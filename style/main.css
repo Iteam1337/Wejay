@@ -1,0 +1,410 @@
+
+			/*********************************************
+			 * FONT-FACE DEFINITIONS
+			 *********************************************/
+
+			@font-face {
+				font-family: 'League Gothic';
+				src: url('../league_gothic-webfont.ttf') format('truetype');
+				font-weight: normal;
+				font-style: normal;
+			}
+			/*********************************************
+			 * GLOBAL STYLES
+			 *********************************************/
+
+			html, body {
+				padding: 0;
+				margin: 0;
+				overflow-y: auto;
+				overflow-x: hidden;
+				font-family: Lucida Grande, sans-serif;
+				font-size: 36px;
+				background: #fff;
+				color: #222;
+				width: 100%;
+				height: 100%;
+			
+				background-image: -webkit-gradient(
+				radial,
+				50% 50%, 0,
+				50% 50%, 1000,
+				from(rgba(100,100,100,1.0)),
+				to(rgba(1,1,3,1.0))
+				);
+				background-image: -moz-radial-gradient(
+				50% 50% 90deg,
+				rgba(245,245,245,1.0) 0%,
+				rgba(100,100,100,1.0) 100%
+				);
+			}
+			/*********************************************
+			 * HEADERS
+			 *********************************************/
+			
+			header{
+				height:30px;
+				text-align: center;
+				margin-top: -20px;
+				
+			}
+			
+			header img{
+				border:0;
+				height:20px;
+				padding:0;
+				margin:0;
+				box-shadow: none;
+				background:none;
+				z-index: 9000;
+			}
+			
+			h1, h2, h3, h4 {
+				margin: 10px 0 10px 0;
+				color: #222;
+				font-family: 'League Gothic', Arial, Helvetica, sans-serif;
+				line-height: 0.9em;
+				letter-spacing: 0.02em;
+				text-transform: uppercase;
+				text-shadow: 0px 1px 0px #000, 0px 0px 4px #333;
+				
+				
+			}
+			h1 {
+				font-size: 136px;
+			}
+			h2 {
+				font-size: 76px;
+				
+			}
+			h3 {
+				font-size: 56px;
+				display: inline-block;
+			}
+			h4 {
+				font-size: 36px;
+			}
+			h1.inverted, h2.inverted, h3.inverted, h4.inverted {
+				color: #fff;
+				text-shadow: 0px 0px 2px #fff, 0px 0px 2px #888;
+			}
+			/*********************************************
+			 * SLIDES
+			 *********************************************/
+			#main {
+				position: absolute;
+				width: 800px;
+				height: 600px;
+				left: 50%;
+				top: 50px;
+				margin-left: -400px;
+				text-align: center;
+/*				-webkit-perspective: 600px;
+				-webkit-perspective-origin: 50% 25%;*/
+			}
+			
+			/*********************************************
+			 * DEFAULT ELEMENT STYLES
+			 *********************************************/
+
+			#main section {
+				line-height: 1.2em;
+				text-shadow: 0px 0px 2px #333, 0px 0px 4px #444;
+				font-weight: 600;
+				min-height: 800px;
+				padding-top: 40px;
+				padding-bottom: 200px;
+			}
+			ol {
+				list-style: decimal;
+				list-style-position: inside;
+			}
+			li, p {
+				margin-bottom: 10px;
+			}
+			a.button {
+				color: #e3e3e3;
+				border: 1px solid #333;
+				border-radius: 10px;
+				text-decoration: none;
+				padding: 5px;
+				font-size:0.5em;
+				margin-top: 100px;
+			}
+			a.button:hover {
+				color: #fff;
+				background: #333;
+				
+			}
+			a:not(.image){
+				color:#fff;	
+				text-decoration: none;
+				text-transform: uppercase;
+			}
+			
+			img {
+				margin: 30px 0 0 0;
+				background: rgba(255,255,255,0.12);
+				border: 4px solid #eee;
+				-webkit-box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+				-moz-box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+				box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+				-webkit-transition: all .11s linear;
+				-moz-transition: all .11s linear;
+				-o-transition: all .11s linear;
+				transition: all .11s linear;
+			}
+			a.image:hover img {
+				background: rgba(255,255,255,0.2);
+				-webkit-box-shadow: 0 0 20px rgba(0, 0, 0, 0.25);
+				-moz-box-shadow: 0 0 20px rgba(0, 0, 0, 0.25);
+				box-shadow: 0 0 20px rgba(0, 0, 0, 0.25);
+			}
+			input[type=text] {
+
+				padding: 10px;
+				font-size: 20px;
+				border-radius: 5px;
+				width: 160px;
+			}
+			input[type=submit], button {
+				margin: 10px;
+				paddin: 10px 20px;
+				font-size: 20px;
+				border-radius: 5px;
+				width: 100px;
+				height:50px;
+			}
+			
+			h3
+			{
+				clear:both;
+			}
+			
+			
+			#roomLink
+			{
+				width: 250px;
+			}
+
+			#currentAlbum
+			{
+				width:300px;
+				margin-bottom: 30px;
+				margin-top: 0;
+				
+			}
+			
+			#current a:hover img{
+				background: url(../images/Play-XLarge-Hover.png)
+			}
+						
+			#current h3{
+				clear:both;
+				width: 800px;
+				margin-top: 10px;
+			}
+			
+			#users li {
+				list-style: none;
+				list-style-type: none;
+				clear: none;
+				float:left;
+				margin-left: 30px;
+
+			}
+			
+			#rooms li{
+				list-style: none;
+				list-style-type: none;
+				clear: none;
+				float:left;
+				margin-left: 30px;
+				margin-bottom:30px;
+				background: #444;
+				width: 150px;
+				height:150px;
+				text-align:center;
+				text-transform: uppercase;
+				font-size: 17px;
+				color:#fff;
+				overflow:hidden;
+				padding:2px;
+				position:relative;
+				box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);			
+				cursor: hand;
+			}
+			
+			#rooms img{
+				width: 73px;
+				float: left;
+				margin-right: 2px;
+				margin-top: -5px;
+				margin-left: -3px;
+				border:0;
+			}
+			
+			#rooms dl{
+				width: 50px;
+				height: 50px;
+				float: left;
+				display: block;
+				color: #AAA;
+				text-decoration: none;
+				font-size: 9px;
+				padding: 0px;
+				margin:0;
+				overflow: hidden;
+				
+			}
+			#queue{
+				width: 722px;
+				margin-left: 40px;
+			}
+			
+			#queue td{
+				text-transform: uppercase;
+				white-space: nowrap;
+				text-overflow:ellipsis;
+				overflow: hidden;
+				text-align:left;
+				max-width: 350px;
+			}
+			
+			table#queue:first-child a
+			{
+				color:#111;
+			}
+			
+			#queue td a.mine:hover{
+				background:#333333;
+			}
+			#queue a.user{
+				float:right;
+			}
+			
+			#rooms a
+			{				
+			 	position: absolute;
+			 	top: 55px;
+			 	left: 2px;
+			 	z-index: 100; 
+			 	width: 150px;
+			 	text-align: center;
+			 	background:rgba(0,0,0, 0.3);
+				
+			}
+			
+			#rooms{
+				clear:both;
+				margin-left: 40px;
+				
+			}
+			
+			.auto-completeForm input{
+				width: 700px;
+				
+			}
+			
+			.auto-complete{
+				margin-left: 40px;
+				margin-top: 10px;
+				min-height: 300px;
+			}
+			
+			.auto-complete img{
+				width: 30px;
+				margin: 0 10px 0 0;
+			}
+			
+			.auto-complete .artists{
+				display:none;
+			}
+			
+			.auto-complete .tracks span{
+				display: none;
+			}
+			
+			.auto-complete a{
+				float:left; 
+				clear: both;
+				text-align: left;
+				white-space: nowrap;
+				overflow: hidden;
+				text-overflow: ellipsis;
+				max-width: 700px;
+			}
+			.auto-complete a img{
+				float:left; 
+			}
+
+			.auto-complete a img{
+				float:left; 
+			}
+
+			.footer{
+				margin-left: 80px;
+			}
+			
+			.banner
+			{
+				text-align:left;
+				margin-left: 30px;
+				width: 335px;
+				height: 190px;
+				float:left;
+				
+			}
+			
+			.small.banner
+			{
+				width:150px;
+			}
+						
+			.banner blockquote
+			{
+				font-size: 10px;
+				color: #999;
+				line-height: 15px;
+				padding: 10px;
+			}
+			
+			table, .auto-complete {
+				font-family: League Gothic;
+			}
+			
+			table td{
+				text-overflow: ellipsis;
+			
+			}
+			
+			
+			.offline
+			{
+				opacity : 0.5;
+			}
+
+
+			blockquote
+			{
+				font-size: 12px;
+				border: 1px solid black;
+				clear: both;
+				color: #fff;
+			}
+			
+			address{
+				font-style:normal;
+				font-size: 10px;
+				line-height: 15px;
+				color:#AAAAAA;
+				
+			}
+			
+			#header{
+				background: url(../images/Wejay-small.png) no-repeat #fff;
+				height: 64px;
+				position:absolute;
+				top:0;
+				
+			}

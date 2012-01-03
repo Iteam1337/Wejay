@@ -1,0 +1,20 @@
+{
+    "AppName": "WEJAY",
+    "AppDescription": "We are the DJ. Control the music – together.",
+    "DefaultTabs" : [
+    	{"title" : {"en":"Start a Room"}, "arguments": "choose"}, 
+    	{"title" : {"en":"Currently Playing"}, "arguments": "room"}, 
+    	{"title" : {"en":"Queue"}, "arguments": "queue"},
+    	{"title" : {"en":"Wejays"}, "arguments": "wejays"}
+    	
+    ],
+    "BundleIdentifier": "wejay.org",
+    "AppIcon": {
+    	"36x18" : "images/icon.png"
+    },
+    "BundleType": "Application",
+    "RequiredInterface": 1,
+    "RequiredPermissions": ["http://wejay.org:81", "http://wejay.org", "http://*.fbcdn.net", "http://ws.spotify.com", "http://*.facebook.com", "https://graph.facebook.com", "http://*.facebook.net"],
+    "VendorIdentifier": "se.iteam",
+    "AcceptedLinkTypes" : ["album", "artist", "playlist", "track", "user"]
+}
