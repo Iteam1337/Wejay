@@ -9,9 +9,12 @@ Basic structure:
 
 
 /Javascipt
+
 *app.js* - Main code controlling the loading of rooms for starting page, login to facebook and initializing room.
 
 *room.js* - RoomController, here is all code related to controlling the actual room. Only one room controller can be initialized per page and is usually stored in global var currentRoom
+
 *hub.js* - CommunicationHub, here is all communication with both the node server and also the api.wejay.org
+
 *autocomplete.js* - spotify controller for adding autocomplete spotify search for an input textbox
 
