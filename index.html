@@ -8,26 +8,20 @@
 		<script src="http://wejay.org/scripts/jquery.tmpl.min.js" type="text/javascript"></script>
 		<script src="http://wejay.org:81/socket.io/socket.io.js" type="text/javascript"></script>
 
-	    
-	    <script>
-			var sp = getSpotifyApi(1);
-			var ui = sp.require('sp://import/scripts/dnd');
-			  
-			var m = sp.require("sp://import/scripts/api/models");
-			var v = sp.require("sp://import/scripts/api/views");
+	  
 
-			var accessToken;
-	    </script>
-
+		<link rel="stylesheet" href="sp://import/css/core-dark.css"> 
+		<link rel="stylesheet" href="sp://import/css/api.css">
 
 		<script src="javascript/hub.js" type="text/javascript"></script>
 		<script src="javascript/room.js" type="text/javascript"></script>
 		<script src="javascript/app.js" type="text/javascript"></script>
+		<script src="javascript/user.js" type="text/javascript"></script>
 
 	    <link href="style/main.css" type="text/css" rel="stylesheet" />
 	   
 </head>
-		<body>	    
+		<body >	    
 			<div id="main">
 				<section id="chooseSection" class="left">
 					<h1 class="inverted">WE ARE THE DJ.</h1>
@@ -78,11 +72,13 @@
 				<section id="roomSection">
 					<h2 id="roomTitle">Room</h2>
 					<section id="current">
-						<a class="image" id="currentLink" href="" onclick="currentRoom.playSong(currentRoom.currentSong, true); return false;"><img  id="currentAlbum">
+						<a class="image" id="currentLink" href="" onclick="currentRoom.playSong(currentRoom.currentSong, true); return false;"><img  id="currentAlbum" src="sp://import/img/placeholders/300-album.png">
 						<h3 class="inverted" id="currentSong"> </h3></a>
 						<h3 id="currentPlayedBy"></h3>
 						<a class="button" href="javascript:currentRoom.skip()">Skip</a>
-						
+						<a class="button" href="javascript:currentRoom.like()">Like</a>
+						<a class="button" href="javascript:currentRoom.block()">Block</a>
+
 						<blockquote>Add music to this room by dragging tracks to this app in the sidebar.</blockquote>
 
 					</section>
@@ -116,6 +112,12 @@
 				</section>
 				
 			</div>
-		
+		  <script>
+		  	
+		  	// initialize Wejay App
+		  	var app = new App();
+		  	app.init();
+		  	
+		  </script>
     	</body>
 </html>

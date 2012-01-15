@@ -1,13 +1,23 @@
+	var sp = getSpotifyApi(1);
+
+	var ui = sp.require('sp://import/scripts/dnd');
+	  
+	var m = sp.require("sp://import/scripts/api/models");
+	var v = sp.require("sp://import/scripts/api/views");
+
+	var accessToken;
 
 			
- 	function RoomController (roomName){
+ 	function RoomController (roomName, nodeUrl){
  		
  		console.log('New RoomController for room ' + roomName);
+		
+		var facebookId;
  		
  		var self = this;
 		
 		if (roomName)
-			this.roomName = roomName.toLowerCase();
+			this.roomName = unescape(roomName).toLowerCase();
 		
 		this.currentTab = null;
 		
@@ -23,17 +33,45 @@
 				song.room = self.roomName;
 				console.log('adding track->song', track, song);
 				
-				login(function(){
-					self.updateUsers();
+				app.user.authenticate(function(){
+					// self.updateUsers();
 					self.hub.queueSong(song, function(){
 		             	self.updatePlaylist();  
-		             	document.location = 'spotify:app:wejay:queue';
+		             	// history.go(-2);
+		             	document.location = 'spotify:app:wejay:room';
 					});
 				});
 
 			});
 
 		}
+		
+		this.getTrack = function(searchString, callback){
+			
+			if (!callback)
+				throw "No callback provided";
+				
+				
+			var search = new m.Search(searchString);
+			search.localResults = m.LOCALSEARCHRESULTS.IGNORE;
+			search.pageSize=1;
+			
+			// only tracks
+			search.searchTracks = true;
+			search.searchAlbums = false;
+			search.searchArtists = false;
+			search.searchPlaylists = false;
+			
+			search.observe(m.EVENT.CHANGE, function() {
+				if (!search.tracks || search.tracks.length == 0)
+					callback(null);
+				else	
+					callback(search.tracks[0].data);
+			});
+			
+			// start search
+			search.appendNext();
+		};
 			
 		this.playSong = function(song, forcePlay){
 							
@@ -64,7 +102,7 @@
 					var currentTrack = player.getNowPlayingTrack();
 					
 
-					if (forcePlay || ((typeof currentTrack == 'undefined' || currentTrack  == null || currentTrack.track.uri != track.uri))){
+					if (forcePlay || ((typeof currentTrack == 'undefined' || currentTrack  == null || (player.getIsPlaying() && currentTrack.track.uri != track.uri)))){
 						
 						player.playTrackFromUri(trackUri, {
 							onSuccess : function(s){
@@ -85,10 +123,15 @@
 					
 					$("#currentSong").html(track.data.artists[0].name + " - " + track.data.name);
 					$("#currentAlbum").attr('src', track.data.album.cover);
-					$("#currentAlbum").show();
 
 					//$("#currentLink").attr('href', track.data.uri);
-					$("#currentPlayedBy").html('by ' + song.PlayedBy.UserName);
+					if (song.PayedBy){
+						$("#currentPlayedBy").html('by ' + song.PlayedBy.UserName);
+						$("#currentPlayedBy").show();
+					}	
+					else{
+						$("#currentPlayedBy").hide();
+					}
 
 					console.log('playing track', track);
 					
@@ -102,7 +145,7 @@
 
 	       	$("#currentSong").html('Loading...');
 
-	       	$("#currentAlbum").hide();
+	       	$("#currentAlbum").attr('src', "sp://import/img/placeholders/300-album.png");
 
 	       	//$("#currentLink").attr('href', '');
 	       	$("#currentPlayedBy").html('');
@@ -132,6 +175,48 @@
 		        }
 		    });	
 		}
+		
+		
+		this.like = function() {
+			if (!this.currentSong)
+				throw "No current song";
+				
+			$.ajax({
+		        url: 'http://wejay.org/Room/vote',
+		        data: { 
+		        	mbId: self.currentSong.MbId ? self.currentSong.MbId : self.currentSong.SpotifyId, 
+		        	value: 5
+		        },
+		        dataType: 'json',
+		        type: 'POST',
+		        traditional: true,
+		        success: function (result) {
+		        	
+		        	console.log('liked successfully');
+		        }
+		    });	
+		}
+
+		this.block = function() {
+			if (!this.currentSong)
+				throw "No current song";
+
+			$.ajax({
+		        url: 'http://wejay.org/Room/vote',
+		        data: { 
+		        	mbId: self.currentSong.MbId ? self.currentSong.MbId : self.currentSong.SpotifyId, 
+		        	value: 1
+		        },
+		        dataType: 'json',
+		        type: 'POST',
+		        traditional: true,
+		        success: function (result) {
+		        	
+		        	console.log('liked successfully');
+		        }
+		    });	
+		}
+
 
 		this.init = function(roomName, anonymous)		{
 			console.log('init');
@@ -161,13 +246,13 @@
 			
 			// start listening to commands from node server
 			//this.hub.checkin();
-			this.hub.checkin({ user: user, room: this.roomName });
+			this.hub.checkin({ user: app.user.userName, room: this.roomName });
 			
 			
 			localStorage.setItem('room', this.roomName);
 			
 			if (!anonymous && !facebookId)
-				login(function(){
+				app.user.authenticate(function(){
 		            self.updateUsers();
 		            self.updatePlaylist();
 					localStorage.setItem('user', user);
@@ -189,7 +274,7 @@
 				
 			$.ajax({
 		        url: 'http://wejay.org/Room/checkin',
-		        data: { userName: escape(user), facebookId: facebookId, room: self.roomName },
+		        data: { userName: escape(app.user.userName), facebookId: facebookId, room: self.roomName },
 		        dataType: 'json',
 		        type: 'POST',
 		        traditional: true,
@@ -224,23 +309,37 @@
 
 		            var result = r ? JSON.parse(r).Playlist : [];
 
-					/*var list = m.Collection();
+					var pl = new m.Playlist();
 					
 					// only show songs with SpotifyId
-					result.filter(function(song){return song.SpotifyId}).forEach(function(song){
-						list.add("spotify:track:" + song.SpotifyId);
+					result.forEach(function(song){
+						if (!song.spotifyId)
+						{
+							// this shouldnt be true for many songs but to prevent errors we search the uri from the database
+							// possible race condition here..
+							self.getTrack(song.MbId ? 'isrc:' + song.MbId : 'artist:' + song.Artist + ', title:' + song.Title, function(track){
+								if (track)
+									pl.add(track.uri);
+							});
+						}
+						else
+						{
+							pl.add("spotify:track:" + song.SpotifyId);
+						}	
 					});
 					
-					* TODO: switch to a Spotify List instead of custom template
-					* */
+					
 					
 					
 		            if (result.length > 0) {
-		                $('#queue').html($("#queueTemplate").tmpl(result));
+		            	console.log(queue);
+		            	var list = new v.List(pl);
+		            	//list.collection = collection;
+		                $('#queue').replaceWith(list.node);
 		                // playSong(result[0]);
 		            }
 		            else {
-		                $('#queue').html('<li>Queue is empty, add tracks by dragging them below.</li>');
+		                $('#queue').html('<li>QUEUE IS EMPTY, ADD TRACKS BELOW</li>');
 		                $("#currentSong").html('Nothing playing right now');
 		            }
 		        }
@@ -271,7 +370,7 @@
 		}
 	
 
-		this.hub = new Hub(nodeUrl, self);
+		this.hub = new Hub(nodeUrl, self, facebookId);
 	
 		if (this.roomName)
 			this.init(roomName);

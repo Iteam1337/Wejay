@@ -1,8 +1,9 @@
-function Hub (nodeUrl, currentRoom){
+function Hub (nodeUrl, currentRoom, facebookUserId){
 	
 	console.log('connecting to node server', nodeUrl);
 	var socket = io.connect(nodeUrl, { secure: false, rememberTransport: false, transports: ['xhr-polling', 'jsonp-polling'] });
-
+	var facebookId = facebookUserId;
+	
 	this.queueSong = function(song, callback){
 		$.ajax({
             url: 'http://wejay.org/Room/playSong',
