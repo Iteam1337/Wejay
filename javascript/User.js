@@ -5,8 +5,8 @@ function User(){
 
 	// properties
 	this.facebookId = null;
-	this.userName = null;
-	this.facebookUser = null;	
+	this.facebookUser = null;
+	//this.facebookUser = null;	
 	this.accessToken = null;
 	
 	var self = this;
@@ -37,11 +37,13 @@ function User(){
 		    onSuccess : function(accessToken, ttl) {
 
 				// get the current facebook user details						
-				$.getJSON('https://graph.facebook.com/me?access_token=' + this.accessToken + '&callback=?', function(facebookUser){
+				$.getJSON('https://graph.facebook.com/me?access_token=' + accessToken + '&callback=?', function(facebookUser){
 					console.log('logged in user: ', facebookUser);							
 					
+					self.facebookUser = facebookUser;
 					self.userName = facebookUser.name;
 					self.facebookId = facebookUser.id;
+					self.accessToken = accessToken;
 					
 					//facebookUser(this); // inherit all facebook properties to this user class
 									

@@ -214,6 +214,13 @@
 
 			}
 			
+			#noUsers {
+				color:#fff;
+				font-size: 13px;
+				line-height: 18px;	
+				
+			}
+			
 			#rooms li{
 				list-style: none;
 				list-style-type: none;

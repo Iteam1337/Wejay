@@ -72,7 +72,11 @@
 			// start search
 			search.appendNext();
 		};
-			
+		
+		var addLeadingZero = function(number){
+			return (parseInt(number) < 10 ? "0" : "") + parseInt(number);
+		}
+	
 		this.playSong = function(song, forcePlay){
 							
 				console.log('Playing ', song);
@@ -255,7 +259,7 @@
 				app.user.authenticate(function(){
 		            self.updateUsers();
 		            self.updatePlaylist();
-					localStorage.setItem('user', user);
+					localStorage.setItem('user', app.user);
 				});
 			else
 			{
@@ -274,7 +278,7 @@
 				
 			$.ajax({
 		        url: 'http://wejay.org/Room/checkin',
-		        data: { userName: escape(app.user.userName), facebookId: facebookId, room: self.roomName },
+		        data: { userName: escape(app.user.userName), facebookId: app.user.facebookId, room: self.roomName },
 		        dataType: 'json',
 		        type: 'POST',
 		        traditional: true,
@@ -286,7 +290,7 @@
 		            if (callback)
 		                callback(self.roomName);
 		                
-		            console.log(user + ' logged in to wejay room ', self.roomName);
+		            console.log(app.user.userName + ' logged in to wejay room ', self.roomName);
 		
 		            //self.hub.checkin({ user: user, room: self.roomName });
 		        }
@@ -332,7 +336,7 @@
 					
 					
 		            if (result.length > 0) {
-		            	console.log(queue);
+		            	//console.log(queue);
 		            	var list = new v.List(pl);
 		            	//list.collection = collection;
 		                $('#queue').replaceWith(list.node);

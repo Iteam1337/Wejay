@@ -214,9 +214,7 @@
 					});
 				}
 	  			
-				this.addLeadingZero = function(number){
-					return (parseInt(number) < 10 ? "0" : "") + parseInt(number);
-				}
+				
 				
 				
 							// set spotify user link from an facebook image
@@ -240,7 +238,7 @@
 			
 			
 		var ac = sp.require('javascript/AutocompleteForm');
-		ac.init('.auto-completeForm');
+		ac.init('.auto-completeForm', topTracks, topArtists);
 
 		
 		$('#login').click(function(){
@@ -279,6 +277,8 @@
 		self.fillRooms();
 		
 		var roomName = localStorage.getItem('room');
+		self.user.facebookUser = localStorage.getItem('user');
+		self.user.userName = self.user.facebookUser.name;
 		
 		self.currentRoom = new RoomController(unescape(roomName), nodeUrl);
 		

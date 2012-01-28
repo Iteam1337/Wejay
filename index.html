@@ -10,8 +10,9 @@
 
 	  
 
-		<link rel="stylesheet" href="sp://import/css/core-dark.css"> 
+		<!--<link rel="stylesheet" href="sp://import/css/core-dark.css"> 
 		<link rel="stylesheet" href="sp://import/css/api.css">
+-->
 
 		<script src="javascript/hub.js" type="text/javascript"></script>
 		<script src="javascript/room.js" type="text/javascript"></script>
@@ -50,7 +51,7 @@
 						<div class="banner">
 						<h3 class="inverted">Start new room?</h3>
 	
-							<form action="#/1" onsubmit="currentRoom.init($('#roomName').val());">
+							<form action="#/1" onsubmit="app.currentRoom.init($('#roomName').val());">
 								<input type="text" value="" id="roomName" placeholder="Name the room"/>
 								<input type=submit value="Open">
 							</form>
@@ -72,12 +73,12 @@
 				<section id="roomSection">
 					<h2 id="roomTitle">Room</h2>
 					<section id="current">
-						<a class="image" id="currentLink" href="" onclick="currentRoom.playSong(currentRoom.currentSong, true); return false;"><img  id="currentAlbum" src="sp://import/img/placeholders/300-album.png">
+						<a class="image" id="currentLink" href="" onclick="app.currentRoom.playSong(currentRoom.currentSong, true); return false;"><img  id="currentAlbum" src="sp://import/img/placeholders/300-album.png">
 						<h3 class="inverted" id="currentSong"> </h3></a>
 						<h3 id="currentPlayedBy"></h3>
-						<a class="button" href="javascript:currentRoom.skip()">Skip</a>
-						<a class="button" href="javascript:currentRoom.like()">Like</a>
-						<a class="button" href="javascript:currentRoom.block()">Block</a>
+						<a class="button" href="javascript:app.currentRoom.skip()">Skip</a>
+						<a class="button" href="javascript:app.currentRoom.like()">Like</a>
+						<a class="button" href="javascript:app.currentRoom.block()">Block</a>
 
 						<blockquote>Add music to this room by dragging tracks to this app in the sidebar.</blockquote>
 
@@ -101,6 +102,9 @@
 					<sectio id="wejaysSection">
 						<h3 class="inverted">Wejays in this room</h3>
 						<ul id="users"></ul>
+						<div id="noUsers">
+							Hooo hoooo... It's quite deserted in this room. Why don't you invite your friends and colleagues so you can all mix your playlists in realtime? Tip: If you are all at the same physical room, mute the volume on all computers except one and you can all listen to one mixed playlist but be able to control if from all computers via this Wejay app. Perfect for open workspaces or parties.
+							 						</div>
 						<script id="usersTemplate" type="text/x-jquery-tmpl">
 							<li><a><img class="${Online ? 'online' : 'offline'}" src="http://graph.facebook.com/${FacebookId}/picture?access_token=${FacebookAcessToken}"></li></a>
 						</script>

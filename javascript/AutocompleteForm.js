@@ -13,7 +13,7 @@ function AutoCompleteForm (){
 	
 
 	
-	this.init = function(formQuery){
+	this.init = function(formQuery, topTracks, topArtists){
 		
 		var ac = sp.require('javascript/autocomplete');
 
@@ -27,7 +27,7 @@ function AutoCompleteForm (){
 			outputElement = ac.setupAutoComplete(ac.tokenInput, function(){
 	            //loadStation(searchInput.value, "spotify:app:radio", "", "search", true);
 	            //hideAutocomplete();
-	            currentRoom.addTrackUri(searchInput.value);
+	            app.currentRoom.addTrackUri(searchInput.value);
 	            searchInput.focus();
 	        });
 	
