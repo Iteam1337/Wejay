@@ -10,9 +10,9 @@
 
 	  
 
-		<!--<link rel="stylesheet" href="sp://import/css/core-dark.css"> 
+		<link rel="stylesheet" href="sp://import/css/core-dark.css"> 
 		<link rel="stylesheet" href="sp://import/css/api.css">
--->
+
 
 		<script src="javascript/hub.js" type="text/javascript"></script>
 		<script src="javascript/room.js" type="text/javascript"></script>
@@ -102,9 +102,7 @@
 					<sectio id="wejaysSection">
 						<h3 class="inverted">Wejays in this room</h3>
 						<ul id="users"></ul>
-						<div id="noUsers">
-							Hooo hoooo... It's quite deserted in this room. Why don't you invite your friends and colleagues so you can all mix your playlists in realtime? Tip: If you are all at the same physical room, mute the volume on all computers except one and you can all listen to one mixed playlist but be able to control if from all computers via this Wejay app. Perfect for open workspaces or parties.
-							 						</div>
+						
 						<script id="usersTemplate" type="text/x-jquery-tmpl">
 							<li><a><img class="${Online ? 'online' : 'offline'}" src="http://graph.facebook.com/${FacebookId}/picture?access_token=${FacebookAcessToken}"></li></a>
 						</script>

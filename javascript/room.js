@@ -339,7 +339,8 @@
 		            	//console.log(queue);
 		            	var list = new v.List(pl);
 		            	//list.collection = collection;
-		                $('#queue').replaceWith(list.node);
+		            	$('#queue').empty();
+		                $('#queue').append(list.node);
 		                // playSong(result[0]);
 		            }
 		            else {
