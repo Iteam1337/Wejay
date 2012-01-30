@@ -97,6 +97,7 @@
 				m.application.observe(m.EVENT.LINKSCHANGED, function() {
 				  	
 				  	var links = m.application.links;
+				  	var droppedLinks = [];
 				  	
 				  	links.forEach(function(link)
 				  	{
@@ -117,7 +118,7 @@
 					  	
 				  	});
 				  	
-				  	history.back();
+				  	history.go(-2);
 	
 				});
 				  
@@ -168,10 +169,10 @@
 				// Load all rooms to startpage
 		this.loadRooms=function(){
 					
-					if (!facebookId)
+					if (!app.user.facebookId)
 						return;
 					
-					$.getJSON('https://graph.facebook.com/me/friends?access_token=' + accessToken + '&callback=?', function(friends){
+					$.getJSON('https://graph.facebook.com/me/friends?access_token=' + app.user.accessToken + '&callback=?', function(friends){
 		
 						console.log(friends);
 						var users = new Array();
@@ -205,7 +206,7 @@
 				
 				
 				this.fillRooms = function(){
-					$('#rooms li').each(function(){
+					$('.rooms li').each(function(){
 						var room = this.innerText;
 						fillRoomToplist(room, this);
 						$(this).click(function(){

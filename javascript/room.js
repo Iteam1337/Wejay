@@ -98,12 +98,17 @@
 
 		    	m.Track.fromURI(trackUri, function(track){
 			    	//$('currentSong').html(track.node);	
-			    	var tpl = new m.Playlist();
-			    	tpl.add(track);
+			    	
+			    	var tpl = self.queue || new m.Playlist();
+			    	
+			    	if (!tpl.data.all().some(function(t){t == track.uri}))
+			    		tpl.add(track);
 
          			var player = sp.trackPlayer;
          			
 					var currentTrack = player.getNowPlayingTrack();
+					
+					player.context = tpl;
 					
 
 					if (forcePlay || ((typeof currentTrack == 'undefined' || currentTrack  == null || (player.getIsPlaying() && currentTrack.track.uri != track.uri)))){
@@ -124,6 +129,8 @@
 						});
 						//document.body.appendChild(player.node);
 					}
+					
+					self.queue = tpl;
 					
 					$("#currentSong").html(track.data.artists[0].name + " - " + track.data.name);
 					$("#currentAlbum").attr('src', track.data.album.cover);
@@ -275,7 +282,10 @@
 			//if (!room || !user || !facebookId )
 			//	throw "You have not set room and user or facebook details yet";
 			var self = this;
-				
+			
+			if (self.lastCheckin && self.lastCheckin.getTime() > new Date().getTime() - 30*60*1000)
+				callback(self.roomName);
+							
 			$.ajax({
 		        url: 'http://wejay.org/Room/checkin',
 		        data: { userName: escape(app.user.userName), facebookId: app.user.facebookId, room: self.roomName },
@@ -283,7 +293,7 @@
 		        type: 'POST',
 		        traditional: true,
 		        success: function (result) {
-		        	
+		        	self.lastCheckin = new Date();
 		        	
 		        	//self.init(result.room); // save the last connected room for this user
 		        								        		
@@ -312,8 +322,10 @@
 		        success: function (r) {
 
 		            var result = r ? JSON.parse(r).Playlist : [];
+					var playlistUri = localStorage.getItem('playlistUri');
 
-					var pl = new m.Playlist();
+					
+					var pl = self.queue || new m.Playlist();
 					
 					// only show songs with SpotifyId
 					result.forEach(function(song){
@@ -322,18 +334,19 @@
 							// this shouldnt be true for many songs but to prevent errors we search the uri from the database
 							// possible race condition here..
 							self.getTrack(song.MbId ? 'isrc:' + song.MbId : 'artist:' + song.Artist + ', title:' + song.Title, function(track){
-								if (track)
+								if (track && !pl.data.all().some(function(t){t == track.uri})) // is this track already in the list?
 									pl.add(track.uri);
 							});
 						}
 						else
 						{
-							pl.add("spotify:track:" + song.SpotifyId);
+							if (track && !pl.data.all().some(function(t){t == track.uri})) // is this track already in the list?
+								pl.add("spotify:track:" + song.SpotifyId);
 						}	
 					});
 					
 					
-					
+					self.queue = pl;
 					
 		            if (result.length > 0) {
 		            	//console.log(queue);
@@ -342,6 +355,7 @@
 		            	$('#queue').empty();
 		                $('#queue').append(list.node);
 		                // playSong(result[0]);
+		                
 		            }
 		            else {
 		                $('#queue').html('<li>QUEUE IS EMPTY, ADD TRACKS BELOW</li>');

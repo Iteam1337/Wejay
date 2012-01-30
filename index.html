@@ -28,10 +28,15 @@
 					<h1 class="inverted">WE ARE THE DJ.</h1>
 					<h4>Control the music together.</h4>
 					
-					<ul id="rooms">
+					<ul class="rooms" id="publicRooms">
 						<li>Stockholm</li>
 						<li>Berlin</li>
 						<li>New York</li>
+						<li>Tokyo</li>
+					</ul>
+					
+					<ul class="rooms" id="rooms">
+						
 					</ul>
 
 			        <script id="roomListTemplate" type="text/x-jquery-tmpl">
@@ -58,7 +63,7 @@
 						</div>
 						<div class="banner small">
 			
-							<h3 class="inverted">Friends</h3>
+							<h3 class="inverted">Find your friends</h3>
 							<button id="login">Login</button>
 							<button id="logout">Logout</button>
 							
@@ -73,7 +78,7 @@
 				<section id="roomSection">
 					<h2 id="roomTitle">Room</h2>
 					<section id="current">
-						<a class="image" id="currentLink" href="" onclick="app.currentRoom.playSong(currentRoom.currentSong, true); return false;"><img  id="currentAlbum" src="sp://import/img/placeholders/300-album.png">
+						<a id="currentLink" href="" onclick="app.currentRoom.playSong(currentRoom.currentSong, true); return false;"><img  id="currentAlbum" src="sp://import/img/placeholders/300-album.png">
 						<h3 class="inverted" id="currentSong"> </h3></a>
 						<h3 id="currentPlayedBy"></h3>
 						<a class="button" href="javascript:app.currentRoom.skip()">Skip</a>

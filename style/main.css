@@ -222,7 +222,7 @@
 				
 			}
 			
-			#rooms li{
+			.rooms li{
 				list-style: none;
 				list-style-type: none;
 				clear: none;
@@ -243,7 +243,7 @@
 				cursor: hand;
 			}
 			
-			#rooms img{
+			.rooms img{
 				width: 73px;
 				float: left;
 				margin-right: 2px;
@@ -252,7 +252,7 @@
 				border:0;
 			}
 			
-			#rooms dl{
+			.rooms dl{
 				width: 50px;
 				height: 50px;
 				float: left;
@@ -267,7 +267,7 @@
 			}
 			#queue{
 				width: 722px;
-				margin-left: 40px;
+				margin-left: 68px;
 			}
 			
 			#queue td{
@@ -291,10 +291,14 @@
 				float:right;
 			}
 			#queue a{
-				font-size: 25px;
+				font-size: 22px;
+				
+			}
+			#queue span{
+				text-align: left;	
 			}
 			
-			#rooms a
+			.rooms a
 			{				
 			 	position: absolute;
 			 	top: 55px;
@@ -306,7 +310,7 @@
 				
 			}
 			
-			#rooms{
+			.rooms{
 				clear:both;
 				margin-left: 40px;
 				
@@ -369,7 +373,7 @@
 			
 			.small.banner
 			{
-				width:150px;
+				/*width:150px;*/
 			}
 						
 			.banner blockquote
