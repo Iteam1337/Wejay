@@ -92,16 +92,8 @@
 			 * SLIDES
 			 *********************************************/
 			#main {
-				position: absolute;
-				width: 80%;
-				min-width: 865px;
-				height: 600px;
-				left: 50%;
-				top: 50px;
-				margin-left: -400px;
+				min-width: 465px;
 				text-align: center;
-/*				-webkit-perspective: 600px;
-				-webkit-perspective-origin: 50% 25%;*/
 			}
 			
 			/*********************************************
@@ -113,8 +105,11 @@
 				text-shadow: 0px 0px 2px #333, 0px 0px 4px #444;
 				font-weight: 600;
 				min-height: 800px;
+				max-width: 820px;
+				min-width: 560px;
 				padding-top: 40px;
 				padding-bottom: 200px;
+				margin: 0 auto;
 			}
 			ol {
 				list-style: decimal;
@@ -312,7 +307,8 @@
 			
 			.rooms{
 				clear:both;
-				margin-left: 40px;
+				margin: 40px;
+				text-align: center;
 				
 			}
 			
@@ -358,7 +354,7 @@
 			}
 
 			.footer{
-				margin-left: 80px;
+				margin: 40px;
 			}
 			
 			.banner

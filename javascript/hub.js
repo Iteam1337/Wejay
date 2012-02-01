@@ -1,6 +1,9 @@
 function Hub (nodeUrl, currentRoom, facebookUserId){
-	
-	console.log('connecting to node server', nodeUrl);
+
+    console.log('connecting to node server', nodeUrl);
+    if (typeof io == "undefined")
+        alert('Sorry, we can not connect to realtime service, try again soon');
+
 	var socket = io.connect(nodeUrl, { secure: false, rememberTransport: false, transports: ['xhr-polling', 'jsonp-polling'] });
 	var facebookId = facebookUserId;
 	
