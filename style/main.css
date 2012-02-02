@@ -260,9 +260,11 @@
 				overflow: hidden;
 				
 			}
-			#queue{
-				width: 722px;
-				margin-left: 68px;
+			#queue
+			{
+			    width: 80%;
+				min-width: 600px;
+				margin-left: 48px;
 			}
 			
 			#queue td{
@@ -286,7 +288,6 @@
 				float:right;
 			}
 			#queue a{
-				font-size: 22px;
 				
 			}
 			#queue span{
@@ -355,6 +356,7 @@
 
 			.footer{
 				margin: 40px;
+				clear:both;
 			}
 			
 			.banner

@@ -39,59 +39,52 @@
 				
 				
 				// tab switched in ui
-				m.application.observe(m.EVENT.ARGUMENTSCHANGED, function() {
-				    var tab = m.application.arguments[0];
-		            self.currentRoom.currentTab = tab;
-		
-			        document.location = "#" + tab + "Section";
-	
-		
-				    if (tab == "room") {
-				        
-				        if (m.application.arguments > 1) {
-							var newRoom = m.application.arguments.toLowerCase();
-							
-							if (newRoom != self.currentRoom.roomName){
-				                
-				                // open new room
-				                self.currentRoom.init(unescape(newRoom), true);
-					            
-							} else{
-								// currentRoom.init(currentRoom.roomName); // force nowplaying to be sent
-							}
-				        } else {
-								
-							if (!self.currentRoom.roomName)
-							{
-								document.location = 'spotify:app:wejay';
-								alert('You have to select a room first');
-							}						
-							
-	
-						}
-				    }
-	
-				    if (tab == "queue"){
-	
-						if (!self.currentRoom.roomName)
-						{
-							document.location = 'spotify:app:wejay';
-							alert('You have to select a room first');
-						}
-						else
-				        	document.location = "#/1/1";
-	
-				    }
-	
-				    if (tab == "wejays"){
-						if (!self.currentRoom.roomName){
-							document.location = 'spotify:app:wejay';
-							alert('You have to select a room first');
-						}
-				    }
-	
-				    console.log(tab);
-				});
+		m.application.observe(m.EVENT.ARGUMENTSCHANGED, function () {
+		    var tab = m.application.arguments[0];
+		    self.currentRoom.currentTab = tab;
+
+		    document.location = "#" + tab + "Section";
+
+		    console.log(m.application.arguments);
+
+		    if (tab == "room") {
+
+		        if (m.application.arguments.length > 1) {
+		            var newRoom = m.application.arguments[1].toLowerCase();
+		            console.log('new room', newRoom);
+		            self.currentRoom.init(unescape(newRoom), true);
+
+		        } else {
+
+		            if (!self.currentRoom.roomName) {
+		                document.location = 'spotify:app:wejay';
+		                alert('You have to select a room first');
+		            }
+
+
+		        }
+		    }
+
+		    if (tab == "queue") {
+
+		        if (!self.currentRoom.roomName) {
+		            document.location = 'spotify:app:wejay';
+		            alert('You have to select a room first');
+		        }
+		        else
+		            document.location = "#/1/1";
+
+		    }
+
+		    if (tab == "wejays") {
+		        if (!self.currentRoom.roomName) {
+		            document.location = 'spotify:app:wejay';
+		            alert('You have to select a room first');
+		        }
+		    }
+
+		    console.log(tab);
+		});
 				
 				// when links are dropped to the application we want to add those to the queue
 				m.application.observe(m.EVENT.LINKSCHANGED, function() {

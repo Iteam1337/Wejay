@@ -37,8 +37,8 @@
 					// self.updateUsers();
 					self.hub.queueSong(song, function(){
 		             	self.updatePlaylist();  
-		             	// history.go(-2);
-		             	document.location = 'spotify:app:wejay:room';
+		             	history.go(-2);
+		             	// document.location = 'spotify:app:wejay:room';
 					});
 				});
 
@@ -312,7 +312,7 @@
 
 
 		// Update playlist ul
-		this.updatePlaylist = function() {
+		this.updatePlaylist = function () {
 		    $.ajax({
 		        url: 'http://wejay.org/Room/Playlist?room=' + self.roomName,
 		        type: 'GET',
@@ -322,48 +322,54 @@
 		        success: function (r) {
 
 		            var result = r ? JSON.parse(r).Playlist : [];
-					var playlistUri = localStorage.getItem('playlistUri');
+		            var playlistUri = localStorage.getItem('playlistUri');
 
-					
-					var pl = self.queue || new m.Playlist();
-					
-					// only show songs with SpotifyId
-					result.forEach(function(song){
-						if (!song.spotifyId)
-						{
-							// this shouldnt be true for many songs but to prevent errors we search the uri from the database
-							// possible race condition here..
-							self.getTrack(song.MbId ? 'isrc:' + song.MbId : 'artist:' + song.Artist + ', title:' + song.Title, function(track){
-								if (track && !pl.data.all().some(function(t){t == track.uri})) // is this track already in the list?
-									pl.add(track.uri);
-							});
-						}
-						else
-						{
-							if (track && !pl.data.all().some(function(t){t == track.uri})) // is this track already in the list?
-								pl.add("spotify:track:" + song.SpotifyId);
-						}	
-					});
-					
-					
-					self.queue = pl;
-					
-		            if (result.length > 0) {
-		            	//console.log(queue);
-		            	var list = new v.List(pl);
-		            	//list.collection = collection;
-		            	$('#queue').empty();
-		                $('#queue').append(list.node);
-		                // playSong(result[0]);
-		                
+
+		            var pl = new m.Playlist();
+
+                    // when the async below is all done we will continue. TODO: implement futures and promise.js here
+		            var done = function () {
+		                if (this.count++ < result.length)
+		                    return;
+
+		                console.log('queue', result);
+		                if (result.length > 0) {
+		                    $('#queue').html($("#queueTemplate").tmpl(result));
+
+		                    /*		                //console.log(queue);
+		                    var list = new v.List(pl);
+		                    //list.collection = collection;
+		                    $('#queue').empty();
+		                    $('#queue').append(list.node);
+		                    // playSong(result[0]);
+		                    */
+		                }
+		                else {
+		                    $('#queue').html('<li>QUEUE IS EMPTY, ADD TRACKS BELOW</li>');
+		                    $("#currentSong").html('Nothing playing right now');
+		                }
 		            }
-		            else {
-		                $('#queue').html('<li>QUEUE IS EMPTY, ADD TRACKS BELOW</li>');
-		                $("#currentSong").html('Nothing playing right now');
-		            }
+
+		            // only show songs with SpotifyId
+		            result.map(function (song) {
+		                if (!song.spotifyId) {
+		                    // this shouldnt be true for many songs but to prevent errors we search the uri from the database
+		                    // possible race condition here..
+		                    self.getTrack(song.MbId ? 'isrc:' + song.MbId : 'artist:' + song.Artist + ', title:' + song.Title, function (track) {
+		                        song.track = new m.Track.fromURI(track.uri);
+		                        done();
+		                    });
+		                }
+		                else {
+		                    song.track = new m.Track.fromURI("spotify:track:" + song.SpotifyId);
+		                    done();
+		                }
+		            });
+
+		            
 		        }
-		    });	
-			
+		    });
+
 		}
 
 		// Update users online list

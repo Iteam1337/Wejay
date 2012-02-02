@@ -56,7 +56,7 @@
 						<div class="banner">
 						<h3 class="inverted">Start new room?</h3>
 	
-							<form action="#/1" onsubmit="app.currentRoom.init($('#roomName').val());">
+							<form action="#/1" onsubmit="app.currentRoom.init($('#roomName').val()); document.location = 'spotify:app:wejay:room'">
 								<input type="text" value="" id="roomName" placeholder="Name the room"/>
 								<input type=submit value="Open">
 							</form>
@@ -81,11 +81,11 @@
 						<a id="currentLink" href="" onclick="app.currentRoom.playSong(currentRoom.currentSong, true); return false;"><img  id="currentAlbum" src="sp://import/img/placeholders/300-album.png">
 						<h3 class="inverted" id="currentSong"> </h3></a>
 						<h3 id="currentPlayedBy"></h3>
-						<a class="button" href="javascript:app.currentRoom.skip()">Skip</a>
 						<a class="button" href="javascript:app.currentRoom.like()">Like</a>
 						<a class="button" href="javascript:app.currentRoom.block()">Block</a>
+						<a class="button" title="Skip this song" href="javascript:app.currentRoom.skip()">Skip</a>
 
-						<blockquote>Add music to this room by dragging tracks to this app in the sidebar.</blockquote>
+						<blockquote>If you LIKE the current song, Wejay will play it more often, if you BLOCK it won't be played when you are online.</blockquote>
 
 					</section>
 					<section id="queueSection">
@@ -96,7 +96,7 @@
 				        </div>
 
 						<script id="queueTemplate" type="text/x-jquery-tmpl">
-							<tr><td><a class="track ${PlayedBy.FacebookId == facebookId ? 'mine' : ''}" href="spotify:track:${SpotifyId}?browse=true">${Artist} - ${Title}</a></td><td><a class="user" href="spotify:user:facebookuid:${PlayedBy.FacebookId}">${PlayedBy.UserName}</a></td></tr>
+							<tr><td><a class="track ${PlayedBy.FacebookId == (app.user ? app.user.facebookId : '') ? 'mine' : ''}" href="${track.data.uri}">${Artist} - ${Title}</a></td><td><a class="user" href="spotify:user:facebookuid:${PlayedBy.FacebookId}">${PlayedBy.UserName}</a></td></tr>
 						</script>
 						<blockquote>Add music to this room by dragging tracks to this app. Your music will be mixed with all other wejays.</a></blockquote>
 <address>When the queue is empty an automatic DJ called Maestro will try to match your listening pattern as well as possible.

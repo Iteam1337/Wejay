@@ -33,7 +33,7 @@ function AutoCompleteForm (){
 	
 	
 	   searchInput.type = 'text';
-	   searchInput.placeholder = 'Add tracks to the queue by searching or drop them here';
+	   searchInput.placeholder = 'Add tracks to the queue by keywords or drop tracks here';
 	
 		// Creating the method that runs the autocomplete search and updates the table.
 		// Take some default methods defined in autocomplete.js and curry them
