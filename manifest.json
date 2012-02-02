@@ -1,5 +1,5 @@
 {
-    "AppName": "WEJAY",
+    "AppName": "Wejay",
     "AppDescription": "We are the DJ. Control the music – together.",
     "DefaultTabs" : [
     	{"title" : {"en":"Start a Room"}, "arguments": "choose"}, 
@@ -10,7 +10,8 @@
     ],
     "BundleIdentifier": "wejay.org",
     "AppIcon": {
-    	"36x18" : "images/icon.png"
+    	"36x18" : "images/icon.png",
+		"64x64" : "images/icon64.png"
     },
     "BundleType": "Application",
     "RequiredInterface": 1,

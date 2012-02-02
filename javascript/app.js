@@ -39,6 +39,12 @@
 
 		console.log('REQUIRES latest version of preview build. If you experience trouble, make sure you have the latest preview build of Spotify: http://developer.spotify.com/en/spotify-apps-api/preview/');
 
+		if (!m.application) {
+		    alert('This version of Spotify is not compatible with this App. Please upgrade to a newer version and try again');
+		    history.back();
+            return;
+		}
+
 				// tab switched in ui
 		m.application.observe(m.EVENT.ARGUMENTSCHANGED, function () {
 		    var tab = m.application.arguments[0];
@@ -58,7 +64,7 @@
 		        } else {
 
 		            if (!self.currentRoom.roomName) {
-		                document.location = 'spotify:app:wejay';
+		                document.location.replace('spotify:app:wejay');
 		                alert('You have to select a room first');
 		            }
 
@@ -69,7 +75,7 @@
 		    if (tab == "queue") {
 
 		        if (!self.currentRoom.roomName) {
-		            document.location = 'spotify:app:wejay';
+		            document.location.replace('spotify:app:wejay');
 		            alert('You have to select a room first');
 		        }
 		        else
@@ -79,7 +85,7 @@
 
 		    if (tab == "wejays") {
 		        if (!self.currentRoom.roomName) {
-		            document.location = 'spotify:app:wejay';
+		            document.location.replace('spotify:app:wejay');
 		            alert('You have to select a room first');
 		        }
 		    }

@@ -135,7 +135,7 @@
 					$("#currentSong").html(track.data.artists[0].name + " - " + track.data.name);
 					$("#currentAlbum").attr('src', track.data.album.cover);
 
-					//$("#currentLink").attr('href', track.data.uri);
+					$("#currentLink").attr('href', track.data.uri);
 					if (song.PayedBy){
 						$("#currentPlayedBy").html('by ' + song.PlayedBy.UserName);
 						$("#currentPlayedBy").show();
@@ -158,7 +158,7 @@
 
 	       	$("#currentAlbum").attr('src', "sp://import/img/placeholders/300-album.png");
 
-	       	//$("#currentLink").attr('href', '');
+	       	$("#currentLink").attr('href', '');
 	       	$("#currentPlayedBy").html('');
 	       	
 	       	//this.stop();

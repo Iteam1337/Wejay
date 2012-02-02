@@ -71,20 +71,19 @@
 						</div>
 					</div>
 					<blockquote>
-								By joining a room you and your friends can add songs to a mixed queue. Perfect for an open workspace!
+								By joining a room you and your friends can add songs to a mixed queue. Perfect for an <a href="#aboutSection">open workspace!</a>
 							</blockquote>
 					<address> You login with your facebook account and by doing so you accept that Wejay may use and store information from your Spotify library.</address>
 				</section>
 				<section id="roomSection">
 					<h2 id="roomTitle">Room</h2>
 					<section id="current">
-						<a id="currentLink" href="" onclick="app.currentRoom.playSong(currentRoom.currentSong, true); return false;"><img  id="currentAlbum" src="sp://import/img/placeholders/300-album.png">
+						<a id="currentLink" href="" onclick="app.currentRoom.playSong(app.currentRoom.currentSong, true); return false;"><img  id="currentAlbum" src="sp://import/img/placeholders/300-album.png">
 						<h3 class="inverted" id="currentSong"> </h3></a>
 						<h3 id="currentPlayedBy"></h3>
 						<a class="button" href="javascript:app.currentRoom.like()">Like</a>
 						<a class="button" href="javascript:app.currentRoom.block()">Block</a>
 						<a class="button" title="Skip this song" href="javascript:app.currentRoom.skip()">Skip</a>
-                        <a class="button" href="javascript:$(this).next('#comment').fadeIn()">Comment</a>
 
                         <div id="comment" class="fb-comments" data-href="http://example.com/artists/madonna" data-num-posts="2" data-colorscheme="dark"></div>
                         
@@ -108,7 +107,7 @@
 	
 	</address>
 					</section>
-					<sectio id="wejaysSection">
+					<section id="wejaysSection">
 						<h3 class="inverted">Wejays in this room</h3>
 						<ul id="users"></ul>
 						
@@ -120,6 +119,11 @@
 							
 							 </blockquote>
 					</section>
+					<section id="aboutSection">
+                        <h3>About Wejay</h3>
+                        <blockquote>Wejay is built for playing music together. You and your friends can add your music to a shared playlist which is controlled by you all. Just start Wejay on one computer and control it from your other computers in real time. Ideal for having great music while you work! Read more about Wejay and the latest research how music while you work affects your productivity, stress levels positive and a lot more good stuff at <a href="http://wejay.org">wejay.org</a></blockquote>
+
+                    </section>
 				</section>
 				
 			</div>
@@ -131,8 +135,6 @@
 		  	
 		  </script>
 
-          		<div id="fb-root"></div>
-          <script src="http://connect.facebook.net/sv_SE/all.js#xfbml=1&appId=154112144637878" type="text/javascript"/>
 
     	</body>
 </html>
