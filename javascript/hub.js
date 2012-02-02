@@ -32,18 +32,20 @@ function Hub (nodeUrl, currentRoom, facebookUserId){
 	this.checkout = function(){
 		socket.disconnect();
 	}
-	
+
 
 	socket.on('connect', function (data) {
-		console.log('connect');
-		
-		//if (currentRoom)
-			//currentRoom.clearCurrentSong();
-		
-		if (facebookId)		 // TODO: move 
-			currentRoom.checkin();
-		
-    });		
+	    console.log('connect');
+
+	    //if (currentRoom)
+	    //currentRoom.clearCurrentSong();
+
+	    if (facebookId)		 // TODO: move 
+	        currentRoom.checkin(function () {
+	            currentRoom.updateUsers();
+	        });
+
+	});		
     
     socket.on('onSongAdded', function(song){
     	console.log('onSongAdded');

@@ -33,11 +33,12 @@
 		
 					
 	/* Event handlers */
-				
-				
-				
-				
-				
+
+
+
+
+		console.log('REQUIRES latest version of preview build. If you experience trouble, make sure you have the latest preview build of Spotify: http://developer.spotify.com/en/spotify-apps-api/preview/');
+
 				// tab switched in ui
 		m.application.observe(m.EVENT.ARGUMENTSCHANGED, function () {
 		    var tab = m.application.arguments[0];
@@ -87,36 +88,70 @@
 		});
 				
 				// when links are dropped to the application we want to add those to the queue
-				m.application.observe(m.EVENT.LINKSCHANGED, function() {
-				  	
-				  	var links = m.application.links;
-				  	var droppedLinks = [];
-				  	
-				  	links.forEach(function(link)
-				  	{
-					  	console.log('dropped', link);
-				  		
-				  		var type = m.Link.getType(link);
-	    				if (m.Link.TYPE.PROFILE === type || m.Link.TYPE.FACEBOOK_USER === type){
-	    		  		
-				  			var user = m.User.fromURI(link, function(user){
-				  				console.log('found user:', user);
-				  				
-				  			});
-				  		} else {
-				  			
-				  			self.currentRoom.addTrackUri(link);
-							
-						}			  		
-					  	
-				  	});
-				  	
-				  	history.go(-2);
-	
-				});
-				  
-	
-	/* helper functions */
+		m.application.observe(m.EVENT.LINKSCHANGED, function () {
+
+		    var links = m.application.links;
+		    var droppedLinks = [];
+
+		    links.forEach(function (link) {
+		        console.log('dropped', link);
+
+		        var type = m.Link.getType(link);
+		        if (m.Link.TYPE.PROFILE === type || m.Link.TYPE.FACEBOOK_USER === type) {
+
+		            var user = m.User.fromURI(link, function (user) {
+		                console.log('found user:', user);
+
+		            });
+		        } else {
+
+		            if (m.Link.TYPE.TRACK === type)
+		                self.currentRoom.addTrackUri(link);
+
+		            if (m.Link.TYPE.PLAYLIST === type) {
+		                var playlist = m.Playlist.fromURI(link);
+		                var tracks = playlist.data.all();
+
+		                console.log('playlist: ', tracks);
+		                tracks.forEach(function (track) { self.currentRoom.addTrackUri(track); });
+
+
+		                playlist.observe(m.EVENT.CHANGE, function (changedPlaylist) {
+		                    var after = changedPlaylist.data.all(); // get tracks from playlist
+		                    var before = tracks;
+
+		                    after.filter(function (track) {
+		                        return !before.some(function (b) { return b == track}); // only keep the tracks that wasn't there before == added
+		                    });
+
+		                    after.forEach(function (track) { self.currentRoom.addTrackUri(track); });
+
+		                    tracks = changedPlaylist.data.all(); // update the history so we can understand next change
+		                });
+
+		            }
+
+
+		        }
+
+		    });
+
+		    //document.location = 'spotify:app:wejay:queue';	
+
+
+		});
+
+
+		/* helper functions */
+
+		function getTracksFromPlaylist(playlist) {
+		    var result = [];
+		    for (var i = 0; i < playlist.data.length; i++) {
+		        var track = playlist.data.getTrack(i);
+		        result.push(track);
+		    }
+		    return result;
+		}
 	
 	
 				// load images in the room banner
@@ -224,63 +259,73 @@
 	/* INIT */
 		
 	// init function
-	this.init = function() {
-		console.log('ready');
-		
-		if (facebookId)
-			this.loadRooms();
-			
-			
-		var ac = sp.require('javascript/AutocompleteForm');
-		ac.init('.auto-completeForm', topTracks, topArtists);
+				this.init = function () {
+				    console.log('ready');
 
-		
-		$('#login').click(function(){
-			self.user.authenticate(function(room){
-				
-			
-				
-				// either the user has been in a room before, we will just open it for him. 
-				//if (room)
-				//	openRoom(room);
-				
-				// anyhow we want to update the room list
-				self.loadRooms();
-	
-				// go back to startpage			
-				document.location = 'spotify:app:wejay';
-				
-			});
-			$(this).hide();
-			//$('#logout').show();
-		});
-		
-		$('#share').bind('click', function(event){
-			
-			event.preventDefault();
-			console.log(event.pageX, event.pageY);
-			sp.social.showSharePopup(event.pageX, event.pageY, 'http://open.spotify.com/app/wejay' /*+ currentRoom.roomName*/);
-		});
-		
-		
-		
-		
-		$('#logout').hide();
-		
-		// fill default rooms
-		self.fillRooms();
-		
-		var roomName = localStorage.getItem('room');
-		self.user.facebookUser = localStorage.getItem('user');
-		self.user.userName = self.user.facebookUser.name;
-		
-		self.currentRoom = new RoomController(unescape(roomName), nodeUrl);
-		
-		if (roomName)
-			document.location = "spotify:app:wejay:room";
-	
-	    
-	};
+				    if (facebookId)
+				        this.loadRooms();
+
+
+				    var ac = sp.require('javascript/AutocompleteForm');
+				    ac.init('.auto-completeForm', topTracks, topArtists);
+
+
+				    $('#logout').click(function () {
+
+				        self.user.logout();
+
+				        $(this).hide();
+				        $('#login').show();
+
+				    });
+
+				    $('#login').click(function () {
+				        self.user.authenticate(function (room) {
+
+
+
+				            // either the user has been in a room before, we will just open it for him. 
+				            //if (room)
+				            //	openRoom(room);
+
+				            // anyhow we want to update the room list
+				            self.loadRooms();
+
+                            // back to startpage
+				            document.location = 'spotify:app:wejay';	
+
+
+				        });
+				        $(this).hide();
+				        $('#logout').show();
+				    });
+
+				    $('#share').bind('click', function (event) {
+
+				        event.preventDefault();
+				        console.log(event.pageX, event.pageY);
+				        m.application.showSharePopup(document.getElementById('share'), 'spotify:app:wejay' /*+ currentRoom.roomName*/);
+				    });
+
+
+
+
+				    $('#logout').hide();
+
+				    // fill default rooms
+				    self.fillRooms();
+
+				    var roomName = localStorage.getItem('room');
+				    self.user.facebookUser = localStorage.getItem('user');
+				    self.user.userName = self.user.facebookUser.name;
+
+				    self.currentRoom = new RoomController(unescape(roomName), nodeUrl);
+
+				    if (roomName)
+				        document.location = 'spotify:app:wejay:room:' + roomName;	
+
+
+				};
  }			
 
 

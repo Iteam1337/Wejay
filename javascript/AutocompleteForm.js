@@ -10,7 +10,7 @@ function AutoCompleteForm (){
 	
 	var topTracks = null;
 	var self = this;
-	
+	var topArtists = null;
 
 	
 	this.init = function(formQuery, topTracks, topArtists){
@@ -47,7 +47,7 @@ function AutoCompleteForm (){
 		
 		// fill the top tracks for this user
 		self.loadTopTracks(function(userTopTracks){
-			self.topTracks = userTopTracks;
+			topTracks = userTopTracks;
 		});
 	}
 	

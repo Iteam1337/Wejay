@@ -86,7 +86,7 @@
 			}
 			h1.inverted, h2.inverted, h3.inverted, h4.inverted {
 				color: #fff;
-				text-shadow: 0px 0px 2px #fff, 0px 0px 2px #888;
+				/*text-shadow: 0px 0px 2px #fff, 0px 0px 2px #888;*/
 			}
 			/*********************************************
 			 * SLIDES
@@ -102,7 +102,7 @@
 
 			#main section {
 				line-height: 1.2em;
-				text-shadow: 0px 0px 2px #333, 0px 0px 4px #444;
+				/*text-shadow: 0px 0px 2px #333, 0px 0px 4px #444;*/
 				font-weight: 600;
 				min-height: 800px;
 				max-width: 820px;
@@ -185,20 +185,18 @@
 
 			#currentAlbum
 			{
-				width:300px;
 				margin-bottom: 30px;
 				margin-top: 0;
 				
 			}
 			
-			#current a:hover img{
-				background: url(../images/Play-XLarge-Hover.png)
-			}
-						
 			#current h3{
+				display:block;
 				clear:both;
-				width: 800px;
 				margin-top: 10px;
+				font-size: 36px;
+				-webkit-font-smoothing: subpixel-antialiased;
+
 			}
 			
 			#users li {
@@ -276,10 +274,6 @@
 				max-width: 350px;
 			}
 			
-			table#queue:first-child a
-			{
-				color:#111;
-			}
 			
 			#queue td a.mine:hover{
 				background:#333333;

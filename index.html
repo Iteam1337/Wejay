@@ -84,6 +84,10 @@
 						<a class="button" href="javascript:app.currentRoom.like()">Like</a>
 						<a class="button" href="javascript:app.currentRoom.block()">Block</a>
 						<a class="button" title="Skip this song" href="javascript:app.currentRoom.skip()">Skip</a>
+                        <a class="button" href="javascript:$(this).next('#comment').fadeIn()">Comment</a>
+
+                        <div id="comment" class="fb-comments" data-href="http://example.com/artists/madonna" data-num-posts="2" data-colorscheme="dark"></div>
+                        
 
 						<blockquote>If you LIKE the current song, Wejay will play it more often, if you BLOCK it won't be played when you are online.</blockquote>
 
@@ -96,7 +100,7 @@
 				        </div>
 
 						<script id="queueTemplate" type="text/x-jquery-tmpl">
-							<tr><td><a class="track ${PlayedBy.FacebookId == (app.user ? app.user.facebookId : '') ? 'mine' : ''}" href="${track.data.uri}">${Artist} - ${Title}</a></td><td><a class="user" href="spotify:user:facebookuid:${PlayedBy.FacebookId}">${PlayedBy.UserName}</a></td></tr>
+							<tr><td><a class="track ${PlayedBy.FacebookId == (app.user ? app.user.facebookId : '') ? 'mine' : ''}" href="spotify:track:${SpotifyId}">${Artist} - ${Title}</a></td><td><a class="user" href="spotify:user:facebook:${PlayedBy.FacebookId}">${PlayedBy.UserName}</a></td></tr>
 						</script>
 						<blockquote>Add music to this room by dragging tracks to this app. Your music will be mixed with all other wejays.</a></blockquote>
 <address>When the queue is empty an automatic DJ called Maestro will try to match your listening pattern as well as possible.
@@ -109,10 +113,10 @@
 						<ul id="users"></ul>
 						
 						<script id="usersTemplate" type="text/x-jquery-tmpl">
-							<li><a><img class="${Online ? 'online' : 'offline'}" src="http://graph.facebook.com/${FacebookId}/picture?access_token=${FacebookAcessToken}"></li></a>
+							<li><a href="spotify:user:facebook:${FacebookId}"><img class="${Online ? 'online' : 'offline'}" src="http://graph.facebook.com/${FacebookId}/picture?access_token=${FacebookAcessToken}"></li></a>
 						</script>
 						<blockquote>Invite friends by sharing this link: <input id="roomLink" value="spotify:app:wejay:room"/> or 
-							<a href="http://www.facebook.com/sharer.php?u=http://open.spotify.com/app/wejay" id="shareFacebook" title="Share on Facebook...">Share on Facebook</a>
+							<a href="http://www.facebook.com/sharer.php?u=http://open.spotify.com/app/wejay" id="share" title="Share on Facebook...">Share on Facebook</a>
 							
 							 </blockquote>
 					</section>
@@ -126,5 +130,9 @@
 		  	app.init();
 		  	
 		  </script>
+
+          		<div id="fb-root"></div>
+          <script src="http://connect.facebook.net/sv_SE/all.js#xfbml=1&appId=154112144637878" type="text/javascript"/>
+
     	</body>
 </html>

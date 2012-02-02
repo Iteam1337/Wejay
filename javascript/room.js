@@ -327,13 +327,14 @@
 
 		            var pl = new m.Playlist();
 
-                    // when the async below is all done we will continue. TODO: implement futures and promise.js here
+		            // when the async below is all done we will continue. TODO: implement futures and promise.js here
 		            var done = function () {
 		                if (this.count++ < result.length)
 		                    return;
 
 		                console.log('queue', result);
 		                if (result.length > 0) {
+		                    console.log('binding queue');
 		                    $('#queue').html($("#queueTemplate").tmpl(result));
 
 		                    /*		                //console.log(queue);
@@ -366,7 +367,7 @@
 		                }
 		            });
 
-		            
+
 		        }
 		    });
 
@@ -388,7 +389,7 @@
                 	if (result.length > 0)
 	                	$('#users').html($("#usersTemplate").tmpl(result));
 	                else
-	                	$('#users').html('<li>No users are online in this room. Login by adding this app to the sidebar and drag a track to the app.</li>');
+	                	$('#users').html('<li>NO WEJAYS HERE. LOGIN TO START THE ROOM.</li>');
                 }
             });	
 			

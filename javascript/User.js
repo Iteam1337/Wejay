@@ -10,7 +10,18 @@ function User(){
 	this.accessToken = null;
 	
 	var self = this;
-	
+
+	this.logout = function () {
+	    var logoutUrl = "https://www.facebook.com/logout.php?next=http://wejay.org/logout&access_token=" + this.accessToken;
+	    auth.showAuthenticationDialog(logoutUrl, "http://wejay.org/logout", {
+	        onSuccess: function () {
+	            app.currentRoom.updateUsers();
+	        }
+	    });
+	};
+
+
+
 	//  login to facebook with the current facebook user account
 	this.authenticate = function(callback){
 			
@@ -19,7 +30,9 @@ function User(){
 
 			if (callback && app.currentRoom){
 				app.currentRoom.checkin(function(room){
-					if (callback) callback(room);
+				    if (callback) callback(room);
+				    app.currentRoom.updateUsers();
+
 				});
 				return;
 			}
@@ -55,7 +68,9 @@ function User(){
 						
 						if (!app.currentRoom.roomName)
 							app.currentRoom.init( unescape(roomName));
-							
+
+						app.currentRoom.updateUsers();
+
 						if (callback)
 							callback(unescape(roomName));
 					});
