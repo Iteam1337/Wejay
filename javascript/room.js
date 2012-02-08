@@ -352,7 +352,7 @@
 		            }
 
 		            // only show songs with SpotifyId
-		            result.map(function (song) {
+		            result.slice(0, 20).map(function (song) {
 		                if (!song.spotifyId) {
 		                    // this shouldnt be true for many songs but to prevent errors we search the uri from the database
 		                    // possible race condition here..

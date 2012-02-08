@@ -323,7 +323,8 @@
 
 				    var roomName = localStorage.getItem('room');
 				    self.user.facebookUser = localStorage.getItem('user');
-				    self.user.userName = self.user.facebookUser.name;
+
+				    if (self.user.facebookUser) self.user.userName = self.user.facebookUser.name;
 
 				    self.currentRoom = new RoomController(unescape(roomName), nodeUrl);
 
