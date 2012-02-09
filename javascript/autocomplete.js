@@ -323,7 +323,7 @@ function limit(max, results) {
 	return ret;
 }
 
-var limitResults = partial(limit, 6);
+var limitResults = partial(limit, 16);
 
 function searchResultHandler(tokenInput, outputElement, result, fromSuggest) {
     // If the search didn't come from the auto-suggest and we have no results,
