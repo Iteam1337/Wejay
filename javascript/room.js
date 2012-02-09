@@ -25,24 +25,26 @@
   			var player = sp.trackPlayer;
 			player.setIsPlaying(false);
 		}
-		
-		this.addTrackUri = function(uri){
-			m.Track.fromURI(uri, function(track){
-				console.log('found track', track)
-				var song = { artist: track.data.artists[0].name, mbid: "", title: track.data.name, length: parseInt(track.data.duration / 1000), spotifyId : track.data.uri.replace('spotify:track:', '') };
-				song.room = self.roomName;
-				console.log('adding track->song', track, song);
-				
-				app.user.authenticate(function(){
-					// self.updateUsers();
-					self.hub.queueSong(song, function(){
-		             	self.updatePlaylist();  
-		             	history.go(-2);
-		             	// document.location = 'spotify:app:wejay:room';
-					});
-				});
 
-			});
+		this.addTrackUri = function (uri) {
+		    console.log('adding track uri: ' + uri);
+
+		    m.Track.fromURI(uri, function (track) {
+		        console.log('found track', track)
+		        var song = { artist: track.data.artists[0].name, mbid: "", title: track.data.name, length: parseInt(track.data.duration / 1000), spotifyId: track.data.uri.replace('spotify:track:', '') };
+		        song.room = self.roomName;
+		        console.log('adding track->song', track, song);
+
+		        app.user.authenticate(function () {
+		            // self.updateUsers();
+		            self.hub.queueSong(song, function () {
+		                self.updatePlaylist();
+		                history.go(-2);
+		                // document.location = 'spotify:app:wejay:room';
+		            });
+		        });
+
+		    });
 
 		}
 		
@@ -157,12 +159,15 @@
 
 	       	$("#currentSong").html('');
 
-	       	$("#currentSong").html('Loading...');
+	       	$("#currentSong").html('Nothing playing right now. Drag a track here!');
 
 	       	$("#currentAlbum").attr('src', "sp://import/img/placeholders/300-album.png");
 
 	       	$("#currentLink").attr('href', '');
 	       	$("#currentPlayedBy").html('');
+
+	       	$("#queue").html('');
+
 	       	
 	       	//this.stop();
 		}
@@ -249,8 +254,8 @@
 			this.clearCurrentSong();
 			
 			//this.stop();
-	      
-	       	$("#roomLink").val('http://open.spotify.com/app/wejay:room:' + this.roomName );
+
+			$("#roomLink").val('http://wejay.org/' + this.roomName);
 	       	//$("#roomLink").html('spotify:app:wejay:room:' + room);
 			
 			$("#shareFacebook").attr('href', "http://www.facebook.com/sharer.php?u={0}&t={1}".format($("#roomLink").val(), this.roomName.toUpperCase() + " WEJAY ROOM on Spotify. Join this room and control the music together. We are the DJ."));
@@ -264,8 +269,8 @@
 			
 			
 			localStorage.setItem('room', this.roomName);
-			
-			if (!anonymous && !facebookId)
+
+			if (!anonymous && !app.user.accessToken)
 				app.user.authenticate(function(){
 		            self.updateUsers();
 		            self.updatePlaylist();
@@ -402,7 +407,7 @@
 		this.hub = new Hub(nodeUrl, self, facebookId);
 	
 		if (this.roomName)
-			this.init(roomName);
+			this.init(roomName, true); // default is anonymous
 		
 
   

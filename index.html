@@ -30,12 +30,6 @@
 					<h1 class="inverted">WE ARE THE DJ.</h1>
 					<h4>Control the music together.</h4>
 					
-					<ul class="rooms" id="publicRooms">
-						<li>Stockholm</li>
-						<li>Berlin</li>
-						<li>New York</li>
-						<li>Tokyo</li>
-					</ul>
 					
 					<ul class="rooms" id="rooms">
 						
@@ -56,20 +50,20 @@
 					<div class="footer">
 				        
 						<div class="banner">
-						<h3 class="inverted">Start new room?</h3>
+						    <h3 class="inverted">Join or start a new room...</h3>
 	
-							<form action="#/1" onsubmit="app.currentRoom.init($('#roomName').val()); document.location = 'spotify:app:wejay:room'">
+							<form action="#/1" onsubmit="app.currentRoom.init($('#roomName').val(), true); document.location = 'spotify:app:wejay:room'">
 								<input type="text" value="" id="roomName" placeholder="Name the room"/>
 								<input type=submit value="Open">
 							</form>
+
 						</div>
-						<div class="banner small">
+						<div class="banner">
 			
-							<h3 class="inverted">Find your friends</h3>
+							<h3 class="inverted">...Or find your friends</h3>
 							<button id="login">Login</button>
 							<button id="logout">Logout</button>
 							
-	
 						</div>
 					</div>
 					<blockquote>
@@ -114,10 +108,10 @@
 						<ul id="users"></ul>
 						
 						<script id="usersTemplate" type="text/x-jquery-tmpl">
-							<li><a href="spotify:user:facebook:${FacebookId}"><img class="${Online ? 'online' : 'offline'}" src="http://graph.facebook.com/${FacebookId}/picture?access_token=${FacebookAcessToken}"></li></a>
+							<li><a href="spotify:user:facebook:${FacebookId}" ><img alt="${UserName}" class="${Online ? 'online' : 'offline'}" src="http://graph.facebook.com/${FacebookId}/picture"></li></a>
 						</script>
-						<blockquote>Invite friends by sharing this link: <input id="roomLink" value="spotify:app:wejay:room"/> or 
-							<a href="http://www.facebook.com/sharer.php?u=http://open.spotify.com/app/wejay" id="share" title="Share on Facebook...">Share on Facebook</a>
+						<blockquote>Invite friends by sharing this link: <input id="roomLink" value="spotify:app:wejay:room"/> or via facebook 
+							<a href="http://www.facebook.com/sharer.php?u=http://open.spotify.com/app/wejay" id="shareFacebook" title="Share on Facebook...">Invite</a>
 							
 							 </blockquote>
 					</section>
@@ -138,7 +132,7 @@
                 // initialize Wejay App
                 var app = new App();
                 app.init({ version: 0.9 });
-		  	
+                var ui = sp.require('sp://import/scripts/dnd');
 		  </script>
 
 

@@ -15,7 +15,7 @@ var _ = partial(lang.getString, catalog, "Radio");
 
 var tokenInput = new TokenInput("uris"),
     lastSearch,
-    allowedLinkTypes = [1, // artist
+    allowedLinkTypes = [//1,  artist
 			4]; // track
 
 // Some interesting events
@@ -225,9 +225,9 @@ function setupAutoComplete(tokenInput, callbackFunction) {
 	}).subscribe(function(e) {
 		e.preventDefault();
 		function start(currentLink) {
-			tokenInput.input.value = currentLink;
-			tokenInput.tokenize();
-			outputElement.classList.remove("show");
+			 //tokenInput.input.value = currentLink;
+			 tokenInput.tokenize();
+			// outputElement.classList.remove("show");
 		}
 		var currentLink = dom.queryOne("a.selected", outputElement);
 		if (currentLink) {

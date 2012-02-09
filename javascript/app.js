@@ -58,8 +58,11 @@
 
 		        if (m.application.arguments.length > 1) {
 		            var newRoom = m.application.arguments[1].toLowerCase();
-		            console.log('new room', newRoom);
-		            self.currentRoom.init(unescape(newRoom), true);
+
+		            if (self.currentRoom.roomName != newRoom) {
+		                console.log('new room', newRoom);
+		                self.currentRoom.init(unescape(newRoom), true);
+		            }
 
 		        } else {
 
@@ -215,10 +218,10 @@
 							friends.data.forEach(function(friend){
 								users.push(friend.id);
 							});
+
+				        users.push(app.user.facebookId); // add current user as well
 						
-						users.push(facebookId); // add current user as well
-						
-						console.log('sending users: ', users);
+						// console.log('sending users: ', users);
 						
 						$.ajax({
 					        url: 'http://wejay.org/room/GetRoomsForUsers',
@@ -268,7 +271,7 @@
 				this.init = function () {
 				    console.log('ready');
 
-				    if (facebookId)
+				    if (app.user.accessToken)
 				        this.loadRooms();
 
 
@@ -297,13 +300,10 @@
 				            // anyhow we want to update the room list
 				            self.loadRooms();
 
-                            // back to startpage
-				            document.location = 'spotify:app:wejay';	
-
+				            // back to startpage
+				            document.location = 'spotify:app:wejay';
 
 				        });
-				        $(this).hide();
-				        $('#logout').show();
 				    });
 
 				    $('#share').bind('click', function (event) {
@@ -322,14 +322,14 @@
 				    self.fillRooms();
 
 				    var roomName = localStorage.getItem('room');
-				    self.user.facebookUser = localStorage.getItem('user');
+				    self.user.facebookUser = localStorage.getItem('facebookUser');
 
 				    if (self.user.facebookUser) self.user.userName = self.user.facebookUser.name;
 
 				    self.currentRoom = new RoomController(unescape(roomName), nodeUrl);
 
 				    if (roomName)
-				        document.location = 'spotify:app:wejay:room:' + roomName;	
+				        document.location = 'spotify:app:wejay:room:' + roomName;
 
 
 				};
