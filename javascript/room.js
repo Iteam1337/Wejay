@@ -76,78 +76,81 @@
 		var addLeadingZero = function(number){
 			return (parseInt(number) < 10 ? "0" : "") + parseInt(number);
 		}
-	
-		this.playSong = function(song, forcePlay){
-							
-				console.log('Playing ', song);
-							
-			    if (song.Played) {
-			        var played = eval(song.Played.replace(/\/Date\(([-\d]+)\)\//gi, "new Date($1)"));
-			        var diff = new Date().getTime() - played.getTime();
-			        song.position = new Date(diff);
-			    } else {
-			        song.position = new Date().setTime(0); // start from 0 seconds if no position was set
-			    }
-			    
-			    this.currentSong = song;
-			
-			    var trackUri = "spotify:track:" + song.SpotifyId;
-			
-			    if (song.position && song.position.getMinutes)
-			        trackUri += "#" + addLeadingZero(song.position.getMinutes()) + ':' + addLeadingZero(song.position.getSeconds());
 
-		    	m.Track.fromURI(trackUri, function(track){
-			    	//$('currentSong').html(track.node);	
-			    	
-			    	var tpl = self.queue || new m.Playlist();
-			    	
-			    	if (!tpl.data.all().some(function(t){t == track.uri}))
-			    		tpl.add(track);
+		this.playSong = function (song, forcePlay) {
 
-         			var player = sp.trackPlayer;
-         			
-					var currentTrack = player.getNowPlayingTrack();
-					
-					player.context = tpl;
-					
+		    console.log('Playing ', song);
 
-					if (forcePlay || ((typeof currentTrack == 'undefined' || currentTrack  == null || (player.getIsPlaying() && currentTrack.track.uri != track.uri)))){
-						
-						player.playTrackFromUri(trackUri, {
-							onSuccess : function(s){
-								//console.log(s, 'played correctly');
-								
-								
-								// only autostart player if we are in the current playing view
-								/*if (self.currentTab == 'room')
-									player.setIsPlaying(true);*/
-									
-							},
-							onError : function(s){
-								console.log(s, 'play error');
-							}
-						});
-						//document.body.appendChild(player.node);
-					}
-					
-					self.queue = tpl;
-					
-					$("#currentSong").html(track.data.artists[0].name + " - " + track.data.name);
-					$("#currentAlbum").attr('src', track.data.album.cover);
+		    if (song.Played) {
+		        var played = eval(song.Played.replace(/\/Date\(([-\d]+)\)\//gi, "new Date($1)"));
+		        var diff = new Date().getTime() - played.getTime();
+		        song.position = new Date(diff);
+		    } else {
+		        song.position = new Date().setTime(0); // start from 0 seconds if no position was set
+		    }
 
-					$("#currentLink").attr('href', track.data.uri);
-					if (song.PayedBy){
-						$("#currentPlayedBy").html('by ' + song.PlayedBy.UserName);
-						$("#currentPlayedBy").show();
-					}	
-					else{
-						$("#currentPlayedBy").hide();
-					}
+		    if (!song.SpotifyId)
+		        this.skip(); // no point in waiting for a song at this point with no id
 
-					console.log('playing track', track);
-					
-		    	});
-			}
+		    this.currentSong = song;
+
+		    var trackUri = "spotify:track:" + song.SpotifyId;
+
+		    if (song.position && song.position.getMinutes)
+		        trackUri += "#" + addLeadingZero(song.position.getMinutes()) + ':' + addLeadingZero(song.position.getSeconds());
+
+		    m.Track.fromURI(trackUri, function (track) {
+		        //$('currentSong').html(track.node);	
+
+		        var tpl = self.queue || new m.Playlist();
+
+		        if (!tpl.data.all().some(function (t) { t == track.uri }))
+		            tpl.add(track);
+
+		        var player = sp.trackPlayer;
+
+		        var currentTrack = player.getNowPlayingTrack();
+
+		        player.context = tpl;
+
+
+		        if (forcePlay || ((typeof currentTrack == 'undefined' || currentTrack == null || (player.getIsPlaying() && currentTrack.track.uri != track.uri)))) {
+
+		            player.playTrackFromUri(trackUri, {
+		                onSuccess: function (s) {
+		                    //console.log(s, 'played correctly');
+
+
+		                    // only autostart player if we are in the current playing view
+		                    /*if (self.currentTab == 'room')
+		                    player.setIsPlaying(true);*/
+
+		                },
+		                onError: function (s) {
+		                    console.log(s, 'play error');
+		                }
+		            });
+		            //document.body.appendChild(player.node);
+		        }
+
+		        self.queue = tpl;
+
+		        $("#currentSong").html(track.data.artists[0].name + " - " + track.data.name);
+		        $("#currentAlbum").attr('src', track.data.album.cover);
+
+		        $("#currentLink").attr('href', track.data.uri);
+		        if (song.PayedBy) {
+		            $("#currentPlayedBy").html('by ' + song.PlayedBy.UserName);
+		            $("#currentPlayedBy").show();
+		        }
+		        else {
+		            $("#currentPlayedBy").hide();
+		        }
+
+		        console.log('playing track', track);
+
+		    });
+		}
 
 		this.clearCurrentSong = function(){
 			$('#roomTitle').html(this.roomName + ' ROOM');
