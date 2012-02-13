@@ -3,7 +3,7 @@
 This is the code behind the Wejay Spotify App.
 
 To use this code you need to download the preview version of Spotify. Use this link:
-http://developer.spotify.com/blog/archives/2012/01/12/new-spotify-api-preview-build-available/ 
+http://developer.spotify.com/en/spotify-apps-api/preview/
 
 Basic structure:
 
