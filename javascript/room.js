@@ -17,7 +17,7 @@
  		var self = this;
 		
 		if (roomName)
-			this.roomName = unescape(roomName).toLowerCase();
+			this.roomName = unescape(roomName).trim().toLowerCase();
 		
 		this.currentTab = null;
 		
@@ -40,7 +40,7 @@
 		            self.hub.queueSong(song, function () {
 		                self.updatePlaylist();
 		                history.go(-2);
-		                // document.location = 'spotify:app:wejay:room';
+		                // document.location = 'spotify:app:Wejay:room';
 		            });
 		        });
 
@@ -248,15 +248,15 @@
 				return;
 			}*/
 				
-			// document.location = 'spotify:app:wejay:room:' + room;
-			this.roomName = roomName.toLowerCase();
+			// document.location = 'spotify:app:Wejay:room:' + room;
+			this.roomName = unescape(roomName).trim().toLowerCase();
 			
 			this.clearCurrentSong();
 			
 			//this.stop();
 
 			$("#roomLink").val('http://wejay.org/' + this.roomName);
-	       	//$("#roomLink").html('spotify:app:wejay:room:' + room);
+	       	//$("#roomLink").html('spotify:app:Wejay:room:' + room);
 			
 			$("#shareFacebook").attr('href', "http://www.facebook.com/sharer.php?u={0}&t={1}".format($("#roomLink").val(), this.roomName.toUpperCase() + " WEJAY ROOM on Spotify. Join this room and control the music together. We are the DJ."));
 			
@@ -265,20 +265,20 @@
 			
 			// start listening to commands from node server
 			//this.hub.checkin();
-			this.hub.checkin({ user: app.user.userName, room: this.roomName });
 			
 			
 			localStorage.setItem('room', this.roomName);
 
 			if (!anonymous && !app.user.accessToken)
 				app.user.authenticate(function(){
-		            self.updateUsers();
+				    this.hub.checkin({ user: app.user.userName, room: this.roomName });
+				    self.updateUsers();
 		            self.updatePlaylist();
-					localStorage.setItem('user', app.user);
 				});
 			else
 			{
-	            self.updateUsers();
+			    this.hub.checkin({ user: "Anonymous", room: this.roomName });
+			    self.updateUsers();
 	            self.updatePlaylist();
 			}
 		}	
@@ -321,29 +321,30 @@
 
 		// Update playlist ul
 		this.updatePlaylist = function () {
+		    console.log('updating queue...');
+
 		    $.ajax({
 		        url: 'http://wejay.org/Room/Playlist?room=' + self.roomName,
 		        type: 'GET',
 		        processData: false,
 		        contentType: 'application/json',
 		        dataType: 'text',
+		        error: function (e) {
+		            console.log('Error updating queue', e);
+		        },
 		        success: function (r) {
 
 		            var result = r ? JSON.parse(r).Playlist : [];
 		            var playlistUri = localStorage.getItem('playlistUri');
 
-
 		            var pl = new m.Playlist();
+		            var queue = [];
 
 		            // when the async below is all done we will continue. TODO: implement futures and promise.js here
-		            var done = function () {
-		                if (this.count++ < result.length)
-		                    return;
+		            var bindQueue = function (queue) {
 
-		                console.log('queue', result);
-		                if (result.length > 0) {
-		                    console.log('binding queue');
-		                    $('#queue').html($("#queueTemplate").tmpl(result));
+		                if (queue.length > 0) {
+		                    $('#queue').html($("#queueTemplate").tmpl(queue));
 
 		                    /*		                //console.log(queue);
 		                    var list = new v.List(pl);
@@ -360,18 +361,20 @@
 		            }
 
 		            // only show songs with SpotifyId
-		            result.slice(0, 20).map(function (song) {
+		            result.forEach(function (song) {
 		                if (!song.spotifyId) {
 		                    // this shouldnt be true for many songs but to prevent errors we search the uri from the database
 		                    // possible race condition here..
 		                    self.getTrack(song.MbId ? 'isrc:' + song.MbId : 'artist:' + song.Artist + ', title:' + song.Title, function (track) {
 		                        song.track = new m.Track.fromURI(track.uri);
-		                        done();
+		                        queue.push(song);
+		                        bindQueue(queue);
 		                    });
 		                }
 		                else {
 		                    song.track = new m.Track.fromURI("spotify:track:" + song.SpotifyId);
-		                    done();
+		                    queue.push(song);
+		                    bindQueue(queue);
 		                }
 		            });
 
@@ -397,7 +400,7 @@
                 	if (result.length > 0)
 	                	$('#users').html($("#usersTemplate").tmpl(result));
 	                else
-	                	$('#users').html('<li>NO WEJAYS HERE. LOGIN TO START THE ROOM.</li>');
+	                	$('#users').html('<li>NO WEJAYS HERE. ADD MUSIC TO START THE ROOM.</li>');
                 }
             });	
 			

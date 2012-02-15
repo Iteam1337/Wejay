@@ -67,7 +67,7 @@
 		        } else {
 
 		            if (!self.currentRoom.roomName) {
-		                document.location.replace('spotify:app:wejay');
+		                document.location.replace('spotify:app:Wejay');
 		                alert('You have to select a room first');
 		            }
 
@@ -78,28 +78,26 @@
 		    if (tab == "queue") {
 
 		        if (!self.currentRoom.roomName) {
-		            document.location.replace('spotify:app:wejay');
+		            document.location.replace('spotify:app:Wejay');
 		            alert('You have to select a room first');
 		        }
-		        else
-		            document.location = "#/1/1";
+
+		        self.currentRoom.updatePlaylist();
 
 		    }
 
 		    if (tab == "wejays") {
 		        if (!self.currentRoom.roomName) {
-		            document.location.replace('spotify:app:wejay');
+		            document.location.replace('spotify:app:Wejay');
 		            alert('You have to select a room first');
 		        }
 		    }
 
-		    console.log(tab);
+		    //console.log(tab);
 		});
-				
-				// when links are dropped to the application we want to add those to the queue
-		m.application.observe(m.EVENT.LINKSCHANGED, function () {
 
-		    var links = m.application.links;
+
+		this.handleDroppedLinks = function (links) {
 		    var droppedLinks = [];
 
 		    links.forEach(function (link) {
@@ -130,7 +128,7 @@
 		                    var before = tracks;
 
 		                    after.filter(function (track) {
-		                        return !before.some(function (b) { return b == track}); // only keep the tracks that wasn't there before == added
+		                        return !before.some(function (b) { return b == track }); // only keep the tracks that wasn't there before == added
 		                    });
 
 		                    after.forEach(function (track) { self.currentRoom.addTrackUri(track); });
@@ -144,8 +142,16 @@
 		        }
 
 		    });
+		}
+				
+				// when links are dropped to the application we want to add those to the queue
+		m.application.observe(m.EVENT.LINKSCHANGED, function () {
 
-		    //document.location = 'spotify:app:wejay:queue';	
+		    var links = m.application.links;
+
+		    handleDroppedLinks(links);
+
+		    //document.location = 'spotify:app:Wejay:queue';	
 
 
 		});
@@ -247,7 +253,7 @@
 						var room = this.innerText;
 						fillRoomToplist(room, this);
 						$(this).click(function(){
-							document.location = 'spotify:app:wejay:room:' + room;	
+							document.location = 'spotify:app:Wejay:room:' + room;	
 						})
 					});
 				}
@@ -301,16 +307,33 @@
 				            self.loadRooms();
 
 				            // back to startpage
-				            document.location = 'spotify:app:wejay';
+				            document.location = 'spotify:app:Wejay';
 
 				        });
+				    });
+
+				    $('section').bind("drop", function (e) {
+				        e.preventDefault();
+				        var id = event.dataTransfer.getData('text');
+				        self.handleDroppedLinks([id]);
+
+				    });
+
+				    $('section').bind("dragenter", function (e) {
+				        e.preventDefault();
+				        e.dataTransfer.dropEffect = 'copy';
+				        return true;
+				    });
+
+				    $('section').bind("dragover", function (e) {
+				        return false;
 				    });
 
 				    $('#share').bind('click', function (event) {
 
 				        event.preventDefault();
 				        console.log(event.pageX, event.pageY);
-				        m.application.showSharePopup(document.getElementById('share'), 'spotify:app:wejay' /*+ currentRoom.roomName*/);
+				        m.application.showSharePopup(document.getElementById('share'), 'spotify:app:Wejay' /*+ currentRoom.roomName*/);
 				    });
 
 
@@ -329,7 +352,7 @@
 				    self.currentRoom = new RoomController(unescape(roomName), nodeUrl);
 
 				    if (roomName)
-				        document.location = 'spotify:app:wejay:room:' + roomName;
+				        document.location = 'spotify:app:Wejay:room:' + roomName;
 
 
 				};

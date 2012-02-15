@@ -52,7 +52,7 @@
 						<div class="banner">
 						    <h3 class="inverted">Join or start a new room...</h3>
 	
-							<form action="#/1" onsubmit="app.currentRoom.init($('#roomName').val(), true); document.location = 'spotify:app:wejay:room'">
+							<form action="#roomSection" onsubmit="document.location = 'spotify:app:Wejay:room:' + $('#roomName').val(); return false;">
 								<input type="text" value="" id="roomName" placeholder="Name the room"/>
 								<input type=submit value="Open">
 							</form>
@@ -84,7 +84,7 @@
                         <div id="comment" class="fb-comments" data-href="http://example.com/artists/madonna" data-num-posts="2" data-colorscheme="dark"></div>
                         
 
-						<blockquote>If you LIKE the current song, Wejay will play it more often, if you BLOCK it won't be played when you are online.</blockquote>
+						<blockquote>If you LIKE the current song, the Maestro bot will play it more often, if you BLOCK no one can play it when you are online.</blockquote>
 
 					</section>
 					<section id="queueSection">
@@ -98,7 +98,7 @@
 							<tr><td><a class="track ${PlayedBy.FacebookId == (app.user ? app.user.facebookId : '') ? 'mine' : ''}" href="spotify:track:${SpotifyId}">${Artist} - ${Title}</a></td><td><a class="user" href="spotify:user:facebook:${PlayedBy.FacebookId}">${unescape(PlayedBy.UserName)}</a></td></tr>
 						</script>
 						<blockquote>Add music to this room by dragging tracks to this app. Your music will be mixed with all other wejays.</a></blockquote>
-<address>When the queue is empty an automatic DJ called Maestro will try to match your listening pattern as well as possible.
+<address>When the queue is empty an automatic bot called Maestro will try to match your listening pattern as well as possible. Maestro will only play tracks you have added more than once.
 	Your added tracks will be sorted according to a set of democratic rules and mixed with tracks added by other logged in wejays. You can block tracks you don't like by blocking them in the room but be careful.
 	
 	</address>
@@ -110,7 +110,7 @@
 						<script id="usersTemplate" type="text/x-jquery-tmpl">
 							<li><a href="spotify:user:facebook:${FacebookId}" ><img alt="${UserName}" class="${Online ? 'online' : 'offline'}" src="http://graph.facebook.com/${FacebookId}/picture"></li></a>
 						</script>
-						<blockquote>Invite friends by sharing this link: <input id="roomLink" value="spotify:app:wejay:room"/> or via facebook 
+						<blockquote>Invite friends by sharing this link: <input id="roomLink" value="spotify:app:Wejay:room"/> or via facebook 
 							<a href="http://www.facebook.com/sharer.php?u=http://open.spotify.com/app/wejay" id="shareFacebook" title="Share on Facebook...">Invite</a>
 							
 							 </blockquote>
