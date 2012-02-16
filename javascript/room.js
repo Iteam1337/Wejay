@@ -141,7 +141,7 @@
 		        $("#currentAlbum").attr('src', track.data.album.cover);
 
 		        $("#currentLink").attr('href', track.data.uri);
-		        if (song.PayedBy) {
+		        if (song.PlayedBy) {
 		            $("#currentPlayedBy").html('by ' + song.PlayedBy.UserName);
 		            $("#currentPlayedBy").show();
 		        }
@@ -181,25 +181,35 @@
 			//this = null;
 		}
 
-		this.skip = function() {
-			$.ajax({
+		this.skip = function () {
+		    $('#skip').html('Skipping...');
+		    $.ajax({
 		        url: 'http://wejay.org/Room/next',
 		        data: { room: self.roomName },
 		        dataType: 'json',
 		        type: 'POST',
 		        traditional: true,
 		        success: function (result) {
-		        	
-		        	console.log('skipped successfully');
+		            $('#skip').html('Skip');
+
+		            console.log('skipped successfully');
+		        },
+		        error: function () {
+		            $('#skip').html('Failed');
+		            setTimeout(function () {
+		                $('#skip').html('Skip');
+		            }, 1000);
 		        }
-		    });	
+		    });
 		}
 		
 		
 		this.like = function() {
 			if (!this.currentSong)
 				throw "No current song";
-				
+
+			$('#like').html('Liking...');
+
 			$.ajax({
 		        url: 'http://wejay.org/Room/vote',
 		        data: { 
@@ -210,8 +220,15 @@
 		        type: 'POST',
 		        traditional: true,
 		        success: function (result) {
+		            $('#like').html('Like');
 		        	
 		        	console.log('liked successfully');
+		        },
+		        error: function () {
+		            $('#like').html('Failed');
+		            setTimeout(function () {
+		                $('#like').html('Like');
+		            }, 1000);
 		        }
 		    });	
 		}
@@ -219,6 +236,8 @@
 		this.block = function() {
 			if (!this.currentSong)
 				throw "No current song";
+			
+            $('#block').html('Blocking...');
 
 			$.ajax({
 		        url: 'http://wejay.org/Room/vote',
@@ -230,8 +249,15 @@
 		        type: 'POST',
 		        traditional: true,
 		        success: function (result) {
+		            $('#block').html('Block');
 		        	
 		        	console.log('liked successfully');
+		        },
+		        error: function () {
+		            $('#block').html('Failed');
+		            setTimeout(function () {
+		                $('#block').html('Block');
+		            }, 1000);
 		        }
 		    });	
 		}

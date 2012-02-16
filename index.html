@@ -77,9 +77,9 @@
 						<a id="currentLink" href="" onclick="app.currentRoom.playSong(app.currentRoom.currentSong, true); return false;"><img  id="currentAlbum" src="sp://import/img/placeholders/300-album.png">
 						<h3 class="inverted" id="currentSong"> </h3></a>
 						<h3 id="currentPlayedBy"></h3>
-						<a class="button" href="javascript:app.currentRoom.like()">Like</a>
-						<a class="button" href="javascript:app.currentRoom.block()">Block</a>
-						<a class="button" title="Skip this song" href="javascript:app.currentRoom.skip()">Skip</a>
+						<a class="button" id="like" href="javascript:app.currentRoom.like()">Like</a>
+						<a class="button" id="block" href="javascript:app.currentRoom.block()">Block</a>
+						<a class="button" title="Skip this song" id="skip" href="javascript:app.currentRoom.skip()">Skip</a>
 
                         <div id="comment" class="fb-comments" data-href="http://example.com/artists/madonna" data-num-posts="2" data-colorscheme="dark"></div>
                         
