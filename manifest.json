@@ -1,5 +1,6 @@
 {
     "AppName": "Wejay",
+	"BundleVersion" : "0.9.1",
     "AppDescription": "We are the DJ. Control the music – together.",
     "DefaultTabs" : [
     	{"title" : {"en":"Start a Room"}, "arguments": "choose"}, 

@@ -305,7 +305,8 @@
 	/* INIT */
 		
 	// init function
-				this.init = function () {
+				this.init = function (version) {
+				    this.version = version;
 				    console.log('ready');
 
 				    if (app.user.accessToken)
