@@ -30,49 +30,51 @@
 		    console.log('adding track uri: ' + uri);
 
 		    m.Track.fromURI(uri, function (track) {
-		        console.log('found track', track)
-		        var song = { artist: track.data.artists[0].name, mbid: "", title: track.data.name, length: parseInt(track.data.duration / 1000), spotifyId: track.data.uri.replace('spotify:track:', '') };
-		        song.room = self.roomName;
-		        console.log('adding track->song', track, song);
-
-		        app.user.authenticate(function () {
-		            // self.updateUsers();
-		            self.hub.queueSong(song, function () {
-		                self.updatePlaylist();
-		                history.go(-2);
-		                // document.location = 'spotify:app:Wejay:room';
-		            });
-		        });
-
+		        self.queueTrack(track);
 		    });
 
 		}
-		
-		this.getTrack = function(searchString, callback){
-			
-			if (!callback)
-				throw "No callback provided";
-				
-				
-			var search = new m.Search(searchString);
-			search.localResults = m.LOCALSEARCHRESULTS.IGNORE;
-			search.pageSize=1;
-			
-			// only tracks
-			search.searchTracks = true;
-			search.searchAlbums = false;
-			search.searchArtists = false;
-			search.searchPlaylists = false;
-			
-			search.observe(m.EVENT.CHANGE, function() {
-				if (!search.tracks || search.tracks.length == 0)
-					callback(null);
-				else	
-					callback(search.tracks[0].data);
-			});
-			
-			// start search
-			search.appendNext();
+
+		this.queueTrack = function (track) {
+		    var song = { artist: track.data.artists[0].name, mbid: "", title: track.data.name, length: parseInt(track.data.duration / 1000), spotifyId: track.data.uri.replace('spotify:track:', '') };
+		    song.room = self.roomName;
+		    console.log('adding track->song', track, song);
+
+		    self.hub.queueSong(song, function () {
+		        // document.location = 'spotify:app:Wejay:room';
+		    });
+		}
+
+
+		this.getTrack = function (searchString, callback, errorCallback) {
+
+		    if (!callback)
+		        throw "No callback provided";
+
+
+		    var search = new m.Search(searchString);
+		    search.localResults = m.LOCALSEARCHRESULTS.IGNORE;
+		    search.pageSize = 1;
+
+		    // only tracks
+		    search.searchTracks = true;
+		    search.searchAlbums = false;
+		    search.searchArtists = false;
+		    search.searchPlaylists = false;
+
+		    search.observe(m.EVENT.CHANGE, function () {
+		        if (!search.tracks || search.tracks.length == 0)
+		            callback(null);
+		        else
+		            callback(search.tracks[0].data);
+		    });
+
+		    // start search
+		    try {
+		        search.appendNext();
+		    } catch (err) {
+		        errorCallback(err);
+		    }
 		};
 		
 		var addLeadingZero = function(number){
@@ -182,84 +184,92 @@
 		}
 
 		this.skip = function () {
-		    $('#skip').html('Skipping...');
-		    $.ajax({
-		        url: 'http://wejay.org/Room/next',
-		        data: { room: self.roomName },
-		        dataType: 'json',
-		        type: 'POST',
-		        traditional: true,
-		        success: function (result) {
-		            $('#skip').html('Skip');
-
-		            console.log('skipped successfully');
-		        },
-		        error: function () {
-		            $('#skip').html('Failed');
-		            setTimeout(function () {
+		    this.checkin(true, function () {
+		        $('#skip').html('Skipping...');
+		        $.ajax({
+		            url: 'http://wejay.org/Room/next',
+		            data: { room: self.roomName },
+		            dataType: 'json',
+		            type: 'POST',
+		            traditional: true,
+		            success: function (result) {
 		                $('#skip').html('Skip');
-		            }, 1000);
-		        }
+
+		                console.log('skipped successfully');
+		            },
+		            error: function () {
+		                $('#skip').html('Failed');
+		                setTimeout(function () {
+		                    $('#skip').html('Skip');
+		                }, 1000);
+		            }
+		        });
 		    });
 		}
-		
-		
-		this.like = function() {
-			if (!this.currentSong)
-				throw "No current song";
 
-			$('#like').html('Liking...');
 
-			$.ajax({
-		        url: 'http://wejay.org/Room/vote',
-		        data: { 
-		        	mbId: self.currentSong.MbId ? self.currentSong.MbId : self.currentSong.SpotifyId, 
-		        	value: 5
-		        },
-		        dataType: 'json',
-		        type: 'POST',
-		        traditional: true,
-		        success: function (result) {
-		            $('#like').html('Like');
-		        	
-		        	console.log('liked successfully');
-		        },
-		        error: function () {
-		            $('#like').html('Failed');
-		            setTimeout(function () {
+		this.like = function () {
+		    if (!this.currentSong)
+		        throw "No current song";
+
+		    this.checkin(true, function () {
+
+		        $('#like').html('Liking...');
+
+		        $.ajax({
+		            url: 'http://wejay.org/Room/vote',
+		            data: {
+		                mbId: self.currentSong.SpotifyId,
+		                value: 5
+		            },
+		            dataType: 'json',
+		            type: 'POST',
+		            traditional: true,
+		            success: function (result) {
 		                $('#like').html('Like');
-		            }, 1000);
-		        }
-		    });	
+
+		                console.log('liked successfully');
+		            },
+		            error: function () {
+		                $('#like').html('Failed');
+		                setTimeout(function () {
+		                    $('#like').html('Like');
+		                }, 1000);
+		            }
+		        });
+		    });
 		}
 
-		this.block = function() {
-			if (!this.currentSong)
-				throw "No current song";
-			
-            $('#block').html('Blocking...');
+		this.block = function () {
+		    if (!this.currentSong)
+		        throw "No current song";
 
-			$.ajax({
-		        url: 'http://wejay.org/Room/vote',
-		        data: { 
-		        	mbId: self.currentSong.MbId ? self.currentSong.MbId : self.currentSong.SpotifyId, 
-		        	value: 1
-		        },
-		        dataType: 'json',
-		        type: 'POST',
-		        traditional: true,
-		        success: function (result) {
-		            $('#block').html('Block');
-		        	
-		        	console.log('liked successfully');
-		        },
-		        error: function () {
-		            $('#block').html('Failed');
-		            setTimeout(function () {
+		    this.checkin(true, function () {
+
+		        $('#block').html('Blocking...');
+
+		        $.ajax({
+		            url: 'http://wejay.org/Room/vote',
+		            data: {
+		                mbId: self.currentSong.SpotifyId,
+		                value: 1
+		            },
+		            dataType: 'json',
+		            type: 'POST',
+		            traditional: true,
+		            success: function (result) {
 		                $('#block').html('Block');
-		            }, 1000);
-		        }
-		    });	
+
+		                console.log('liked successfully');
+		            },
+		            error: function () {
+		                $('#block').html('Failed');
+		                setTimeout(function () {
+		                    $('#block').html('Block');
+		                }, 1000);
+		            }
+		        });
+		    });
 		}
 
 
@@ -287,8 +297,6 @@
 			$("#shareFacebook").attr('href', "http://www.facebook.com/sharer.php?u={0}&t={1}".format($("#roomLink").val(), this.roomName.toUpperCase() + " WEJAY ROOM on Spotify. Join this room and control the music together. We are the DJ."));
 			
 
-			
-			
 			// start listening to commands from node server
 			//this.hub.checkin();
 			
@@ -311,13 +319,13 @@
             
 		
 // checkin the current user to wejay
-		this.checkin = function(callback)
+		this.checkin = function(force, callback)
 		{
 			//if (!room || !user || !facebookId )
 			//	throw "You have not set room and user or facebook details yet";
 			var self = this;
 			
-			if (self.lastCheckin && self.lastCheckin.getTime() > new Date().getTime() - 30*60*1000)
+			if (!force && (self.lastCheckin && self.lastCheckin.getTime() > new Date().getTime() - 30*60*1000))
 				callback(self.roomName);
 							
 			$.ajax({
@@ -341,8 +349,9 @@
 		    });
 			
 		}
-			
 
+
+		
 
 
 		// Update playlist ul
@@ -364,47 +373,18 @@
 		            var playlistUri = localStorage.getItem('playlistUri');
 
 		            var pl = new m.Playlist();
-		            var queue = [];
 
-		            // when the async below is all done we will continue. TODO: implement futures and promise.js here
-		            var bindQueue = function (queue) {
-
-		                if (queue.length > 0) {
-		                    $('#queue').html($("#queueTemplate").tmpl(queue));
-
-		                    /*		                //console.log(queue);
-		                    var list = new v.List(pl);
-		                    //list.collection = collection;
-		                    $('#queue').empty();
-		                    $('#queue').append(list.node);
-		                    // playSong(result[0]);
-		                    */
-		                }
-		                else {
-		                    $('#queue').html('<li>QUEUE IS EMPTY, ADD TRACKS BELOW</li>');
-		                    $("#currentSong").html('Nothing playing right now');
-		                }
+		            result.filter(function (song) {
+		                return song.spotifyId;
+		            })
+                    
+		            if (result.length > 0) {
+		                $('#queue').html($("#queueTemplate").tmpl(result));
 		            }
-
-		            // only show songs with SpotifyId
-		            result.forEach(function (song) {
-		                if (!song.spotifyId) {
-		                    // this shouldnt be true for many songs but to prevent errors we search the uri from the database
-		                    // possible race condition here..
-		                    self.getTrack(song.MbId ? 'isrc:' + song.MbId : 'artist:' + song.Artist + ', title:' + song.Title, function (track) {
-		                        song.track = new m.Track.fromURI(track.uri);
-		                        queue.push(song);
-		                        bindQueue(queue);
-		                    });
-		                }
-		                else {
-		                    song.track = new m.Track.fromURI("spotify:track:" + song.SpotifyId);
-		                    queue.push(song);
-		                    bindQueue(queue);
-		                }
-		            });
-
-
+		            else {
+		                $('#queue').html('<li>QUEUE IS EMPTY, ADD TRACKS BELOW</li>');
+		                $("#currentSong").html('Nothing playing right now');
+		            }
 		        }
 		    });
 
@@ -440,5 +420,41 @@
 		
 
   
-	}  
-			
+	}
+
+
+    /*
+	Array.prototype.next = function () {
+	    if (this.finishedCount === undefined)
+	        this.finishedCount == 0;
+
+	    this.finishedCount++;
+
+	    if (this.finishedCount >= this.length)
+	        this.complete(this);
+	};
+
+	Array.prototype.complete = function (callback) {
+	    if (this.finishedCount !== undefined && this.finishedCount >= this.length)
+	        callback();
+	    else
+	        this.complete = callback;
+	};
+
+	Array.prototype.amap = function (item, next) {
+	    if (this.next !== undefined)
+	        next = this.next;
+
+	    return Array.prototype.map.call(this, item, next);
+	};
+
+	['one', 'two', 'three'].amap(function (number, next) {
+	    setTimeout(function () {
+	        console.log(number);
+	        console.log(next);
+	        next();
+	    }, 100);
+	}).complete(function () {
+	    console.log('complete');
+	});
+    */

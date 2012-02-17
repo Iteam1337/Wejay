@@ -99,59 +99,88 @@
 
 		this.handleDroppedLinks = function (links) {
 		    var droppedLinks = [];
+		    app.user.authenticate(function () {
 
-		    links.forEach(function (link) {
-		        console.log('dropped', link);
+		        links.forEach(function (link) {
+		            console.log('dropped', link);
 
-		        var type = m.Link.getType(link);
-		        if (m.Link.TYPE.PROFILE === type || m.Link.TYPE.FACEBOOK_USER === type) {
+		            var type = m.Link.getType(link);
+		            if (m.Link.TYPE.PROFILE === type || m.Link.TYPE.FACEBOOK_USER === type) {
 
-		            var user = m.User.fromURI(link, function (user) {
-		                console.log('found user:', user);
+		                var user = m.User.fromURI(link, function (user) {
+		                    console.log('found user:', user);
+		                    alert('You can not yet invite people by dragging them, please share the link to the room instead, you will find it on the Wejays tab');
+		                });
+		            } else {
 
-		            });
-		        } else {
+		                if (m.Link.TYPE.TRACK === type)
+		                    self.currentRoom.addTrackUri(link);
 
-		            if (m.Link.TYPE.TRACK === type)
-		                self.currentRoom.addTrackUri(link);
+		                if (m.Link.TYPE.PLAYLIST === type) {
+		                    var playlist = m.Playlist.fromURI(link);
+		                    var tracks = playlist.data.all();
 
-		            if (m.Link.TYPE.PLAYLIST === type) {
-		                var playlist = m.Playlist.fromURI(link);
-		                var tracks = playlist.data.all();
-
-		                console.log('playlist: ', tracks);
-		                tracks.forEach(function (track) { self.currentRoom.addTrackUri(track); });
-
-
-		                playlist.observe(m.EVENT.CHANGE, function (changedPlaylist) {
-		                    var after = changedPlaylist.data.all(); // get tracks from playlist
-		                    var before = tracks;
-
-		                    after.filter(function (track) {
-		                        return !before.some(function (b) { return b == track }); // only keep the tracks that wasn't there before == added
+		                    console.log('playlist: ', tracks);
+		                    tracks.forEach(function (uri) {
+		                        self.currentRoom.addTrackUri(uri);
 		                    });
 
-		                    after.forEach(function (track) { self.currentRoom.addTrackUri(track); });
+		                    self.currentRoom.updatePlaylist();
 
-		                    tracks = changedPlaylist.data.all(); // update the history so we can understand next change
-		                });
+		                    self.linkPlaylist(playlist);
+		                }
+
 
 		            }
 
+		        });
+		    });
+		}
 
+
+        // listen to changes in a playlist and automatically add all new tracks added
+		this.linkPlaylist = function (playlist) {
+		    var tracks = before = playlist.data.all();
+
+		    playlist.observe(m.EVENT.CHANGE, function (changedPlaylist) {
+		        console.log('Found changes in playlist');
+
+		        var after = changedPlaylist.data.all(); // get tracks from playlist
+
+
+
+		        var newTracks = after
+                .filter(function (track) {
+                    return !before.some(function (b) { return b == track }); // only keep the tracks that wasn't there before == added
+                });
+
+		        if (newTracks.length) {
+
+		            app.user.authenticate(function () {
+		                newTracks.forEach(function (track) {
+		                    self.currentRoom.addTrackUri(track);
+		                });
+
+		                self.currentRoom.updatePlaylist();
+		            });
 		        }
 
+		        before = after; // update the history so we can understand next change
 		    });
+
 		}
 				
 				// when links are dropped to the application we want to add those to the queue
 		m.application.observe(m.EVENT.LINKSCHANGED, function () {
 
+
 		    var links = m.application.links;
 
-		    handleDroppedLinks(links);
+		    console.log('dropped links', links);
 
-		    //document.location = 'spotify:app:Wejay:queue';	
+		    self.handleDroppedLinks(links);
+
+		    document.location = 'spotify:app:Wejay:queue';	
 
 
 		});
@@ -321,7 +350,7 @@
 
 				    $('section').bind("dragenter", function (e) {
 				        e.preventDefault();
-				        e.dataTransfer.dropEffect = 'copy';
+				        // e.dataTransfer.dropEffect = 'copy';
 				        return true;
 				    });
 

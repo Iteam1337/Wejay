@@ -35,7 +35,8 @@ function User(){
 	    console.log('starting authentication');
 
 	    // we are already authorized
-	    if (this.accessToken) {
+	    if (self.accessToken) {
+	        console.log('already authenticated');
 
 	        $('#logout').show();
 	        $('#login').hide();
@@ -43,7 +44,7 @@ function User(){
 	        if (callback && app.currentRoom) {
 
 
-	            app.currentRoom.checkin(function (room) {
+	            app.currentRoom.checkin(false, function (room) {
 	                if (callback) callback(room);
 	                app.currentRoom.updateUsers();
 
@@ -85,7 +86,7 @@ function User(){
 	                    app.currentRoom = new RoomController();
 
 
-	                app.currentRoom.checkin(function (roomName) {
+	                app.currentRoom.checkin(false, function (roomName) {
 
 	                    if (!app.currentRoom.roomName)
 	                        app.currentRoom.init(unescape(roomName));

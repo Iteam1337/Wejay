@@ -17,5 +17,5 @@
     "RequiredInterface": 1,
     "RequiredPermissions": ["http://wejay.org:81", "http://wejay.org", "http://*.fbcdn.net", "http://ws.spotify.com", "http://*.facebook.com", "https://graph.facebook.com", "http://*.facebook.net"],
     "VendorIdentifier": "se.iteam",
-    "AcceptedLinkTypes" : ["album", "artist", "playlist", "track", "user"]
+    "AcceptedLinkTypes" : ["album", "playlist", "track"]
 }

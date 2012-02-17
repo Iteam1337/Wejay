@@ -12,43 +12,45 @@ function AutoCompleteForm (){
 	var self = this;
 	var topArtists = null;
 
-	
-	this.init = function(formQuery, topTracks, topArtists){
-		
-		var ac = sp.require('javascript/autocomplete');
 
-		var dom = sp.require('sp://import/scripts/dom');
+	this.init = function (formQuery, topTracks, topArtists) {
 
-			// Set up autocomplete. ripped from radio.js - I hope it is OK. ---------------------------------------------------------
-	
-		var showingAutocomplete = false;
-		var autocompleteForm = dom.queryOne(formQuery),
+	    var ac = sp.require('javascript/autocomplete');
+
+	    var dom = sp.require('sp://import/scripts/dom');
+
+	    // Set up autocomplete. ripped from radio.js - I hope it is OK. ---------------------------------------------------------
+
+	    var showingAutocomplete = false;
+	    var autocompleteForm = dom.queryOne(formQuery),
 			searchInput = ac.tokenInput.input,
-			outputElement = ac.setupAutoComplete(ac.tokenInput, function(){
-	            //loadStation(searchInput.value, "spotify:app:radio", "", "search", true);
-	            //hideAutocomplete();
-	            app.currentRoom.addTrackUri(searchInput.value);
-	            searchInput.focus();
-	        });
-	
-	
-	   searchInput.type = 'text';
-	   searchInput.placeholder = 'Add tracks to the queue by keywords or drop tracks here';
-	
-		// Creating the method that runs the autocomplete search and updates the table.
-		// Take some default methods defined in autocomplete.js and curry them
-		var searchHandler = partial(ac.searchResultHandler, ac.tokenInput, outputElement);
-		var autocomplete = partial(ac.autoComplete, searchHandler, function() {return {tracks: topTracks, artists: topArtists}});
+			outputElement = ac.setupAutoComplete(ac.tokenInput, function () {
+			    //loadStation(searchInput.value, "spotify:app:radio", "", "search", true);
+			    //hideAutocomplete();
+			    app.user.authenticate(function () {
+			        app.currentRoom.addTrackUri(searchInput.value);
+			    });
+			    searchInput.focus();
+			});
 
-	
-		dom.adopt(autocompleteForm, ac.tokenInput.node);
-	
-		r.fromDOMEvent(searchInput, 'input').subscribe(ac.throttle(autocomplete, 500));
-		
-		// fill the top tracks for this user
-		self.loadTopTracks(function(userTopTracks){
-			topTracks = userTopTracks;
-		});
+
+	    searchInput.type = 'text';
+	    searchInput.placeholder = 'Add tracks to the queue by keywords or drop tracks here';
+
+	    // Creating the method that runs the autocomplete search and updates the table.
+	    // Take some default methods defined in autocomplete.js and curry them
+	    var searchHandler = partial(ac.searchResultHandler, ac.tokenInput, outputElement);
+	    var autocomplete = partial(ac.autoComplete, searchHandler, function () { return { tracks: topTracks, artists: topArtists} });
+
+
+	    dom.adopt(autocompleteForm, ac.tokenInput.node);
+
+	    r.fromDOMEvent(searchInput, 'input').subscribe(ac.throttle(autocomplete, 500));
+
+	    // fill the top tracks for this user
+	    self.loadTopTracks(function (userTopTracks) {
+	        topTracks = userTopTracks;
+	    });
 	}
 	
 	this.loadTopTracks = function(callback) {

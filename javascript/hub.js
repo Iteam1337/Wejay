@@ -23,16 +23,17 @@ function Hub (nodeUrl, currentRoom, facebookUserId){
         });	
 	}
 	
+    // checkin to the room in node server
 	this.checkin = function(options)
 	{
 		console.log('checkin to node');
 		socket.emit("checkin", options);
 	}
 	
+    // checkout from the room in the node server
 	this.checkout = function(){
 		socket.disconnect();
 	}
-
 
 	socket.on('connect', function (data) {
 	    console.log('connect');
