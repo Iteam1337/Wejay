@@ -244,15 +244,7 @@
 				    if (!app.user.facebookId)
 				        return;
 
-				    $.getJSON('https://graph.facebook.com/me/friends?access_token=' + app.user.accessToken + '&callback=?', function (friends) {
-
-				        //console.log(friends);
-				        var users = new Array();
-
-				        if (friends && friends.data)
-				            friends.data.forEach(function (friend) {
-				                users.push(friend.id);
-				            });
+				   app.user.loadFriends(function(users){
 
 				        users.push(app.user.facebookId); // add current user as well
 

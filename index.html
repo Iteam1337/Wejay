@@ -108,7 +108,7 @@
 						<ul id="users"></ul>
 						
 						<script id="usersTemplate" type="text/x-jquery-tmpl">
-							<li><a href="spotify:user:facebook:${FacebookId}" ><img alt="${UserName}" class="${Online ? 'online' : 'offline'}" src="http://graph.facebook.com/${FacebookId}/picture"></li></a>
+							<li><a href="${(app.user.friends || []) .indexOf(FacebookId) >= 0 ? 'spotify:user:facebook:' + FacebookId : '#wejaysSection' }" ><img alt="${UserName}" class="${Online ? 'online' : 'offline'}" src="http://graph.facebook.com/${FacebookId}/picture"></li></a>
 						</script>
 						<blockquote>Invite friends by sharing this link: <input id="roomLink" value="spotify:app:Wejay:room"/> or via facebook 
 							<a href="http://www.facebook.com/sharer.php?u=http://open.spotify.com/app/wejay" id="shareFacebook" title="Share on Facebook...">Invite</a>

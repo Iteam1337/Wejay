@@ -29,6 +29,27 @@ function User(){
 	};
 
 
+	this.loadFriends = function (callback) {
+
+	    $.getJSON('https://graph.facebook.com/me/friends?access_token=' + self.accessToken + '&callback=?', function (friends) {
+
+	        //console.log(friends);
+	        var users = new Array();
+
+	        if (friends && friends.data)
+	            friends.data.forEach(function (friend) {
+	                users.push(friend.id);
+	            });
+
+	        self.friends = users;
+
+	        localStorage.setItem('friends', users);
+
+	        if (callback)
+	            callback(users);
+	    });
+	}
+
 
 	//  login to facebook with the current facebook user account
 	this.authenticate = function (callback) {
@@ -79,6 +100,7 @@ function User(){
 	                app.loadRooms();
 
 	                localStorage.setItem('facebookUser', facebookUser);
+	                self.friends = localStorage.getItem('friends');
 
 	                //facebookUser(this); // inherit all facebook properties to this user class
 
