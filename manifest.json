@@ -1,7 +1,7 @@
 {
     "AppName": "Wejay",
 	"BundleVersion" : "0.9.1",
-    "AppDescription": "We are the DJ. Control the music – together.",
+    "AppDescription": "We are the DJ. Listen to music togehter while you work",
     "DefaultTabs" : [
     	{"title" : {"en":"Start a Room"}, "arguments": "choose"}, 
     	{"title" : {"en":"Currently Playing"}, "arguments": "room"}, 

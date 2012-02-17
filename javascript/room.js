@@ -374,8 +374,8 @@
 
 		            var pl = new m.Playlist();
 
-		            result.filter(function (song) {
-		                return song.spotifyId;
+		            result = result.filter(function (song) {
+		                return song.SpotifyId;
 		            })
                     
 		            if (result.length > 0) {

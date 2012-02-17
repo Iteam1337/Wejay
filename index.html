@@ -28,7 +28,7 @@
 			<div id="main">
 				<section id="chooseSection" class="left">
 					<h1 class="inverted">WE ARE THE DJ.</h1>
-					<h4>Control the music together.</h4>
+					<h4>Listen to music togehter while you work</h4>
 					
 					
 					<ul class="rooms" id="rooms">
@@ -52,7 +52,7 @@
 						<div class="banner">
 						    <h3 class="inverted">Join or start a new room...</h3>
 	
-							<form action="#roomSection" onsubmit="app.currentRoom.init(this.roomName.value, true); document.location = 'spotify:app:Wejay:room'; ">
+							<form action="#roomSection" onsubmit="app.currentRoom.init(this.roomName.value, true); document.location = 'spotify:app:Wejay:room'; return false;">
 								<input type="text" value="" id="roomName" placeholder="Name the room"/>
 								<input type=submit value="Open">
 							</form>
