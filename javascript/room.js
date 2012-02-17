@@ -273,48 +273,48 @@
 		}
 
 
-		this.init = function(roomName, anonymous)		{
-			console.log('init');
-			
-			if (!roomName)
-				throw "Room name must be specified"
-			/*if (!room) // if no room was specified, go back to the starting page
-			{
-				document.location = '#/0';
-				return;
-			}*/
-				
-			// document.location = 'spotify:app:Wejay:room:' + room;
-			this.roomName = unescape(roomName).trim().toLowerCase();
-			
-			this.clearCurrentSong();
-			
-			//this.stop();
+		this.init = function (roomName, anonymous) {
+		    console.log('init');
 
-			$("#roomLink").val('http://wejay.org/' + this.roomName);
-	       	//$("#roomLink").html('spotify:app:Wejay:room:' + room);
-			
-			$("#shareFacebook").attr('href', "http://www.facebook.com/sharer.php?u={0}&t={1}".format($("#roomLink").val(), this.roomName.toUpperCase() + " WEJAY ROOM on Spotify. Join this room and control the music together. We are the DJ."));
-			
+		    if (!roomName)
+		        throw "Room name must be specified"
+		    /*if (!room) // if no room was specified, go back to the starting page
+		    {
+		    document.location = '#/0';
+		    return;
+		    }*/
 
-			// start listening to commands from node server
-			//this.hub.checkin();
-			
-			
-			localStorage.setItem('room', this.roomName);
+		    // document.location = 'spotify:app:Wejay:room:' + room;
+		    this.roomName = unescape(roomName).trim().toLowerCase();
 
-			if (!anonymous && !app.user.accessToken)
-				app.user.authenticate(function(){
-				    this.hub.checkin({ user: app.user.userName, room: this.roomName });
-				    self.updateUsers();
+		    this.clearCurrentSong();
+
+		    //this.stop();
+
+		    $("#roomLink").val('http://wejay.org/' + encodeURI(this.roomName));
+		    $("#roomLink").bind('click', function () { this.select(); });
+		    //$("#roomLink").html('spotify:app:Wejay:room:' + room);
+
+		    $("#shareFacebook").attr('href', "http://www.facebook.com/sharer.php?u={0}&t={1}".format($("#roomLink").val(), this.roomName.toUpperCase() + " WEJAY ROOM on Spotify. Join this room and control the music together. We are the DJ."));
+
+
+		    // start listening to commands from node server
+		    //this.hub.checkin();
+
+
+		    localStorage.setItem('room', this.roomName);
+
+		    if (!anonymous && !app.user.accessToken)
+		        app.user.authenticate(function () {
+		            this.hub.checkin({ user: app.user.userName, room: this.roomName });
+		            self.updateUsers();
 		            self.updatePlaylist();
-				});
-			else
-			{
-			    this.hub.checkin({ user: "Anonymous", room: this.roomName });
-			    self.updateUsers();
-	            self.updatePlaylist();
-			}
+		        });
+		    else {
+		        this.hub.checkin({ user: "Anonymous", room: this.roomName });
+		        self.updateUsers();
+		        self.updatePlaylist();
+		    }
 		}	
             
 		
