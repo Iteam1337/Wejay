@@ -246,7 +246,7 @@
 
 				    $.getJSON('https://graph.facebook.com/me/friends?access_token=' + app.user.accessToken + '&callback=?', function (friends) {
 
-				        console.log(friends);
+				        //console.log(friends);
 				        var users = new Array();
 
 				        if (friends && friends.data)
@@ -265,6 +265,8 @@
 				            data: { facebookIds: users },
 				            type: "POST",
 				            success: function (r) {
+
+				                r = r.filter(function (i) { return i.Name && i.Name.toLowerCase() != "null" });
 
 				                $('#rooms').html($("#roomListTemplate").tmpl(r));
 
