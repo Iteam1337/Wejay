@@ -200,38 +200,38 @@
 	
 				// load images in the room banner
 				function fillRoomToplist(room, div){
-					$.ajax({
-				        url: 'http://wejay.org/Room/Toplist?room=' + room,
-				        type: "GET",
+				    $.ajax({
+				        url: 'http://wejay.org/Room/GetOnlineUsers?room=' + encodeURI(room),
+				        type: 'GET',
 				        processData: false,
-				        contentType: "application/json",
-				        dataType: "text",
+				        contentType: 'application/json',
+				        dataType: 'text',
 				        success: function (r) {
+
 				            var result = r ? JSON.parse(r).Data : [];
-				            
-				            
-				            var result = r ? JSON.parse(r).Data : [];
-				            result = result.sort(function(song){
-				            	return -song.Count;
-				            })
+
+				            result = result.sort(function (user1, user2) {
+				                return user1.CheckedIn-user2.CheckedIn;
+				            });
+
 				            result = result.slice(0, 9);
 				            $(div).html($("#roomTopListTemplate").tmpl(result));
 				            $(div).append('<a>' + room + '</a>');
-				            
+
 				            /*
 				            result = result.filter(function(item){
-				            	return !!item.Songs[0].SpotifyId;
+				            return !!item.Songs[0].SpotifyId;
 				            });
 				            
 				            result = result.sort(function(song){
-				            	return -song.Count;
+				            return -song.Count;
 				            });
 				            
 				            result = result.slice(0, 4);
 				            console.log(result);
 				            $(div).css('backgroundImage', 'url(spotify:mosaic:' + result.map(function(item){return item.Songs[0].SpotifyId}).join(';') + ') no-repeat');
 				            $(div).append('<a>' + room + '</a>');
-				*/
+				            */
 				        }
 				    });
 					

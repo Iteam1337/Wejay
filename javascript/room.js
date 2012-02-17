@@ -383,7 +383,7 @@
 		            }
 		            else {
 		                $('#queue').html('<li>QUEUE IS EMPTY, ADD TRACKS BELOW</li>');
-		                $("#currentSong").html('Nothing playing right now');
+		                $("#currentSong").html('Add tracks by dragging them here');
 		            }
 		        }
 		    });
