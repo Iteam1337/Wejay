@@ -83,6 +83,9 @@
 
 		this.playSong = function (song, forcePlay) {
 
+		    if (!song)
+		        return;
+
 		    console.log('Playing ', song);
 
 		    if (song.Played) {
@@ -93,8 +96,10 @@
 		        song.position = new Date().setTime(0); // start from 0 seconds if no position was set
 		    }
 
-		    if (!song.SpotifyId)
+		    if (!song.SpotifyId) {
 		        this.skip(); // no point in waiting for a song at this point with no id
+		        return;
+		    }
 
 		    this.currentSong = song;
 
@@ -157,7 +162,7 @@
 		}
 
 		this.clearCurrentSong = function(){
-			$('#roomTitle').html(this.roomName + ' ROOM');
+			$('#roomTitle').html(escape(this.roomName) + ' ROOM');
 
 	       	$("#currentSong").html('');
 

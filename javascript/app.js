@@ -192,7 +192,8 @@
 		    var result = [];
 		    for (var i = 0; i < playlist.data.length; i++) {
 		        var track = playlist.data.getTrack(i);
-		        result.push(track);
+		        if (track)
+                    result.push(track);
 		    }
 		    return result;
 		}
