@@ -135,7 +135,6 @@
 			a:not(.image){
 				color:#fff;	
 				text-decoration: none;
-				text-transform: uppercase;
 			}
 			
 			img {
