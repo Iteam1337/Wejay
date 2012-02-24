@@ -408,6 +408,8 @@
                 	
                 	var result = r ? JSON.parse(r).Data : [];
                 	
+                	result = result.filter(function(user){return user.FacebookId && user.FacebookId != "null";});
+                	
                 	if (result.length > 0)
 	                	$('#users').html($("#usersTemplate").tmpl(result));
 	                else
