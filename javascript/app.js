@@ -337,7 +337,7 @@
 				        });
 				    });
 
-				    $('section').bind("drop", function (e) {
+				    $('#currentSection').bind("drop", function (e) {
 				        e.preventDefault();
 				        var id = event.dataTransfer.getData('text');
 				        self.handleDroppedLinks([id]);

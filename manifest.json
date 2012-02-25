@@ -3,7 +3,7 @@
 	"BundleVersion" : "0.9.1",
     "AppDescription": "We are the DJ. Listen to music togehter while you work",
     "DefaultTabs" : [
-    	{"title" : {"en":"Start a Room"}, "arguments": "choose"}, 
+    	{"title" : {"en":"Open a Room"}, "arguments": "choose"}, 
     	{"title" : {"en":"Currently Playing"}, "arguments": "room"}, 
     	{"title" : {"en":"Queue"}, "arguments": "queue"},
     	{"title" : {"en":"Wejays"}, "arguments": "wejays"}
