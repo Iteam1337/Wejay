@@ -98,11 +98,11 @@
 
 
 		this.handleDroppedLinks = function (links) {
+		    console.log('dropped', links);
 		    var droppedLinks = [];
 		    app.user.authenticate(function () {
 
 		        links.forEach(function (link) {
-		            console.log('dropped', link);
 
 		            var type = m.Link.getType(link);
 		            if (m.Link.TYPE.PROFILE === type || m.Link.TYPE.FACEBOOK_USER === type) {
@@ -141,6 +141,8 @@
         // listen to changes in a playlist and automatically add all new tracks added
 		this.linkPlaylist = function (playlist) {
 		    var tracks = before = playlist.data.all();
+
+
 
 		    playlist.observe(m.EVENT.CHANGE, function (changedPlaylist) {
 		        console.log('Found changes in playlist');
@@ -337,20 +339,28 @@
 				        });
 				    });
 
+<<<<<<< HEAD
 				    $('#currentSection').bind("drop", function (e) {
+=======
+				    $('#roomSection').bind("drop", function (e) {
+
+
+>>>>>>> da7355ff20007d8e5ac9a97c7ee97f3546b5ca9a
 				        e.preventDefault();
 				        var id = event.dataTransfer.getData('text');
+				        console.log('dropped to section ', id);
+
 				        self.handleDroppedLinks([id]);
 
 				    });
 
-				    $('section').bind("dragenter", function (e) {
+				    $('#roomSection').bind("dragenter", function (e) {
 				        e.preventDefault();
 				        // e.dataTransfer.dropEffect = 'copy';
 				        return true;
 				    });
 
-				    $('section').bind("dragover", function (e) {
+				    $('#roomSection').bind("dragover", function (e) {
 				        return false;
 				    });
 

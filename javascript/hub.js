@@ -42,7 +42,7 @@ function Hub (nodeUrl, currentRoom, facebookUserId){
 	    //currentRoom.clearCurrentSong();
 
 	    if (facebookId)		 // TODO: move 
-	        currentRoom.checkin(function () {
+	        currentRoom.checkin(false, function () {
 	            currentRoom.updateUsers();
 	        });
 
