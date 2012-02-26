@@ -29,6 +29,9 @@
 		this.addTrackUri = function (uri) {
 		    console.log('adding track uri: ' + uri);
 
+			if (!uri)
+				return;
+			
 		    m.Track.fromURI(uri, function (track) {
 		        self.queueTrack(track);
 		    });
@@ -331,7 +334,10 @@
 			var self = this;
 			
 			if (!force && (self.lastCheckin && self.lastCheckin.getTime() > new Date().getTime() - 30*60*1000))
+			{
 				callback(self.roomName);
+				return;				
+			}
 							
 			$.ajax({
 		        url: 'http://wejay.org/Room/checkin',

@@ -49,8 +49,14 @@
 		m.application.observe(m.EVENT.ARGUMENTSCHANGED, function () {
 		    var tab = m.application.arguments[0];
 		    self.currentRoom.currentTab = tab;
+		    
+		    var currentTab = document.location = "#" + tab + "Section";
 
-		    document.location = "#" + tab + "Section";
+			$('section').removeClass('current');
+
+			$(currentTab).addClass('current');
+			$(currentTab).parents('section').addClass('current');			
+			$(currentTab).children('section').first().addClass('current');			
 
 		    console.log(m.application.arguments);
 
@@ -338,14 +344,7 @@
 
 				        });
 				    });
-
-<<<<<<< HEAD
-				    $('#currentSection').bind("drop", function (e) {
-=======
 				    $('#roomSection').bind("drop", function (e) {
-
-
->>>>>>> da7355ff20007d8e5ac9a97c7ee97f3546b5ca9a
 				        e.preventDefault();
 				        var id = event.dataTransfer.getData('text');
 				        console.log('dropped to section ', id);

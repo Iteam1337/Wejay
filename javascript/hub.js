@@ -23,28 +23,23 @@ function Hub (nodeUrl, currentRoom, facebookUserId){
         });	
 	}
 	
-    // checkin to the room in node server
 	this.checkin = function(options)
 	{
 		console.log('checkin to node');
 		socket.emit("checkin", options);
 	}
 	
-    // checkout from the room in the node server
 	this.checkout = function(){
 		socket.disconnect();
 	}
+
 
 	socket.on('connect', function (data) {
 	    console.log('connect');
 
 	    //if (currentRoom)
 	    //currentRoom.clearCurrentSong();
-
-	    if (facebookId)		 // TODO: move 
-	        currentRoom.checkin(false, function () {
-	            currentRoom.updateUsers();
-	        });
+		currentRoom.updateUsers();
 
 	});		
     
@@ -67,20 +62,37 @@ function Hub (nodeUrl, currentRoom, facebookUserId){
 		currentRoom.clearCurrentSong();
 		console.log('onSongEnded');
 	});
+	
+		            			
+    socket.on('onSongStarted', function(currentSong){
+	
+		console.log('songStarted', currentSong);
+		
+		
+		if (!currentSong.SpotifyId) {
+			// if it is an old song we don't have the spotifyId, we have to look it up..
+            $.ajax({
+                url: "http://ws.spotify.com/search/1/track.xml?q=" + (currentSong.MbId ? 'isrc:' + currentSong.MbId : currentSong.Artist + ',' + currentSong.Title),
+                dataType: 'xml',
+                traditional: true,
+                type: 'GET',
+                success: function (result) {
+                    //Parse spotify link id
+                    if ($(result).find("track").length > 0) {
+                        var parsedValue = $(result).find("track")[0].attributes[0].value; //"spotify:track:2b712q3E27nyW6LGsZxr0y"
+                        currentSong.SpotifyId = parsedValue.split(':')[2];
+                    }
 
-
-	socket.on('onSongStarted', function (currentSong) {
-
-	    console.log('songStarted', currentSong);
-
-	    if (!currentSong)
-	        return;
-
-        currentRoom.playSong(currentSong)
-
-	    currentRoom.updatePlaylist();
-
-	});
+                    currentRoom.playSong(currentSong);
+                }
+            });
+		} else {
+			currentRoom.playSong(currentSong)
+		}
+		
+		currentRoom.updatePlaylist();
+		
+    });
     
  }
  

@@ -100,15 +100,27 @@
 			 * DEFAULT ELEMENT STYLES
 			 *********************************************/
 
-			#main section {
+			section{
+				display:none;
+				opacity:0;
+			}
+			
+			section.current{
+				display:block;
+				opacity:1;
+			}
+
+			#main{
+				margin-top:40px;
+			}
+			
+			#roomSection section {
 				line-height: 1.2em;
 				/*text-shadow: 0px 0px 2px #333, 0px 0px 4px #444;*/
 				font-weight: 600;
-				min-height: 800px;
 				max-width: 820px;
 				min-width: 560px;
 				padding-top: 40px;
-				padding-bottom: 200px;
 				margin: 0 auto;
 			}
 			ol {
@@ -135,6 +147,7 @@
 			a:not(.image){
 				color:#fff;	
 				text-decoration: none;
+				text-transform: uppercase;
 			}
 			
 			img {
