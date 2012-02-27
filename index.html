@@ -100,9 +100,11 @@
 						
 			    	    <div class="auto-completeForm">
 				        </div>
+						
+						<div class="clearFix">&nbsp;</div>
 
 						<script id="queueTemplate" type="text/x-jquery-tmpl">
-							<tr><td><a class="track ${PlayedBy.FacebookId == (app.user ? app.user.facebookId : '') ? 'mine' : ''}" href="spotify:track:${SpotifyId}">${Artist} - ${Title}</a></td><td><a class="user" href="spotify:user:facebook:${PlayedBy.FacebookId}">${unescape(PlayedBy.UserName)}</a></td></tr>
+							<tr><td><a class="track ${PlayedBy.FacebookId == (app.user ? app.user.facebookId : '') ? 'mine' : ''}" href="spotify:track:${SpotifyId}"><strong>${Artist}</strong> ${Title}</a></td><td><a class="user" href="spotify:user:facebook:${PlayedBy.FacebookId}">${unescape(PlayedBy.UserName)}</a></td></tr>
 						</script>
 						<blockquote>Add music to this room by dragging tracks to this app. Your music will be mixed with all other wejays.</a></blockquote>
 <address>When the queue is empty an automatic bot called Maestro will try to match your listening pattern as well as possible. Maestro will only play tracks you have added more than once.
@@ -117,6 +119,7 @@
 						<script id="usersTemplate" type="text/x-jquery-tmpl">
 							<li><a href="${(app.user.friends || []) .indexOf(FacebookId) >= 0 ? 'spotify:user:facebook:' + FacebookId : '#wejaysSection' }" ><img alt="${UserName}" class="${Online ? 'online' : 'offline'}" src="http://graph.facebook.com/${FacebookId}/picture"></li></a>
 						</script>
+						
 						<blockquote>Invite friends by sharing this link: <input id="roomLink" value="spotify:app:Wejay:room"/> or via facebook 
 							<a class="button" href="http://www.facebook.com/sharer.php?u=http://open.spotify.com/app/wejay" id="shareFacebook" title="Share on Facebook...">Invite</a>
 							

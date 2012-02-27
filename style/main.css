@@ -324,18 +324,30 @@
 						
 			.auto-completeForm input{
 				width: 700px;
-				
+			}
+			.auto-completeForm{
+				min-height: 500px;
+				overflow: hidden;
 			}
 			
-			.auto-complete{
-				margin-left: 40px;
-				margin-top: 10px;
-				min-height: 400px;
+			.auto-complete.show {
+				margin-top: 20px;
+				display:block;
+				position: inherit;
+				background: rgba(0,0,0,0.7)
 			}
 			
 			.auto-complete img{
 				width: 30px;
+				height: 30px;
+				border:0;
 				margin: 0 10px 0 0;
+			}
+			
+			.auto-complete strong, #queue strong{
+				color:#ddd;
+				font-weight: normal;
+				
 			}
 			
 			.auto-complete .artists{
@@ -356,7 +368,9 @@
 				max-width: 700px;
 				text-transform: uppercase;
 				color:#fff;
-				font-size: 25px;
+				font-size: 31px;
+				font-weight: 400;
+				line-height: 43px;	
 			}
 			.auto-complete a img{
 				float:left; 

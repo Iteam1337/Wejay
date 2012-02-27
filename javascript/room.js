@@ -195,7 +195,7 @@
 		}
 
 		this.skip = function () {
-		    this.checkin(true, function () {
+		    app.user.authenticate(function () {
 		        $('#skip').html('Skipping...');
 		        $.ajax({
 		            url: 'http://wejay.org/Room/next',
