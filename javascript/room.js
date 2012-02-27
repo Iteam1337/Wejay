@@ -152,7 +152,7 @@
 
 		        $("#currentLink").attr('href', track.data.uri);
 		        if (song.PlayedBy) {
-		            $("#currentPlayedBy").html('by ' + unescape(song.PlayedBy.UserName));
+		            $("#currentPlayedBy").html('by ' + song.PlayedBy.UserName);
 		            $("#currentPlayedBy").show();
 		        }
 		        else {
@@ -338,7 +338,7 @@
 							
 			$.ajax({
 		        url: 'http://wejay.org/Room/checkin',
-		        data: { userName: escape(app.user.userName), facebookId: app.user.facebookId, room: self.roomName },
+		        data: { userName: app.user.userName, facebookId: app.user.facebookId, room: self.roomName },
 		        dataType: 'json',
 		        type: 'POST',
 		        traditional: true,
@@ -377,8 +377,13 @@
 		        },
 		        success: function (r) {
 
+
 		            var result = r ? JSON.parse(r).Playlist : [];
+
+		            console.log('load success', result);
+
 		            var playlistUri = localStorage.getItem('playlistUri');
+
 
 		            var pl = new m.Playlist();
 

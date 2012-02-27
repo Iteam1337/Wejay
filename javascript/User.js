@@ -90,7 +90,7 @@ function User(){
 	                console.log('logged in user: ', facebookUser);
 
 	                self.facebookUser = facebookUser;
-	                self.userName = facebookUser.name;
+	                self.userName = unescape(facebookUser.name);
 	                self.facebookId = facebookUser.id;
 	                self.accessToken = accessToken;
 
