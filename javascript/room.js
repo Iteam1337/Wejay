@@ -152,7 +152,7 @@
 
 		        $("#currentLink").attr('href', track.data.uri);
 		        if (song.PlayedBy) {
-		            $("#currentPlayedBy").html('by ' + song.PlayedBy.UserName);
+		            $("#currentPlayedBy").html('by ' + unescape(song.PlayedBy.UserName));
 		            $("#currentPlayedBy").show();
 		        }
 		        else {
