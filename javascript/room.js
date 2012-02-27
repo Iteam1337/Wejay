@@ -177,6 +177,9 @@
 	       	$("#currentPlayedBy").html('');
 
 	       	$("#queue").html('');
+		    $('#skip').html('Skip');
+			$('#block').html('Block');
+			$('#like').html('Like');
 
 	       	
 	       	//this.stop();
@@ -220,7 +223,7 @@
 		    if (!this.currentSong)
 		        throw "No current song";
 
-		    this.checkin(true, function () {
+		   	app.user.authenticate(function () {
 
 		        $('#like').html('Liking...');
 
@@ -234,7 +237,8 @@
 		            type: 'POST',
 		            traditional: true,
 		            success: function (result) {
-		                $('#like').html('Like');
+		                $('#like').html('Liked');
+		                $('#block').html('Block');
 
 		                console.log('liked successfully');
 		            },
@@ -252,7 +256,7 @@
 		    if (!this.currentSong)
 		        throw "No current song";
 
-		    this.checkin(true, function () {
+		    app.user.authenticate(function () {
 
 		        $('#block').html('Blocking...');
 
@@ -266,9 +270,10 @@
 		            type: 'POST',
 		            traditional: true,
 		            success: function (result) {
-		                $('#block').html('Block');
+		                $('#block').html('Blocked');
+		                $('#like').html('Like');
 
-		                console.log('liked successfully');
+		                console.log('Blocked successfully');
 		            },
 		            error: function () {
 		                $('#block').html('Failed');
@@ -286,28 +291,19 @@
 
 		    if (!roomName)
 		        throw "Room name must be specified"
-		    /*if (!room) // if no room was specified, go back to the starting page
-		    {
-		    document.location = '#/0';
-		    return;
-		    }*/
 
-		    // document.location = 'spotify:app:Wejay:room:' + room;
+
+
 		    this.roomName = unescape(roomName).trim().toLowerCase();
 
 		    this.clearCurrentSong();
 
-		    //this.stop();
 
 		    $("#roomLink").val('http://wejay.org/' + encodeURI(this.roomName));
 		    $("#roomLink").bind('click', function () { this.select(); });
 		    //$("#roomLink").html('spotify:app:Wejay:room:' + room);
 
 		    $("#shareFacebook").attr('href', "http://www.facebook.com/sharer.php?u={0}&t={1}".format($("#roomLink").val(), this.roomName.toUpperCase() + " WEJAY ROOM on Spotify. Join this room and control the music together. We are the DJ."));
-
-
-		    // start listening to commands from node server
-		    //this.hub.checkin();
 
 
 		    localStorage.setItem('room', this.roomName);
@@ -329,8 +325,9 @@
 // checkin the current user to wejay
 		this.checkin = function(force, callback)
 		{
-			//if (!room || !user || !facebookId )
-			//	throw "You have not set room and user or facebook details yet";
+			if (!app.user.facebookId )
+				throw "You have not set room and user or facebook details yet";
+			
 			var self = this;
 			
 			if (!force && (self.lastCheckin && self.lastCheckin.getTime() > new Date().getTime() - 30*60*1000))

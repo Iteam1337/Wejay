@@ -330,7 +330,7 @@
 			.auto-complete{
 				margin-left: 40px;
 				margin-top: 10px;
-				
+				min-height: 400px;
 			}
 			
 			.auto-complete img{
@@ -354,6 +354,9 @@
 				overflow: hidden;
 				text-overflow: ellipsis;
 				max-width: 700px;
+				text-transform: uppercase;
+				color:#fff;
+				font-size: 25px;
 			}
 			.auto-complete a img{
 				float:left; 
