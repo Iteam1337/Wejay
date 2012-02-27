@@ -6,7 +6,9 @@
     	{"title" : {"en":"Open a Room"}, "arguments": "choose"}, 
     	{"title" : {"en":"Currently Playing"}, "arguments": "room"}, 
     	{"title" : {"en":"Queue"}, "arguments": "queue"},
-    	{"title" : {"en":"Wejays"}, "arguments": "wejays"}
+    	{"title" : {"en":"Wejays"}, "arguments": "wejays"},
+    	{"title" : {"en":"About"}, "arguments": "about"}
+    	
     	
     ],
     "BundleIdentifier": "wejay.org",

@@ -393,8 +393,8 @@
 		                $('#queue').html($("#queueTemplate").tmpl(result));
 		            }
 		            else {
-		                $('#queue').html('<li>QUEUE IS EMPTY, ADD TRACKS BELOW</li>');
-		                $("#currentSong").html('Add tracks by dragging them here');
+		                $('#queue').html('<tr><td>QUEUE IS EMPTY, ADD TRACKS BELOW</td></tr>');
+		                $("#currentSong").html('Drag tracks here to start the room');
 		            }
 		        }
 		    });

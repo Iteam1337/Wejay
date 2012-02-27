@@ -18,10 +18,6 @@
 				margin: 0;
 				overflow-y: auto;
 				overflow-x: hidden;
-				font-family: Lucida Grande, sans-serif;
-				font-size: 36px;
-				background: #fff;
-				color: #222;
 				width: 100%;
 				height: 100%;
 			
@@ -49,22 +45,13 @@
 				
 			}
 			
-			header img{
-				border:0;
-				height:20px;
-				padding:0;
-				margin:0;
-				box-shadow: none;
-				background:none;
-				z-index: 9000;
-			}
-			
 			h1, h2, h3, h4 {
 				margin: 10px 0 10px 0;
 				color: #222;
 				font-family: 'League Gothic', Arial, Helvetica, sans-serif;
 				line-height: 0.9em;
 				letter-spacing: 0.02em;
+				font-weight:500;
 				text-transform: uppercase;
 				text-shadow: 0px 1px 0px #000, 0px 0px 4px #333;
 				
@@ -103,6 +90,7 @@
 			section{
 				display:none;
 				opacity:0;
+				text-align: center;
 			}
 			
 			section.current{
@@ -117,7 +105,6 @@
 			#roomSection section {
 				line-height: 1.2em;
 				/*text-shadow: 0px 0px 2px #333, 0px 0px 4px #444;*/
-				font-weight: 600;
 				max-width: 820px;
 				min-width: 560px;
 				padding-top: 40px;
@@ -130,24 +117,8 @@
 			li, p {
 				margin-bottom: 10px;
 			}
-			a.button {
-				color: #e3e3e3;
-				border: 1px solid #333;
-				border-radius: 10px;
-				text-decoration: none;
-				padding: 5px;
-				font-size:0.5em;
-				margin-top: 100px;
-			}
-			a.button:hover {
-				color: #fff;
-				background: #333;
-				
-			}
 			a:not(.image){
-				color:#fff;	
 				text-decoration: none;
-				text-transform: uppercase;
 			}
 			
 			img {
@@ -168,21 +139,6 @@
 				-moz-box-shadow: 0 0 20px rgba(0, 0, 0, 0.25);
 				box-shadow: 0 0 20px rgba(0, 0, 0, 0.25);
 			}
-			input[type=text] {
-
-				padding: 10px;
-				font-size: 20px;
-				border-radius: 5px;
-				width: 160px;
-			}
-			input[type=submit], button {
-				margin: 10px;
-				paddin: 10px 20px;
-				font-size: 20px;
-				border-radius: 5px;
-				width: 100px;
-				height:50px;
-			}
 			
 			h3
 			{
@@ -202,6 +158,23 @@
 				
 			}
 			
+			#current{
+				position: relative;
+				width: 300px;
+			}
+			
+			#current:hover .hover {
+				display:block;
+				position: absolute;
+				height: 100px;
+				width: 300px;
+				background: rgba(255,255,255,0.2);
+				
+			}
+			
+			#current .hover {
+				display:none;
+			}
 		
 			#current h3{
 				display:block;
@@ -235,6 +208,10 @@
 				
 			}
 			
+			.rooms{
+				width: 600px;
+			}
+			
 			.rooms li{
 				list-style: none;
 				list-style-type: none;
@@ -245,6 +222,7 @@
 				background: #444;
 				width: 150px;
 				height:150px;
+				border-radius: 5px;
 				text-align:center;
 				text-transform: uppercase;
 				font-size: 17px;
@@ -254,6 +232,11 @@
 				position:relative;
 				box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);			
 				cursor: hand;
+			}
+			
+			.rooms li a {
+				color:#fff;
+				padding:7px;
 			}
 			
 			.rooms img{
@@ -281,6 +264,7 @@
 			    width: 80%;
 				min-width: 600px;
 				margin-left: 48px;
+				
 			}
 			
 			#queue td{
@@ -291,6 +275,15 @@
 				text-align:left;
 				max-width: 350px;
 				font-size: 30px;
+				line-height: 35px;
+					color:#fff;
+			}
+			#queue td a{
+				color:#fff;
+			}
+			
+			.auto-completeForm .input {
+				padding:6px;
 			}
 			
 			#publicRooms
@@ -340,7 +333,7 @@
 			.auto-complete{
 				margin-left: 40px;
 				margin-top: 10px;
-				min-height: 300px;
+				
 			}
 			
 			.auto-complete img{
@@ -416,18 +409,33 @@
 			{
 				opacity : 0.5;
 			}
+			
+			#users li img{
+				width: 50px;
+				height:50px;
+			}
 
+
+			input[type=text]{
+				border:0px;
+				padding:3px;
+				min-width: 200px;
+			}
 
 			blockquote
 			{
-				font-size: 12px;
-				border: 1px solid black;
+				border-top: 2px solid black;
+				border-bottom: 2px solid black;
 				clear: both;
 				color: #fff;
 				padding: 10px;
 				line-height: 18px;
-				text-shadow: 0px 1px 2px #333;
+				margin-top: 20px;
 
+			}
+			blockquote a {
+				color:#e3e3e3;
+				
 			}
 			
 			address{

@@ -45,10 +45,11 @@
             return;
 		}
 
-				// tab switched in ui
-		m.application.observe(m.EVENT.ARGUMENTSCHANGED, function () {
-		    var tab = m.application.arguments[0];
-		    self.currentRoom.currentTab = tab;
+		
+		
+		this.tabTo = function(tab)
+		{
+			self.currentRoom.currentTab = tab;
 		    
 		    var currentTab = document.location = "#" + tab + "Section";
 
@@ -98,11 +99,18 @@
 		            alert('You have to select a room first');
 		        }
 		    }
+		}
+
+		// tab switched in ui
+		m.application.observe(m.EVENT.ARGUMENTSCHANGED, function () {
+		    var tab = m.application.arguments[0];
+		    
+		    self.tabTo(tab);
 
 		    //console.log(tab);
 		});
-
-
+		
+		
 		this.handleDroppedLinks = function (links) {
 		    console.log('dropped', links);
 		    var droppedLinks = [];
@@ -385,9 +393,10 @@
 
 				    self.currentRoom = new RoomController(unescape(roomName), nodeUrl);
 
-				    if (roomName)
-				        document.location = 'spotify:app:Wejay:room:' + roomName;
+					var tab = m.application.arguments[0];
 
+				    this.tabTo(tab);
+	
 
 				};
  }			
