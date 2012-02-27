@@ -166,9 +166,12 @@
 			#current:hover .hover {
 				display:block;
 				position: absolute;
-				height: 100px;
-				width: 300px;
-				background: rgba(255,255,255,0.2);
+				height: 50px;
+				width: 308px;
+				padding-top:20px;
+				bottom: 155px;
+				left:126px;
+				background: rgba(255,255,255,0.4);
 				
 			}
 			
