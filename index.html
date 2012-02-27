@@ -113,7 +113,7 @@
 					<section id="wejaysSection">
 						<h3 class="inverted">Wejays in this room</h3>
 						<ul id="users"></ul>
-						
+						<div>&nbsp;</div>
 						<script id="usersTemplate" type="text/x-jquery-tmpl">
 							<li><a href="${(app.user.friends || []) .indexOf(FacebookId) >= 0 ? 'spotify:user:facebook:' + FacebookId : '#wejaysSection' }" ><img alt="${UserName}" class="${Online ? 'online' : 'offline'}" src="http://graph.facebook.com/${FacebookId}/picture"></li></a>
 						</script>
