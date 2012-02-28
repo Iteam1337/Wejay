@@ -330,12 +330,6 @@
 			
 			var self = this;
 			
-			if (!force && (self.lastCheckin && self.lastCheckin.getTime() > new Date().getTime() - 30*60*1000))
-			{
-				callback(self.roomName);
-				return;				
-			}
-							
 			$.ajax({
 		        url: 'http://wejay.org/Room/checkin',
 		        data: { userName: app.user.userName, facebookId: app.user.facebookId, room: self.roomName },
