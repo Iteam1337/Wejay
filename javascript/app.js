@@ -45,21 +45,24 @@
             return;
 		}
 
-		
-		
-		this.tabTo = function(tab)
-		{
-			self.currentRoom.currentTab = tab;
-		    
+
+
+		this.tabTo = function (tab) {
+		    self.currentRoom.currentTab = tab;
+
 		    var currentTab = document.location = "#" + tab + "Section";
 
-			$('section').removeClass('current');
+		    $('section').removeClass('current');
 
-			$(currentTab).addClass('current');
-			$(currentTab).parents('section').addClass('current');			
-			$(currentTab).children('section').first().addClass('current');			
+		    $(currentTab).addClass('current');
+		    $(currentTab).parents('section').addClass('current');
+		    $(currentTab).children('section').first().addClass('current');
 
 		    console.log(m.application.arguments);
+
+		    if (tab == "choose") {
+		        this.loadRooms();
+		    }
 
 		    if (tab == "room") {
 
@@ -74,7 +77,7 @@
 		        } else {
 
 		            if (!self.currentRoom.roomName) {
-		                document.location.replace('spotify:app:Wejay');
+		                document.location.replace('spotify:app:wejay');
 		                alert('You have to select a room first');
 		            }
 
@@ -85,7 +88,7 @@
 		    if (tab == "queue") {
 
 		        if (!self.currentRoom.roomName) {
-		            document.location.replace('spotify:app:Wejay');
+		            document.location.replace('spotify:app:wejay');
 		            alert('You have to select a room first');
 		        }
 
@@ -95,7 +98,7 @@
 
 		    if (tab == "wejays") {
 		        if (!self.currentRoom.roomName) {
-		            document.location.replace('spotify:app:Wejay');
+		            document.location.replace('spotify:app:wejay');
 		            alert('You have to select a room first');
 		        }
 		    }
@@ -196,7 +199,7 @@
 
 		    self.handleDroppedLinks(links);
 
-		    document.location = 'spotify:app:Wejay:queue';	
+		    document.location = 'spotify:app:wejay:queue';	
 
 
 		});

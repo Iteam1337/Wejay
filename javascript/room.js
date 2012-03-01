@@ -44,7 +44,7 @@
 		    console.log('adding track->song', track, song);
 
 		    self.hub.queueSong(song, function () {
-		        // document.location = 'spotify:app:Wejay:room';
+		        // document.location = 'spotify:app:wejay:room';
 		    });
 		}
 
@@ -165,7 +165,7 @@
 		}
 
 		this.clearCurrentSong = function(){
-			$('#roomTitle').html(escape(this.roomName) + ' ROOM');
+			$('#roomTitle').html(this.roomName.encodeToHTML() + ' ROOM');
 
 	       	$("#currentSong").html('');
 
@@ -301,7 +301,7 @@
 
 		    $("#roomLink").val('http://wejay.org/' + encodeURI(this.roomName));
 		    $("#roomLink").bind('click', function () { this.select(); });
-		    //$("#roomLink").html('spotify:app:Wejay:room:' + room);
+		    //$("#roomLink").html('spotify:app:wejay:room:' + room);
 
 		    $("#shareFacebook").attr('href', "http://www.facebook.com/sharer.php?u={0}&t={1}".format($("#roomLink").val(), this.roomName.toUpperCase() + " WEJAY ROOM on Spotify. Join this room and control the music together. We are the DJ."));
 
