@@ -53,7 +53,7 @@
 						<div class="banner">
 						    <h3 class="inverted">Join or start a new room...</h3>
 	
-							<form action="#roomSection" onsubmit="app.currentRoom.init(this.roomName.value, true); document.location = 'spotify:app:Wejay:room'; return false;">
+							<form action="#roomSection" onsubmit="app.currentRoom.init(this.roomName.value, true); document.location = 'spotify:app:wejay:room'; return false;">
 								<input type="text" value="" id="roomName" placeholder="Name the room"/>
 								<input type=submit class="sp-button" value="Open">
 							</form>
@@ -120,7 +120,7 @@
 							<li><a href="${(app.user.friends || []) .indexOf(FacebookId) >= 0 ? 'spotify:user:facebook:' + FacebookId : '#wejaysSection' }" ><img alt="${UserName}" class="${Online ? 'online' : 'offline'}" src="http://graph.facebook.com/${FacebookId}/picture"></li></a>
 						</script>
 						
-						<blockquote>Invite friends by sharing this link: <input id="roomLink" value="spotify:app:Wejay:room"/> or via facebook 
+						<blockquote>Invite friends by sharing this link: <input id="roomLink" value="spotify:app:wejay:room"/> or via facebook 
 							<a class="button" href="http://www.facebook.com/sharer.php?u=http://open.spotify.com/app/wejay" id="shareFacebook" title="Share on Facebook...">Invite</a>
 							
 							 </blockquote>
