@@ -27,10 +27,11 @@ function AutoCompleteForm (){
 			outputElement = ac.setupAutoComplete(ac.tokenInput, function () {
 			    //loadStation(searchInput.value, "spotify:app:radio", "", "search", true);
 			    //hideAutocomplete();
+			    var uri = searchInput.value;
 			    app.user.authenticate(function () {
-			        app.currentRoom.addTrackUri(searchInput.value);
+			        app.currentRoom.addTrackUri(uri);
+			        searchInput.focus();
 			    });
-			    searchInput.focus();
 			});
 
 
