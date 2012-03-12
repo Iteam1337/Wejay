@@ -77,19 +77,10 @@
 		        } else {
 
 		            if (!self.currentRoom.roomName) {
-		                document.location.replace('spotify:app:wejay');
 		                alert('You have to select a room first');
 		            }
 
 
-		        }
-		    }
-
-		    if (tab == "queue") {
-
-		        if (!self.currentRoom.roomName) {
-		            document.location.replace('spotify:app:wejay');
-		            alert('You have to select a room first');
 		        }
 
 		        self.currentRoom.updatePlaylist();
@@ -98,7 +89,6 @@
 
 		    if (tab == "wejays") {
 		        if (!self.currentRoom.roomName) {
-		            document.location.replace('spotify:app:wejay');
 		            alert('You have to select a room first');
 		        }
 		    }
@@ -198,9 +188,6 @@
 		    console.log('dropped links', links);
 
 		    self.handleDroppedLinks(links);
-
-		    document.location = 'spotify:app:wejay:queue';	
-
 
 		});
 

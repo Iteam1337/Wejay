@@ -75,6 +75,7 @@
 				<section id="roomSection">
 					<h2 id="roomTitle">Room</h2>
 					<section id="current">
+                        <div>
 						<div class="hover">
 								<a class="button" id="start" href="javascript:app.currentRoom.playSong(app.currentRoom.currentSong, true); return false;">Play room</a>
 								<a class="button" id="like" href="javascript:app.currentRoom.like()">Like</a>
@@ -85,34 +86,31 @@
 						<a id="currentLink" href="" onclick="">
 							<img  id="currentAlbum" src="sp://import/img/placeholders/300-album.png">
 						</a>
-						<h3 class="inverted" id="currentSong"> </h3>
-						<h3 id="currentPlayedBy"></h3>
+                        </div>
+					<h3 class="inverted" id="currentSong"> </h3>
+					<h3 id="currentPlayedBy"></h3>
+                    
+					<address>If you LIKE the current song, the Maestro bot will play it more often, if you BLOCK no one can play it when you are online. Drag tracks here to add them to the queue.</address>
 
-                        <div id="comment" class="fb-comments" data-href="http://example.com/artists/madonna" data-num-posts="2" data-colorscheme="dark"></div>
-                        
-
-						<address>If you LIKE the current song, the Maestro bot will play it more often, if you BLOCK no one can play it when you are online. Drag tracks here to add them to the queue.</address>
-
-					</section>
-					<section id="queueSection">
-						<h3>Queue</h3>
-						<table id="queue"></table>
+					<h3>Queue</h3>
+					<table id="queue"></table>
 						
-			    	    <div class="auto-completeForm">
-				        </div>
+			    	<div class="auto-completeForm">
+				    </div>
 						
-						<div class="clearFix">&nbsp;</div>
+					<div class="clearFix">&nbsp;</div>
+                    </section>
 
-						<script id="queueTemplate" type="text/x-jquery-tmpl">
-							<tr><td><a class="track ${PlayedBy.FacebookId == (app.user ? app.user.facebookId : '') ? 'mine' : ''}" href="spotify:track:${SpotifyId}"><strong>${Artist}</strong> ${Title}</a></td><td><a class="user" href="spotify:user:facebook:${PlayedBy.FacebookId}">${unescape(PlayedBy.UserName)}</a></td></tr>
-						</script>
-						<blockquote>Add music to this room by dragging tracks to this app. Your music will be mixed with all other wejays.</a></blockquote>
+					<script id="queueTemplate" type="text/x-jquery-tmpl">
+						<tr><td><a class="track ${PlayedBy.FacebookId == (app.user ? app.user.facebookId : '') ? 'mine' : ''}" href="spotify:track:${SpotifyId}"><strong>${Artist}</strong> ${Title}</a></td><td><a class="user" href="spotify:user:facebook:${PlayedBy.FacebookId}">${unescape(PlayedBy.UserName)}</a></td></tr>
+					</script>
+					<blockquote>Add music to this room by dragging tracks to this app. Your music will be mixed with all other wejays.</blockquote>
 <address>When the queue is empty an automatic bot called Maestro will try to match your listening pattern as well as possible. Maestro will only play tracks you have added more than once.
-	Your added tracks will be sorted according to a set of democratic rules and mixed with tracks added by other logged in wejays. You can block tracks you don't like by blocking them in the room but be careful.
+Your added tracks will be sorted according to a set of democratic rules and mixed with tracks added by other logged in wejays. You can block tracks you don't like by blocking them in the room but be careful.
 	
 	</address>
-					</section>
-					<section id="wejaysSection">
+			</section>
+			<section id="wejaysSection">
 						<h3 class="inverted">Wejays in this room</h3>
 						<ul id="users"></ul>
 						<div>&nbsp;</div>
@@ -130,7 +128,7 @@
                         <blockquote>Wejay is built for playing music together. You and your friends can add your music to a shared playlist. Start Wejay on one computer and control it from other computers in real time. Ideal for great music while you work! Read more about Wejay and the latest research how music while you work affects your productivity, stress levels positive and a lot more good stuff at <a href="http://wejay.org">wejay.org</a></blockquote>
 						<address>There is more than hits the eye. After a while when you have started adding music you will get rewarded. An automatic bot called Maestro will try to match your listening pattern as good as possible. Only music that have been added more than once will be played. The bot will try play music that more than one logged in user likes. It will try to avoid playing blocked music.  </address>
                     </section>
-				</section>
+			</section>
 				
 			</div>
 		  

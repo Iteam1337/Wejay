@@ -4,8 +4,7 @@
     "AppDescription": "We are the DJ. Listen to music togehter while you work",
     "DefaultTabs" : [
     	{"title" : {"en":"Open a Room"}, "arguments": "choose"}, 
-    	{"title" : {"en":"Currently Playing"}, "arguments": "room"}, 
-    	{"title" : {"en":"Queue"}, "arguments": "queue"},
+    	{"title" : {"en":"Room queue"}, "arguments": "room"}, 
     	{"title" : {"en":"Wejays"}, "arguments": "wejays"},
     	{"title" : {"en":"About"}, "arguments": "about"}
     	
