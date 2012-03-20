@@ -5,6 +5,17 @@ This is the code behind the Wejay Spotify App.
 To use this code you need to download the preview version of Spotify. Use this link:
 http://developer.spotify.com/en/spotify-apps-api/preview/
 
+Install it by expanding the files to:
+
+Windows:
+\My Documents\Spotify\Wejay
+
+Mac:
+~\Spotify\Wejay
+
+Restart Spotify and in Spotify search for:
+spotify:app:Wejay
+
 Basic structure:
 
 *index.html* - Main layout
