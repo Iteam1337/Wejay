@@ -6,9 +6,11 @@
 			@font-face {
 				font-family: 'League Gothic';
 				src: url('../league_gothic-webfont.ttf') format('truetype');
+				src: url('../league_gothic-webfont.svg') format('svg');
 				font-weight: normal;
 				font-style: normal;
 			}
+
 			/*********************************************
 			 * GLOBAL STYLES
 			 *********************************************/
@@ -48,7 +50,7 @@
 			h1, h2, h3, h4 {
 				margin: 10px 0 10px 0;
 				color: #222;
-				font-family: 'League Gothic', Arial, Helvetica, sans-serif;
+				font-family: 'League Gothic', serif, Arial, Helvetica, sans-serif;
 				line-height: 0.9em;
 				font-weight:500;
 				text-transform: uppercase;
@@ -155,28 +157,35 @@
 			{
 				margin-bottom: 30px;
 				margin-top: 0;
-				
+				width: 300px;
+				height: 300px;
+				min-width: 300px;
+				min-height: 300px;
 			}
 			
-			#current{
+			#current {
 				position: relative;
 				width: 300px;
 			}
 			
-			#current:hover .hover {
-				display:block;
+			#currentHolder:hover .hover {
+				display: block;
 				position: absolute;
-				height: 50px;
+				height: 40px;
 				width: 308px;
-				padding-top:20px;
-				bottom: 155px;
-				left:126px;
+				padding-top: 20px;
+				top: 285px;
+				left: 126px;
 				background: rgba(255,255,255,0.4);
 				
 			}
 			
-			#current .hover {
+			#currentHolder .hover {
 				display:none;
+			}
+			
+			#current a {
+				cursor: pointer;
 			}
 		
 			#current h3{
@@ -271,7 +280,7 @@
 				
 			}
 			
-			#queue td{
+			#queue td {
 				text-transform: uppercase;
 				white-space: nowrap;
 				text-overflow:ellipsis;
@@ -280,8 +289,9 @@
 				max-width: 350px;
 				font-size: 30px;
 				line-height: 35px;
-					color:#fff;
+				color:#fff;
 			}
+
 			#queue td a{
 				color:#fff;
 			}
@@ -323,8 +333,9 @@
 			}
 						
 			.auto-completeForm input{
-				width: 700px;
+				width: 500px;
 			}
+			
 			.auto-completeForm{
 				min-height: 500px;
 				overflow: hidden;
@@ -337,11 +348,22 @@
 				background: rgba(0,0,0,0.7)
 			}
 			
+			.auto-complete.show .tracks {
+				display: block;
+			}
+			
+			.auto-complete.show .tracks a {
+				width: 100%;
+				height: 36px;
+				padding: 5px;
+				margin: 0 0 0 -5px;
+			}
+			
 			.auto-complete img{
 				width: 30px;
 				height: 30px;
-				border:0;
-				margin: 0 10px 0 0;
+				border: 0;
+				margin: 3px 10px 0 0;
 			}
 			
 			.auto-complete strong, #queue strong{
