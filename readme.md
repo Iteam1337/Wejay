@@ -11,7 +11,7 @@ Windows:
 \My Documents\Spotify\Wejay
 
 Mac:
-~\Spotify\Wejay
+~/Spotify/Wejay
 
 Restart Spotify and in Spotify search for:
 spotify:app:Wejay
