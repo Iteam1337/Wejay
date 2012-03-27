@@ -343,21 +343,24 @@ function searchResultHandler(tokenInput, outputElement, result, fromSuggest) {
 }
 
 function resultToHtml(result) {
-	var tracks = "", artists = "",
-		localFilter = function(track) {
+	var tracks = ""
+	  , artists = ""
+	  , localFilter = function(track) {
 			return track.uri.search("spotify:local") === -1;
-		},
-		trackFunc = function(track) {
+		}
+	  , trackFunc = function(track) {
 			return lang.format("<a href=\"{0}\">{1}{2}</a>", track.uri,
 				(track.album.cover ? lang.format("<img src=\"{0}\">", track.album.cover) : ""),
-				"<strong>" + track.artists[0].name + "</strong> " + track.name);
-		},
-		artistFunc = function(artist) {
+				"<strong>" + track.artists[0].name.toLowerCase() + "</strong> " + track.name.toLowerCase());
+
+		}
+	  , artistFunc = function(artist) {
 			return lang.format("<a href=\"{0}\">{1}{2}</a>", artist.uri,
 				(artist.portrait ? lang.format("<img src=\"{0}\">", artist.portrait) : ""),
-				"<strong>" + artist.name + "</strong>");
-		};
-		
+				"<strong>" + artist.name.toLowerCase() + "</strong>");
+
+		}
+	;
 	if (result.tracks.length) {
 		var trackHtml = map(trackFunc, filter(localFilter, result.tracks)).join("");
 		tracks = lang.format("<div class=\"tracks\"><span>{0}</span>{1}</div>", _("Tracks"), trackHtml);
@@ -365,8 +368,8 @@ function resultToHtml(result) {
 	if (result.artists.length) {
 		var artistHtml = map(artistFunc, result.artists).join("");
 		artists = lang.format("<div class=\"artists\"><span>{0}</span>{1}</div>", _("Artists"), artistHtml);
-
 	}
+	
 	return lang.format("{0}{1}", artists, tracks);
 }
 
