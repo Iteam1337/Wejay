@@ -1,23 +1,40 @@
 {
-    "AppName": "Wejay",
-	"BundleVersion" : "0.9.1",
-    "AppDescription": "We are the DJ. Listen to music togehter while you work",
-    "DefaultTabs" : [
-    	{"title" : {"en":"Open a Room"}, "arguments": "choose"}, 
-    	{"title" : {"en":"Room queue"}, "arguments": "room"}, 
-    	{"title" : {"en":"Wejays"}, "arguments": "wejays"},
-    	{"title" : {"en":"About"}, "arguments": "about"}
-    	
-    	
+    "AppName": {
+		"en": "Wejay"
+	},
+	"BundleVersion": "0.9.2",
+    "AppDescription": {
+		"en": "We are the DJ. Listen to music together while you work"
+	},
+    "DefaultTabs": [
+    	{"title": {"en": "Open a Room"}, "arguments": "choose"}, 
+    	{"title": {"en": "Room queue"}, "arguments": "room"}, 
+    	{"title": {"en": "Wejays"}, "arguments": "wejays"},
+    	{"title": {"en": "About"}, "arguments": "about"}
     ],
+	"SupportedLanguages": [
+		"en"
+	],
     "BundleIdentifier": "Wejay",
     "AppIcon": {
-    	"36x18" : "images/icon.png",
-	"64x64" : "images/icon64.png"
+    	"36x18" : "Images/icon.png",
+		"64x64" : "Images/wejay-Icon64.png"
     },
     "BundleType": "Application",
     "RequiredInterface": 1,
-    "RequiredPermissions": ["http://wejay.org:81", "http://*.wejay.org", "http://*.fbcdn.net", "http://ws.spotify.com", "http://*.facebook.com", "https://graph.facebook.com", "http://*.facebook.net"],
+    "RequiredPermissions": [
+		"http://wejay.org:81",
+		"http://*.wejay.org",
+		"http://*.fbcdn.net",
+		"http://ws.spotify.com",
+		"http://*.facebook.com",
+		"https://graph.facebook.com",
+		"http://*.facebook.net"
+	],
     "VendorIdentifier": "se.iteam",
-    "AcceptedLinkTypes" : ["album", "playlist", "track"]
+    "AcceptedLinkTypes":  [
+		"album",
+		"playlist",
+		"track"
+	]
 }
