@@ -15,7 +15,7 @@
 	"SupportedLanguages": [
 		"en"
 	],
-	"BundleIdentifier": "Wejay",
+	"BundleIdentifier": "wejay",
 	"AppIcon": {
 		"36x18" : "Images/icon.png",
 		"64x64" : "Images/wejay-Icon64.png"
