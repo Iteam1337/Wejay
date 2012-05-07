@@ -70,7 +70,5 @@ function AutoCompleteForm (){
 	
 		// Finished setting up auto complete ---------------------------------------------------------
 				
-		
-var exports = {}
 exports.init = new AutoCompleteForm().init;
 		

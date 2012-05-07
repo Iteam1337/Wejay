@@ -165,7 +165,7 @@
 		}
 
 		this.clearCurrentSong = function(){
-			$('#roomTitle').html(this.roomName.encodeToHTML() + ' ROOM');
+			$('#roomTitle').html( encodeURI(this.roomName) + ' ROOM' );
 
 	       	$("#currentSong").html('');
 

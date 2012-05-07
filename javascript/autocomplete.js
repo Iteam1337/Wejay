@@ -401,10 +401,8 @@ function throttle(f, t) {
 	}
 };
 
-exports = {
-    autoComplete: autoComplete,
-    setupAutoComplete: setupAutoComplete,
-    tokenInput: tokenInput,
-    searchResultHandler: searchResultHandler,
-    throttle: throttle,
-}
+exports.autoComplete = autoComplete;
+exports.setupAutoComplete = setupAutoComplete;
+exports.tokenInput = tokenInput;
+exports.searchResultHandler = searchResultHandler;
+exports.throttle = throttle;

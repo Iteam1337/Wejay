@@ -283,7 +283,7 @@
 						var room = this.innerText;
 						fillRoomToplist(room, this);
 						$(this).click(function(){
-							document.location = 'spotify:app:Wejay:room:' + room;	
+							document.location = 'spotify:app:wejay:room:' + room;	
 						})
 					});
 				}
@@ -338,7 +338,7 @@
 				            self.loadRooms();
 
 				            // back to startpage
-				            document.location = 'spotify:app:Wejay';
+				            document.location = 'spotify:app:wejay';
 
 				        });
 				    });
@@ -365,7 +365,7 @@
 
 				        event.preventDefault();
 				        console.log(event.pageX, event.pageY);
-				        m.application.showSharePopup(document.getElementById('share'), 'spotify:app:Wejay' /*+ currentRoom.roomName*/);
+				        m.application.showSharePopup(document.getElementById('share'), 'spotify:app:wejay' /*+ currentRoom.roomName*/);
 				    });
 
 
