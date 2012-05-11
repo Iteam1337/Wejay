@@ -6,18 +6,18 @@
 	var v = sp.require("sp://import/scripts/api/views");
 
 	var accessToken;
+	
+    function RoomController (roomName, nodeUrl){
+ 		
+ 	    console.log('New RoomController for room ' + roomName);
+		
+	    var facebookId;
+ 		
+ 	    var self = this;
 
-			
- 	function RoomController (roomName, nodeUrl){
- 		
- 		console.log('New RoomController for room ' + roomName);
-		
-		var facebookId;
- 		
- 		var self = this;
-		
-		if (roomName)
-			this.roomName = unescape(roomName).trim().toLowerCase();
+ 	    if (roomName) {
+ 		    this.roomName = unescape(roomName).trim().toLowerCase();
+ 		}
 		
 		this.currentTab = null;
 		
@@ -147,12 +147,14 @@
 
 		        self.queue = tpl;
 
-		        $("#currentSong").html(track.data.artists[0].name + " - " + track.data.name);
+		        var curr = track.data.artists[0].name + " - " + track.data.name;
+
+		        $("#currentSong").html(curr);
 		        $("#currentAlbum").attr('src', track.data.album.cover);
 
 		        $("#currentLink").attr('href', track.data.uri);
 		        if (song.PlayedBy) {
-		            $("#currentPlayedBy").html('by ' + song.PlayedBy.UserName);
+		            $("#currentPlayedBy").html('Added by ' + song.PlayedBy.UserName);
 		            $("#currentPlayedBy").show();
 		        }
 		        else {
@@ -164,25 +166,23 @@
 		    });
 		}
 
-		this.clearCurrentSong = function(){
-			$('#roomTitle').html( encodeURI(this.roomName) + ' ROOM' );
+		this.clearCurrentSong = function () {
+		    $('#roomTitle').html(encodeURI(this.roomName) + ' Wejay Room');
 
-	       	$("#currentSong").html('');
+		    $("#currentSong").html('');
+		    $("#currentSong").html('Nothing playing right now. Drag a track here!');
 
-	       	$("#currentSong").html('Nothing playing right now. Drag a track here!');
+		    $("#currentAlbum").attr('src', "sp://import/img/placeholders/300-album.png");
 
-	       	$("#currentAlbum").attr('src', "sp://import/img/placeholders/300-album.png");
 
-	       	$("#currentLink").attr('href', '');
-	       	$("#currentPlayedBy").html('');
-
-	       	$("#queue").html('');
+		    $("#currentLink").attr('href', '');
+		    $("#currentPlayedBy").html('');
+		    $("#queue").html('');
 		    $('#skip').html('Skip');
-			$('#block').html('Block');
-			$('#like').html('Like');
+		    $('#block').html('Block');
+		    $('#like').html('Like');
 
-	       	
-	       	//this.stop();
+		    //this.stop();
 		}
 
 		this.dispose = function() {
@@ -289,8 +289,10 @@
 		this.init = function (roomName, anonymous) {
 		    console.log('init');
 
-		    if (!roomName)
+		    if (!roomName) {
+                console.log( "Room name must be specified" )
 		        throw "Room name must be specified"
+		    }
 
 
 
@@ -308,13 +310,13 @@
 
 		    localStorage.setItem('room', this.roomName);
 
-		    if (!anonymous && !app.user.accessToken)
+		    if (!anonymous && !app.user.accessToken) {
 		        app.user.authenticate(function () {
 		            this.hub.checkin({ user: app.user.userName, room: this.roomName });
 		            self.updateUsers();
 		            self.updatePlaylist();
 		        });
-		    else {
+		    } else {
 		        this.hub.checkin({ user: "Anonymous", room: this.roomName });
 		        self.updateUsers();
 		        self.updatePlaylist();
@@ -323,33 +325,33 @@
             
 		
 // checkin the current user to wejay
-		this.checkin = function(force, callback)
-		{
-			if (!app.user.facebookId )
-				throw "You have not set room and user or facebook details yet";
-			
-			var self = this;
-			
-			$.ajax({
+		this.checkin = function (force, callback) {
+		    if (!app.user.facebookId)
+		        throw "You have not set room and user or facebook details yet";
+
+		    var self = this;
+
+		    $.ajax({
 		        url: 'http://wejay.org/Room/checkin',
 		        data: { userName: app.user.userName, facebookId: app.user.facebookId, room: self.roomName },
 		        dataType: 'json',
 		        type: 'POST',
 		        traditional: true,
 		        success: function (result) {
-		        	self.lastCheckin = new Date();
-		        	
-		        	//self.init(result.room); // save the last connected room for this user
-		        								        		
-		            if (callback)
+		            self.lastCheckin = new Date();
+
+		            //self.init(result.room); // save the last connected room for this user
+
+		            if (callback) {
 		                callback(self.roomName);
-		                
+		            }
+
 		            console.log(app.user.userName + ' logged in to wejay room ', self.roomName);
-		
+
 		            //self.hub.checkin({ user: user, room: self.roomName });
 		        }
 		    });
-			
+
 		}
 
 
@@ -384,13 +386,17 @@
 		            result = result.filter(function (song) {
 		                return song.SpotifyId;
 		            })
-                    
+
+		            console.log("result -> ", result);
+
 		            if (result.length > 0) {
 		                $('#queue').html($("#queueTemplate").tmpl(result));
 		            }
 		            else {
-		                $('#queue').html('<tr><td>QUEUE IS EMPTY, ADD TRACKS BELOW</td></tr>');
-		                $("#currentSong").html('Drag tracks here to start the room');
+		                $('#queue').html('<span class="nothing playing">Nothing in the playlist right now. Add songs either by searching or draggin an album, track or playlist to this app.</span>');
+		                if ($("#currentSong").html() === '') {
+		                    $("#currentSong").html('Drag tracks here to start the room');
+		                }
 		            }
 		        }
 		    });
@@ -398,27 +404,27 @@
 		}
 
 		// Update users online list
-		this.updateUsers = function()
-		{
-			$.ajax({
-                url: 'http://wejay.org/Room/GetOnlineUsers?room=' + self.roomName,
-                type: 'GET',
-                processData: false,
-                contentType: 'application/json',
-                dataType: 'text',
-                success: function (r) {
-                	
-                	var result = r ? JSON.parse(r).Data : [];
-                	
-                	result = result.filter(function(user){return user.FacebookId && user.FacebookId != "null";});
-                	
-                	if (result.length > 0)
-	                	$('#users').html($("#usersTemplate").tmpl(result));
-	                else
-	                	$('#users').html('<li>NO WEJAYS HERE. ADD MUSIC TO START THE ROOM.</li>');
-                }
-            });	
-			
+		this.updateUsers = function () {
+		    $.ajax({
+		        url: 'http://wejay.org/Room/GetOnlineUsers?room=' + self.roomName,
+		        type: 'GET',
+		        processData: false,
+		        contentType: 'application/json',
+		        dataType: 'text',
+		        success: function (r) {
+
+		            var result = r ? JSON.parse(r).Data : [];
+
+		            result = result.filter(function (user) { return user.FacebookId && user.FacebookId != "null"; });
+
+                    console.log( "updateUsers => ", result )
+		            if (result.length > 0)
+		                $('#users').html($("#usersTemplate").tmpl(result));
+		            else
+		                $('#users').html('<li>When you log into this room your best mysic will be mixed into the playlist automatically. You can also invite your friends below.</li>');
+		        }
+		    });
+
 		}
 	
 

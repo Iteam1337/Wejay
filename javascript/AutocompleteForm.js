@@ -25,6 +25,7 @@ function AutoCompleteForm (){
 	    var autocompleteForm = dom.queryOne(formQuery),
 			searchInput = ac.tokenInput.input,
 			outputElement = ac.setupAutoComplete(ac.tokenInput, function () {
+			    console.log("tokeninput",ac.tokenInput);
 			    //loadStation(searchInput.value, "spotify:app:radio", "", "search", true);
 			    //hideAutocomplete();
 			    var uri = searchInput.value;
@@ -36,7 +37,7 @@ function AutoCompleteForm (){
 
 
 	    searchInput.type = 'text';
-	    searchInput.placeholder = 'Add tracks to the queue by keywords or drop tracks here';
+	    searchInput.placeholder = 'Add track to the queue';
 
 	    // Creating the method that runs the autocomplete search and updates the table.
 	    // Take some default methods defined in autocomplete.js and curry them
@@ -50,21 +51,23 @@ function AutoCompleteForm (){
 
 	    // fill the top tracks for this user
 	    self.loadTopTracks(function (userTopTracks) {
+	        console.log("userTopTracks =>", userTopTracks);
 	        topTracks = userTopTracks;
 	    });
 	}
-	
-	this.loadTopTracks = function(callback) {
-					
-					var userName = null; // null means current user
-					sp.social.getToplist('track', 'user', userName, {
-						onSuccess: function (r) {
-							topTracks = r.tracks;
-							if (callback)
-								callback(topTracks);
-						}
-					});
-				}
+
+	this.loadTopTracks = function (callback) {
+	    console.log(topTracks);
+	    var userName = null; // null means current user
+	    sp.social.getToplist('track', 'user', userName, {
+	        onSuccess: function (r) {
+	            topTracks = r.tracks;
+	            if (callback) {
+	                callback(topTracks);
+	            }
+	        }
+	    });
+	}
 }
 
 	

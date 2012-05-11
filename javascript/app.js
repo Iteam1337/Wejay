@@ -1,6 +1,6 @@
 
  // main app logic for Wejay App
- function App (){
+ function App () {
 
 		var self = this;
 		
@@ -34,18 +34,11 @@
 					
 	/* Event handlers */
 
-
-
-
-		console.log('REQUIRES latest version of preview build. If you experience trouble, make sure you have the latest preview build of Spotify: http://developer.spotify.com/en/spotify-apps-api/preview/');
-
 		if (!m.application) {
 		    alert('This version of Spotify is not compatible with this App. Please upgrade to a newer version and try again');
 		    history.back();
             return;
 		}
-
-
 
 		this.tabTo = function (tab) {
 		    self.currentRoom.currentTab = tab;
@@ -58,7 +51,7 @@
 		    $(currentTab).parents('section').addClass('current');
 		    $(currentTab).children('section').first().addClass('current');
 
-		    console.log(m.application.arguments);
+		    console.log("tabTo =>",m.application.arguments, "this.user =>", self.user.facebookId);
 
 		    if (tab == "choose") {
 		        this.loadRooms();
@@ -251,7 +244,7 @@
 				    if (!app.user.facebookId)
 				        return;
 
-				   app.user.loadFriends(function(users){
+				    app.user.loadFriends(function (users) {
 
 				        users.push(app.user.facebookId); // add current user as well
 
@@ -265,8 +258,7 @@
 				            type: "POST",
 				            success: function (r) {
 
-				                r = r.filter(function (i) { return i.Name && i.Name.toLowerCase() != "null" });
-
+				                r = r.filter(function (i) { return i.Name && i.Name.toLowerCase() != "null" })
 				                $('#rooms').html($("#roomListTemplate").tmpl(r));
 
 				                self.fillRooms();
@@ -315,14 +307,38 @@
 				    var ac = sp.require('javascript/AutocompleteForm');
 				    ac.init('.auto-completeForm', topTracks, topArtists);
 
+				    var userLogoutShow = function () {
+				        $('#login').hide();
+				        $('#roomLogin').hide();
+				        $('#logout').show();
+				        $('#roomLogout').show();
+				    }
+				    var userLogoutHide = function () {
+				        $('#login').show();
+				        $('#roomLogin').show();
+				        $('#logout').hide();
+				        $('#roomLogout').hide();
+				    }
 
 				    $('#logout').click(function () {
 
 				        self.user.logout();
+				        userLogoutHide();
 
-				        $(this).hide();
-				        $('#login').show();
+				    });
 
+				    $('#roomLogout').click(function () {
+
+				        self.user.logout();
+				        userLogoutHide();
+
+				    });
+
+				    $('#roomLogin').click(function () {
+				        self.user.authenticate(function (room) {
+				            self.loadRooms();
+				        });
+				        userLogoutShow();
 				    });
 
 				    $('#login').click(function () {
@@ -338,9 +354,10 @@
 				            self.loadRooms();
 
 				            // back to startpage
-				            document.location = 'spotify:app:wejay';
+				            //document.location = 'spotify:app:wejay';
 
 				        });
+				        userLogoutShow();
 				    });
 				    $('#roomSection').bind("drop", function (e) {
 				        e.preventDefault();
@@ -368,10 +385,7 @@
 				        m.application.showSharePopup(document.getElementById('share'), 'spotify:app:wejay' /*+ currentRoom.roomName*/);
 				    });
 
-
-
-
-				    $('#logout').hide();
+				    userLogoutHide();
 
 				    // fill default rooms
 				    self.fillRooms();
@@ -383,10 +397,10 @@
 
 				    self.currentRoom = new RoomController(unescape(roomName), nodeUrl);
 
-					var tab = m.application.arguments[0];
+				    var tab = m.application.arguments[0];
 
 				    this.tabTo(tab);
-	
+
 
 				};
  }			

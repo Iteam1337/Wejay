@@ -1,149 +1,142 @@
 <!doctype html>
 <html lang="en">
-	<head>
-		<meta charset="utf-8">
-		<title>Wejay</title>
-		
-		<script src="http://wejay.org/scripts/jquery-1.4.1.js" type="text/javascript"></script>
-		<script src="http://wejay.org/scripts/jquery.tmpl.min.js" type="text/javascript"></script>
-		<script src="http://wejay.org:81/socket.io/socket.io.js" type="text/javascript"></script>
-
-	  
-
-		<link rel="stylesheet" href="sp://import/css/adam.css"/> 
-		<link rel="stylesheet" href="sp://import/css/api.css"/>
-
-		<link rel="stylesheet" href="http://wejay.org/content/css/bugfixes.css"/>
-
-
-		<script src="javascript/hub.js" type="text/javascript"></script>
-		<script src="javascript/room.js" type="text/javascript"></script>
-		<script src="javascript/app.js" type="text/javascript"></script>
-		<script src="javascript/user.js" type="text/javascript"></script>
-
-	    <link href="style/main.css" type="text/css" rel="stylesheet" />
-	   
-</head>
-		<body >	    
-			<div id="main">
-				<section id="chooseSection" class="current">
-					
-					<h1 class="inverted">WE ARE THE DJ.</h1>
-					<h4>Music with your friends while you work</h4>
-					
-					
-					<ul class="rooms" id="rooms">
-						
-					</ul>
-
-			        <script id="roomListTemplate" type="text/x-jquery-tmpl">
-			            
-			            <li><a href="spotify:app:room:${Name}">${Name}</a></li>
-			            
-			        </script>
-						
-						
-			        <script id="roomTopListTemplate" type="text/x-jquery-tmpl">
-			            
-			            <dl><img alt="${UserName}" src="http://graph.facebook.com/${FacebookId}/picture"></dl>
-			            
-			        </script>
-					<div class="footer">
-				        
-						<div class="banner">
-						    <h3 class="inverted">Join or start a new room...</h3>
-	
-							<form action="#roomSection" onsubmit="app.currentRoom.init(this.roomName.value, true); document.location = 'spotify:app:Wejay:room'; return false;">
-								<input type="text" value="" id="roomName" placeholder="Name the room"/>
-								<input type=submit class="sp-button" value="Open">
-							</form>
-
-						</div>
-						<div class="banner">
-			
-							<h3 class="inverted">...Or find your friends</h3>
-							<button class="sp-button" id="login">Login</button>
-							<button class="sp-button" id="logout">Logout</button>
-							
-						</div>
-					</div>
-					<blockquote>
-								By opening a Wejay room you and your friends can add songs to a mixed queue. Perfect for an <a href="#aboutSection">open workspace!</a>
-							</blockquote>
-					<address> You login with your Facebook account and by doing so you accept that Wejay may use and store information from your Spotify library.</address>
-				</section>
-				<section id="roomSection">
-					<h2 id="roomTitle">Room</h2>
-					<section id="current">
-                        <div id="currentHolder">
-						<div class="hover">
-								<a class="button" id="start" href="javascript:app.currentRoom.playSong(app.currentRoom.currentSong, true); return false;">Play room</a>
-								<a class="button" id="like" href="javascript:app.currentRoom.like()">Like</a>
-								<a class="button" id="block" href="javascript:app.currentRoom.block()">Block</a>
-								<a class="button" title="Skip this song" id="skip" href="javascript:app.currentRoom.skip()">Skip</a>
-
-							</div>
-						<a id="currentLink" href="" onclick="">
-							<img  id="currentAlbum" src="sp://import/img/placeholders/300-album.png">
-						</a>
+    <head>
+        <meta charset="utf-8">
+        <title>Wejay</title>
+        <script src="javascript/jquery-1.7.2.min.js" type="text/javascript"></script>
+        <script src="javascript/jquery.tmpl.min.js" type="text/javascript"></script>
+        <script src="http://wejay.org:81/socket.io/socket.io.js" type="text/javascript"></script>
+        <link rel="stylesheet" href="sp://import/css/adam.css"/> 
+        <link rel="stylesheet" href="sp://import/css/api.css"/>
+        <link rel="stylesheet" href="http://wejay.org/content/css/bugfixes.css"/>
+        <link rel="stylesheet" href="style/main.css"/>
+        <script src="javascript/hub.js" type="text/javascript"></script>
+        <script src="javascript/room.js" type="text/javascript"></script>
+        <script src="javascript/app.js" type="text/javascript"></script>
+        <script src="javascript/user.js" type="text/javascript"></script>
+    </head>
+    <body >	    
+        <div id="main">
+            <!-- open a room/start -->
+            <section id="chooseSection" class="current">
+                <section>
+                    <span>
+                        <h1>Wejay Rooms</h1>
+                        <p>By joining a Wejay Room you may add music to a collaborative mixed playlist</p>
+                        <ul class="rooms" id="rooms"></ul>
+                        <script id="roomListTemplate" type="text/x-jquery-tmpl">
+                            <li><a href="spotify:app:room:${Name}">${Name}</a></li>
+                        </script>
+                        <script id="roomTopListTemplate" type="text/x-jquery-tmpl">
+                            <dl><img alt="${UserName}" src="http://graph.facebook.com/${FacebookId}/picture"></dl>
+                        </script>
+                    </span>
+                    <div class="banner">
+                        <h3>Find a Wejay Room</h3>
+                        <form action="#roomSection" class="input" onsubmit="app.currentRoom.init(this.roomName.value, true); document.location = 'spotify:app:wejay:room'; return false;">
+                            <input type="text" value="" id="roomName" placeholder="Wejay Room" />
+                            <input type="submit" class="sp-button" value="Enter" />
+                        </form>
+                    </div>
+                    <span class="buttons">
+                        <button class="sp-button" id="roomLogin">Login</button>
+                        <button class="sp-button" id="roomLogout">Logout</button>
+                    </span>
+                </section>
+                <footer class="bottom">
+                    <blockquote>
+                        By opening a Wejay room you and your friends can add songs to a mixed queue. Perfect for an open workspace!
+                    </blockquote>
+                    <address> You login with your Facebook account and by doing so you accept that Wejay may use and store information from your Spotify library.</address>
+                </footer>
+            </section>
+            <!-- open a room/end -->
+            <!-- wejay/start -->
+            <section id="roomSection">
+                <section id="current">
+                    <div class="top">
+                        <div class="left">
+                            <div id="currentHolder">
+                                <div class="hover">
+                                    <a id="start" href="javascript:app.currentRoom.playSong(app.currentRoom.currentSong, true); return false;"></a>
+                                </div>
+                                <a id="currentLink" href="" onclick="">
+                                    <img class="image" alt="current albumcover" id="currentAlbum" src="sp://import/img/placeholders/300-album.png" />
+                                </a>
+                            </div>
                         </div>
-					<h3 class="inverted" id="currentSong"> </h3>
-					<h3 id="currentPlayedBy"></h3>
-                    
-					<address>If you LIKE the current song, the Maestro bot will play it more often, if you BLOCK no one can play it when you are online. Drag tracks here to add them to the queue.</address>
-
-					<h3>Queue</h3>
-					<table id="queue"></table>
-						
-			    	<div class="auto-completeForm">
-				    </div>
-						
-					<div class="clearFix">&nbsp;</div>
-                    </section>
-
-					<script id="queueTemplate" type="text/x-jquery-tmpl">
-						<tr><td><a class="track ${PlayedBy.FacebookId == (app.user ? app.user.facebookId : '') ? 'mine' : ''}" href="spotify:track:${SpotifyId}"><strong>${Artist}</strong> ${Title}</a></td><td><a class="user" href="spotify:user:facebook:${PlayedBy.FacebookId}">${unescape(PlayedBy.UserName)}</a></td></tr>
-					</script>
-					<blockquote>Add music to this room by dragging tracks to this app. Your music will be mixed with all other wejays.</blockquote>
-<address>When the queue is empty an automatic bot called Maestro will try to match your listening pattern as well as possible. Maestro will only play tracks you have added more than once.
-Your added tracks will be sorted according to a set of democratic rules and mixed with tracks added by other logged in wejays. You can block tracks you don't like by blocking them in the room but be careful.
-	
-	</address>
-			</section>
-			<section id="wejaysSection">
-						<h3 class="inverted">Wejays in this room</h3>
-						<ul id="users"></ul>
-						<div>&nbsp;</div>
-						<script id="usersTemplate" type="text/x-jquery-tmpl">
-							<li><a href="${(app.user.friends || []) .indexOf(FacebookId) >= 0 ? 'spotify:user:facebook:' + FacebookId : '#wejaysSection' }" ><img alt="${UserName}" class="${Online ? 'online' : 'offline'}" src="http://graph.facebook.com/${FacebookId}/picture"></li></a>
-						</script>
-						
-						<blockquote>Invite friends by sharing this link: <input id="roomLink" value="spotify:app:Wejay:room"/> or via facebook 
-							<a class="button" href="http://www.facebook.com/sharer.php?u=http://open.spotify.com/app/wejay" id="shareFacebook" title="Share on Facebook...">Invite</a>
-							
-							 </blockquote>
-					</section>
-					<section id="aboutSection">
-                        <h3>About Wejay</h3>
-                        <blockquote>Wejay is built for playing music together. You and your friends can add your music to a shared playlist. Start Wejay on one computer and control it from other computers in real time. Ideal for great music while you work! Read more about Wejay and the latest research how music while you work affects your productivity, stress levels positive and a lot more good stuff at <a href="http://wejay.org">wejay.org</a></blockquote>
-						<address>There is more than hits the eye. After a while when you have started adding music you will get rewarded. An automatic bot called Maestro will try to match your listening pattern as good as possible. Only music that have been added more than once will be played. The bot will try play music that more than one logged in user likes. It will try to avoid playing blocked music.  </address>
-                    </section>
-			</section>
-				
-			</div>
-		  
-         <script src="http://wejay.org/scripts/bugfixes.js" type="text/javascript"></script>
-         
-
-          <script type="text/javascript">
-		  	
-                // initialize Wejay App
-                var app = new App();
-                app.init({ version: 0.91 });
-                var ui = sp.require('sp://import/scripts/dnd');
-		  </script>
-
-
-
-    	</body>
+                        <h1 id="roomTitle">Room</h1>
+                        <div class="right">
+                            <h2 id="currentSong"></h2>
+                            <h3 id="currentPlayedBy"></h3>
+                            <a class="button" title="Like this song" id="like" href="javascript:app.currentRoom.like()">Like</a>
+                            <!--<a class="button" title="Block this song from playing" id="block" href="javascript:app.currentRoom.block()">Block</a>-->
+                            <a class="button" title="Skip this song" id="skip" href="javascript:app.currentRoom.skip()">Skip</a>
+                            <a class="button" href="javascript:app.currentRoom.playSong(app.currentRoom.currentSong, true); return false;">Play Room</a>
+                        </div>
+                    </div>
+                    <div class="middle">
+                        <div class="left">
+                            <h1>Current playlist:</h1>
+                            <div class="auto-completeForm"></div>
+                        <div id="queue"></div>
+                        </div>
+                        <div class="right">
+                            <div class="logged in">
+                                <h1>Logged in Wejays:</h1>
+                                <ul id="users"></ul>
+                                <span class="buttons">
+                                    <a class="button" href="http://facebook.com/sharer.php?u=http://open.spotify.com/app/wejay" id="shareFacebook" title="Invite friends">Invite friends</a>
+                                    <button class="sp-button" id="login">Login</button>
+                                    <button class="sp-button" id="logout">Logout</button>
+                                </span>
+                            </div>
+                            <div class="toplist">
+                                <h1>Your toplist:</h1>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <footer class="bottom">
+                    <blockquote>Add music to this room by dragging tracks to this app. Your music will be mixed with all other wejays.</blockquote>
+                    <address>
+                        When the queue is empty an automatic bot called Maestro will try to match your listening pattern as well as possible. Maestro will only play tracks you have added more than once.
+                        Your added tracks will be sorted according to a set of democratic rules and mixed with tracks added by other logged in wejays. You can block tracks you don't like by blocking them in the room but be careful.
+                    </address>
+                </footer>
+                <!-- Logged in users -->
+                <script id="usersTemplate" type="text/x-jquery-tmpl">
+                    {{if Online}}
+                        <li><a href="${(app.user.friends || []) .indexOf(FacebookId) >= 0 ? 'spotify:user:facebook:' + FacebookId : '#wejaysSection' }" ><img class="image" alt="${UserName}" src="http://graph.facebook.com/${FacebookId}/picture"><p>${UserName}</p></li></a>
+                    {{/if}}
+                </script>
+                <!-- Current music in playlist -->
+                <script id="queueTemplate" type="text/x-jquery-tmpl">
+                    <div><span class="star no${Vote}"></span><div class="song"><a class="track ${PlayedBy.FacebookId == (app.user ? app.user.facebookId : '') ? 'mine' : ''}" href="spotify:track:${SpotifyId}"><strong>${Artist}</strong> - ${Title}</a><a class="user" href="spotify:user:facebook:${PlayedBy.FacebookId}">Added by ${unescape(PlayedBy.UserName)}</a></div></div>
+                </script>
+                
+            </section>
+            <!-- wejay/end -->
+            <!-- about/start -->
+            <section id="aboutSection">
+                <section>
+                    <span>
+                        <h1>About Wejay</h1>
+                        <p>Wejay is built for playing music together. You and your friends can add your music to a shared playlist. Start Wejay on one computer and control it from other computers in real time. Ideal for great music while you work! Read more about Wejay and the latest research how music while you work affects your productivity, stress levels positive and a lot more good stuff at <a href="http://wejay.org">wejay.org</a></p>
+                    </span>
+                </section>
+                <footer class="bottom">
+                    <address>There is more than hits the eye. After a while when you have started adding music you will get rewarded. An automatic bot called Maestro will try to match your listening pattern as good as possible. Only music that have been added more than once will be played. The bot will try play music that more than one logged in user likes. It will try to avoid playing blocked music.</address>
+                </footer>
+            </section>
+            <!-- about/end -->
+        </div>
+        <script src="http://wejay.org/scripts/bugfixes.js" type="text/javascript"></script>
+        <script type="text/javascript">
+            // initialize Wejay App
+            var app = new App();
+            app.init({ version: 0.92 });
+            var ui = sp.require('sp://import/scripts/dnd');
+        </script>
+    </body>
 </html>

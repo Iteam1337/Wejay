@@ -92,6 +92,7 @@ function TokenInput() {
 	});
 
 	r.fromDOMEvent(ti.input, "blur").subscribe(function(e) {
+        console.log("blur => ", e.target, e, r );
 		ti.node.classList.remove("focus");
 	});
 
@@ -166,16 +167,16 @@ function setupAutoComplete(tokenInput, callbackFunction) {
 	var outputElement = document.createElement("div");
 	outputElement.tabIndex = 1;
 	outputElement.classList.add("auto-complete");
-	r.fromDOMEvent(outputElement, "click")
-		.subscribe(function(ev) {
+	r.fromDOMEvent(outputElement, "click").subscribe(function(ev) {
+        console.log( "setupAutoComplete => ", ev );
 		ev.preventDefault();
 		ev.currentTarget.classList.remove("show");
 		var a = ev.target;
 		while (a) {
 			if (a.tagName === "A") {
-				tokenInput.input.value = a.href;
-				tokenInput.tokenize();
-				return;
+                tokenInput.input.value = a.href;
+                tokenInput.tokenize();
+                return;
 			}
 			a = a.parentNode;
 			if (a === ev.currentTarget) { return; }
@@ -266,8 +267,9 @@ function autoComplete(handler, defaultResultGetter, event) {
 	lastSearch = searchString;
 
 	if (searchString.trim()) {
-		sp.core.suggestSearch(searchString, {
+		sp.core.search(searchString, {
 			onSuccess: function(result) {
+                console.log(result);
 				if (lastSearch === searchString) {
 					handler(limitResults(result), true);
 				} else {
