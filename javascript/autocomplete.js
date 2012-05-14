@@ -92,7 +92,6 @@ function TokenInput() {
 	});
 
 	r.fromDOMEvent(ti.input, "blur").subscribe(function(e) {
-        console.log("blur => ", e.target, e, r );
 		ti.node.classList.remove("focus");
 	});
 

@@ -46,14 +46,17 @@ h1, h2, h3, h4
 }
 h1
 {
-    font-size: 24px;
     font-family: 'League Gothic', serif, Arial, Helvetica, sans-serif;
     font-weight: normal;
     text-transform: uppercase;
+    font-size: 30px;
 }
 h2
 {
-    font-size: 18px;
+    font-family: 'League Gothic', serif, Arial, Helvetica, sans-serif;
+    font-weight: normal;
+    text-transform: uppercase;
+    font-size: 24px;
 }
 h3
 {
@@ -65,13 +68,9 @@ h4
     font-size: 12px;
     line-height: 14px;
 }
-h1.inverted, h2.inverted, h3.inverted, h4.inverted
-{
-    color: #fff;
-}
 a
 {
-    color: white;
+    color: #fff;
 }
 
 /*********************************************
@@ -100,7 +99,8 @@ section.current
     display: block;
     z-index: 1;
     position: absolute;
-    background: url(../images/dark.png);
+    /*background: url(../images/dark.png);*/
+    background-color: gray;
     -webkit-background-size: cover;
     width: 100%;
     height: auto;
@@ -136,6 +136,7 @@ section.current
     background-color: rgba(0,0,0,.6);
     vertical-align: top;
     display: inline-block;
+    min-height: 100px;
 }
 #roomName
 {
@@ -423,16 +424,18 @@ h3
     display: none;
     height: 100%;
     position: absolute;
+    opacity: 0;
 }
 .auto-complete.show
 {
+    opacity: 1;
     width: 338px;
-	margin-top: 5px;
-	display:block;
-	background-color: white;
-	height: auto;
-	border-radius: 2px;
-	margin-left: -20px;
+    margin-top: 5px;
+    display:block;
+    background-color: white;
+    height: auto;
+    border-radius: 2px;
+    margin-left: -20px;
 }
 .auto-complete.show:before 
 {

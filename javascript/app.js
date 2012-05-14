@@ -387,6 +387,20 @@
 				        self.currentRoom.addTrackUri(link);
 				    });
 
+				    // one way to correct the auto-completeForm show/hide-function
+				    $("body").click(function (e) {
+				        var parentClass = $(e.target).parent().parent().hasClass("auto-completeForm");
+				        if ($(".auto-complete").hasClass("show")) {
+				            if (!parentClass) {
+				                $(".auto-complete").removeClass("show");
+				            }
+				        } else {
+				            if (parentClass) {
+				                $(".auto-complete").addClass("show");
+				            }
+				        }
+				    });
+
 
 				    userLogoutHide();
 

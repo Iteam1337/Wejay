@@ -21,6 +21,10 @@
             <section id="chooseSection" class="current">
                 <section>
                     <span>
+                        <h1>We are the DJ.</h1>
+                        <p>Music with your friends while you work</p>
+                    </span>
+                    <span>
                         <h1>Wejay Rooms</h1>
                         <p>By joining a Wejay Room you may add music to a collaborative mixed playlist</p>
                         <ul class="rooms" id="rooms"></ul>
@@ -32,22 +36,22 @@
                         </script>
                     </span>
                     <div class="banner">
-                        <h1>Find a Wejay Room</h1>
+                        <h2>Find a Wejay Room</h2>
                         <form action="#roomSection" class="input" onsubmit="app.currentRoom.init(this.roomName.value, true); document.location = 'spotify:app:wejay:room'; return false;">
                             <input type="text" value="" id="roomName" placeholder="Wejay Room" />
                             <input type="submit" class="sp-button" value="Enter" />
                         </form>
                     </div>
                     <span class="buttons">
-                        <h1>Login</h1>
+                        <h2>Login</h2>
                         <button class="sp-button" id="roomLogin">Login</button>
                         <button class="sp-button" id="roomLogout">Logout</button>
                     </span>
                 </section>
-                <footer class="bottom">
-                    <blockquote>
+                <blockquote>
                         By opening a Wejay room you and your friends can add songs to a mixed queue. Perfect for an open workspace!
-                    </blockquote>
+                </blockquote>
+                <footer class="bottom">
                     <address> You login with your Facebook account and by doing so you accept that Wejay may use and store information from your Spotify library.</address>
                 </footer>
             </section>
@@ -68,23 +72,22 @@
                         </div>
                         <h1 id="roomTitle">Room</h1>
                         <div class="right">
-                            <h2 id="currentSong"></h2>
-                            <h3 id="currentPlayedBy"></h3>
+                            <h3 id="currentSong"></h3>
+                            <h4 id="currentPlayedBy"></h4>
                             <a class="button" title="Like this song" id="like" href="javascript:app.currentRoom.like()">Like</a>
-                            <!--<a class="button" title="Block this song from playing" id="block" href="javascript:app.currentRoom.block()">Block</a>-->
+                            <a class="button" title="Block this song from playing" id="block" href="javascript:app.currentRoom.block()">Block</a>
                             <a class="button" title="Skip this song" id="skip" href="javascript:app.currentRoom.skip()">Skip</a>
-                            <a class="button" href="javascript:app.currentRoom.playSong(app.currentRoom.currentSong, true); return false;">Play Room</a>
                         </div>
                     </div>
                     <div class="middle">
                         <div class="left">
-                            <h1>Current playlist:</h1>
+                            <h2>Current playlist</h2>
                             <div class="auto-completeForm"></div>
-                        <div id="queue"></div>
+                            <div id="queue"></div>
                         </div>
                         <div class="right">
                             <div class="logged in">
-                                <h1>Logged in Wejays:</h1>
+                                <h2>Logged in Wejays</h2>
                                 <ul id="users"></ul>
                                 <span class="buttons">
                                     <a class="button" href="http://facebook.com/sharer.php?u=http://open.spotify.com/app/wejay" id="shareFacebook" title="Invite friends">Invite friends</a>
@@ -93,14 +96,14 @@
                                 </span>
                             </div>
                             <div class="toplist">
-                                <h1>Your toplist:</h1>
+                                <h2>Your toplist</h2>
                                 <ul id="userToplist"></ul>
                             </div>
                         </div>
                     </div>
                 </section>
+                     <blockquote>Add music to this room by dragging tracks to this app. Your music will be mixed with all other wejays.</blockquote>
                 <footer class="bottom">
-                    <blockquote>Add music to this room by dragging tracks to this app. Your music will be mixed with all other wejays.</blockquote>
                     <address>
                         When the queue is empty an automatic bot called Maestro will try to match your listening pattern as well as possible. Maestro will only play tracks you have added more than once.
                         Your added tracks will be sorted according to a set of democratic rules and mixed with tracks added by other logged in wejays. You can block tracks you don't like by blocking them in the room but be careful.
