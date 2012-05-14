@@ -99,9 +99,7 @@ section.current
     display: block;
     z-index: 1;
     position: absolute;
-    /*background: url(../images/dark.png);*/
-    background-color: gray;
-    -webkit-background-size: cover;
+    background: -webkit-linear-gradient(top, rgb(26,26,26) 0%,rgb(35,35,35) 86%,rgb(51,51,51) 100%);
     width: 100%;
     height: auto;
     margin-top: -10px;
@@ -127,16 +125,15 @@ section.current
     background-color: rgba(0,0,0,.6);
     padding: 20px;
     width: 630px;
+    margin: 0 0 20px;
 }
 #chooseSection .banner,
 #chooseSection .buttons
 {
-    margin-top: 20px;
     padding: 20px 20px 40px;
     background-color: rgba(0,0,0,.6);
     vertical-align: top;
     display: inline-block;
-    min-height: 140px;
 }
 #roomName
 {
@@ -152,15 +149,22 @@ section.current
 #chooseSection .banner
 {
     width: 315px;
-    height: 95px;
+    height: auto;
+}
+#chooseSection .banner form
+{
+    position: relative;
 }
 #chooseSection .banner form input[type="submit"]
 {
     margin-left: -15px;
+    position: absolute;
+    top: 8px;
+    right: -70px;
 }
 #chooseSection .banner .input
 {
-    width: 285px;
+    width: 260px;
     display: inline-block;
 }
 #roomSection section
@@ -328,11 +332,12 @@ h3
     margin: 10px 0 0;
     padding: 0;
 }
-#queue div
+#queue li
 {
-    width: 330px;
+    max-width: auto;
+    position: relative;
 }
-#queue div:nth-child(odd)
+#queue li:nth-child(odd)
 {
     background-color: rgba(255,255,255,.05);
 }
@@ -344,6 +349,7 @@ h3
     background: url("sp://import/img/mainlist-star-simple-dark.png");
     vertical-align: top;
     margin: 12px 0 0 5px;
+    position: absolute;
 }
 #queue .song .track
 {
@@ -359,8 +365,8 @@ h3
 {
     margin: 5px 0;
     display: inline-block;
-    width: 290px;
-    padding: 0 0 0 20px;
+    width: 280px;
+    padding: 0 0 0 30px;
 }
 #queue a
 {
@@ -380,20 +386,6 @@ h3
 {
     white-space: nowrap;
     overflow: hidden;
-}
-#queue td a.mine:hover
-{
-    background:#333;
-}
-#queue a.user
-{
-    display: block;
-    font-size: 10px;
-}
-
-#queue span
-{
-    text-align: left;
 }
 .rooms a
 {
@@ -659,6 +651,10 @@ blockquote a
     padding: 20px;
     background-color: rgba(0,0,0,.6);
 }
+.middle .left #queue {
+    max-height: 575px;
+    overflow: auto;
+}
 .middle .right div
 {
     padding: 20px;
@@ -671,6 +667,16 @@ blockquote a
 {
     width: 280px;
     margin-left: 20px;
+}
+.middle .right #users
+{
+    max-height: 300px;
+    overflow: auto;
+    display: block;
+}
+.middle .right .toplist ul {
+    max-height: 150px;
+    overflow: auto;
 }
 .middle .right.userlist
 {
@@ -685,7 +691,7 @@ blockquote a
     float: left;
     clear: both;
     margin: 10px 0 20px -1px;
-    width: 100%;
+    width: 120%;
 }
 #start
 {

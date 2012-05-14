@@ -81,7 +81,7 @@
                         <div class="left">
                             <h2>Current playlist</h2>
                             <div class="auto-completeForm"></div>
-                            <div id="queue"></div>
+                            <ul id="queue"></ul>
                         </div>
                         <div class="right">
                             <div class="logged in">
@@ -113,7 +113,7 @@
                 </script>
                 <!-- Current music in playlist -->
                 <script id="queueTemplate" type="text/x-jquery-tmpl">
-                    <div><span class="star no${Vote}"></span><div class="song"><a class="track ${PlayedBy.FacebookId == (app.user ? app.user.facebookId : '') ? 'mine' : ''}" href="spotify:track:${SpotifyId}"><strong>${Artist}</strong> - ${Title}</a><a class="user" href="spotify:user:facebook:${PlayedBy.FacebookId}">Added by ${unescape(PlayedBy.UserName)}</a></div></div>
+                    <li><span class="star no${Vote}"></span><div class="song"><a class="track ${PlayedBy.FacebookId == (app.user ? app.user.facebookId : '') ? 'mine' : ''}" href="spotify:track:${SpotifyId}"><strong>${Artist}</strong> - ${Title}</a><a class="user" href="spotify:user:facebook:${PlayedBy.FacebookId}">Added by ${unescape(PlayedBy.UserName)}</a></div></li>
                 </script>
                 <!-- Current music in playlist -->
                 <script id="userToplistTemplate" type="text/x-jquery-tmpl">
