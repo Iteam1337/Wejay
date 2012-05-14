@@ -1,19 +1,15 @@
 
  // main app logic for Wejay App
  function App () {
-
+ 		
 		var self = this;
 		
 		var sp = getSpotifyApi(1);
-		var ui = sp.require('sp://import/scripts/dnd');			  
+		var ui = sp.require('sp://import/scripts/dnd');
 		var m = sp.require("sp://import/scripts/api/models");
 		var v = sp.require("sp://import/scripts/api/views");
-	    var r = sp.require("sp://import/scripts/react");
+		var r = sp.require("sp://import/scripts/react");
 		var kbd = sp.require('sp://import/scripts/keyboard');
-		
-
-
-		
 		
 		var accessToken;
 		var facebookId;
@@ -26,47 +22,46 @@
 		var socket;
 		var topTracks = [];
 		var topArtists = [];
-
+		
 		// public properties
 		this.user = new User();
 		this.currentRoom = null;
 		
-					
-	/* Event handlers */
-
+		/* Event handlers */
+		
 		if (!m.application) {
 		    alert('This version of Spotify is not compatible with this App. Please upgrade to a newer version and try again');
 		    history.back();
-            return;
+		    return;
 		}
-
+		
 		this.tabTo = function (tab) {
 		    self.currentRoom.currentTab = tab;
-
+		
 		    var currentTab = document.location = "#" + tab + "Section";
-
+		
 		    $('section').removeClass('current');
-
+		
 		    $(currentTab).addClass('current');
 		    $(currentTab).parents('section').addClass('current');
 		    $(currentTab).children('section').first().addClass('current');
-
+		
 		    console.log("tabTo =>",m.application.arguments, "this.user =>", self.user.facebookId);
-
+		
 		    if (tab == "choose") {
 		        this.loadRooms();
 		    }
-
+		
 		    if (tab == "room") {
-
+		
 		        if (m.application.arguments.length > 1) {
 		            var newRoom = m.application.arguments[1].toLowerCase();
-
+		
 		            if (self.currentRoom.roomName != newRoom) {
 		                console.log('new room', newRoom);
 		                self.currentRoom.init(unescape(newRoom), true);
 		            }
-
+		
 		        } else {
 
 		            if (!self.currentRoom.roomName) {
@@ -359,6 +354,7 @@
 				        });
 				        userLogoutShow();
 				    });
+
 				    $('#roomSection').bind("drop", function (e) {
 				        e.preventDefault();
 				        var id = event.dataTransfer.getData('text');
@@ -384,6 +380,13 @@
 				        console.log(event.pageX, event.pageY);
 				        m.application.showSharePopup(document.getElementById('share'), 'spotify:app:wejay' /*+ currentRoom.roomName*/);
 				    });
+
+				    $("#userToplist a").live("click", function (e) {
+				        e.preventDefault();
+				        var link = $(this).attr("href");
+				        self.currentRoom.addTrackUri(link);
+				    });
+
 
 				    userLogoutHide();
 
@@ -415,3 +418,19 @@ String.prototype.format = function() {
     return formatted;
 };
 
+// Toplist
+var toplist = new m.Toplist();
+toplist.toplistType = m.TOPLISTTYPE.USER;
+//toplist.toplistType = m.TOPLISTTYPE.REGION;
+toplist.matchType = m.TOPLISTMATCHES.TRACKS;
+toplist.userName = m.TOPLISTUSER_CURRENT;
+//toplist.region = "SE";
+toplist.observe(m.EVENT.CHANGE, function () {
+    var i = 0, max = 10;
+    for (; i < max; i++) {
+        console.log("added song to toplist", toplist.results[i]);
+        $("#userToplist").append($("#userToplistTemplate").tmpl(toplist.results[i]));
+    }
+});
+
+toplist.run();

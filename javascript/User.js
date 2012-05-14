@@ -45,8 +45,9 @@ function User(){
 
 	        localStorage.setItem('friends', users);
 
-	        if (callback)
+	        if (callback) {
 	            callback(users);
+	        }
 	    });
 	}
 

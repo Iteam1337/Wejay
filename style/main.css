@@ -1,15 +1,14 @@
-
 /*********************************************
 * FONT-FACE DEFINITIONS
 *********************************************/
 
 @font-face
 {
-	font-family: 'League Gothic';
-	src: url('../league_gothic-webfont.ttf') format('truetype');
-	src: url('../league_gothic-webfont.svg') format('svg');
-	font-weight: normal;
-	font-style: normal;
+    font-family: 'League Gothic';
+    src: url('../league_gothic-webfont.ttf') format('truetype');
+    src: url('../league_gothic-webfont.svg') format('svg');
+    font-weight: normal;
+    font-style: normal;
 }
 
 /*********************************************
@@ -18,60 +17,57 @@
 
 html, body
 {
-	padding: 0;
-	margin: 0;
-	overflow-y: auto;
-	overflow-x: hidden;
-	width: 100%;
-	height: 100%;
-	background-color: #ecebe8;
+    padding: 0;
+    margin: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    width: 100%;
+    height: 100%;
+    background-color: #ecebe8;
 }
 
 /*********************************************
 * HEADERS
 *********************************************/
-			
 header
 {
-	height:30px;
-	text-align: center;
-	margin-top: -20px;		
+    height:30px;
+    text-align: center;
+    margin-top: -20px;
 }
-			
+
 h1, h2, h3, h4
 {
-	margin: 10px 0 10px 0;
-	color: #fff;
-	font-family: Arial, Helvetica, sans-serif;
-	line-height: 0.9em;
-	font-weight: normal;
-	/*text-shadow: 0px 1px 0px #000, 0px 0px 4px #333;*/	
+    margin: 10px 0 10px 0;
+    color: #fff;
+    font-family: Arial, Helvetica, sans-serif;
+    line-height: 0.9em;
+    font-weight: normal;
 }
 h1
 {
-	font-size: 24px;
-	font-family: 'League Gothic', serif, Arial, Helvetica, sans-serif;
-	font-weight: normal;
-	text-transform: uppercase;
+    font-size: 24px;
+    font-family: 'League Gothic', serif, Arial, Helvetica, sans-serif;
+    font-weight: normal;
+    text-transform: uppercase;
 }
 h2
 {
-	font-size: 18px;
+    font-size: 18px;
 }
 h3
 {
-	font-size: 14px;
-	display: inline-block;
+    font-size: 14px;
+    display: inline-block;
 }
 h4
 {
-	font-size: 12px;
-	line-height: 14px;
+    font-size: 12px;
+    line-height: 14px;
 }
 h1.inverted, h2.inverted, h3.inverted, h4.inverted
 {
-	color: #fff;
-	/*text-shadow: 0px 0px 2px #fff, 0px 0px 2px #888;*/
+    color: #fff;
 }
 a
 {
@@ -83,42 +79,36 @@ a
 *********************************************/
 #main
 {
-	min-width: 465px;
-	text-align: center;
+    min-width: 465px;
+    text-align: center;
 }
-			
+
 /*********************************************
 * DEFAULT ELEMENT STYLES
 *********************************************/
 section
 {
-	display: none;
-	opacity: 0;
-	text-align: center;
-	background: none;
+    display: none;
+    opacity: 0;
+    text-align: center;
+    background: none;
 }
-			
+
 section.current
 {
-	opacity: 1;
+    opacity: 1;
     display: block;
     z-index: 1;
     position: absolute;
-	background: url(../images/dark.png);
-	-webkit-background-size: cover;
-	width: 100%;
-	height: auto;
-	margin-top: -10px;
-	padding-top: 10px;
-	min-height: 500px;
+    background: url(../images/dark.png);
+    -webkit-background-size: cover;
+    width: 100%;
+    height: auto;
+    margin-top: -10px;
+    padding-top: 10px;
+    min-height: 500px;
 }
 
-/*
-#main
-{
-	margin-top:40px;
-}
-*/
 #aboutSection section,
 #chooseSection section
 {
@@ -142,7 +132,7 @@ section.current
 #chooseSection .buttons
 {
     margin-top: 20px;
-    padding: 20px;
+    padding: 20px 20px 40px;
     background-color: rgba(0,0,0,.6);
     vertical-align: top;
     display: inline-block;
@@ -163,6 +153,10 @@ section.current
     width: 315px;
     height: 95px;
 }
+#chooseSection .banner form input[type="submit"]
+{
+    margin-left: -15px;
+}
 #chooseSection .banner .input
 {
     width: 285px;
@@ -170,140 +164,132 @@ section.current
 }
 #roomSection section
 {
-	line-height: 1.2em;
-	width: auto;
-	min-width: 560px;.
-	margin: 0 auto;
-	background: none;
+    line-height: 1.2em;
+    width: auto;
+    min-width: 560px;.
+    margin: 0 auto;
+    background: none;
 }
 ol
 {
-	list-style: decimal;
-	list-style-position: inside;
+    list-style: decimal;
+    list-style-position: inside;
 }
 li, p
 {
-	margin-bottom: 10px;
+    margin-bottom: 10px;
 }
 a:not(.image)
 {
-	text-decoration: none;
+    text-decoration: none;
 }
-		
+
 h3
 {
-	clear:both;
+    clear:both;
 }
-			
-			
+
 #roomLink
 {
-	width: 250px;
+    width: 250px;
 }
 
 #currentAlbum
 {
-	margin: 0;
-	width: 200px;
-	height: 200px;
-	min-width: 200px;
-	min-height: 200px;
+    margin: 0;
+    width: 200px;
+    height: 200px;
+    min-width: 200px;
+    min-height: 200px;
 }
-			
+
 #current
 {
-	position: relative;
-	width: 250px;
+    position: relative;
+    width: 250px;
 }
-		
+
 #currentHolder
 {
     width: 200px;
     position: relative;
 }
-		
+
 #currentHolder .hover
 {
-	display :none;
+    opacity: 0;
+    -webkit-transition: opacity .08s ease-in-out;
 }
 #currentHolder:hover .hover
 {
-    display: block;
-}		
+    opacity: 1;
+}
 #current a
 {
-	cursor: pointer;
+    cursor: pointer;
 }
-		
+
 #current h3
 {
-	display:block;
-	clear:both;
-	margin-top: 10px;
-	margin-bottom: 20px;
-	-webkit-font-smoothing: subpixel-antialiased;
-
+    display:block;
+    clear:both;
+    margin-top: 10px;
+    margin-bottom: 20px;
+    -webkit-font-smoothing: subpixel-antialiased;
 }
-			
+
 #users li
 {
-	list-style: none;
-	list-style-type: none;
-	clear: none;
-	float:left;
-	width: 100%;    
-
-	/*font-family: 'League Gothic', Arial, Helvetica, sans-serif;*/
-	font-family: Arial, Helvetica, sans-serif;
+    list-style: none;
+    list-style-type: none;
+    clear: none;
+    float:left;
+    width: 100%;
+    font-family: Arial, Helvetica, sans-serif;
 }
-		
+
 #noUsers
 {
-	color:#fff;
-	font-size: 13px;
-	line-height: 18px;		
+    color:#fff;
+    font-size: 13px;
+    line-height: 18px;
 }
-			
 .rooms
 {
-	width: 600px;
-	margin:auto;
+    width: 600px;
+    margin:auto;
 }
-			
 .rooms li
 {
-	list-style: none;
-	list-style-type: none;
-	clear: none;
-	float:left;
-	margin-left: 30px;
-	margin-bottom:30px;
-	background: #444;
-	width: 150px;
-	height:150px;
-	border-radius: 5px;
-	text-align:center;
-	text-transform: uppercase;
-	color:#fff;
-	overflow:hidden;
-	padding:2px;
-	position:relative;
-	box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);			
-	cursor: hand;
+    list-style: none;
+    list-style-type: none;
+    clear: none;
+    float:left;
+    margin-left: 30px;
+    margin-bottom:30px;
+    background: #444;
+    width: 150px;
+    height:150px;
+    border-radius: 5px;
+    text-align:center;
+    text-transform: uppercase;
+    color:#fff;
+    overflow:hidden;
+    padding:2px;
+    position:relative;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    cursor: hand;
 }
-			
 .rooms li a
 {
-	color:#fff;
-	padding:7px;
+    color:#fff;
+    padding:7px;
 }
-			
 .rooms img
 {
-	/*width: 73px;*/
-	float: left;
-	margin:0;
-	border:0;
+    float: left;
+    margin:0;
+    border:0;
 }
 .rooms dl:nth-child(1)
 {
@@ -321,18 +307,16 @@ h3
 {
     border-radius: 0 0 4px 0;
 }
-			
 .rooms dl
 {
-	width: 50px;
-	height: 50px;
-	float: left;
-	display: block;
-	text-decoration: none;
-	padding: 0px;
-	margin:0;
-	overflow: hidden;
-				
+    width: 50px;
+    height: 50px;
+    float: left;
+    display: block;
+    text-decoration: none;
+    padding: 0px;
+    margin:0;
+    overflow: hidden;
 }
 #queue
 {
@@ -379,7 +363,7 @@ h3
 }
 #queue a
 {
-	color: #fff;
+    color: #fff;
 }
 #queue .nothing.playing
 {
@@ -387,51 +371,42 @@ h3
     margin: 10px;
     color: #999;
 }
-			
 .auto-completeForm .input
 {
-	padding:6px;
+    padding:6px;
 }
-			
 #publicRooms
 {
-	white-space: nowrap;
-	overflow: hidden;
+    white-space: nowrap;
+    overflow: hidden;
 }
-			
-			
 #queue td a.mine:hover
 {
-	background:#333;
+    background:#333;
 }
 #queue a.user
 {
     display: block;
     font-size: 10px;
 }
-#queue a
-{
-				
-}
+
 #queue span
 {
-	text-align: left;
-}		
-.rooms a
-{				
-	position: absolute;
-	top: 55px;
-	left: 2px;
-	z-index: 100; 
-	width: 150px;
-	text-align: center;
-	background:rgba(0,0,0, 0.3);
-				
+    text-align: left;
 }
-						
+.rooms a
+{
+    position: absolute;
+    top: 55px;
+    left: 2px;
+    z-index: 100; 
+    width: 150px;
+    text-align: center;
+    background:rgba(0,0,0, 0.3);
+}
 .auto-completeForm input
 {
-	width: 200px;
+    width: 200px;
 }
 .input
 {
@@ -440,7 +415,7 @@ h3
 }
 .auto-completeForm
 {
-	max-height: 400px;
+    max-height: 400px;
 }
 .auto-complete
 {
@@ -467,37 +442,37 @@ h3
     height: 100%;
     display: block;
     position: absolute;
-}		
+}
 .auto-complete.show .tracks
 {
-	display: block;
+    display: block;
 }
-			
+
 .auto-complete.show .tracks a
 {
-	height: 36px;
-	padding: 5px;
-	margin: 0;
-	width: 338px;
+    height: 36px;
+    padding: 5px;
+    margin: 0;
+    width: 338px;
+    -webkit-transition: all .08s ease-in-out;
 }
 .auto-complete.show .tracks a:hover
 {
     background-color: #9ad2fa;
     text-shadow: 0 -1px 1px #eee;
 }
-			
+
 .auto-complete img
 {
-	width: 30px;
-	height: 30px;
-	border: 0;
-	margin: 3px 10px 0 0;
+    width: 30px;
+    height: 30px;
+    border: 0;
+    margin: 3px 10px 0 0;
 }
-			
+
 .auto-complete strong, #queue strong
 {
-	font-weight: normal;
-				
+    font-weight: normal;
 }
 .auto-complete span,
 .auto-complete .artists
@@ -506,33 +481,32 @@ h3
 }
 .auto-complete .tracks
 {
-	display:block;
-	position: relative;
-	width: 338px;
-	overflow-x: hidden;
-	white-space: nowrap;
-	text-overflow: ellipsis;
-	padding: 10px 0;
+    display:block;
+    position: relative;
+    width: 338px;
+    overflow-x: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    padding: 10px 0;
 }
-			
 .auto-complete a
 {
-	float:left; 
-	clear: both;
-	text-align: left;
-	white-space: nowrap;
-	overflow: hidden;
-	text-overflow: ellipsis;
-	max-width: 328px;
-	color:#aaa;
-	font-weight: 400;
-	display: block;
-	font-size: 10px;
+    float:left; 
+    clear: both;
+    text-align: left;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 328px;
+    color:#aaa;
+    font-weight: 400;
+    display: block;
+    font-size: 10px;
 }
 
 .auto-complete a img
 {
-	display: inline;
+    display: inline;
 }
 .auto-complete a strong
 {
@@ -547,51 +521,39 @@ h3
 
 .footer
 {
-	width:591px;
-	margin: auto;
-	padding-bottom: 40px;
-	clear:both;
-}
-			
-.small.banner
-{
-	/*width:150px;*/
-}
-						
-.banner blockquote
-{
-	font-size: 10px;
-	line-height: 15px;
-	padding: 10px;
+    width:591px;
+    margin: auto;
+    padding-bottom: 40px;
+    clear:both;
 }
 
-/*		
-table, .auto-complete {
-	font-family: League Gothic;
+.banner blockquote
+{
+    font-size: 10px;
+    line-height: 15px;
+    padding: 10px;
 }
-*/
-			
+
 table td
 {
-	text-overflow: ellipsis;
-			
+    text-overflow: ellipsis;
 }
-			
-			
+
 .offline
 {
-	opacity : 0.5;
+    opacity : 0.5;
 }
 
 #users
 {
     margin-top: 10px;
-}			
+}
+
 #users li img
 {
-	width: 50px;
-	height:50px;
-	display: inline-block;
+    width: 50px;
+    height:50px;
+    display: inline-block;
 }
 #users li a,
 #users li a p,
@@ -607,32 +569,30 @@ table td
 }
 input[type=text]
 {
-	border:0px;
-	padding:3px;
+    border:0px;
+    padding:3px;
 }
 
 blockquote,
 address
 {
-	clear: both;
-	padding: 10px;
-	line-height: 18px;
-	width: 80%;
-	margin: 0 auto;
+    clear: both;
+    padding: 10px;
+    line-height: 18px;
+    width: 80%;
+    margin: 0 auto;
 }
 blockquote a
 {
-	color:#fff;
+    color:#fff;
 }
 
-			
 #header
 {
-	background: url(../images/Wejay-small.png) no-repeat #fff;
-	height: 64px;
-	position:absolute;
-	top:0;
-				
+    background: url(../images/Wejay-small.png) no-repeat #fff;
+    height: 64px;
+    position:absolute;
+    top:0;
 }
 
 #roomTitle 
@@ -727,14 +687,14 @@ blockquote a
 #start
 {
     position: absolute;
-	bottom: 4%;
-	right: 4%;
-	width: 43px;
-	height: 43px;
-	border: none;
-	background: url("sp://import/img/play-button-M.png") transparent;
-	background-position-x: -178px;
-	display: block;
+    bottom: 4%;
+    right: 4%;
+    width: 43px;
+    height: 43px;
+    border: none;
+    background: url("sp://import/img/play-button-M.png") transparent;
+    background-position-x: -178px;
+    display: block;
 }
 .image
 {
@@ -765,4 +725,27 @@ footer *
 footer a
 {
     color: black;
+}
+#userToplist li
+{
+    margin: 0;
+    padding: 0;
+}
+#userToplist li a
+{
+    padding: 5px 10px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: block;
+    margin: 0;
+    -webkit-transition: background-color .08s ease-in-out;
+}
+#userToplist li:nth-child(odd)
+{
+    background-color: rgba(255,255,255,.05);
+}
+#userToplist li a:hover
+{
+    background-color: rgba(255,255,255,.08);
 }
