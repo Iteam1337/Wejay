@@ -136,7 +136,7 @@ section.current
     background-color: rgba(0,0,0,.6);
     vertical-align: top;
     display: inline-block;
-    min-height: 100px;
+    min-height: 140px;
 }
 #roomName
 {

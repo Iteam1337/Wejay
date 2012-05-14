@@ -22,11 +22,11 @@
                 <section>
                     <span>
                         <h1>We are the DJ.</h1>
-                        <p>Music with your friends while you work</p>
+                        <p>No more discussions, no more band bashing, no more competition over the shared office sound system. You work better to the tunes of your favorite music, and Wejay makes that happen - for everyone.</p>
                     </span>
                     <span>
                         <h1>Wejay Rooms</h1>
-                        <p>By joining a Wejay Room you may add music to a collaborative mixed playlist</p>
+                        <p>All music in Wejay is played in rooms. Join a room to listen and add your own tracks.</p>
                         <ul class="rooms" id="rooms"></ul>
                         <script id="roomListTemplate" type="text/x-jquery-tmpl">
                             <li><a href="spotify:app:room:${Name}">${Name}</a></li>
@@ -36,23 +36,21 @@
                         </script>
                     </span>
                     <div class="banner">
-                        <h2>Find a Wejay Room</h2>
+                        <h2>Enter a Wejay Room</h2>
+						<p>Is your room not in the list above, or you want to start a new one? Fret not, just enter the room name here!</p>
                         <form action="#roomSection" class="input" onsubmit="app.currentRoom.init(this.roomName.value, true); document.location = 'spotify:app:wejay:room'; return false;">
-                            <input type="text" value="" id="roomName" placeholder="Wejay Room" />
+                            <input type="text" value="" id="roomName" placeholder="Wejay Room Name" />
                             <input type="submit" class="sp-button" value="Enter" />
                         </form>
                     </div>
                     <span class="buttons">
                         <h2>Login</h2>
-                        <button class="sp-button" id="roomLogin">Login</button>
+                        <button class="sp-button" id="roomLogin">Login with Facebook</button>
                         <button class="sp-button" id="roomLogout">Logout</button>
                     </span>
                 </section>
-                <blockquote>
-                        By opening a Wejay room you and your friends can add songs to a mixed queue. Perfect for an open workspace!
-                </blockquote>
                 <footer class="bottom">
-                    <address> You login with your Facebook account and by doing so you accept that Wejay may use and store information from your Spotify library.</address>
+                    <address>By logging in with your Facebook account you accept that Wejay may use and store information from your Spotify library.</address>
                 </footer>
             </section>
             <!-- open a room/end -->
@@ -91,7 +89,7 @@
                                 <ul id="users"></ul>
                                 <span class="buttons">
                                     <a class="button" href="http://facebook.com/sharer.php?u=http://open.spotify.com/app/wejay" id="shareFacebook" title="Invite friends">Invite friends</a>
-                                    <button class="sp-button" id="login">Login</button>
+                                    <button class="sp-button" id="login">Login with Facebook</button>
                                     <button class="sp-button" id="logout">Logout</button>
                                 </span>
                             </div>
@@ -102,12 +100,10 @@
                         </div>
                     </div>
                 </section>
-                     <blockquote>Add music to this room by dragging tracks to this app. Your music will be mixed with all other wejays.</blockquote>
+				<blockquote>Add music to this room by dragging tracks to this app</blockquote>
                 <footer class="bottom">
                     <address>
-                        When the queue is empty an automatic bot called Maestro will try to match your listening pattern as well as possible. Maestro will only play tracks you have added more than once.
-                        Your added tracks will be sorted according to a set of democratic rules and mixed with tracks added by other logged in wejays. You can block tracks you don't like by blocking them in the room but be careful.
-                    </address>
+						Active song selections are always played first and sorted in a way so that users get equal play time. When the active playlist is empty, the intelligent Maestro bot keeps playing music logged-in users like.</address>
                 </footer>
                 <!-- Logged in users -->
                 <script id="usersTemplate" type="text/x-jquery-tmpl">
@@ -130,11 +126,12 @@
                 <section>
                     <span>
                         <h1>About Wejay</h1>
-                        <p>Wejay is built for playing music together. You and your friends can add your music to a shared playlist. Start Wejay on one computer and control it from other computers in real time. Ideal for great music while you work! Read more about Wejay and the latest research how music while you work affects your productivity, stress levels positive and a lot more good stuff at <a href="http://wejay.org">wejay.org</a></p>
+						<p>Most of us work in an open-plan office. There are many approaches to music in the workplace - complete silence, isolation-via-headphones, a musical dictator or the path of least resistance (mainstream commercial radio satisfying nobody). None of these solutions seem very palatable.</p>
+						<p>Enter <a href="http://wejay.org">Wejay</a>! Research shows that music promotes productivity, as long as you get a say in its selection. Wejay plays the music you and your colleagues select, in a You and your colleagues queues music in a room. The queue will be ordered in a way that will feel fair to all. The sound will be streamed from Spotify via the Wejay App to your speakers.</a>
                     </span>
                 </section>
                 <footer class="bottom">
-                    <address>There is more than hits the eye. After a while when you have started adding music you will get rewarded. An automatic bot called Maestro will try to match your listening pattern as good as possible. Only music that have been added more than once will be played. The bot will try play music that more than one logged in user likes. It will try to avoid playing blocked music.</address>
+                    <address>Wejay will not automatically add tracks that logged-in users don't like. Use your voting power to assure Wejay waits until you log out before playing that incessant summer hit from 1992. Also, to keep things fresh, Wejay never automatically plays the same song more than once a week or the same artist more than once a day.</address>
                 </footer>
             </section>
             <!-- about/end -->
