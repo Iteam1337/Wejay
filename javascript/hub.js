@@ -25,7 +25,7 @@ function Hub (nodeUrl, currentRoom, facebookUserId){
 	
 	this.checkin = function(options)
 	{
-		console.log('checkin to node');
+		console.log('checkin to node', options);
 		socket.emit("checkin", options);
 	}
 	

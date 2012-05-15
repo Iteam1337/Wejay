@@ -4,11 +4,11 @@
 
 @font-face
 {
-    font-family: 'League Gothic';
-    src: url('../league_gothic-webfont.ttf') format('truetype');
-    src: url('../league_gothic-webfont.svg') format('svg');
-    font-weight: normal;
-    font-style: normal;
+  font-family: 'League Gothic';
+  src: url('../league_gothic-webfont.ttf') format('truetype');
+  src: url('../league_gothic-webfont.svg') format('svg');
+  font-weight: normal;
+  font-style: normal;
 }
 
 /*********************************************
@@ -17,13 +17,13 @@
 
 html, body
 {
-    padding: 0;
-    margin: 0;
-    overflow-y: auto;
-    overflow-x: hidden;
-    width: 100%;
-    height: 100%;
-    background-color: #ecebe8;
+  padding: 0;
+  margin: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  width: 100%;
+  height: 100%;
+  background-color: #ecebe8;
 }
 
 /*********************************************
@@ -31,46 +31,46 @@ html, body
 *********************************************/
 header
 {
-    height:30px;
-    text-align: center;
-    margin-top: -20px;
+  height:30px;
+  text-align: center;
+  margin-top: -20px;
 }
 
 h1, h2, h3, h4
 {
-    margin: 10px 0 10px 0;
-    color: #fff;
-    font-family: Arial, Helvetica, sans-serif;
-    line-height: 0.9em;
-    font-weight: normal;
+  margin: 10px 0 10px 0;
+  color: #fff;
+  font-family: Arial, Helvetica, sans-serif;
+  line-height: 0.9em;
+  font-weight: normal;
 }
 h1
 {
-    font-family: 'League Gothic', serif, Arial, Helvetica, sans-serif;
-    font-weight: normal;
-    text-transform: uppercase;
-    font-size: 30px;
+  font-family: 'League Gothic', serif, Arial, Helvetica, sans-serif;
+  font-weight: normal;
+  text-transform: uppercase;
+  font-size: 30px;
 }
 h2
 {
-    font-family: 'League Gothic', serif, Arial, Helvetica, sans-serif;
-    font-weight: normal;
-    text-transform: uppercase;
-    font-size: 24px;
+  font-family: 'League Gothic', serif, Arial, Helvetica, sans-serif;
+  font-weight: normal;
+  text-transform: uppercase;
+  font-size: 24px;
 }
 h3
 {
-    font-size: 14px;
-    display: inline-block;
+  font-size: 14px;
+  display: inline-block;
 }
 h4
 {
-    font-size: 12px;
-    line-height: 14px;
+  font-size: 12px;
+  line-height: 14px;
 }
 a
 {
-    color: #fff;
+  color: #fff;
 }
 
 /*********************************************
@@ -78,8 +78,8 @@ a
 *********************************************/
 #main
 {
-    min-width: 465px;
-    text-align: center;
+  min-width: 465px;
+  text-align: center;
 }
 
 /*********************************************
@@ -87,674 +87,688 @@ a
 *********************************************/
 section
 {
-    display: none;
-    opacity: 0;
-    text-align: center;
-    background: none;
+  display: none;
+  opacity: 0;
+  text-align: center;
+  background: none;
 }
 
 section.current
 {
-    opacity: 1;
-    display: block;
-    z-index: 1;
-    position: absolute;
-    background: -webkit-linear-gradient(top, rgb(26,26,26) 0%,rgb(35,35,35) 86%,rgb(51,51,51) 100%);
-    width: 100%;
-    height: auto;
-    margin-top: -10px;
-    padding-top: 10px;
-    min-height: 500px;
+  opacity: 1;
+  display: block;
+  z-index: 1;
+  position: absolute;
+  background: -webkit-linear-gradient(top, rgb(26,26,26) 0%,rgb(60,60,60) 70%,rgb(90,90,90) 100%);
+  width: 100%;
+  height: auto;
+  margin-top: -10px;
+  padding-top: 10px;
+  min-height: 500px;
 }
 
 #aboutSection section,
 #chooseSection section
 {
-    margin: 20px auto;
-    padding: 0;
-    width: 670px;
-    display: inline-block;
-    text-align: left;
-    position: relative;
-    background: none;
+  margin: 20px auto;
+  padding: 0;
+  width: 670px;
+  display: inline-block;
+  text-align: left;
+  position: relative;
+  background: none;
 }
 #aboutSection section span,
 #chooseSection section span
 {
-    display: inline-block;
-    background-color: rgba(0,0,0,.6);
-    padding: 20px;
-    width: 630px;
-    margin: 0 0 20px;
+  display: inline-block;
+  background-color: rgba(0,0,0,.6);
+  padding: 20px;
+  width: 630px;
+  margin: 0 0 20px;
 }
 #chooseSection .banner,
 #chooseSection .buttons
 {
-    padding: 20px 20px 40px;
-    background-color: rgba(0,0,0,.6);
-    vertical-align: top;
-    display: inline-block;
+  padding: 20px 20px 40px;
+  background-color: rgba(0,0,0,.6);
+  vertical-align: top;
+  display: inline-block;
+  height: 115px;
+}
+#chooseSection .buttons address
+{
+  margin: 0;
+  padding: 0 0 10px;
+  width: 100%;
 }
 #roomName
 {
-    width: 205px;
-    display: block;
-    margin: 3px 0 20px 0;
+  width: 205px;
+  display: block;
+  margin: 3px 0 20px 0;
 }
 #chooseSection .buttons
 {
-    margin-left: 20px;
-    width: 250px;
+  margin-left: 20px;
+  width: 250px;
 }
 #chooseSection .banner
 {
-    width: 315px;
-    height: auto;
+  width: 315px;
 }
 #chooseSection .banner form
 {
-    position: relative;
+  position: relative;
 }
 #chooseSection .banner form input[type="submit"]
 {
-    margin-left: -15px;
-    position: absolute;
-    top: 8px;
-    right: -70px;
+  margin-left: -15px;
+  position: absolute;
+  top: 8px;
+  right: -70px;
 }
 #chooseSection .banner .input
 {
-    width: 260px;
-    display: inline-block;
+  width: 260px;
+  display: inline-block;
 }
 #roomSection section
 {
-    line-height: 1.2em;
-    width: auto;
-    min-width: 560px;.
-    margin: 0 auto;
-    background: none;
+  line-height: 1.2em;
+  width: auto;
+  min-width: 560px;.
+  margin: 0 auto;
+  background: none;
 }
 ol
 {
-    list-style: decimal;
-    list-style-position: inside;
+  list-style: decimal;
+  list-style-position: inside;
 }
 li, p
 {
-    margin-bottom: 10px;
+  margin-bottom: 10px;
 }
 a:not(.image)
 {
-    text-decoration: none;
+  text-decoration: none;
 }
 
 h3
 {
-    clear:both;
+  clear:both;
 }
 
 #roomLink
 {
-    width: 250px;
+  width: 250px;
 }
 
 #currentAlbum
 {
-    margin: 0;
-    width: 200px;
-    height: 200px;
-    min-width: 200px;
-    min-height: 200px;
+  margin: 0;
+  width: 200px;
+  height: 200px;
+  min-width: 200px;
+  min-height: 200px;
 }
 
 #current
 {
-    position: relative;
-    width: 250px;
+  position: relative;
+  width: 250px;
 }
 
 #currentHolder
 {
-    width: 200px;
-    position: relative;
+  width: 200px;
+  position: relative;
 }
 
 #currentHolder .hover
 {
-    opacity: 0;
-    -webkit-transition: opacity .08s ease-in-out;
+  opacity: 0;
+  -webkit-transition: opacity .08s ease-in-out;
 }
 #currentHolder:hover .hover
 {
-    opacity: 1;
+  opacity: 1;
 }
 #current a
 {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 #current h3
 {
-    display:block;
-    clear:both;
-    margin-top: 10px;
-    margin-bottom: 20px;
-    -webkit-font-smoothing: subpixel-antialiased;
+  display:block;
+  clear:both;
+  margin-top: 10px;
+  margin-bottom: 20px;
+  -webkit-font-smoothing: subpixel-antialiased;
 }
 
 #users li
 {
-    list-style: none;
-    list-style-type: none;
-    clear: none;
-    float:left;
-    width: 100%;
-    font-family: Arial, Helvetica, sans-serif;
+  list-style: none;
+  list-style-type: none;
+  clear: none;
+  float:left;
+  width: 100%;
+  font-family: Arial, Helvetica, sans-serif;
 }
-
+#users li:last-child
+{
+  margin-bottom: -20px;
+}
 #noUsers
 {
-    color:#fff;
-    font-size: 13px;
-    line-height: 18px;
+  color:#fff;
+  font-size: 13px;
+  line-height: 18px;
 }
 .rooms
 {
-    width: 600px;
-    margin:auto;
+  width: 600px;
+  margin:auto;
 }
 .rooms li
 {
-    list-style: none;
-    list-style-type: none;
-    clear: none;
-    float:left;
-    margin-left: 30px;
-    margin-bottom:30px;
-    background: #444;
-    width: 150px;
-    height:150px;
-    border-radius: 5px;
-    text-align:center;
-    text-transform: uppercase;
-    color:#fff;
-    overflow:hidden;
-    padding:2px;
-    position:relative;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-    cursor: hand;
+  list-style: none;
+  list-style-type: none;
+  clear: none;
+  float:left;
+  margin-left: 30px;
+  margin-bottom:30px;
+  background: #444;
+  width: 150px;
+  height:150px;
+  border-radius: 5px;
+  text-align:center;
+  text-transform: uppercase;
+  color:#fff;
+  overflow:hidden;
+  padding:2px;
+  position:relative;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  cursor: hand;
 }
 .rooms li a
 {
-    color:#fff;
-    padding:7px;
+  color:#fff;
+  padding:7px;
 }
 .rooms img
 {
-    float: left;
-    margin:0;
-    border:0;
+  float: left;
+  margin:0;
+  border:0;
 }
 .rooms dl:nth-child(1)
 {
-    border-radius: 4px 0 0 0;
+  border-radius: 4px 0 0 0;
 }
 .rooms dl:nth-child(3)
 {
-    border-radius: 0 4px 0 0;
+  border-radius: 0 4px 0 0;
 }
 .rooms dl:nth-child(7)
 {
-    border-radius: 0 0 0 4px;
+  border-radius: 0 0 0 4px;
 }
 .rooms dl:nth-child(9)
 {
-    border-radius: 0 0 4px 0;
+  border-radius: 0 0 4px 0;
 }
 .rooms dl
 {
-    width: 50px;
-    height: 50px;
-    float: left;
-    display: block;
-    text-decoration: none;
-    padding: 0px;
-    margin:0;
-    overflow: hidden;
+  width: 50px;
+  height: 50px;
+  float: left;
+  display: block;
+  text-decoration: none;
+  padding: 0px;
+  margin:0;
+  overflow: hidden;
 }
 #queue
 {
-    width: 330px;
-    display: block;
-    text-align: left;
-    color: #fff;
-    margin: 10px 0 0;
-    padding: 0;
+  width: 330px;
+  display: block;
+  text-align: left;
+  color: #fff;
+  margin: 10px 0 0;
+  padding: 0;
 }
 #queue li
 {
-    max-width: auto;
-    position: relative;
+  max-width: auto;
+  position: relative;
 }
 #queue li:nth-child(odd)
 {
-    background-color: rgba(255,255,255,.05);
+  background-color: rgba(255,255,255,.05);
 }
 #queue .star
 {
-    display: inline-block;
-    height: 14px;
-    width: 14px;
-    background: url("sp://import/img/mainlist-star-simple-dark.png");
-    vertical-align: top;
-    margin: 12px 0 0 5px;
-    position: absolute;
+  display: inline-block;
+  height: 14px;
+  width: 14px;
+  background: url("sp://import/img/mainlist-star-simple-dark.png");
+  vertical-align: top;
+  margin: 12px 0 0 5px;
+  position: absolute;
 }
 #queue .song .track
 {
-    padding: 0 0 4px 0;
-    display: block;
-    font-size: 14px;
-    line-height: 16px;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    overflow: hidden;
+  padding: 0 0 4px 0;
+  display: block;
+  font-size: 14px;
+  line-height: 16px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
 #queue .song
 {
-    margin: 5px 0;
-    display: inline-block;
-    width: 280px;
-    padding: 0 0 0 30px;
+  margin: 5px 0;
+  display: inline-block;
+  width: 280px;
+  padding: 0 0 0 30px;
 }
 #queue a
 {
-    color: #fff;
+  color: #fff;
 }
 #queue .nothing.playing
 {
-    display: block;
-    margin: 10px;
-    color: #999;
+  display: block;
+  margin: 10px;
+  color: #999;
 }
 .auto-completeForm .input
 {
-    padding:6px;
+  padding:6px;
 }
 #publicRooms
 {
-    white-space: nowrap;
-    overflow: hidden;
+  white-space: nowrap;
+  overflow: hidden;
 }
 .rooms a
 {
-    position: absolute;
-    top: 55px;
-    left: 2px;
-    z-index: 100; 
-    width: 150px;
-    text-align: center;
-    background:rgba(0,0,0, 0.3);
+  position: absolute;
+  top: 55px;
+  left: 2px;
+  z-index: 100; 
+  width: 150px;
+  text-align: center;
+  background:rgba(0,0,0, 0.3);
 }
 .auto-completeForm input
 {
-    width: 200px;
+  width: 200px;
 }
 .input
 {
-    width: 338px;
-    padding: 5px;
+  width: 338px;
+  padding: 5px;
 }
 .auto-completeForm
 {
-    max-height: 400px;
+  max-height: 400px;
 }
 .auto-complete
 {
-    width: 100px;
-    display: none;
-    height: 100%;
-    position: absolute;
-    opacity: 0;
+  width: 100px;
+  display: none;
+  height: 100%;
+  position: absolute;
+  opacity: 0;
 }
 .auto-complete.show
 {
-    opacity: 1;
-    width: 338px;
-    margin-top: 5px;
-    display:block;
-    background-color: white;
-    height: auto;
-    border-radius: 2px;
-    margin-left: -20px;
+  opacity: 1;
+  width: 338px;
+  margin-top: 5px;
+  display:block;
+  height: auto;
+  margin-left: -20px;
 }
 .auto-complete.show:before 
 {
-    background-color: gray;
-    left: 0;
-    top: 0;
-    height: 100%;
-    display: block;
-    position: absolute;
+  background-color: gray;
+  left: 0;
+  top: 0;
+  height: 100%;
+  display: block;
+  position: absolute;
 }
 .auto-complete.show .tracks
 {
-    display: block;
+  display: block;
 }
 
 .auto-complete.show .tracks a
 {
-    height: 36px;
-    padding: 5px;
-    margin: 0;
-    width: 338px;
-    -webkit-transition: all .08s ease-in-out;
+  height: 15px;
+  padding: 0 5px 15px 5px;
+  margin: 0;
+  width: 338px;
+  -webkit-transition: all .08s ease-in-out;
 }
 .auto-complete.show .tracks a:hover
 {
-    background-color: #9ad2fa;
-    text-shadow: 0 -1px 1px #eee;
+  background-color: #9ad2fa;
+  text-shadow: 0 -1px 1px #eee;
 }
 
 .auto-complete img
 {
-    width: 30px;
-    height: 30px;
-    border: 0;
-    margin: 3px 10px 0 0;
+  width: 20px;
+  height: 20px;
+  border: 1px solid #e2e2e2;
+  margin: 5px 5px 7px 0;
+  padding: 0;
+  vertical-align: middle;
 }
 
 .auto-complete strong, #queue strong
 {
-    font-weight: normal;
+  font-weight: normal;
 }
 .auto-complete span,
 .auto-complete .artists
 {
-    display: none;
+  display: none;
 }
 .auto-complete .tracks
 {
-    display:block;
-    position: relative;
-    width: 338px;
-    overflow-x: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    padding: 10px 0;
+  position: relative;
+  width: 338px;
+  overflow-x: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  padding: 10px 0;
+  z-index: 100;
+  background-color: #fff;
+  border-radius: 4px;
 }
 .auto-complete a
 {
-    float:left; 
-    clear: both;
-    text-align: left;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    max-width: 328px;
-    color:#aaa;
-    font-weight: 400;
-    display: block;
-    font-size: 10px;
+  float:left; 
+  clear: both;
+  text-align: left;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 328px;
+  color:#aaa;
+  font-weight: 400;
+  display: block;
+  font-size: 10px;
 }
 
 .auto-complete a img
 {
-    display: inline;
+  display: inline;
 }
 .auto-complete a strong
 {
-    margin-left: 5px;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    max-width: 100px;
-    display: inline-block;
-    overflow: hidden;
-    color: black;
+  margin-left: 5px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  max-width: 100px;
+  display: inline-block;
+  overflow: hidden;
+  color: black;
 }
 
 .footer
 {
-    width:591px;
-    margin: auto;
-    padding-bottom: 40px;
-    clear:both;
+  width:591px;
+  margin: auto;
+  padding-bottom: 40px;
+  clear:both;
 }
 
 .banner blockquote
 {
-    font-size: 10px;
-    line-height: 15px;
-    padding: 10px;
+  font-size: 10px;
+  line-height: 15px;
+  padding: 10px;
 }
 
 table td
 {
-    text-overflow: ellipsis;
+  text-overflow: ellipsis;
 }
 
 .offline
 {
-    opacity : 0.5;
+  opacity : 0.5;
 }
 
 #users
 {
-    margin-top: 10px;
+  margin-top: 10px;
 }
 
 #users li img
 {
-    width: 50px;
-    height:50px;
-    display: inline-block;
+  width: 50px;
+  height:50px;
+  display: inline-block;
 }
 #users li a,
 #users li a p,
 #users li a img
 {
-    display: inline-block;
+  display: inline-block;
 }
 #users li a p
 {
-    vertical-align: top;
-    margin-left: 20px;
-    color: white;
+  vertical-align: top;
+  margin-left: 20px;
+  color: white;
 }
 input[type=text]
 {
-    border:0px;
-    padding:3px;
+  border:0px;
+  padding:3px;
 }
 
 blockquote,
 address
 {
-    clear: both;
-    padding: 10px;
-    line-height: 18px;
-    width: 80%;
-    margin: 0 auto;
+  clear: both;
+  padding: 10px;
+  line-height: 18px;
+  width: 80%;
+  margin: 0 auto;
 }
 blockquote a
 {
-    color:#fff;
+  color:#fff;
 }
 
 #header
 {
-    background: url(../images/Wejay-small.png) no-repeat #fff;
-    height: 64px;
-    position:absolute;
-    top:0;
+  background: url(../images/Wejay-small.png) no-repeat #fff;
+  height: 64px;
+  position:absolute;
+  top:0;
 }
 
 #roomTitle 
 {
-    text-align: left;
-    height: 65px;
-    font-size: 42px;
+  text-align: left;
+  height: 65px;
+  font-size: 42px;
 }
 
 .top
 {
-    margin: 20px auto;
-    padding: 20px;
-    width: 630px;
-    display: block;
-    height: 202px !important;
-    text-align: left;
-    position: relative;
-    background-color: rgba(0,0,0,.6);
+  margin: 20px auto;
+  padding: 20px;
+  width: 630px;
+  display: block;
+  height: 202px !important;
+  text-align: left;
+  position: relative;
+  background-color: rgba(0,0,0,.6);
+  /*border: 1px solid rgba(255,255,255,.2);*/
 }
 .top .left,
 .top .right
 {
-    float: left;
+  float: left;
 }
 .top .left
 {
-    width: 220px;
-    height: 202px;
+  width: 220px;
+  height: 202px;
 }
 .top .right
 {
-    width: 390px;
-    height: auto;
-    left: 240px;
-    bottom: 21px;
-    position: absolute;
+  width: 390px;
+  height: auto;
+  left: 240px;
+  bottom: 21px;
+  position: absolute;
 }
 .middle
 {
-    margin: 0 auto;
-    width: 670px;
-    display: block;
-    text-align: left;
-    height: auto;
+  margin: 0 auto;
+  width: 670px;
+  display: block;
+  text-align: left;
+  height: auto;
 }
 .middle h2
 {
-    margin-bottom: 20px;
+  margin-bottom: 20px;
 }
 .middle .left,
 .middle .right
 {
-    display: inline-block;
-    float: left;
-    margin-bottom: 20px;
+  display: inline-block;
+  float: left;
+  margin-bottom: 20px;
 }
 .middle .left
 {
-    width: 330px !important;
-    padding: 20px;
-    background-color: rgba(0,0,0,.6);
+  width: 330px !important;
+  padding: 20px;
+  background-color: rgba(0,0,0,.6);
+  /*border: 1px solid rgba(255,255,255,.2);*/
 }
 .middle .left #queue {
-    max-height: 575px;
-    overflow: auto;
+  max-height: 575px;
+  overflow: auto;
 }
 .middle .right div
 {
-    padding: 20px;
-    background-color: rgba(0,0,0,.6);
-    display: inline-block;
-    width: 240px;
-    margin-bottom: 20px;
+  padding: 20px;
+  background-color: rgba(0,0,0,.6);
+  display: inline-block;
+  width: 240px;
+  margin-bottom: 20px;
+  /*border: 1px solid rgba(255,255,255,.2);*/
 }
 .middle .right
 {
-    width: 280px;
-    margin-left: 20px;
+  width: 280px;
+  margin-left: 20px;
 }
 .middle .right #users
 {
-    max-height: 300px;
-    overflow: auto;
-    display: block;
+  max-height: 300px;
+  overflow: auto;
+  display: block;
 }
 .middle .right .toplist ul {
-    max-height: 150px;
-    overflow: auto;
+  max-height: 150px;
+  overflow: auto;
 }
 .middle .right.userlist
 {
-    clear: both;
+  clear: both;
 }
 .middle .right h3
 {
-    margin-left: 15px;
+  margin-left: 15px;
 }
 .middle .right .buttons
 {
-    float: left;
-    clear: both;
-    margin: 10px 0 20px -1px;
-    width: 120%;
+  float: left;
+  clear: both;
+  margin: 10px 0 0 -1px;
+  width: 120%;
 }
 #start
 {
-    position: absolute;
-    bottom: 4%;
-    right: 4%;
-    width: 43px;
-    height: 43px;
-    border: none;
-    background: url("sp://import/img/play-button-M.png") transparent;
-    background-position-x: -178px;
-    display: block;
+  position: absolute;
+  bottom: 4%;
+  right: 4%;
+  width: 43px;
+  height: 43px;
+  border: none;
+  background: url("sp://import/img/play-button-M.png") transparent;
+  background-position-x: -178px;
+  display: block;
 }
 .image
 {
-    background-color: gray;
+  background-color: gray;
 }
 footer
 {
-    border-top: 1px solid rgba(255,255,255,.2);
-    box-shadow: 0 -1px 0 rgba(0,0,0,.2);
-    width: 100%;
-    display: inline-block;
-    margin: 0 0 0 -15px;
-    z-index: 0;
-    clear: both;
-    padding: 15px;
-    background-color: #ecebe8;
-    bottom: -150px;
-    z-index: 4;
+  border-top: 1px solid rgba(255,255,255,.2);
+  box-shadow: 0 -1px 0 rgba(0,0,0,.2);
+  width: 100%;
+  display: inline-block;
+  margin: 0 0 0 -15px;
+  z-index: 0;
+  clear: both;
+  padding: 15px;
+  background-color: #ecebe8;
+  bottom: -150px;
+  z-index: 4;
 }
 footer *
 {
-    color: #636363;
-    text-align: left;
-    width: 640px;
-    margin: 0 auto;
-    padding: 10px 0;
+  color: #636363;
+  text-align: left;
+  width: 640px;
+  margin: 0 auto;
+  padding: 10px 0;
 }
 footer a
 {
-    color: black;
+  color: black;
 }
 #userToplist li
 {
-    margin: 0;
-    padding: 0;
+  margin: 0;
+  padding: 0;
 }
 #userToplist li a
 {
-    padding: 5px 10px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    display: block;
-    margin: 0;
-    -webkit-transition: background-color .08s ease-in-out;
+  padding: 5px 10px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
+  margin: 0;
+  -webkit-transition: background-color .08s ease-in-out;
 }
 #userToplist li:nth-child(odd)
 {
-    background-color: rgba(255,255,255,.05);
+  background-color: rgba(255,255,255,.05);
 }
 #userToplist li a:hover
 {
-    background-color: rgba(255,255,255,.08);
+  background-color: rgba(255,255,255,.08);
 }

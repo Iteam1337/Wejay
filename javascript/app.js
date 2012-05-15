@@ -288,9 +288,8 @@
 				
 					
 				
-	/* INIT */
-		
-	// init function
+      	/* INIT */
+	      // init function
 				this.init = function (version) {
 				    this.version = version;
 				    console.log('ready');
@@ -307,12 +306,14 @@
 				        $('#roomLogin').hide();
 				        $('#logout').show();
 				        $('#roomLogout').show();
+                //$("#loginInformation").hide();
 				    }
 				    var userLogoutHide = function () {
 				        $('#login').show();
 				        $('#roomLogin').show();
 				        $('#logout').hide();
 				        $('#roomLogout').hide();
+                //$("#loginInformation").show();
 				    }
 
 				    $('#logout').click(function () {
