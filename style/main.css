@@ -104,13 +104,13 @@ section.current
   height: auto;
   margin-top: -10px;
   padding-top: 10px;
-  min-height: 500px;
+  min-height: 480px;
 }
 
 #aboutSection section,
 #chooseSection section
 {
-  margin: 20px auto;
+  margin: 20px auto 0;
   padding: 0;
   width: 670px;
   display: inline-block;
@@ -260,7 +260,7 @@ h3
 }
 #users li:last-child
 {
-  margin-bottom: -20px;
+  margin-bottom: 0;
 }
 #noUsers
 {
@@ -687,6 +687,7 @@ blockquote a
   max-height: 300px;
   overflow: auto;
   display: block;
+  margin: 10px 0;
 }
 .middle .right .toplist ul {
   max-height: 150px;
