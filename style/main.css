@@ -665,7 +665,7 @@ blockquote a
   /*border: 1px solid rgba(255,255,255,.2);*/
 }
 .middle .left #queue {
-  max-height: 575px;
+  max-height: 665px;
   overflow: auto;
 }
 .middle .right div
@@ -690,7 +690,7 @@ blockquote a
   margin: 10px 0;
 }
 .middle .right .toplist ul {
-  max-height: 150px;
+  max-height: 240px;
   overflow: auto;
 }
 .middle .right.userlist
