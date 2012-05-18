@@ -1,54 +1,55 @@
 {
-	"AppName": {
-		"en": "Wejay"
-	},
-	"BundleVersion": "0.9.2",
-	"AppDescription": {
-		"en": "We are the DJ. Listen to music together while you work"
-	},
-	"DefaultTabs": [
-		{
-			"arguments": "room",
-			"title": {
-				"en": "Wejay"
-			}
-		},
-		{
-			"arguments": "choose",
-			"title": {
-				"en": "Open a Room"
-			}
-		}, 
-		{
-			"arguments": "about",
-			"title": {
-				"en": "About"
-			}
-		}
-	],
-	"SupportedLanguages": [
-		"en"
-	],
-	"BundleIdentifier": "wejay",
-	"AppIcon": {
-		"36x18" : "Images/icon.png",
-		"64x64" : "Images/wejay-Icon64.png"
-	},
-	"BundleType": "Application",
-	"RequiredInterface": 1,
-	"RequiredPermissions": [
-		"http://wejay.org:81",
-		"http://*.wejay.org",
-		"http://*.fbcdn.net",
-		"http://ws.spotify.com",
-		"http://*.facebook.com",
-		"https://graph.facebook.com",
-		"http://*.facebook.net"
-	],
-	"VendorIdentifier": "se.iteam",
-	"AcceptedLinkTypes":  [
-		"album",
-		"playlist",
-		"track"
-	]
+    "AppName": {
+        "en": "Wejay"
+    },
+    "BundleVersion": "0.9.2",
+    "AppDescription": {
+        "en": "We are the DJ. Listen to music together while you work"
+    },
+    "DefaultTabs": [
+        {
+            "arguments": "room",
+            "title": {
+                "en": "Wejay"
+            }
+        },
+        {
+            "arguments": "choose",
+            "title": {
+                "en": "Open a Room"
+            }
+        },
+        {
+            "arguments": "about",
+            "title": {
+                "en": "About"
+            }
+        }
+    ],
+    "SupportedLanguages": [
+        "en"
+    ],
+    "BundleIdentifier": "wejay",
+    "AppIcon": {
+        "36x18" : "Images/icon.png",
+        "64x64" : "Images/wejay-Icon64.png"
+    },
+    "BundleType": "Application",
+    "RequiredInterface": 1,
+    "RequiredPermissions": [
+        "http://wejay.org:81",
+        "http://*.wejay.org",
+        "http://*.fbcdn.net",
+        "http://ws.spotify.com",
+        "http://*.facebook.com",
+        "https://graph.facebook.com",
+        "http://*.facebook.net",
+		"http://81.201.221.135"
+    ],
+    "VendorIdentifier": "se.iteam",
+    "AcceptedLinkTypes":  [
+        "album",
+        "playlist",
+        "track"
+    ]
 }

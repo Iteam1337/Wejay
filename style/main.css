@@ -254,9 +254,11 @@ h3
   list-style: none;
   list-style-type: none;
   clear: none;
-  float:left;
-  width: 100%;
+  float: left;
+  width: 230px;
   font-family: Arial, Helvetica, sans-serif;
+  padding: 2px 0;
+  display: block;
 }
 #users li:last-child
 {
@@ -567,11 +569,20 @@ table td
 {
   display: inline-block;
 }
+#users li a img
+{
+  float: left;
+}
 #users li a p
 {
   vertical-align: top;
-  margin-left: 20px;
+  margin: 7px 0 0 20px;
   color: white;
+  display: inline-block;
+}
+#users li a p.time
+{
+  font-size: 9px;
 }
 input[type=text]
 {
@@ -688,6 +699,7 @@ blockquote a
   overflow: auto;
   display: block;
   margin: 10px 0;
+  overflow-x: hidden;
 }
 .middle .right .toplist ul {
   max-height: 240px;

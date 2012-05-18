@@ -10,6 +10,7 @@
         <link rel="stylesheet" href="sp://import/css/api.css"/>
         <link rel="stylesheet" href="http://wejay.org/content/css/bugfixes.css"/>
         <link rel="stylesheet" href="style/main.css"/>
+        <script src="javascript/moment.min.js" type="text/javascript"></script>
         <script src="javascript/hub.js" type="text/javascript"></script>
         <script src="javascript/room.js" type="text/javascript"></script>
         <script src="javascript/app.js" type="text/javascript"></script>
@@ -37,7 +38,7 @@
                     </span>
                     <div class="banner">
                         <h2>Enter a Wejay Room</h2>
-						<p>Is your room not in the list above, or you want to start a new one? Fret not, just enter the room name here!</p>
+                        <p>Is your room not in the list above, or you want to start a new one? Fret not, just enter the room name here!</p>
                         <form action="#roomSection" class="input" onsubmit="app.currentRoom.init(this.roomName.value, true); document.location = 'spotify:app:wejay:room'; return false;">
                             <input type="text" value="" id="roomName" placeholder="Wejay Room Name" />
                             <input type="submit" class="sp-button" value="Enter" />
@@ -101,15 +102,15 @@
                         </div>
                     </div>
                 </section>
-				<blockquote>Add music to this room by dragging tracks to this app</blockquote>
+                <blockquote>Add music to this room by dragging tracks to this app</blockquote>
                 <footer class="bottom">
                     <address>
-						Active song selections are always played first and sorted in a way so that users get equal play time. When the active playlist is empty, the intelligent Maestro bot keeps playing music logged-in users like.</address>
+                        Active song selections are always played first and sorted in a way so that users get equal play time. When the active playlist is empty, the intelligent Maestro bot keeps playing music logged-in users like.</address>
                 </footer>
                 <!-- Logged in users -->
                 <script id="usersTemplate" type="text/x-jquery-tmpl">
                     {{if Online}}
-                        <li><a href="${(app.user.friends || []) .indexOf(FacebookId) >= 0 ? 'spotify:user:facebook:' + FacebookId : '#wejaysSection' }" ><img class="image" alt="${UserName}" src="http://graph.facebook.com/${FacebookId}/picture"><p>${UserName}</p></li></a>
+                        <li><a href="${(app.user.friends || []) .indexOf(FacebookId) >= 0 ? 'spotify:user:facebook:' + FacebookId : '#wejaysSection' }" ><img class="image" alt="${UserName}" src="http://graph.facebook.com/${FacebookId}/picture"><p>${UserName}</p><p class="time">${CheckedIn}</p></li></a>
                     {{/if}}
                 </script>
                 <!-- Current music in playlist -->
@@ -127,8 +128,8 @@
                 <section>
                     <span>
                         <h1>About Wejay</h1>
-						<p>Most of us work in an open-plan office. There are many approaches to music in the workplace - complete silence, isolation-via-headphones, a musical dictator or the path of least resistance (mainstream commercial radio satisfying nobody). None of these solutions seem very palatable.</p>
-						<p>Enter <a href="http://wejay.org">Wejay</a>! Research shows that music promotes productivity, as long as you get a say in its selection. Wejay plays the music you and your colleagues select, in a You and your colleagues queues music in a room. The queue will be ordered in a way that will feel fair to all. The sound will be streamed from Spotify via the Wejay App to your speakers.</a>
+                        <p>Most of us work in an open-plan office. There are many approaches to music in the workplace - complete silence, isolation-via-headphones, a musical dictator or the path of least resistance (mainstream commercial radio satisfying nobody). None of these solutions seem very palatable.</p>
+                        <p>Enter <a href="http://wejay.org">Wejay</a>! Research shows that music promotes productivity, as long as you get a say in its selection. Wejay plays the music you and your colleagues select, in a You and your colleagues queues music in a room. The queue will be ordered in a way that will feel fair to all. The sound will be streamed from Spotify via the Wejay App to your speakers.</a>
                     </span>
                 </section>
                 <footer class="bottom">

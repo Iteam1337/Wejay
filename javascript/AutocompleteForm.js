@@ -1,77 +1,66 @@
-
-
 function AutoCompleteForm (){
-	
-	var ui = sp.require('sp://import/scripts/dnd');			  
-	var m = sp.require("sp://import/scripts/api/models");
-	var v = sp.require("sp://import/scripts/api/views");
-    var r = sp.require("sp://import/scripts/react");
-	var kbd = sp.require('sp://import/scripts/keyboard');
-	
-	var topTracks = null;
-	var self = this;
-	var topArtists = null;
 
+    var ui         = sp.require('sp://import/scripts/dnd'),
+        m          = sp.require("sp://import/scripts/api/models"),
+        v          = sp.require("sp://import/scripts/api/views"),
+        r          = sp.require("sp://import/scripts/react"),
+        kbd        = sp.require('sp://import/scripts/keyboard'),
+        topTracks  = null,
+        self       = this,
+        topArtists = null;
 
-	this.init = function (formQuery, topTracks, topArtists) {
+    this.init = function (formQuery, topTracks, topArtists) {
 
-	    var ac = sp.require('javascript/autocomplete');
+        var ac  = sp.require('javascript/autocomplete'),
+            dom = sp.require('sp://import/scripts/dom');
 
-	    var dom = sp.require('sp://import/scripts/dom');
+        // Set up autocomplete. ripped from radio.js - I hope it is OK. ---------------------------------------------------------
+        var showingAutocomplete = false,
+            autocompleteForm    = dom.queryOne(formQuery),
+            searchInput         = ac.tokenInput.input,
+            outputElement       = ac.setupAutoComplete(ac.tokenInput, function () {
+                console.log("tokeninput",ac.tokenInput);
+                //loadStation(searchInput.value, "spotify:app:radio", "", "search", true);
+                //hideAutocomplete();
+                var uri = searchInput.value;
+                app.user.authenticate(function () {
+                    app.currentRoom.addTrackUri(uri);
+                    searchInput.focus();
+                });
+            });
 
-	    // Set up autocomplete. ripped from radio.js - I hope it is OK. ---------------------------------------------------------
+        searchInput.type        = 'text';
+        searchInput.placeholder = 'Add track to the queue';
 
-	    var showingAutocomplete = false;
-	    var autocompleteForm = dom.queryOne(formQuery),
-			searchInput = ac.tokenInput.input,
-			outputElement = ac.setupAutoComplete(ac.tokenInput, function () {
-			    console.log("tokeninput",ac.tokenInput);
-			    //loadStation(searchInput.value, "spotify:app:radio", "", "search", true);
-			    //hideAutocomplete();
-			    var uri = searchInput.value;
-			    app.user.authenticate(function () {
-			        app.currentRoom.addTrackUri(uri);
-			        searchInput.focus();
-			    });
-			});
+        // Creating the method that runs the autocomplete search and updates the table.
+        // Take some default methods defined in autocomplete.js and curry them
+        var searchHandler = partial(ac.searchResultHandler, ac.tokenInput, outputElement),
+            autocomplete  = partial(ac.autoComplete, searchHandler, function () { return { tracks: topTracks, artists: topArtists} });
 
+        dom.adopt(autocompleteForm, ac.tokenInput.node);
 
-	    searchInput.type = 'text';
-	    searchInput.placeholder = 'Add track to the queue';
+        r.fromDOMEvent(searchInput, 'input').subscribe(ac.throttle(autocomplete, 500));
 
-	    // Creating the method that runs the autocomplete search and updates the table.
-	    // Take some default methods defined in autocomplete.js and curry them
-	    var searchHandler = partial(ac.searchResultHandler, ac.tokenInput, outputElement);
-	    var autocomplete = partial(ac.autoComplete, searchHandler, function () { return { tracks: topTracks, artists: topArtists} });
+        // fill the top tracks for this user
+        self.loadTopTracks(function (userTopTracks) {
+            console.log("userTopTracks =>", userTopTracks);
+            topTracks = userTopTracks;
+        });
+    }
 
-
-	    dom.adopt(autocompleteForm, ac.tokenInput.node);
-
-	    r.fromDOMEvent(searchInput, 'input').subscribe(ac.throttle(autocomplete, 500));
-
-	    // fill the top tracks for this user
-	    self.loadTopTracks(function (userTopTracks) {
-	        console.log("userTopTracks =>", userTopTracks);
-	        topTracks = userTopTracks;
-	    });
-	}
-
-	this.loadTopTracks = function (callback) {
-	    console.log(topTracks);
-	    var userName = null; // null means current user
-	    sp.social.getToplist('track', 'user', userName, {
-	        onSuccess: function (r) {
-	            topTracks = r.tracks;
-	            if (callback) {
-	                callback(topTracks);
-	            }
-	        }
-	    });
-	}
+    this.loadTopTracks = function (callback) {
+        console.log("topTracks", topTracks);
+        var userName = null; // null means current user
+        sp.social.getToplist('track', 'user', userName, {
+            onSuccess: function (r) {
+                topTracks = r.tracks;
+                if (callback) {
+                    callback(topTracks);
+                }
+            }
+        });
+    }
 }
 
-	
-		// Finished setting up auto complete ---------------------------------------------------------
-				
+// Finished setting up auto complete ---------------------------------------------------------
 exports.init = new AutoCompleteForm().init;
-		
