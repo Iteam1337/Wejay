@@ -43,7 +43,6 @@ function AutoCompleteForm (){
 
         // fill the top tracks for this user
         self.loadTopTracks(function (userTopTracks) {
-            console.log("userTopTracks =>", userTopTracks);
             topTracks = userTopTracks;
         });
     }

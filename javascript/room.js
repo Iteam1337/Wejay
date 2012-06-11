@@ -6,8 +6,7 @@ var sp = getSpotifyApi(1),
 
 function RoomController(roomName, nodeUrl) {
     console.log('New RoomController for room ' + roomName);
-    var facebookId,
-        self = this;
+    var facebookId, self = this;
     if (roomName) {
         this.roomName = unescape(roomName).trim().toLowerCase();
     }
@@ -109,7 +108,8 @@ function RoomController(roomName, nodeUrl) {
                     onSuccess: function (s) {
                         //console.log(s, 'played correctly');
                         // only autostart player if we are in the current playing view
-                        /*if (self.currentTab == 'room') {                            player.setIsPlaying(true);
+                        /*if (self.currentTab == 'room') {
+                            player.setIsPlaying(true);
                         }*/
                     },
                     onError: function (s) {
@@ -165,7 +165,8 @@ function RoomController(roomName, nodeUrl) {
                     $('#skip').html('Skip');
                     console.log('skipped successfully');
                 },
-                error: function () {
+                error: function (res) {
+                    console.log("skip failed", res);
                     $('#skip').html('Failed');
                     setTimeout(function () {
                         $('#skip').html('Skip');
@@ -192,7 +193,10 @@ function RoomController(roomName, nodeUrl) {
                 success: function (result) {
                     $('#like').html('Liked');
                     $('#block').html('Block');
-                    console.log('liked successfully');
+                    var name = (app.user.userName) ? app.user.userName : "Anonymous";
+                    var obj = { user: name, room: self.roomName, mbId: self.currentSong.SpotifyId, value: 5 };
+                    socket.emit("vote", obj);
+                    console.log( "liked successfully" );
                 },
                 error: function () {
                     $('#like').html('Failed');
@@ -205,9 +209,9 @@ function RoomController(roomName, nodeUrl) {
     }
 
     this.block = function () {
-        if (!this.currentSong)
+        if ( !this.currentSong )
             throw "No current song";
-        app.user.authenticate(function () {
+        app.user.authenticate( function () {
             $('#block').html('Blocking...');
             $.ajax({
                 url: 'http://wejay.org/Room/vote',
@@ -233,6 +237,39 @@ function RoomController(roomName, nodeUrl) {
         });
     }
 
+    this.liveVote = function (SpotifyId, element, number) {
+        if (!SpotifyId || !element || !number) {
+            throw "No song selected";
+        }
+        var vote = null;
+        if (number === 3) {
+            vote = 5;
+        } else if (number === 5) {
+            vote = 1;
+        } else {
+            throw "This is not allowed";
+        }
+        app.user.authenticate(function () {
+            $.ajax({
+                url: "http://wejay.org/Room/vote",
+                data: {
+                    mbId: SpotifyId,
+                    value: vote
+                },
+                dataType: "json",
+                type: "POST",
+                tradition: true,
+                success: function (result) {
+                    var newClass = (number === 5) ? "no3" : "no5";
+                    element.removeClass("no" + number).addClass(newClass);
+                },
+                error: function (msg) {
+                    console.log(msg)
+                }
+            });
+        });
+    }
+
     this.init = function (roomName, anonymous) {
         console.log('init');
         if (!roomName) {
@@ -253,7 +290,8 @@ function RoomController(roomName, nodeUrl) {
                 self.updatePlaylist();
             });
         } else {
-            this.hub.checkin({ user: "Anonymous", room: this.roomName });
+            var name = (app.user.userName) ? app.user.userName : "Anonymous";
+            this.hub.checkin({ user: name, room: this.roomName });
             self.updateUsers();
             self.updatePlaylist();
         }
@@ -295,13 +333,12 @@ function RoomController(roomName, nodeUrl) {
                 console.log('Error updating queue', e);
             },
             success: function (r) {
-                var result = r ? JSON.parse(r).Playlist : [];
-                console.log('load success', result);
-                var playlistUri = localStorage.getItem('playlistUri');
-                var pl = new m.Playlist();
+                var result = r ? JSON.parse(r).Playlist : []
+                  , playlistUri = localStorage.getItem('playlistUri')
+                  , pl = new m.Playlist();
                 result = result.filter(function (song) {
                     return song.SpotifyId;
-                })
+                });
                 console.log("result -> ", result);
                 if (result.length > 0) {
                     $('#queue').html($("#queueTemplate").tmpl(result));
@@ -341,8 +378,40 @@ function RoomController(roomName, nodeUrl) {
         });
     }
     this.hub = new Hub(nodeUrl, self, facebookId);
-    if (this.roomName)
+    if (this.roomName) {
         this.init(roomName, true); // default is anonymous
+    }
 }
 
-/*    Array.prototype.next = function () {        if (this.finishedCount === undefined)            this.finishedCount == 0;        this.finishedCount++;        if (this.finishedCount >= this.length)            this.complete(this);    };    Array.prototype.complete = function (callback) {        if (this.finishedCount !== undefined && this.finishedCount >= this.length)            callback();        else            this.complete = callback;    };    Array.prototype.amap = function (item, next) {        if (this.next !== undefined)            next = this.next;        return Array.prototype.map.call(this, item, next);    };    ['one', 'two', 'three'].amap(function (number, next) {        setTimeout(function () {            console.log(number);            console.log(next);            next();        }, 100);    }).complete(function () {        console.log('complete');    });*/
+/*
+    Array.prototype.next = function () {
+        if (this.finishedCount === undefined)
+            this.finishedCount == 0;
+        this.finishedCount++;
+        if (this.finishedCount >= this.length)
+            this.complete(this);
+    };
+
+    Array.prototype.complete = function (callback) {
+        if (this.finishedCount !== undefined && this.finishedCount >= this.length)
+            callback();
+        else
+            this.complete = callback;
+    };
+
+    Array.prototype.amap = function (item, next) {
+        if (this.next !== undefined)
+            next = this.next;
+        return Array.prototype.map.call(this, item, next);
+    };
+
+    ['one', 'two', 'three'].amap(function (number, next) {
+        setTimeout(function () {
+            console.log(number);
+            console.log(next);
+            next();
+        }, 100);
+    }).complete(function () {
+        console.log('complete');
+    });
+*/

@@ -4,7 +4,6 @@ function User() {
     // properties
     this.facebookId     = null;
     this.facebookUser   = null;
-    //this.facebookUser = null;
     this.accessToken    = null;
 
     var self = this;
@@ -85,7 +84,8 @@ function User() {
                     $('#logout').show();
                     $('#login').hide();
                     app.loadRooms();
-                    localStorage.setItem('facebookUser', facebookUser);
+                    // Why is this needed?
+                    localStorage.setItem('facebookUser', JSON.stringify(facebookUser));
                     self.friends = localStorage.getItem('friends');
                     //facebookUser(this); // inherit all facebook properties to this user class
                     if (!app.currentRoom) {
@@ -97,6 +97,7 @@ function User() {
                         }
                         app.currentRoom.updateUsers();
                         if (callback) {
+                            console.log( "onCallback", callback() )
                             callback(unescape(roomName));
                         }
                     });

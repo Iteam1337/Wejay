@@ -26,7 +26,7 @@ function Hub (nodeUrl, currentRoom, facebookUserId) {
     }
 
     this.checkin = function(options) {
-        console.log('checkin to node', options);
+        //console.log('checkin to node', options);
         socket.emit("checkin", options);
     }
 
@@ -35,34 +35,38 @@ function Hub (nodeUrl, currentRoom, facebookUserId) {
     }
 
     socket.on('connect', function (data) {
-        console.log('connect');
+        //console.log(':::   connect', data);
         
         currentRoom.clearCurrentSong();
         currentRoom.updateUsers();
     });
 
     socket.on('onSongAdded', function(song) {
-        console.log('onSongAdded');
+        //console.log(':::   onSongAdded', song);
+
         currentRoom.updatePlaylist();
     })
     
     socket.on('onCheckin', function (data) {
-        console.log('onCheckin');
+        //console.log(':::   onCheckin', data);
+
         currentRoom.updateUsers();
     });
 
     socket.on('onCheckout', function (data) {
-        console.log('checkout');
+        //console.log(':::   checkout', data);
+
         currentRoom.updateUsers();
     });
 
-    socket.on('onSongEnded', function(lastSong) {
+    socket.on('onSongEnded', function (lastSong) {
+        //console.log(':::   onSongEnded', lastSong);
+
         currentRoom.clearCurrentSong();
-        console.log('onSongEnded');
     });
 
     socket.on('onSongStarted', function (currentSong) {
-        console.log('songStarted', currentSong);
+        //console.log(':::   songStarted', currentSong);
 
         if (!currentSong) {
             return;

@@ -11,6 +11,7 @@ function App () {
         accessToken,
         facebookId,
         //nodeUrl = 'http://wejay.org:81';
+        //nodeUrl = 'http://81.201.221.135:5050';
         nodeUrl = 'http://81.201.221.135:5000';
 
     //var user = 'Anonymous';
@@ -41,7 +42,7 @@ function App () {
         $(currentTab).parents('section').addClass('current');
         $(currentTab).children('section').first().addClass('current');
 
-        console.log("tabTo =>",m.application.arguments, "this.user =>", self.user.facebookId);
+        console.log("tabTo =>", m.application.arguments, "this.user =>", self.user.facebookId);
 
         if (tab == "choose") {
             this.loadRooms();
@@ -279,7 +280,7 @@ function App () {
                 // either the user has been in a room before, we will just open it for him. 
                 /*
                 if (room) {
-                    openRoom(room);
+                openRoom(room);
                 }*/
                 // anyhow we want to update the room list
                 self.loadRooms();
@@ -313,7 +314,7 @@ function App () {
             m.application.showSharePopup(document.getElementById('share'), 'spotify:app:wejay' /*+ currentRoom.roomName*/);
         });
 
-        $("#userToplist a").live("click", function (e) {
+        $(document).on("click", "#userToplist a", function (e) {
             e.preventDefault();
             var link = $(this).attr("href");
             self.currentRoom.addTrackUri(link);
@@ -333,6 +334,22 @@ function App () {
             }
         });
 
+        $(document).on("click", "#queue li .star", function () {
+            var element = $(this),
+            CurrentClass = element.attr("class").match(/(no)+(\d){1}/)
+            song = element.parent().find(".track").attr("href"),
+            SpotifyId = song.split(":"),
+            length = SpotifyId.length - 1,
+            CurrentClassNumber = parseInt(CurrentClass[2]);
+
+            CurrentClass = CurrentClass[0];
+            SpotifyId = SpotifyId[length];
+
+            if ( (CurrentClassNumber === 3) || (CurrentClassNumber === 5)) {
+                app.currentRoom.liveVote(SpotifyId, element, CurrentClassNumber);
+            }
+        });
+
 
         userLogoutHide();
 
@@ -340,9 +357,11 @@ function App () {
         self.fillRooms();
 
         var roomName = localStorage.getItem('room');
-        self.user.facebookUser = localStorage.getItem('facebookUser');
+        self.user.facebookUser = JSON.parse(localStorage.getItem('facebookUser'));
 
-        if (self.user.facebookUser) self.user.userName = self.user.facebookUser.name;
+        if (self.user.facebookUser) {
+            self.user.userName = self.user.facebookUser.name;
+        }
 
         self.currentRoom = new RoomController(unescape(roomName), nodeUrl);
 
@@ -353,14 +372,11 @@ function App () {
         // Toplist
         var toplist = new m.Toplist();
         toplist.toplistType = m.TOPLISTTYPE.USER;
-        //toplist.toplistType = m.TOPLISTTYPE.REGION;
         toplist.matchType = m.TOPLISTMATCHES.TRACKS;
         toplist.userName = m.TOPLISTUSER_CURRENT;
-        //toplist.region = "SE";
         toplist.observe(m.EVENT.CHANGE, function () {
             var i = 0, max = 10;
             for (; i < max; i++) {
-                console.log("added song to toplist", toplist.results[i]);
                 $("#userToplist").append($("#userToplistTemplate").tmpl(toplist.results[i]));
             }
         });
@@ -368,10 +384,12 @@ function App () {
     };
 }
 
-String.prototype.format = function() {
-    var formatted = this;
-    for (var i = 0; i < arguments.length; i++) {
-        var regexp = new RegExp('\\{'+i+'\\}', 'gi');
+String.prototype.format = function () {
+    var formatted = this
+      , i = 0
+      , arg = arguments.length;
+    for (; i < arg; i++) {
+        var regexp = new RegExp('\\{' + i + '\\}', 'gi');
         formatted = formatted.replace(regexp, arguments[i]);
     }
     return formatted;

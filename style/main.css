@@ -362,6 +362,26 @@ h3
   margin: 12px 0 0 5px;
   position: absolute;
 }
+#queue .star.no1
+{
+    background-position: 0 0;
+}
+#queue .star.no3
+{
+    background-position: 16px 0;
+}
+#queue .star.no3:hover
+{
+    background-position: 32px 0;  
+}
+#queue .star.no5
+{
+    background-position: 0 0;
+}
+#queue .star.no5:hover
+{
+    background-position: 0 0;
+}
 #queue .song .track
 {
   padding: 0 0 4px 0;
