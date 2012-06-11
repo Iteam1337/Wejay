@@ -104,11 +104,8 @@ function RoomController(roomName, nodeUrl) {
             var currentTrack = player.getNowPlayingTrack();
             player.context = tpl;
 
-            console.log("isPlayingFromWejay", app.isPlayingFromWejay);
-
             // the user controls if the player should force-play every song. This is by pressing the play-icon on the cover.
-            if (app.isPlayingFromWejay) {
-            //if (forcePlay || ((typeof currentTrack == 'undefined' || currentTrack == null || (player.getIsPlaying() && currentTrack.track.uri != track.uri )))) {
+            if (forcePlay || ((typeof currentTrack == 'undefined' || currentTrack == null || (player.getIsPlaying() && currentTrack.track.uri != track.uri && app.isPlayingFromWejay)))) {
                 player.playTrackFromUri(trackUri, {
                     onSuccess: function (s) {
                         //console.log(s, 'played correctly');
