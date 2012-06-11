@@ -240,7 +240,7 @@ function App () {
         ac.init('.auto-completeForm', topTracks, topArtists);
 
         // when switching rooms -- the app should not autostart the music ...
-        app.isPlayingFromWejay = false;
+        self.isPlayingFromWejay = false;
         $("#start").removeClass("pause");
 
         var userLogoutShow = function () {
