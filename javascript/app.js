@@ -24,6 +24,7 @@ function App () {
     // public properties
     this.user         = new User();
     this.currentRoom  = null;
+    this.isPlayingFromWejay = true;
 
     /* Event handlers */
     if (!m.application) {
@@ -238,6 +239,10 @@ function App () {
         var ac = sp.require('javascript/AutocompleteForm');
         ac.init('.auto-completeForm', topTracks, topArtists);
 
+        // when switching rooms -- the app should not autostart the music ...
+        app.isPlayingFromWejay = false;
+        $("#start").removeClass("pause");
+
         var userLogoutShow = function () {
             $('#login').hide();
             $('#roomLogin').hide();
@@ -347,6 +352,23 @@ function App () {
 
             if ((CurrentClassNumber === 3) || (CurrentClassNumber === 5)) {
                 app.currentRoom.liveVote(SpotifyId, element, CurrentClassNumber);
+            }
+        });
+
+
+        $("#start").click(function () {
+            var element = $(this);
+
+            // If the user presses play -- then wejay should force-play each time the track changes
+            if (element.hasClass("pause")) {
+                // wejay is playing -- and removes the play-clause
+                app.isPlayingFromWejay = false;
+                element.removeClass("pause");
+            } else {
+                // wejay should play.
+                app.isPlayingFromWejay = true;
+                app.currentRoom.playSong(app.currentRoom.currentSong, true);
+                element.addClass("pause");
             }
         });
 

@@ -103,13 +103,17 @@ function RoomController(roomName, nodeUrl) {
             var player = sp.trackPlayer;
             var currentTrack = player.getNowPlayingTrack();
             player.context = tpl;
-            if (forcePlay || ((typeof currentTrack == 'undefined' || currentTrack == null || (player.getIsPlaying() && currentTrack.track.uri != track.uri)))) {
+
+            // the user controls if the player should force-play every song. This is by pressing the play-icon on the cover.
+            if (app.isPlayingFromWejay) {
+                // this overrides the whole spotify-functionallity.
+                //if (forcePlay || ((typeof currentTrack == 'undefined' || currentTrack == null || (player.getIsPlaying() && currentTrack.track.uri != track.uri )))) {
                 player.playTrackFromUri(trackUri, {
                     onSuccess: function (s) {
                         //console.log(s, 'played correctly');
                         // only autostart player if we are in the current playing view
                         /*if (self.currentTab == 'room') {
-                            player.setIsPlaying(true);
+                        player.setIsPlaying(true);
                         }*/
                     },
                     onError: function (s) {
@@ -195,7 +199,6 @@ function RoomController(roomName, nodeUrl) {
                     $('#block').html('Block');
                     var name = (app.user.userName) ? app.user.userName : "Anonymous";
                     var obj = { user: name, room: self.roomName, mbId: self.currentSong.SpotifyId, value: 5 };
-                    socket.emit("vote", obj);
                     console.log( "liked successfully" );
                 },
                 error: function () {

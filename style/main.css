@@ -752,6 +752,19 @@ blockquote a
   background-position-x: -178px;
   display: block;
 }
+#start:hover 
+{
+  background-position-x: -223px;
+}
+#start.pause 
+{
+  opacity: 0.8;
+  background-position-x: 43px;
+}
+#start.pause:hover 
+{
+    opacity: 1;
+}
 .image
 {
   background-color: gray;
