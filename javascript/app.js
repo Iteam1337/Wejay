@@ -345,7 +345,7 @@ function App () {
             CurrentClass = CurrentClass[0];
             SpotifyId = SpotifyId[length];
 
-            if ( (CurrentClassNumber === 3) || (CurrentClassNumber === 5)) {
+            if ((CurrentClassNumber === 3) || (CurrentClassNumber === 5)) {
                 app.currentRoom.liveVote(SpotifyId, element, CurrentClassNumber);
             }
         });
@@ -356,8 +356,11 @@ function App () {
         // fill default rooms
         self.fillRooms();
 
-        var roomName = localStorage.getItem('room');
-        self.user.facebookUser = JSON.parse(localStorage.getItem('facebookUser'));
+        // This generated a error before. Earlier the localStorage version of facebookUser was "[object Object]".
+        // ... In the never version it's a stringified JSON-object.
+        var roomName = localStorage.getItem('room'),
+            localFacebookUser = localStorage.getItem('facebookUser');
+        self.user.facebookUser = (localFacebookUser === "[object Object]") ? "" : JSON.parse(localFacebookUser);
 
         if (self.user.facebookUser) {
             self.user.userName = self.user.facebookUser.name;
