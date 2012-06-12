@@ -38,9 +38,7 @@ function RoomController(roomName, nodeUrl) {
         };
         song.room = self.roomName;
         console.log('adding track -> song', track, song);
-        self.hub.queueSong(song, function () {
-            // document.location = 'spotify:app:wejay:room';
-        });
+        self.hub.queueSong(song);
     }
 
     this.getTrack = function (searchString, callback, errorCallback) {
@@ -105,7 +103,7 @@ function RoomController(roomName, nodeUrl) {
             player.context = tpl;
 
             // the user controls if the player should force-play every song. This is by pressing the play-icon on the cover.
-            if (forcePlay || ((typeof currentTrack == 'undefined' || currentTrack == null || (player.getIsPlaying() && currentTrack.track.uri != track.uri && app.isPlayingFromWejay)))) {
+            if (forcePlay || (player.getIsPlaying() && currentTrack.track.uri != track.uri && app.isPlayingFromWejay)) {
                 player.playTrackFromUri(trackUri, {
                     onSuccess: function (s) {
                         //console.log(s, 'played correctly');
@@ -302,10 +300,11 @@ function RoomController(roomName, nodeUrl) {
     this.checkin = function (force, callback) {
         if (!app.user.facebookId)
             throw "You have not set room and user or facebook details yet";
-        var self = this;
+        var self = this,
+            userObject = { userName: app.user.userName, facebookId: app.user.facebookId, room: self.roomName };
         $.ajax({
             url: 'http://wejay.org/Room/checkin',
-            data: { userName: app.user.userName, facebookId: app.user.facebookId, room: self.roomName },
+            data: userObject,
             dataType: 'json',
             type: 'POST',
             traditional: true,

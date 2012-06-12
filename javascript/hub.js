@@ -9,7 +9,7 @@ function Hub (nodeUrl, currentRoom, facebookUserId) {
     var socket = io.connect(nodeUrl, { secure: false, rememberTransport: false, transports: ['xhr-polling', 'jsonp-polling'] }),
         facebookId = facebookUserId;
 
-    this.queueSong = function(song, callback) {
+    this.queueSong = function (song, callback) {
         $.ajax({
             url: 'http://wejay.org/Room/playSong',
             data: song,

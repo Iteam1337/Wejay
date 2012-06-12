@@ -80,6 +80,7 @@ function User() {
                     self.facebookUser = facebookUser;
                     self.userName = unescape(facebookUser.name);
                     self.facebookId = facebookUser.id;
+                    console.log(m.User(self.facebookId));
                     self.accessToken = accessToken;
                     $('#logout').show();
                     $('#login').hide();
@@ -97,7 +98,6 @@ function User() {
                         }
                         app.currentRoom.updateUsers();
                         if (callback) {
-                            console.log( "onCallback", callback() )
                             callback(unescape(roomName));
                         }
                     });
@@ -109,7 +109,6 @@ function User() {
             },
 
             onComplete: function () {
-                console.log("Authentication complete");
             }
         });
     }

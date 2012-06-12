@@ -11,7 +11,6 @@ function App () {
         accessToken,
         facebookId,
         //nodeUrl = 'http://wejay.org:81';
-        //nodeUrl = 'http://81.201.221.135:5050';
         nodeUrl = 'http://81.201.221.135:5000';
 
     //var user = 'Anonymous';
@@ -96,8 +95,7 @@ function App () {
                 } else {
                     if (m.Link.TYPE.TRACK === type) {
                         self.currentRoom.addTrackUri(link);
-                    }
-                    if (m.Link.TYPE.PLAYLIST === type) {
+                    } else if (m.Link.TYPE.PLAYLIST === type) {
                         var playlist = m.Playlist.fromURI(link);
                         var tracks = playlist.data.all();
                         console.log('playlist: ', tracks);
@@ -124,9 +122,11 @@ function App () {
             });
             if (newTracks.length) {
                 app.user.authenticate(function () {
+                    /*
                     newTracks.forEach(function (track) {
                         self.currentRoom.addTrackUri(track);
                     });
+                    */
                     self.currentRoom.updatePlaylist();
                 });
             }
