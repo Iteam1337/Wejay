@@ -1,13 +1,13 @@
 // main app logic for Wejay App
 function App () {
 
-    var self    = this,
-        sp      = getSpotifyApi(1),
-        ui      = sp.require('sp://import/scripts/dnd'),
-        m       = sp.require("sp://import/scripts/api/models"),
-        v       = sp.require("sp://import/scripts/api/views"),
-        r       = sp.require("sp://import/scripts/react"),
-        kbd     = sp.require('sp://import/scripts/keyboard'),
+    var self = this,
+        sp   = getSpotifyApi(1),
+        ui   = sp.require('sp://import/scripts/dnd'),
+        m    = sp.require("sp://import/scripts/api/models"),
+        v    = sp.require("sp://import/scripts/api/views"),
+        r    = sp.require("sp://import/scripts/react"),
+        kbd  = sp.require('sp://import/scripts/keyboard'),
         accessToken,
         facebookId,
         //nodeUrl = 'http://wejay.org:81';

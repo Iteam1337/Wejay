@@ -103,7 +103,7 @@ function RoomController(roomName, nodeUrl) {
             player.context = tpl;
 
             // the user controls if the player should force-play every song. This is by pressing the play-icon on the cover.
-            if (forcePlay || (player.getIsPlaying() && currentTrack.track.uri != track.uri && app.isPlayingFromWejay)) {
+            if (forcePlay || (currentTrack.track.uri != track.uri && app.isPlayingFromWejay)) {
                 player.playTrackFromUri(trackUri, {
                     onSuccess: function (s) {
                         //console.log(s, 'played correctly');
