@@ -94,8 +94,12 @@ function App () {
                     });
                 } else {
                     if (m.Link.TYPE.TRACK === type) {
+                        //
+                        // adding single track
                         self.currentRoom.addTrackUri(link);
                     } else if (m.Link.TYPE.PLAYLIST === type) {
+                        //
+                        // adding user generated playlist
                         var playlist = m.Playlist.fromURI(link);
                         var tracks = playlist.data.all();
                         console.log('playlist: ', tracks);
@@ -104,6 +108,17 @@ function App () {
                         });
                         self.currentRoom.updatePlaylist();
                         self.linkPlaylist(playlist);
+                    } else if (m.Link.TYPE.ALBUM === type) {
+                        //
+                        // adding album
+                        m.Album.fromURI(link, function (album) {
+                            console.log("album: ", album);
+                            var albumLink = album.data.uri;
+                            var tracks = album.data.tracks;
+                            tracks.forEach(function (uri) {
+                                self.currentRoom.addTrackUri(uri.uri);
+                            });
+                        });
                     }
                 }
             });
