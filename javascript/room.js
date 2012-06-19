@@ -364,15 +364,18 @@ function RoomController(roomName, nodeUrl) {
             success: function (r) {
                 var result = r ? JSON.parse(r).Data : [];
                 result = result.filter(function (user) { return user.FacebookId && user.FacebookId != "null"; });
-                console.log("updateUsers => ", result)
                 if (result.length > 0) {
+                    var onlineUsers = 0;
                     for (var i in result) {
                         var newDate = parseInt(result[i].CheckedIn.replace(/\/Date\(/, "").replace(/\/\)/, ""));
                         result[i].CheckedIn = "Logged in since " + moment(new Date(newDate)).format('HH:mm MM-DD');
+                        if (result[i].Online !== false) onlineUsers++;
                     }
                     $('#users').html($("#usersTemplate").tmpl(result));
+                    $('.logged.in h2').html("LOGGED IN WEJAYS (" + onlineUsers + ")");
                 } else {
-                    $('#users').html('<li>When you log into this room your best mysic will be mixed into the playlist automatically. You can also invite your friends below.</li>');
+                    $('#users').html('<li class="noOneIsLoggedIn">When you log into this room your best mysic will be mixed into the playlist automatically. You can also invite your friends below.</li>');
+                    $('.logged.in h2').html("LOGGED IN WEJAYS");
                 }
             }
         });

@@ -21,8 +21,7 @@ function User() {
                 $('#rooms').html('');
 
                 localStorage.removeItem('facebookUser');
-                console.log("logout logoutUrl", logoutUrl);
-                $.post("http://wejay.org/Room/logout");
+                $.post("http://wejay.org/logout");
                 app.currentRoom.updateUsers();
             }
         });

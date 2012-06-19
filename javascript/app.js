@@ -21,8 +21,8 @@ function App () {
         topArtists  = [];
 
     // public properties
-    this.user         = new User();
-    this.currentRoom  = null;
+    this.user               = new User();
+    this.currentRoom        = null;
     this.isPlayingFromWejay = true;
 
     /* Event handlers */

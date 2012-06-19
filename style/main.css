@@ -14,7 +14,6 @@
 /*********************************************
 * GLOBAL STYLES
 *********************************************/
-
 html, body
 {
   padding: 0;
@@ -25,6 +24,8 @@ html, body
   height: 100%;
   background-color: #ecebe8;
 }
+
+* { -webkit-filter: blur(10px); }
 
 /*********************************************
 * HEADERS
@@ -247,6 +248,7 @@ h3
   margin-top: 10px;
   margin-bottom: 20px;
   -webkit-font-smoothing: subpixel-antialiased;
+  line-height: 1.2em;
 }
 
 #users li
@@ -430,7 +432,7 @@ h3
 }
 .auto-completeForm input
 {
-  width: 200px;
+  width: 100%;
 }
 .input
 {
@@ -817,4 +819,177 @@ footer a
 #userToplist li a:hover
 {
   background-color: rgba(255,255,255,.08);
+}
+
+@media (max-width:680px)
+{
+    section.current
+    {
+        min-height: 0;
+        padding-top: 10px;
+    }
+    #roomSection section
+    {
+        min-width: 0;
+        width: 100%;
+    }
+    #roomSection .top
+    {
+        margin: 0 0 20px;
+        padding: 0 5% 10px;
+        width: 90%;
+        height: auto !important;
+        position: initial;
+        display: inline-block;
+    }
+    #roomSection .top .left
+    {
+        margin: 10px 0 0;
+    }
+    #roomSection .top #roomTitle
+    {
+        margin: 15px 0 0;
+    }
+    #roomSection .top .right
+    {
+        float: right;
+        width: auto;
+        padding-bottom: 10px;
+    }
+    #roomSection .middle
+    {
+        width: 100%;
+    }
+    #roomSection .middle .input
+    {
+        width: 100%;
+        max-width: 100%;
+    }
+    #roomSection .middle .auto-completeForm
+    {
+        margin-left: 5px;
+    }
+    #roomSection .middle .auto-complete.show,
+    #roomSection .middle .auto-complete .tracks,
+    #roomSection .middle .auto-complete.show .tracks a
+    {
+        width: 96%;
+        max-width: 96%;
+    }
+    #roomSection .middle .left
+    {
+        width: 90% !important;
+        margin: 0 0 20px;
+        padding: 0 5% 20px;
+    }
+    #roomSection .middle .left #queue
+    {
+        width: 100%;
+    }
+    #roomSection .middle .left #queue .song
+    {
+        width: 90%;
+        padding: 0 0 0 10%;
+    }
+    #roomSection .middle .right
+    {
+        width: 100% !important;
+        margin: 0;
+        padding: 0;
+    }
+    #roomSection .middle .right #users li
+    {
+        width: 50%;
+    }
+    #roomSection .middle .right #users li.noOneIsLoggedIn
+    {
+        width: 100%;
+    }
+    #roomSection .middle .right #users li a p
+    {
+        display: block;
+        margin: 7px 0 0 60px;
+    }
+    #chooseSection .banner .input
+    {
+        width: 100%;
+    }
+    #chooseSection .banner input[type="text"]
+    {
+        width: 100%;
+    }
+    .middle .right div
+    {
+        width: 90%;
+        padding: 0 5% 10px;
+    }
+    #aboutSection section span, #chooseSection section span
+    {
+        width: 90%;
+        padding: 0 5%;
+    }
+    #aboutSection section, #chooseSection section 
+    {
+        width: 100%;
+        margin: 0;
+    }
+    #chooseSection .rooms
+    {
+        width: 100%;
+    }
+    #chooseSection .banner
+    {
+        width: 90%;
+        padding: 0 5% 40px;
+        height: auto;
+        margin: 0 0 20px;
+    }
+    #chooseSection .banner form input[type="submit"]
+    {
+        position: relative;
+        margin: 0;
+        top: 0;
+        left: -15px;
+        display: block;
+    }
+    #chooseSection .buttons
+    {
+        padding: 0 5% 15px;
+        width: 90%;
+        margin: 0 0 20px;
+        height: auto;
+    }
+    footer *
+    {
+        width: 90%;
+    }
+}
+
+@media (max-width:460px)
+{
+    #roomSection .top #roomTitle
+    {
+        position: absolute;
+        top: 10px;
+    }
+    #roomSection .top .left
+    {
+        margin: 60px auto 0;
+        float: none;
+        position: relative;
+        width: 200px;
+    }
+    #roomSection .top .right
+    {
+        float: none;
+        display: block;
+        position: relative;
+        top: 10px;
+        left: 0;
+        padding-bottom: 20px;
+    }
+    #roomSection .middle .right #users li
+    {
+        width: 100%;
+    }
 }
