@@ -364,6 +364,7 @@ function RoomController(roomName, nodeUrl) {
             success: function (r) {
                 var result = r ? JSON.parse(r).Data : [];
                 result = result.filter(function (user) { return user.FacebookId && user.FacebookId != "null"; });
+                var loggedInUsersInnerText = "NO LOGGED IN WEJAYS";
                 if (result.length > 0) {
                     var onlineUsers = 0;
                     for (var i in result) {
@@ -372,11 +373,13 @@ function RoomController(roomName, nodeUrl) {
                         if (result[i].Online !== false) onlineUsers++;
                     }
                     $('#users').html($("#usersTemplate").tmpl(result));
-                    $('.logged.in h2').html("LOGGED IN WEJAYS (" + onlineUsers + ")");
+                    if (onlineUsers !== 0) {
+                        loggedInUsersInnerText = "LOGGED IN WEJAYS (" + onlineUsers + ")";
+                    }
                 } else {
                     $('#users').html('<li class="noOneIsLoggedIn">When you log into this room your best mysic will be mixed into the playlist automatically. You can also invite your friends below.</li>');
-                    $('.logged.in h2').html("LOGGED IN WEJAYS");
                 }
+                $('.logged.in h2').html(loggedInUsersInnerText);
             }
         });
     }

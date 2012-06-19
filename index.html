@@ -22,7 +22,7 @@
             <section id="roomSection">
                 <section id="current">
                     <div class="top">
-                        <div class="left buildingBlock">
+                        <div class="left">
                             <div id="currentHolder">
                                 <div class="hover">
                                     <a id="start" href="#" title="play/pause room"></a>
@@ -33,7 +33,7 @@
                             </div>
                         </div>
                         <h1 id="roomTitle">Room</h1>
-                        <div class="right buildingBlock">
+                        <div class="right">
                             <h3 id="currentSong"></h3>
                             <h4 id="currentPlayedBy"></h4>
                             <a class="button" title="Like this song" id="like" href="javascript:app.currentRoom.like()">Like</a>
@@ -42,13 +42,13 @@
                         </div>
                     </div>
                     <div class="middle">
-                        <div class="left buildingBlock">
+                        <div class="left">
                             <h2>Current playlist</h2>
                             <div class="auto-completeForm"></div>
                             <ul id="queue"></ul>
                         </div>
                         <div class="right">
-                            <div class="logged in buildingBlock">
+                            <div class="logged in">
                                 <h2>Logged in Wejays</h2>
                                 <ul id="users"></ul>
                                 <span class="buttons">
@@ -57,7 +57,7 @@
                                     <button class="sp-button" id="logout">Logout</button>
                                 </span>
                             </div>
-                            <div class="toplist buildingBlock">
+                            <div class="toplist">
                                 <h2>Your toplist</h2>
                                 <ul id="userToplist"></ul>
                             </div>
@@ -92,7 +92,7 @@
                         <h1>We are the DJ.</h1>
                         <p>No more discussions, no more band bashing, no more competition over the shared office sound system. You work better to the tunes of your favorite music, and Wejay makes that happen - for everyone.</p>
                     </span>
-                    <span class="buildingBlock">
+                    <span>
                         <h1>Wejay Rooms</h1>
                         <p>All music in Wejay is played in rooms. Join a room to listen and add your own tracks.</p>
                         <ul class="rooms" id="rooms"></ul>
@@ -103,7 +103,7 @@
                             <dl><img alt="${UserName}" src="http://graph.facebook.com/${FacebookId}/picture"></dl>
                         </script>
                     </span>
-                    <div class="banner buildingBlock">
+                    <div class="banner">
                         <h2>Enter a Wejay Room</h2>
                         <p>Is your room not in the list above, or you want to start a new one? Fret not, just enter the room name here!</p>
                         <form action="#roomSection" class="input" onsubmit="app.currentRoom.init(this.roomName.value, true); document.location = 'spotify:app:wejay:room'; return false;">
@@ -111,7 +111,7 @@
                             <input type="submit" class="sp-button" value="Enter" />
                         </form>
                     </div>
-                    <span class="buttons buildingBlock">
+                    <span class="buttons">
                         <h2>Login</h2>
                         <address>By logging in with your Facebook account you accept that Wejay may use and store information from your Spotify library.</address>
                         <button class="sp-button" id="roomLogin">Login with Facebook</button>
