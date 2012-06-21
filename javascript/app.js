@@ -16,9 +16,11 @@ function App () {
     //var user = 'Anonymous';
 
     // global connection to node server
-    var socket,
-        topTracks   = [],
-        topArtists  = [];
+    var socket;
+
+    // global Toplist
+    var topTracks  = [],
+        topArtists = [];
 
     // public properties
     this.user               = new User();
@@ -315,6 +317,14 @@ function App () {
             var id = event.dataTransfer.getData('text');
             console.log('dropped to section ', id);
             self.handleDroppedLinks([id]);
+        });
+
+        $("#roomName").bind("focus", function (e) {
+            $("form.input").addClass("focus");
+        });
+
+        $("#roomName").bind("blur", function (e) {
+            $("form.input").removeClass("focus");
         });
 
         $('#roomSection').bind("dragenter", function (e) {

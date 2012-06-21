@@ -13,6 +13,8 @@ function RoomController(roomName, nodeUrl) {
 
     this.currentTab = null;
 
+    this.queue = new m.Playlist();
+
     this.stop = function () {
         var player = sp.trackPlayer;
         player.setIsPlaying(false);
@@ -37,7 +39,6 @@ function RoomController(roomName, nodeUrl) {
             spotifyId: track.data.uri.replace('spotify:track:', '')
         };
         song.room = self.roomName;
-        console.log('adding track -> song', track, song);
         self.hub.queueSong(song);
     }
 
@@ -73,13 +74,16 @@ function RoomController(roomName, nodeUrl) {
     }
 
     this.playSong = function (song, forcePlay) {
+        console.log("playSong", song, forcePlay);
         if (!song)
             return;
         console.log('Playing ', song);
         if (song.Played) {
             var played = eval(song.Played.replace(/\/Date\(([-\d]+)\)\//gi, "new Date($1)"));
             var diff = new Date().getTime() - played.getTime();
+            if (diff < 0) diff = 0;
             song.position = new Date(diff);
+            console.log(diff);
         } else {
             song.position = new Date().setTime(0); // start from 0 seconds if no position was set
         }
@@ -92,9 +96,9 @@ function RoomController(roomName, nodeUrl) {
         if (song.position && song.position.getMinutes) {
             trackUri += "#" + addLeadingZero(song.position.getMinutes()) + ':' + addLeadingZero(song.position.getSeconds());
         }
+        console.log(trackUri);
         m.Track.fromURI(trackUri, function (track) {
-            //$('currentSong').html(track.node);	
-            var tpl = self.queue || new m.Playlist();
+            var tpl = self.queue;
             if (!tpl.data.all().some(function (t) { t == track.uri })) {
                 tpl.add(track);
             }
@@ -102,23 +106,24 @@ function RoomController(roomName, nodeUrl) {
             var currentTrack = player.getNowPlayingTrack();
             player.context = tpl;
 
+            console.log("******************************************************");
+            console.log("TrackURI", trackUri);
+            console.log("currentTrack", currentTrack);
+            console.log("******************************************************");
+
             // the user controls if the player should force-play every song. This is by pressing the play-icon on the cover.
-            if (forcePlay || (currentTrack.track.uri != track.uri && app.isPlayingFromWejay)) {
+            if (forcePlay || (currentTrack === null && app.isPlayingFromWejay) || ((currentTrack.track.uri != track.uri) && app.isPlayingFromWejay)) {
+                console.log("ctrack!");
                 player.playTrackFromUri(trackUri, {
                     onSuccess: function (s) {
-                        //console.log(s, 'played correctly');
-                        // only autostart player if we are in the current playing view
-                        /*if (self.currentTab == 'room') {
-                        player.setIsPlaying(true);
-                        }*/
+                        console.log("playin track");
                     },
                     onError: function (s) {
                         console.log(s, 'play error');
                     }
                 });
-                //document.body.appendChild(player.node);
             }
-            self.queue = tpl;
+            //self.queue = tpl;
             var curr = track.data.artists[0].name + " - " + track.data.name;
             $("#currentSong").html(curr);
             $("#currentAlbum").attr('src', track.data.album.cover);
@@ -130,7 +135,7 @@ function RoomController(roomName, nodeUrl) {
             else {
                 $("#currentPlayedBy").hide();
             }
-            console.log('playing track', track);
+            console.log('playing track ' + track);
         });
     }
     this.clearCurrentSong = function () {
@@ -333,21 +338,16 @@ function RoomController(roomName, nodeUrl) {
                 console.log('Error updating queue', e);
             },
             success: function (r) {
-                var result = r ? JSON.parse(r).Playlist : []
-                  , playlistUri = localStorage.getItem('playlistUri')
-                  , pl = new m.Playlist();
-                result = result.filter(function (song) {
-                    return song.SpotifyId;
-                });
-                console.log("result -> ", result);
+                var result = r ? JSON.parse(r).Playlist : [];
+                //  , playlistUri = localStorage.getItem('playlistUri')
+                //  , pl = new m.Playlist();
+                result = result.filter(function (song) { return song.SpotifyId; });
                 if (result.length > 0) {
                     $('#queue').html($("#queueTemplate").tmpl(result));
                 }
                 else {
                     $('#queue').html('<span class="nothing playing">Nothing in the playlist right now. Add songs either by searching or draggin an album, track or playlist to this app.</span>');
-                    if ($("#currentSong").html() === '') {
-                        $("#currentSong").html('Drag tracks here to start the room');
-                    }
+                    if ($("#currentSong").html() === '') { $("#currentSong").html('Drag tracks here to start the room'); }
                 }
             }
         });
@@ -369,7 +369,7 @@ function RoomController(roomName, nodeUrl) {
                     var onlineUsers = 0;
                     for (var i in result) {
                         var newDate = parseInt(result[i].CheckedIn.replace(/\/Date\(/, "").replace(/\/\)/, ""));
-                        result[i].CheckedIn = "Logged in since " + moment(new Date(newDate)).format('HH:mm MM-DD');
+                        result[i].CheckedIn = "Logged in since " + moment(new Date(newDate)).format('HH:mm MM/DD');
                         if (result[i].Online !== false) onlineUsers++;
                     }
                     $('#users').html($("#usersTemplate").tmpl(result));
@@ -383,41 +383,11 @@ function RoomController(roomName, nodeUrl) {
             }
         });
     }
+
     this.hub = new Hub(nodeUrl, self, facebookId);
+
     if (this.roomName) {
         this.init(roomName, true); // default is anonymous
     }
+
 }
-
-/*
-    Array.prototype.next = function () {
-        if (this.finishedCount === undefined)
-            this.finishedCount == 0;
-        this.finishedCount++;
-        if (this.finishedCount >= this.length)
-            this.complete(this);
-    };
-
-    Array.prototype.complete = function (callback) {
-        if (this.finishedCount !== undefined && this.finishedCount >= this.length)
-            callback();
-        else
-            this.complete = callback;
-    };
-
-    Array.prototype.amap = function (item, next) {
-        if (this.next !== undefined)
-            next = this.next;
-        return Array.prototype.map.call(this, item, next);
-    };
-
-    ['one', 'two', 'three'].amap(function (number, next) {
-        setTimeout(function () {
-            console.log(number);
-            console.log(next);
-            next();
-        }, 100);
-    }).complete(function () {
-        console.log('complete');
-    });
-*/
