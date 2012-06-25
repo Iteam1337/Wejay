@@ -890,6 +890,10 @@ footer a
         width: 90%;
         padding: 0 0 0 10%;
     }
+    #roomSection .middle .left #queue .star
+    {
+        margin: 12px 0 0 3.8%;    
+    }
     #roomSection .middle .right
     {
         width: 100% !important;

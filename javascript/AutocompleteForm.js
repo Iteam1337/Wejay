@@ -40,25 +40,8 @@ function AutoCompleteForm (){
         dom.adopt(autocompleteForm, ac.tokenInput.node);
 
         r.fromDOMEvent(searchInput, 'input').subscribe(ac.throttle(autocomplete, 500));
-
-        // fill the top tracks for this user
-        self.loadTopTracks(function (userTopTracks) {
-            topTracks = userTopTracks;
-        });
     }
 
-    this.loadTopTracks = function (callback) {
-        console.log("topTracks", topTracks);
-        var userName = null; // null means current user
-        sp.social.getToplist('track', 'user', userName, {
-            onSuccess: function (r) {
-                topTracks = r.tracks;
-                if (callback) {
-                    callback(topTracks);
-                }
-            }
-        });
-    }
 }
 
 // Finished setting up auto complete ---------------------------------------------------------

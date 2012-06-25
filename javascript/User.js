@@ -1,10 +1,10 @@
-var auth = sp.require('sp://import/scripts/api/auth');
+var auth = sp.require("sp://import/scripts/api/auth");
 // user class which handles all authentication with facebook and stores accesstokens, usernames, etc
 function User() {
     // properties
-    this.facebookId     = null;
-    this.facebookUser   = null;
-    this.accessToken    = null;
+    this.facebookId   = null;
+    this.facebookUser = null;
+    this.accessToken  = null;
 
     var self = this;
 
@@ -18,16 +18,16 @@ function User() {
                 self.facebookUser = null;
                 self.accessToken = null;
 
-                $('#rooms').html('');
+                $("#rooms").html("");
 
-                localStorage.removeItem('facebookUser');
+                localStorage.removeItem("facebookUser");
                 app.currentRoom.updateUsers();
             }
         });
     };
 
     this.loadFriends = function (callback) {
-        $.getJSON('https://graph.facebook.com/me/friends?access_token=' + self.accessToken + '&callback=?', function (friends) {
+        $.getJSON("https://graph.facebook.com/me/friends?access_token=" + self.accessToken + "&callback=?", function (friends) {
             //console.log(friends);
             var users = new Array();
             if (friends && friends.data) {
@@ -36,7 +36,7 @@ function User() {
                 });
             }
             self.friends = users;
-            localStorage.setItem('friends', users);
+            localStorage.setItem("friends", users);
             if (callback) {
                 callback(users);
             }
@@ -45,13 +45,13 @@ function User() {
 
     //  login to facebook with the current facebook user account
     this.authenticate = function (callback) {
-        console.log('starting authentication');
+        console.log("starting authentication");
 
         // we are already authorized
         if (self.accessToken) {
-            console.log('already authenticated');
-            $('#logout').show();
-            $('#login').hide();
+            console.log("already authenticated");
+            $("#logout").show();
+            $("#login").hide();
             if (callback && app.currentRoom) {
                 app.currentRoom.checkin(false, function (room) {
                     if (callback) {
@@ -65,27 +65,26 @@ function User() {
             }
         }
 
-        var appID = "154112144637878",
-            path = 'https://www.facebook.com/dialog/oauth?',
-            successUrl = "https://www.facebook.com/connect/login_success.html";
+        var appID = "154112144637878"
+          , path = "https://www.facebook.com/dialog/oauth?"
+          , successUrl = "https://www.facebook.com/connect/login_success.html";
 
-        auth.authenticateWithFacebook(appID, ['email', 'read_stream'], {
+        auth.authenticateWithFacebook(appID, ["email", "read_stream"], {
 
             onSuccess: function (accessToken, ttl) {
                 // get the current facebook user details
-                $.getJSON('https://graph.facebook.com/me?access_token=' + accessToken + '&callback=?', function (facebookUser) {
-                    console.log('logged in user: ', facebookUser);
+                $.getJSON("https://graph.facebook.com/me?access_token=" + accessToken + "&callback=?", function (facebookUser) {
+                    console.log("logged in user: ", facebookUser);
                     self.facebookUser = facebookUser;
                     self.userName = unescape(facebookUser.name);
                     self.facebookId = facebookUser.id;
-                    console.log(m.User(self.facebookId));
                     self.accessToken = accessToken;
-                    $('#logout').show();
-                    $('#login').hide();
+                    $("#logout").show();
+                    $("#login").hide();
                     app.loadRooms();
                     // Why is this needed?
-                    localStorage.setItem('facebookUser', JSON.stringify(facebookUser));
-                    self.friends = localStorage.getItem('friends');
+                    localStorage.setItem("facebookUser", JSON.stringify(facebookUser));
+                    self.friends = localStorage.getItem("friends");
                     //facebookUser(this); // inherit all facebook properties to this user class
                     if (!app.currentRoom) {
                         app.currentRoom = new RoomController();

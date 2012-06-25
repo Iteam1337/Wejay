@@ -1,11 +1,11 @@
-var sp = getSpotifyApi(1),
-    ui = sp.require('sp://import/scripts/dnd'),
-    m  = sp.require("sp://import/scripts/api/models"),
-    v  = sp.require("sp://import/scripts/api/views"),
-    accessToken;
+var sp = getSpotifyApi(1)
+  , ui = sp.require("sp://import/scripts/dnd")
+  , m  = sp.require("sp://import/scripts/api/models")
+  , v  = sp.require("sp://import/scripts/api/views")
+  , accessToken;
 
 function RoomController(roomName, nodeUrl) {
-    console.log('New RoomController for room ' + roomName);
+    console.log("New RoomController for room " + roomName);
     var facebookId, self = this;
     if (roomName) {
         this.roomName = unescape(roomName).trim().toLowerCase();
@@ -21,7 +21,7 @@ function RoomController(roomName, nodeUrl) {
     }
 
     this.addTrackUri = function (uri) {
-        console.log('adding track uri: ' + uri);
+        console.log("adding track uri: " + uri);
         if (!uri) {
             return;
         }
@@ -36,7 +36,7 @@ function RoomController(roomName, nodeUrl) {
             mbid     : "",
             title    : track.data.name,
             length   : parseInt(track.data.duration / 1000),
-            spotifyId: track.data.uri.replace('spotify:track:', '')
+            spotifyId: track.data.uri.replace("spotify:track:", "")
         };
         song.room = self.roomName;
         self.hub.queueSong(song);
@@ -74,16 +74,13 @@ function RoomController(roomName, nodeUrl) {
     }
 
     this.playSong = function (song, forcePlay) {
-        console.log("playSong", song, forcePlay);
         if (!song)
             return;
-        console.log('Playing ', song);
         if (song.Played) {
-            var played = eval(song.Played.replace(/\/Date\(([-\d]+)\)\//gi, "new Date($1)"));
-            var diff = new Date().getTime() - played.getTime();
+            var played = eval(song.Played.replace(/\/Date\(([-\d]+)\)\//gi, "new Date($1)"))
+              , diff = new Date().getTime() - played.getTime();
             if (diff < 0) diff = 0;
             song.position = new Date(diff);
-            console.log(diff);
         } else {
             song.position = new Date().setTime(0); // start from 0 seconds if no position was set
         }
@@ -94,151 +91,176 @@ function RoomController(roomName, nodeUrl) {
         this.currentSong = song;
         var trackUri = "spotify:track:" + song.SpotifyId;
         if (song.position && song.position.getMinutes) {
-            trackUri += "#" + addLeadingZero(song.position.getMinutes()) + ':' + addLeadingZero(song.position.getSeconds());
+            trackUri += "#" + addLeadingZero(song.position.getMinutes()) + ":" + addLeadingZero(song.position.getSeconds());
         }
-        console.log(trackUri);
         m.Track.fromURI(trackUri, function (track) {
             var tpl = self.queue;
             if (!tpl.data.all().some(function (t) { t == track.uri })) {
                 tpl.add(track);
             }
-            var player = sp.trackPlayer;
-            var currentTrack = player.getNowPlayingTrack();
+            var player = sp.trackPlayer
+              , currentTrack = player.getNowPlayingTrack();
             player.context = tpl;
 
+            console.log("");
             console.log("******************************************************");
             console.log("TrackURI", trackUri);
             console.log("currentTrack", currentTrack);
-            console.log("******************************************************");
-
+            //
             // the user controls if the player should force-play every song. This is by pressing the play-icon on the cover.
             if (forcePlay || (currentTrack === null && app.isPlayingFromWejay) || ((currentTrack.track.uri != track.uri) && app.isPlayingFromWejay)) {
-                console.log("ctrack!");
                 player.playTrackFromUri(trackUri, {
                     onSuccess: function (s) {
-                        console.log("playin track");
+                        console.log("playing track -- " + track);
                     },
                     onError: function (s) {
-                        console.log(s, 'play error');
+                        console.log(s, "play error");
                     }
                 });
             }
             //self.queue = tpl;
             var curr = track.data.artists[0].name + " - " + track.data.name;
             $("#currentSong").html(curr);
-            $("#currentAlbum").attr('src', track.data.album.cover);
-            $("#currentLink").attr('href', track.data.uri);
+            $("#currentAlbum").attr("src", track.data.album.cover);
+            $("#currentLink").attr("href", track.data.uri);
             if (song.PlayedBy) {
-                $("#currentPlayedBy").html('Added by ' + song.PlayedBy.UserName);
+                $("#currentPlayedBy").html("Added by " + song.PlayedBy.UserName);
                 $("#currentPlayedBy").show();
             }
             else {
                 $("#currentPlayedBy").hide();
             }
-            console.log('playing track ' + track);
+            console.log("******************************************************");
         });
     }
     this.clearCurrentSong = function () {
-        $('#roomTitle').html(encodeURI(this.roomName) + ' Wejay Room');
-        $("#currentSong").html('');
-        $("#currentSong").html('Nothing playing right now. Drag a track here!');
-        $("#currentAlbum").attr('src', "sp://import/img/placeholders/300-album.png");
-        $("#currentLink").attr('href', '');
-        $("#currentPlayedBy").html('');
-        $("#queue").html('');
-        $('#skip').html('Skip');
-        $('#block').html('Block');
-        $('#like').html('Like');
+        $("#roomTitle").html(encodeURI(this.roomName) + " Wejay Room");
+        $("#currentSong").html("");
+        $("#currentSong").html("Nothing playing right now. Drag a track here!");
+        $("#currentAlbum").attr("src", "sp://import/img/placeholders/300-album.png");
+        $("#currentLink").attr("href", "");
+        $("#currentPlayedBy").html("");
+        $("#queue").html("");
+        $("#skip").html("Skip");
+        $("#block").html("Block");
+        $("#like").html("Like");
         //this.stop();
     }
     this.dispose = function () {
-        console.log('dispose', this);
+        console.log("dispose", this);
         this.hub.checkout();
         this.hub = null;
         //this = null;
     }
     this.skip = function () {
-        app.user.authenticate(function () {
-            $('#skip').html('Skipping...');
+        var voteFunction = function () {
+            $("#skip").html("Skipping...");
             $.ajax({
-                url: 'http://wejay.org/Room/next',
+                url: "http://wejay.org/Room/next",
                 data: { room: self.roomName },
-                dataType: 'json',
-                type: 'POST',
+                dataType: "json",
+                type: "POST",
                 traditional: true,
                 success: function (result) {
-                    $('#skip').html('Skip');
-                    console.log('skipped successfully');
+                    $("#skip").html("Skip");
+                    console.log("skipped successfully");
                 },
                 error: function (res) {
                     console.log("skip failed", res);
-                    $('#skip').html('Failed');
+                    $("#skip").html("Failed");
                     setTimeout(function () {
-                        $('#skip').html('Skip');
+                        $("#skip").html("Skip");
                     }, 1000);
                 }
             });
-        });
+        };
+
+        if (app.user.accessToken) {
+            voteFunction();
+        } else {
+            app.user.authenticate(function () {
+                voteFunction();
+            });
+        }
     }
 
     this.like = function () {
-        if (!this.currentSong)
+        if (!this.currentSong) {
             throw "No current song";
-        app.user.authenticate(function () {
-            $('#like').html('Liking...');
+        }
+        var voteFunction = function () {
+            $("#like").html("Liking...");
             $.ajax({
-                url: 'http://wejay.org/Room/vote',
+                url: "http://wejay.org/Room/vote",
                 data: {
                     mbId: self.currentSong.SpotifyId,
                     value: 5
                 },
-                dataType: 'json',
-                type: 'POST',
+                dataType: "json",
+                type: "POST",
                 traditional: true,
                 success: function (result) {
-                    $('#like').html('Liked');
-                    $('#block').html('Block');
+                    $("#like").html("Liked");
+                    $("#block").html("Block");
                     var name = (app.user.userName) ? app.user.userName : "Anonymous";
                     var obj = { user: name, room: self.roomName, mbId: self.currentSong.SpotifyId, value: 5 };
-                    console.log( "liked successfully" );
+                    console.log("liked successfully");
                 },
                 error: function () {
-                    $('#like').html('Failed');
+                    $("#like").html("Failed");
                     setTimeout(function () {
-                        $('#like').html('Like');
+                        $("#like").html("Like");
                     }, 1000);
                 }
             });
-        });
+        }
+
+        if (app.user.accessToken) {
+            voteFunction();
+        } else {
+            app.user.authenticate(function () {
+                voteFunction();
+            });
+        }
     }
 
     this.block = function () {
-        if ( !this.currentSong )
+        if ( !this.currentSong ) {
             throw "No current song";
-        app.user.authenticate( function () {
-            $('#block').html('Blocking...');
+        }
+        var voteFunction = function () {
+            $("#block").html("Blocking...");
             $.ajax({
-                url: 'http://wejay.org/Room/vote',
+                url: "http://wejay.org/Room/vote",
                 data: {
                     mbId: self.currentSong.SpotifyId,
                     value: 1
                 },
-                dataType: 'json',
-                type: 'POST',
+                dataType: "json",
+                type: "POST",
                 traditional: true,
                 success: function (result) {
-                    $('#block').html('Blocked');
-                    $('#like').html('Like');
-                    console.log('Blocked successfully');
+                    $("#block").html("Blocked");
+                    $("#like").html("Like");
+                    console.log("Blocked successfully");
                 },
                 error: function () {
-                    $('#block').html('Failed');
+                    $("#block").html("Failed");
                     setTimeout(function () {
-                        $('#block').html('Block');
+                        $("#block").html("Block");
                     }, 1000);
                 }
             });
-        });
+        };
+
+        if (app.user.accessToken) {
+            voteFunction();
+        } else {
+            app.user.authenticate(function () {
+                voteFunction();
+            });
+        }
+
     }
 
     this.liveVote = function (SpotifyId, element, number) {
@@ -249,11 +271,11 @@ function RoomController(roomName, nodeUrl) {
         if (number === 3) {
             vote = 5;
         } else if (number === 5) {
-            vote = 1;
+            vote = 3;
         } else {
             throw "This is not allowed";
         }
-        app.user.authenticate(function () {
+        var voteFunction = function () {
             $.ajax({
                 url: "http://wejay.org/Room/vote",
                 data: {
@@ -268,25 +290,33 @@ function RoomController(roomName, nodeUrl) {
                     element.removeClass("no" + number).addClass(newClass);
                 },
                 error: function (msg) {
-                    console.log(msg)
+                    console.log(msg);
                 }
             });
-        });
+        }
+
+        if (app.user.accessToken) {
+            voteFunction();
+        } else {
+            app.user.authenticate(function () {
+                voteFunction();
+            });
+        }
     }
 
     this.init = function (roomName, anonymous) {
-        console.log('init');
+        console.log("init");
         if (!roomName) {
             console.log("Room name must be specified")
             throw "Room name must be specified"
         }
         this.roomName = unescape(roomName).trim().toLowerCase();
         this.clearCurrentSong();
-        $("#roomLink").val('http://wejay.org/' + encodeURI(this.roomName));
-        $("#roomLink").bind('click', function () { this.select(); });
-        //$("#roomLink").html('spotify:app:wejay:room:' + room);
-        $("#shareFacebook").attr('href', "http://www.facebook.com/sharer.php?u={0}&t={1}".format($("#roomLink").val(), this.roomName.toUpperCase() + " WEJAY ROOM on Spotify. Join this room and control the music together. We are the DJ."));
-        localStorage.setItem('room', this.roomName);
+        $("#roomLink").val("http://wejay.org/" + encodeURI(this.roomName));
+        $("#roomLink").bind("click", function () { this.select(); });
+        //$("#roomLink").html("spotify:app:wejay:room:" + room);
+        $("#shareFacebook").attr("href", "http://www.facebook.com/sharer.php?u={0}&t={1}".format($("#roomLink").val(), this.roomName.toUpperCase() + " WEJAY ROOM on Spotify. Join this room and control the music together. We are the DJ."));
+        localStorage.setItem("room", this.roomName);
         if (!anonymous && !app.user.accessToken) {
             app.user.authenticate(function () {
                 this.hub.checkin({ user: app.user.userName, room: this.roomName });
@@ -299,6 +329,23 @@ function RoomController(roomName, nodeUrl) {
             self.updateUsers();
             self.updatePlaylist();
         }
+        // fill the top tracks for this user
+        self.loadTopTracks(function (userTopTracks) {
+            topTracks = userTopTracks;
+        });
+    }
+
+    this.loadTopTracks = function (callback) {
+        var userName = null; // null means current user
+        sp.social.getToplist("track", "user", userName, {
+            onSuccess: function (r) {
+                var topTracks = r.tracks;
+                console.log("topTracks Loaded");
+                if (callback) {
+                    callback(topTracks);
+                }
+            }
+        });
     }
 
     // checkin the current user to wejay
@@ -308,10 +355,10 @@ function RoomController(roomName, nodeUrl) {
         var self = this,
             userObject = { userName: app.user.userName, facebookId: app.user.facebookId, room: self.roomName };
         $.ajax({
-            url: 'http://wejay.org/Room/checkin',
+            url: "http://wejay.org/Room/checkin",
             data: userObject,
-            dataType: 'json',
-            type: 'POST',
+            dataType: "json",
+            type: "POST",
             traditional: true,
             success: function (result) {
                 self.lastCheckin = new Date();
@@ -319,7 +366,7 @@ function RoomController(roomName, nodeUrl) {
                 if (callback) {
                     callback(self.roomName);
                 }
-                console.log(app.user.userName + ' logged in to wejay room ', self.roomName);
+                console.log(app.user.userName + " logged in to wejay room ", self.roomName);
                 //self.hub.checkin({ user: user, room: self.roomName });
             }
         });
@@ -327,27 +374,27 @@ function RoomController(roomName, nodeUrl) {
 
     // Update playlist ul
     this.updatePlaylist = function () {
-        console.log('updating queue...');
+        console.log("updating queue...");
         $.ajax({
-            url: 'http://wejay.org/Room/Playlist?room=' + self.roomName,
-            type: 'GET',
+            url: "http://wejay.org/Room/Playlist?room=" + self.roomName,
+            type: "GET",
             processData: false,
-            contentType: 'application/json',
-            dataType: 'text',
+            contentType: "application/json",
+            dataType: "text",
             error: function (e) {
-                console.log('Error updating queue', e);
+                console.log("Error updating queue", e);
             },
             success: function (r) {
                 var result = r ? JSON.parse(r).Playlist : [];
-                //  , playlistUri = localStorage.getItem('playlistUri')
+                //  , playlistUri = localStorage.getItem("playlistUri")
                 //  , pl = new m.Playlist();
                 result = result.filter(function (song) { return song.SpotifyId; });
                 if (result.length > 0) {
-                    $('#queue').html($("#queueTemplate").tmpl(result));
+                    $("#queue").html($("#queueTemplate").tmpl(result));
                 }
                 else {
-                    $('#queue').html('<span class="nothing playing">Nothing in the playlist right now. Add songs either by searching or draggin an album, track or playlist to this app.</span>');
-                    if ($("#currentSong").html() === '') { $("#currentSong").html('Drag tracks here to start the room'); }
+                    $("#queue").html("<span class=\"nothing playing\">Nothing in the playlist right now. Add songs either by searching or draggin an album, track or playlist to this app.</span>");
+                    if ($("#currentSong").html() === "") { $("#currentSong").html("Drag tracks here to start the room"); }
                 }
             }
         });
@@ -356,11 +403,11 @@ function RoomController(roomName, nodeUrl) {
     // Update users online list
     this.updateUsers = function () {
         $.ajax({
-            url: 'http://wejay.org/Room/GetOnlineUsers?room=' + self.roomName,
-            type: 'GET',
+            url: "http://wejay.org/Room/GetOnlineUsers?room=" + self.roomName,
+            type: "GET",
             processData: false,
-            contentType: 'application/json',
-            dataType: 'text',
+            contentType: "application/json",
+            dataType: "text",
             success: function (r) {
                 var result = r ? JSON.parse(r).Data : [];
                 result = result.filter(function (user) { return user.FacebookId && user.FacebookId != "null"; });
@@ -369,17 +416,17 @@ function RoomController(roomName, nodeUrl) {
                     var onlineUsers = 0;
                     for (var i in result) {
                         var newDate = parseInt(result[i].CheckedIn.replace(/\/Date\(/, "").replace(/\/\)/, ""));
-                        result[i].CheckedIn = "Logged in since " + moment(new Date(newDate)).format('HH:mm MM/DD');
+                        result[i].CheckedIn = "Logged in since " + moment(new Date(newDate)).format("HH:mm MM/DD");
                         if (result[i].Online !== false) onlineUsers++;
                     }
-                    $('#users').html($("#usersTemplate").tmpl(result));
+                    $("#users").html($("#usersTemplate").tmpl(result));
                     if (onlineUsers !== 0) {
                         loggedInUsersInnerText = "LOGGED IN WEJAYS (" + onlineUsers + ")";
                     }
                 } else {
-                    $('#users').html('<li class="noOneIsLoggedIn">When you log into this room your best mysic will be mixed into the playlist automatically. You can also invite your friends below.</li>');
+                    $("#users").html("<li class=\"noOneIsLoggedIn\">When you log into this room your best mysic will be mixed into the playlist automatically. You can also invite your friends below.</li>");
                 }
-                $('.logged.in h2').html(loggedInUsersInnerText);
+                $(".logged.in h2").html(loggedInUsersInnerText);
             }
         });
     }
