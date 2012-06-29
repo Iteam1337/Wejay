@@ -8,12 +8,11 @@ function User() {
 
     var self = this;
 
-    this.logout = function () {
+    // TODO: 
+    this.logoutFromFacebook = function () {
         var logoutUrl = "https://www.facebook.com/logout.php?next=http://wejay.org/logout&access_token=" + this.accessToken;
         auth.showAuthenticationDialog(logoutUrl, "http://wejay.org/logout", {
             onSuccess: function () {
-                app.currentRoom.updateUsers();
-
                 self.facebookId = null;
                 self.facebookUser = null;
                 self.accessToken = null;
@@ -21,7 +20,22 @@ function User() {
                 $("#rooms").html("");
 
                 localStorage.removeItem("facebookUser");
+            }
+        });
+    };
+
+    this.logout = function () {
+
+        $.ajax({
+            url: "http://wejay.org/Room/logout",
+            type: "POST",
+            traditional: true,
+            success: function (result) {
+                console.log("success!!!");
                 app.currentRoom.updateUsers();
+            },
+            error: function (res) {
+                console.log("failed :/!!!");
             }
         });
     };
