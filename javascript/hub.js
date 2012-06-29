@@ -2,6 +2,7 @@ function Hub (nodeUrl, currentRoom, facebookUserId) {
 
     console.log("connecting to node server", nodeUrl);
 
+
     if (typeof io === "undefined") {
         alert("Sorry, we can not connect to realtime service, try again soon");
     }
@@ -27,6 +28,7 @@ function Hub (nodeUrl, currentRoom, facebookUserId) {
 
     this.checkin = function(options) {
         console.log("checkin to node", options);
+        console.log("currentRoom", currentRoom);
         socket.emit("checkin", options);
     }
 
