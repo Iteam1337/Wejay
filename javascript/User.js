@@ -31,11 +31,10 @@ function User() {
             type: "POST",
             traditional: true,
             success: function (result) {
-                console.log("success!!!");
                 app.currentRoom.updateUsers();
             },
             error: function (res) {
-                console.log("failed :/!!!");
+                console.log("failed to logout");
             }
         });
     };
@@ -60,7 +59,7 @@ function User() {
     //  login to facebook with the current facebook user account
     this.authenticate = function (callback) {
         console.log("starting authentication");
-
+        //
         // we are already authorized
         if (self.accessToken) {
             console.log("already authenticated");
@@ -96,7 +95,6 @@ function User() {
                     $("#logout").show();
                     $("#login").hide();
                     app.loadRooms();
-                    // Why is this needed?
                     localStorage.setItem("facebookUser", JSON.stringify(facebookUser));
                     self.friends = localStorage.getItem("friends");
                     //facebookUser(this); // inherit all facebook properties to this user class

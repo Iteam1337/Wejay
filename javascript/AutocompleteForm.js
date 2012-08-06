@@ -20,8 +20,6 @@ function AutoCompleteForm (){
             searchInput         = ac.tokenInput.input,
             outputElement       = ac.setupAutoComplete(ac.tokenInput, function () {
                 console.log("tokeninput",ac.tokenInput);
-                //loadStation(searchInput.value, "spotify:app:radio", "", "search", true);
-                //hideAutocomplete();
                 var uri = searchInput.value;
                 app.user.authenticate(function () {
                     app.currentRoom.addTrackUri(uri);

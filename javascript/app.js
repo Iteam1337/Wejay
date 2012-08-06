@@ -11,16 +11,12 @@ function App () {
       , accessToken
       , facebookId;
 
-    
-
-    //var user = "Anonymous";
-
     //
-    // global connection to node server
+    // Global connection to node server
     var socket
       , nodeUrl = "http://81.201.221.135:5000";
-    //, nodeUrl = "http://wejay.org:81";
 
+    //
     // global Toplist
     var topTracks = []
       , topArtists = [];
@@ -79,11 +75,8 @@ function App () {
 
     // tab switched in ui
     m.application.observe(m.EVENT.ARGUMENTSCHANGED, function () {
-
         var tab = m.application.arguments[0];
         self.tabTo(tab);
-
-        //console.log(tab);
     });
 
     this.handleDroppedLinks = function (links) {
@@ -189,18 +182,6 @@ function App () {
                 result = result.slice(0, 9);
                 $(div).html($("#roomTopListTemplate").tmpl(result));
                 $(div).append("<a>" + room + "</a>");
-                /*
-                result = result.filter(function(item){
-                    return !!item.Songs[0].SpotifyId;
-                });
-                result = result.sort(function(song){
-                    return -song.Count;
-                });
-                result = result.slice(0, 4);
-                console.log(result);
-                $(div).css("backgroundImage', 'url(spotify:mosaic:' + result.map(function(item){return item.Songs[0].SpotifyId}).join(";") + ") no-repeat");
-                $(div).append("<a>' + room + '</a>");
-                */
             }
         });
     }
@@ -212,7 +193,6 @@ function App () {
         }
         app.user.loadFriends(function (users) {
             users.push(app.user.facebookId); // add current user as well
-            // console.log("sending users: ", users);
             $.ajax({
                 url: "http://wejay.org/room/GetRoomsForUsers",
                 traditional: true,

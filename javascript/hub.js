@@ -37,38 +37,32 @@ function Hub (nodeUrl, currentRoom, facebookUserId) {
     }
 
     socket.on("connect", function (data) {
-        //console.log(":::   connect", data);
         
         currentRoom.clearCurrentSong();
         currentRoom.updateUsers();
     });
 
     socket.on("onSongAdded", function(song) {
-        //console.log(":::   onSongAdded", song);
 
         currentRoom.updatePlaylist();
     })
     
     socket.on("onCheckin", function (data) {
-        //console.log(":::   onCheckin", data);
 
         currentRoom.updateUsers();
     });
 
     socket.on("onCheckout", function (data) {
-        //console.log(":::   checkout", data);
 
         currentRoom.updateUsers();
     });
 
     socket.on("onSongEnded", function (lastSong) {
-        //console.log(":::   onSongEnded", lastSong);
 
         currentRoom.clearCurrentSong();
     });
 
     socket.on("onSongStarted", function (currentSong) {
-        //console.log(":::   songStarted", currentSong);
 
         if (!currentSong) {
             return;
