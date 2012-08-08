@@ -14,7 +14,7 @@ Mac:
 ~/Spotify/wejay
 
 Restart Spotify and in Spotify search for:
-spotify:app:Wejay
+spotify:app:wejay
 
 Basic structure:
 
