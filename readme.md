@@ -8,10 +8,10 @@ http://developer.spotify.com/en/spotify-apps-api/preview/
 Install it by expanding the files to:
 
 Windows:
-\My Documents\Spotify\Wejay
+\My Documents\Spotify\wejay
 
 Mac:
-~/Spotify/Wejay
+~/Spotify/wejay
 
 Restart Spotify and in Spotify search for:
 spotify:app:Wejay
