@@ -1,8 +1,8 @@
 {
     "AppName": {
-        "en": "Wejay"
+        "en": "WEJAY"
     },
-    "BundleVersion": "1.00",
+    "BundleVersion": "1.0.1",
     "AppDescription": {
         "en": "We are the DJ. Listen to music together while you work"
     },
@@ -31,8 +31,9 @@
     ],
     "BundleIdentifier": "wejay",
     "AppIcon": {
-        "36x18" : "Images/icon.png",
-        "64x64" : "Images/wejay-Icon64.png"
+        "36x18": "Images/icon.png",
+        "64x64": "Images/wejay64.png",
+		"128x128": "Images/wejay128.png"
     },
     "BundleType": "Application",
     "RequiredInterface": 1,

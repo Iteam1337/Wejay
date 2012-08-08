@@ -4,7 +4,10 @@ function Hub (nodeUrl, currentRoom, facebookUserId) {
 
 
     if (typeof io === "undefined") {
+        $( "#offline" ).show();
+        $( "#main" ).hide();
         alert("Sorry, we can not connect to realtime service, try again soon");
+        return
     }
 
     var socket = io.connect(nodeUrl, { secure: false, rememberTransport: false, transports: ["xhr-polling", "jsonp-polling"] })
@@ -37,33 +40,27 @@ function Hub (nodeUrl, currentRoom, facebookUserId) {
     }
 
     socket.on("connect", function (data) {
-        
         currentRoom.clearCurrentSong();
         currentRoom.updateUsers();
     });
 
     socket.on("onSongAdded", function(song) {
-
         currentRoom.updatePlaylist();
     })
     
     socket.on("onCheckin", function (data) {
-
         currentRoom.updateUsers();
     });
 
     socket.on("onCheckout", function (data) {
-
         currentRoom.updateUsers();
     });
 
     socket.on("onSongEnded", function (lastSong) {
-
         currentRoom.clearCurrentSong();
     });
 
     socket.on("onSongStarted", function (currentSong) {
-
         if (!currentSong) {
             return;
         }

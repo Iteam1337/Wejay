@@ -25,7 +25,6 @@ function User() {
     };
 
     this.logout = function () {
-
         $.ajax({
             url: "http://wejay.org/Room/logout",
             type: "POST",

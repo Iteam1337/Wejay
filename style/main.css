@@ -80,6 +80,25 @@ a
   min-width: 465px;
   text-align: center;
 }
+#offline
+{
+  background-image: -webkit-linear-gradient(top, rgb(26,26,26) 0%,rgb(60,60,60) 70%,rgb(90,90,90) 100%);*/
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+#offline h1 
+{
+    position: absolute;
+    top: 50%;
+    height: 30px;
+    width: 210px;
+    margin: -30px 0 0 -105px;
+    left: 50%;
+}
 
 /*********************************************
 * DEFAULT ELEMENT STYLES
@@ -205,8 +224,14 @@ h3
   width: 250px;
 }
 
-#currentAlbum
+.hidden.title
 {
+    display: none;
+}
+#currentAlbum,
+#currentLink
+{
+  display: block;
   margin: 0;
   width: 200px;
   height: 200px;
@@ -622,9 +647,73 @@ address
 }
 blockquote a
 {
-  color:#fff;
+  color: #fff;
 }
-
+.checkbox
+{
+    background-image: url("../images/checkbox.png");
+    background-position: 0 36px;
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+    background-color: rgba(255,255,255,.3);
+    border-radius: 3px;
+    position: absolute;
+    left: 150px;
+    top: 19px;
+}
+.checkbox:hover
+{
+    background-position: 0 54px;
+}
+.checkbox:checked
+{
+    background-position: 0 90px;
+}
+.checkbox:checked:hover
+{
+    background-position: 0 0;
+}
+.disclaimer
+{
+    background-color: rgba(255,25,49,.8) !important;
+    margin: 20px auto;
+    padding: 5px 20px 15px !important;
+    width: 630px;
+    position: relative;
+    height: 40px;
+}
+.disclaimer h1,
+.disclaimer p
+{
+    color: white;
+    display: inline-block;
+    text-align: left;
+    line-height: 1em;
+    margin: 0;
+    padding: 0;
+    vertical-align: top;
+    position: absolute;
+}
+.disclaimer h1
+{
+    text-shadow: 1px 1px 0 black;
+    width: 110px;
+    top: 20px;
+    left: 20px;
+}
+.disclaimer p
+{
+    width: 420px;
+    top: 18px;
+    left: 210px;
+}
+.disclaimer .discl
+{
+    position: absolute;
+    top: 20px;
+    left: 210px;
+}
 #header
 {
   background: url(../images/Wejay-small.png) no-repeat #fff;
@@ -635,9 +724,12 @@ blockquote a
 
 #roomTitle 
 {
+  margin: 0;
   text-align: left;
-  height: 65px;
+  height: 82px;
   font-size: 42px;
+  overflow: hidden;
+  line-height: 1em;
 }
 
 .top
@@ -659,7 +751,7 @@ blockquote a
 }
 .top .left
 {
-  width: 220px;
+  width: 215px;
   height: 202px;
 }
 .top .right
@@ -669,6 +761,16 @@ blockquote a
   left: 240px;
   bottom: 21px;
   position: absolute;
+}
+.top #onair
+{
+    line-height: 1em;
+    margin: 0;
+    padding: 0;
+    position: absolute;
+    right: 2px;
+    top: 4px;
+    color: rgb(220,220,220);
 }
 .middle
 {
@@ -847,7 +949,12 @@ footer a
     }
     #roomSection .top #roomTitle
     {
-        margin: 15px 0 0;
+        margin: 11px 0 0;
+    }
+    #roomSection .top #onair
+    {
+        top: initial;
+        bottom: 26px;
     }
     #roomSection .top .right
     {

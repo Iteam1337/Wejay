@@ -1,15 +1,34 @@
 // main app logic for Wejay App
 function App () {
 
-    var self    = this
-      , sp      = getSpotifyApi(1)
-      , ui      = sp.require("sp://import/scripts/dnd")
-      , m       = sp.require("sp://import/scripts/api/models")
-      , v       = sp.require("sp://import/scripts/api/views")
-      , r       = sp.require("sp://import/scripts/react")
-      , kbd     = sp.require("sp://import/scripts/keyboard")
+    var self = this
+      , sp   = getSpotifyApi( 1 )
+      , ui   = sp.require( "sp://import/scripts/dnd" )
+      , m    = sp.require( "sp://import/scripts/api/models" )
+      , v    = sp.require( "sp://import/scripts/api/views" )
+      , r    = sp.require( "sp://import/scripts/react" )
+      , kbd  = sp.require( "sp://import/scripts/keyboard" )
       , accessToken
       , facebookId;
+      
+    //
+    // Before anything begins loading - the application hinders users who are offline
+    m.session.observe( m.EVENT.STATECHANGED, function () {
+        if ( m.session.state >= 2 ) { 
+            $( "#offline" ).show();
+            $( "#main" ).hide();
+        } else {
+            $( "#offline" ).hide();
+            $( "#main" ).show();
+        }
+    });
+    
+    if ( m.session.state >= 2 ) {
+        $( "#offline" ).show();
+        $( "#main" ).hide();
+    } else {
+        $( "#offline" ).hide();
+    }
 
     //
     // Global connection to node server
@@ -24,97 +43,91 @@ function App () {
     // public properties
     this.user               = new User();
     this.currentRoom        = null;
-    this.isPlayingFromWejay = true;
+    this.isPlayingFromWejay = false;
+    this.acceptedLogin      = false;
 
     /* Event handlers */
-    if (!m.application) {
+    if ( !m.application ) {
         alert("This version of Spotify is not compatible with this App. Please upgrade to a newer version and try again");
         history.back();
         return;
     }
 
-    this.tabTo = function (tab) {
-        self.currentRoom.currentTab = tab;
-
+    this.tabTo = function ( tab ) {
+        if ( self.currentRoom && self.currentRoom.currentTab ) {
+            self.currentRoom.currentTab = tab;
+        }
         var currentTab = document.location = "#" + tab + "Section";
-        $("section").removeClass("current");
-
-        $(currentTab).addClass("current");
-        $(currentTab).parents("section").addClass("current");
-        $(currentTab).children("section").first().addClass("current");
-
-        console.log("tabTo =>", m.application.arguments, "this.user =>", self.user.facebookId);
-
-        if (tab == "choose") {
-            this.loadRooms();
-        }
-
-        if (tab == "room") {
-            if (m.application.arguments.length > 1) {
-                var newRoom = m.application.arguments[1].toLowerCase();
-                if (self.currentRoom.roomName != newRoom) {
-                    console.log("new room", newRoom);
-                    self.currentRoom.init(unescape(newRoom), true);
+        $( "section" ).removeClass( "current" );
+        $( currentTab ).addClass( "current" );
+        $( currentTab ).parents( "section" ).addClass( "current" );
+        $( currentTab ).children( "section" ).first().addClass( "current" );
+        console.log( "tabTo =>", m.application.arguments, "this.user =>", self.user.facebookId );
+        switch ( tab ) {
+            case "choose":
+                this.loadRooms();
+                break;
+            case "room":
+                if ( m.application.arguments.length > 1 ) {
+                    var newRoom = m.application.arguments[ 1 ].toLowerCase();
+                    if ( self.currentRoom.roomName != newRoom ) {
+                        console.log( "new room", newRoom );
+                        self.currentRoom.init( unescape( newRoom ), true );
+                    }
+                } else {
+                    if ( !self.currentRoom.roomName ) {
+                        alert( "You have to select a room first" );
+                    }
                 }
-            } else {
-                if (!self.currentRoom.roomName) {
-                    alert("You have to select a room first");
+                self.currentRoom.updatePlaylist();
+                break;
+            case "wejays":
+                if ( !self.currentRoom.roomName ) {
+                    alert( "You have to select a room first" );
                 }
-            }
-
-            self.currentRoom.updatePlaylist();
-
-        }
-
-        if (tab == "wejays") {
-            if (!self.currentRoom.roomName) {
-                alert("You have to select a room first");
-            }
+                break;
         }
     }
-
+    //
     // tab switched in ui
-    m.application.observe(m.EVENT.ARGUMENTSCHANGED, function () {
-        var tab = m.application.arguments[0];
-        self.tabTo(tab);
+    m.application.observe( m.EVENT.ARGUMENTSCHANGED, function () {
+        var tab = m.application.arguments[ 0 ];
+        self.tabTo( tab );
     });
 
-    this.handleDroppedLinks = function (links) {
-        console.log("dropped", links);
+    this.handleDroppedLinks = function ( links ) {
+        console.log( "dropped", links );
         var droppedLinks = [];
-        app.user.authenticate(function () {
-            links.forEach(function (link) {
-                var type = m.Link.getType(link);
-                if (m.Link.TYPE.PROFILE === type || m.Link.TYPE.FACEBOOK_USER === type) {
-                    var user = m.User.fromURI(link, function (user) {
-                        console.log("found user: ", user);
-                        alert("You can not yet invite people by dragging them, please share the link to the room instead, you will find it on the Wejays tab");
-                    });
+        app.user.authenticate( function () {
+            links.forEach( function ( link ) {
+                var type = m.Link.getType( link );
+                if ( m.Link.TYPE.PROFILE === type || m.Link.TYPE.FACEBOOK_USER === type ) {
+                    console.log("this is currently not available");
                 } else {
-                    if (m.Link.TYPE.TRACK === type) {
+                    if ( m.Link.TYPE.TRACK === type ) {
                         //
                         // adding single track
                         self.currentRoom.addTrackUri(link);
-                    } else if (m.Link.TYPE.PLAYLIST === type) {
+                    } else if ( m.Link.TYPE.PLAYLIST === type ) {
                         //
                         // adding user generated playlist
-                        var playlist = m.Playlist.fromURI(link)
+                        var playlist = m.Playlist.fromURI( link )
                           , tracks = playlist.data.all();
-                        console.log("playlist: ", tracks);
-                        tracks.forEach(function (uri) {
-                            self.currentRoom.addTrackUri(uri);
+                        console.log( "playlist: ", tracks );
+                        tracks.forEach( function ( uri ) {
+                            self.currentRoom.addTrackUri( uri );
                         });
                         self.currentRoom.updatePlaylist();
-                        self.linkPlaylist(playlist);
-                    } else if (m.Link.TYPE.ALBUM === type) {
+                        self.linkPlaylist( playlist );
+                    } else if ( m.Link.TYPE.ALBUM === type ) {
                         //
                         // adding album
-                        m.Album.fromURI(link, function (album) {
-                            console.log("album: ", album);
+                        m.Album.fromURI( link, function ( album ) {
+                            console.log( "album: ", album );
                             var albumLink = album.data.uri
                               , tracks = album.data.tracks;
-                            tracks.forEach(function (uri) {
-                                self.currentRoom.addTrackUri(uri.uri);
+                            tracks.forEach( function ( uri ) {
+                                self.currentRoom.addTrackUri( uri.uri );
                             });
                         });
                     }
@@ -123,18 +136,18 @@ function App () {
         });
     }
 
-
+    //
     // listen to changes in a playlist and automatically add all new tracks added
-    this.linkPlaylist = function (playlist) {
+    this.linkPlaylist = function ( playlist ) {
         var tracks = before = playlist.data.all();
-        playlist.observe(m.EVENT.CHANGE, function (changedPlaylist) {
-            console.log("Found changes in playlist");
+        playlist.observe( m.EVENT.CHANGE, function ( changedPlaylist ) {
+            console.log( "Found changes in playlist" );
             var after = changedPlaylist.data.all() // get tracks from playlist
-              , newTracks = after.filter(function (track) {
-                    return !before.some(function (b) { return b == track }); // only keep the tracks that wasn't there before == added
+              , newTracks = after.filter( function ( track ) {
+                    return !before.some( function ( b ) { return b == track }); // only keep the tracks that wasn't there before == added
                  });
-            if (newTracks.length) {
-                app.user.authenticate(function () {
+            if ( newTracks.length ) {
+                app.user.authenticate( function () {
                     /*
                     newTracks.forEach(function (track) {
                         self.currentRoom.addTrackUri(track);
@@ -148,51 +161,52 @@ function App () {
     }
 
     // when links are dropped to the application we want to add those to the queue
-    m.application.observe(m.EVENT.LINKSCHANGED, function () {
+    m.application.observe( m.EVENT.LINKSCHANGED, function () {
         var links = m.application.links;
-        console.log("dropped links", links);
-        self.handleDroppedLinks(links);
+        console.log( "dropped links", links );
+        self.handleDroppedLinks( links );
     });
 
     /* helper functions */
-    function getTracksFromPlaylist(playlist) {
-        var result = [];
-        for (var i = 0; i < playlist.data.length; i++) {
-            var track = playlist.data.getTrack(i);
-            if (track) {
-                result.push(track);
+    var getTracksFromPlaylist = function ( playlist ) {
+        var result = [], i = 0
+          , length = playlist.data.length;
+        for ( ; i < length; i++ ) {
+            var track = playlist.data.getTrack( i );
+            if ( track ) {
+                result.push( track );
             }
         }
         return result;
-    }
+    };
 
     // load images in the room banner
-    function fillRoomToplist(room, div){
+    var fillRoomToplist = function ( room, div ) {
         $.ajax({
-            url: "http://wejay.org/Room/GetOnlineUsers?room=" + encodeURI(room),
+            url: "http://wejay.org/Room/GetOnlineUsers?room=" + encodeURI( room ),
             type: "GET",
             processData: false,
             contentType: "application/json",
             dataType: "text",
-            success: function (r) {
-                var result = r ? JSON.parse(r).Data : [];
-                result = result.sort(function (user1, user2) {
+            success: function ( r ) {
+                var result = r ? JSON.parse( r ).Data : [];
+                result = result.sort( function ( user1, user2 ) {
                     return user1.CheckedIn-user2.CheckedIn;
                 });
-                result = result.slice(0, 9);
-                $(div).html($("#roomTopListTemplate").tmpl(result));
-                $(div).append("<a>" + room + "</a>");
+                result = result.slice( 0, 9 );
+                $( div ).html( $( "#roomTopListTemplate" ).tmpl( result ) );
+                $( div ).append( "<a>" + room + "</a>" );
             }
         });
-    }
+    };
 
     // Load all rooms to startpage
     this.loadRooms = function () {
-        if (!app.user.facebookId) {
+        if ( !app.user.facebookId ) {
             return;
         }
-        app.user.loadFriends(function (users) {
-            users.push(app.user.facebookId); // add current user as well
+        app.user.loadFriends( function ( users ) {
+            users.push( app.user.facebookId ); // add current user as well
             $.ajax({
                 url: "http://wejay.org/room/GetRoomsForUsers",
                 traditional: true,
@@ -201,10 +215,10 @@ function App () {
                     facebookIds: users
                 },
                 type: "POST",
-                success: function (r) {
-                    console.log("loadRooms // app.user.loadFriends()", r);
-                    r = r.filter(function (i) { return i.Name && i.Name.toLowerCase() != "null" })
-                    $("#rooms").html($("#roomListTemplate").tmpl(r));
+                success: function ( r ) {
+                    console.log( "loadRooms // app.user.loadFriends()", r );
+                    r = r.filter( function ( i ) { return i.Name && i.Name.toLowerCase() != "null" })
+                    $( "#rooms" ).html( $( "#roomListTemplate" ).tmpl( r ) );
                     self.fillRooms();
                 }
             });
@@ -212,10 +226,10 @@ function App () {
     }
 
     this.fillRooms = function(){
-        $(".rooms li").each(function(){
+        $( ".rooms li" ).each( function () {
             var room = this.innerText;
-            fillRoomToplist(room, this);
-            $(this).click(function(){
+            fillRoomToplist( room, this );
+            $( this ).click( function () {
                 document.location = "spotify:app:wejay:room:" + room;	
             })
         });
@@ -223,21 +237,49 @@ function App () {
 
     /* INIT */
     // init function
-    this.init = function (version) {
+    this.init = function ( version ) {
+
         this.version = version;
         console.log("ready");
 
-        if (app.user.accessToken) {
+        var checkIfUserAcceptedAgreement = function () {
+            var accepted = false;
+            if ( self.acceptedLogin ) {
+                accepted = true;
+            } else {
+                $( ".disclaimer" ).show();
+            }
+            return accepted;
+        };
+
+        var acceptedLogin = ( localStorage.acceptedLogin ) ? localStorage.acceptedLogin : false;
+
+        if ( acceptedLogin === "true" ) {
+            self.acceptedLogin = true;
+        } else {
+            //
+            // if the user has not accepted the disclaimer -- he/she will be reverted to the
+            // "open a room"-section. Also, the standardroom will be the iteam-room.
+            $( ".disclaimer:first" ).hide();
+            $( "#roomLogin" ).text( "Login/Register" );
+            if ( localStorage.room === undefined ) {
+                localStorage.room = "iteam";
+            }
+            document.location = "spotify:app:wejay:choose";
+        }
+
+        if ( app.user.accessToken ) {
             this.loadRooms();
         }
 
         var ac = sp.require("javascript/AutocompleteForm");
-        ac.init(".auto-completeForm", topTracks, topArtists);
+        ac.init(".auto-completeForm");
 
         //
         // when switching rooms -- the app should not autostart the music ...
         self.isPlayingFromWejay = false;
         $("#start").removeClass("pause");
+        $( "#onair" ).hide();
 
         var userLogoutShow = function () {
             $("#login").hide();
@@ -264,24 +306,30 @@ function App () {
         });
 
         $("#roomLogin").click(function () {
-            self.user.authenticate(function (room) {
-                self.loadRooms();
-            });
-            userLogoutShow();
+            if ( checkIfUserAcceptedAgreement ) {
+                self.user.authenticate(function (room) {
+                    self.loadRooms();
+                });
+                userLogoutShow();
+            }
         });
 
         $("#login").click(function () {
-            self.user.authenticate(function (room) {
-                self.loadRooms();
-            });
-            userLogoutShow();
+            if ( checkIfUserAcceptedAgreement() ) {
+                self.user.authenticate(function (room) {
+                    self.loadRooms();
+                });
+                userLogoutShow();
+            }
         });
 
         $("#roomSection").bind("drop", function (e) {
             e.preventDefault();
             var id = event.dataTransfer.getData("text");
             console.log("dropped to section ", id);
-            self.handleDroppedLinks([id]);
+            if ( checkIfUserAcceptedAgreement() ) {
+                self.handleDroppedLinks([id]);
+            }
         });
 
         $("#roomName").bind("focus", function (e) {
@@ -292,39 +340,53 @@ function App () {
             $("form.input").removeClass("focus");
         });
 
-        $("#roomSection").bind("dragenter", function (e) {
+        $( "#roomSection" ).bind( "dragenter", function ( e ) {
             e.preventDefault();
             // e.dataTransfer.dropEffect = "copy";
             return true;
         });
 
-        $("#roomSection").bind("dragover", function (e) {
+        $( "#roomSection" ).bind( "dragover", function ( e ) {
             return false;
         });
 
-        $("#share").bind("click", function (event) {
-            event.preventDefault();
-            console.log(event.pageX, event.pageY);
-            m.application.showSharePopup(document.getElementById("share"), "spotify:app:wejay" /*+ currentRoom.roomName*/);
+        //
+        // share popup
+        $( "#share" ).bind( "click", function ( e ) {
+            e.preventDefault();
+            if ( checkIfUserAcceptedAgreement() ) {
+                m.application.showSharePopup( this, "spotify:app:wejay" );
+            }
         });
 
-        $(document).on("click", "#userToplist a", function (e) {
+        $( document ).on( "click", "#userToplist a", function ( e ) {
             e.preventDefault();
-            var link = $(this).attr("href");
-            self.currentRoom.addTrackUri(link);
+            if ( checkIfUserAcceptedAgreement() ) {
+                var link = $( this ).attr( "href" );
+                self.currentRoom.addTrackUri( link );
+            }
+        });
+
+        $( document ).on( "click", ".tracks a", function ( e ) {
+            e.preventDefault();
+            var link = $( this ).attr( "href" );
+            if ( checkIfUserAcceptedAgreement() ) {
+                self.currentRoom.addTrackUri( link );
+            }
+            $( ".auto-complete" ).removeClass( "show" );
         });
 
         //
         // one way to correct the auto-completeForm show/hide-function
-        $("body").click(function (e) {
-            var parentClass = $(e.target).parent().parent().hasClass("auto-completeForm");
-            if ($(".auto-complete").hasClass("show")) {
-                if (!parentClass) {
-                    $(".auto-complete").removeClass("show");
+        $( "body" ).click( function ( e ) {
+            var parentClass = $( e.target ).parent().parent().hasClass( "auto-completeForm" );
+            if ( $( ".auto-complete" ).hasClass( "show" ) ) {
+                if ( !parentClass ) {
+                    $( ".auto-complete" ).removeClass( "show" );
                 }
             } else {
-                if (parentClass) {
-                    $(".auto-complete").addClass("show");
+                if ( parentClass ) {
+                    $( ".auto-complete" ).addClass( "show" );
                 }
             }
         });
@@ -339,29 +401,93 @@ function App () {
 
             CurrentClass = CurrentClass[0];
             SpotifyId = SpotifyId[length];
-
-            if ((CurrentClassNumber === 3) || (CurrentClassNumber === 5)) {
-                app.currentRoom.liveVote(SpotifyId, element, CurrentClassNumber);
+            if ( checkIfUserAcceptedAgreement() ) {
+                if ( (CurrentClassNumber === 3) || (CurrentClassNumber === 5) ) {
+                    app.currentRoom.liveVote(SpotifyId, element, CurrentClassNumber);
+                }
             }
         });
 
+
+        var playApp = function () {
+            app.isPlayingFromWejay = true;
+            $( "#onair" ).show();
+            $( "#start" ).addClass("pause");
+            app.currentRoom.playSong(app.currentRoom.currentSong, true);
+        },  pauseApp = function () {
+            var player = sp.trackPlayer;
+            app.isPlayingFromWejay = false;
+            $( "#onair" ).hide();
+            $( "#start" ).removeClass("pause");
+            player.setIsPlaying(false);
+        };
+
+        //
+        // bind space to play-pause
+        $( document ).on( "keyup", function ( e ) {
+            if ( e.target.nodeName !== "INPUT" && e.keyCode === 32 ) {
+                e.preventDefault();
+                if ( app.isPlayingFromWejay ) {
+                    pauseApp();
+                } else {
+                    playApp();
+                }
+            }
+        });
 
         $("#start").click(function () {
-            var element = $(this);
             //
             // If the user presses play -- then wejay should force-play each time the track changes
-            if (element.hasClass("pause")) {
-                // wejay is playing -- and removes the play-clause
-                app.isPlayingFromWejay = false;
-                element.removeClass("pause");
+            if ($(this).hasClass("pause")) {
+                pauseApp();
             } else {
                 // wejay should play.
-                app.isPlayingFromWejay = true;
-                app.currentRoom.playSong(app.currentRoom.currentSong, true);
-                element.addClass("pause");
+                playApp();
             }
         });
 
+
+        //
+        // initialize the disclaimer
+        if ( self.acceptedLogin === false ) {
+            $( ".disclaimer .checkbox" ).click( function() {
+                var self =  $( this ).parent()
+                  , text = self.find( "p" )
+                  , disc = self.find( ".discl" );
+                if ( $( this ).is( ":checked" ) ) {
+                    text.hide();
+                    disc.show();
+                } else {
+                    text.show();
+                    disc.hide();
+                }
+            });
+
+            $( ".disclaimer .discl" ).click( function () {
+                $( ".disclaimer" ).remove();
+                localStorage.acceptedLogin = "true";
+                $( "#roomLogin" ).text( "Login with Facebook" );
+                self.acceptedLogin = true;
+            });
+        } else {
+            $( ".disclaimer" ).remove();
+        }
+
+        $( "#like" ).click( function () {
+            if ( checkIfUserAcceptedAgreement() ) {
+                app.currentRoom.like();
+            }
+        });
+        $( "#block" ).click( function () {
+            if ( checkIfUserAcceptedAgreement() ) {
+                app.currentRoom.block();
+            }
+        });
+        $( "#skip" ).click( function () {
+            if ( checkIfUserAcceptedAgreement() ) {
+                app.currentRoom.skip();
+            }
+        });
 
         userLogoutHide();
 
@@ -400,12 +526,11 @@ function App () {
 }
 
 String.prototype.format = function () {
-    var formatted = this
-      , i = 0
+    var formatted = this, i = 0
       , arg = arguments.length;
-    for (; i < arg; i++) {
-        var regexp = new RegExp("\\{' + i + '\\}', 'gi");
-        formatted = formatted.replace(regexp, arguments[i]);
+    for ( ; i < arg; i++ ) {
+        var regexp = new RegExp( "\\{' + i + '\\}', 'gi" );
+        formatted = formatted.replace( regexp, arguments[ i ] );
     }
     return formatted;
 };

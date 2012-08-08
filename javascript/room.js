@@ -5,10 +5,13 @@ var sp = getSpotifyApi(1)
   , accessToken;
 
 function RoomController(roomName, nodeUrl) {
-    console.log("New RoomController for room " + roomName);
+    if ( roomName === "null" || roomName === undefined ) {
+        roomName = "iteam";
+    }
+    console.log( "New RoomController for room " + roomName );
     var facebookId, self = this;
-    if (roomName) {
-        this.roomName = unescape(roomName).trim().toLowerCase();
+    if ( roomName ) {
+        this.roomName = unescape( roomName ).trim().toLowerCase();
     }
 
     this.currentTab = null;
@@ -17,29 +20,29 @@ function RoomController(roomName, nodeUrl) {
 
     this.stop = function () {
         var player = sp.trackPlayer;
-        player.setIsPlaying(false);
+        player.setIsPlaying( false );
     }
 
     this.addTrackUri = function (uri) {
-        console.log("adding track uri: " + uri);
-        if (!uri) {
+        console.log( "adding track uri: " + uri );
+        if ( !uri ) {
             return;
         }
-        m.Track.fromURI(uri, function (track) {
-            self.queueTrack(track);
+        m.Track.fromURI( uri, function ( track ) {
+            self.queueTrack( track );
         });
     }
 
-    this.queueTrack = function (track) {
+    this.queueTrack = function ( track ) {
         var song = {
-            artist   : track.data.artists[0].name,
+            artist   : track.data.artists[ 0 ].name,
             mbid     : "",
             title    : track.data.name,
-            length   : parseInt(track.data.duration / 1000),
-            spotifyId: track.data.uri.replace("spotify:track:", "")
+            length   : parseInt( track.data.duration / 100 ),
+            spotifyId: track.data.uri.replace( "spotify:track:", "" )
         };
         song.room = self.roomName;
-        self.hub.queueSong(song);
+        self.hub.queueSong( song );
     }
 
     this.getTrack = function (searchString, callback, errorCallback) {
@@ -95,11 +98,17 @@ function RoomController(roomName, nodeUrl) {
         }
         m.Track.fromURI(trackUri, function (track) {
             var tpl = self.queue;
-            if (!tpl.data.all().some(function (t) { t == track.uri })) {
+            
+            // search through all songs in the existing playlist and see if the current track is already there
+            if (!tpl.data.all().some(function (t) { 
+                return t === track.uri;
+            })) {
                 tpl.add(track);
             }
+
             var player = sp.trackPlayer
               , currentTrack = player.getNowPlayingTrack();
+           
             player.context = tpl;
 
             console.log("");
@@ -108,21 +117,15 @@ function RoomController(roomName, nodeUrl) {
             console.log("currentTrack", currentTrack);
             //
             // the user controls if the player should force-play every song. This is by pressing the play-icon on the cover.
-            if (forcePlay || (currentTrack === null && app.isPlayingFromWejay) || ((currentTrack.track.uri != track.uri) && app.isPlayingFromWejay)) {
-                player.playTrackFromUri(trackUri, {
-                    onSuccess: function (s) {
-                        console.log("playing track -- " + track);
-                    },
-                    onError: function (s) {
-                        console.log(s, "play error");
-                    }
-                });
+            if (forcePlay || (currentTrack === null && app.isPlayingFromWejay) || (((currentTrack === null) || (currentTrack.track.uri != track.uri)) && app.isPlayingFromWejay)) {
+                m.player.play(trackUri, tpl);
             }
-            //self.queue = tpl;
+
             var curr = track.data.artists[0].name + " - " + track.data.name;
             $("#currentSong").html(curr);
             $("#currentAlbum").attr("src", track.data.album.cover);
             $("#currentLink").attr("href", track.data.uri);
+            $(".hidden.title").html(track.data.name);
             if (song.PlayedBy) {
                 $("#currentPlayedBy").html("Added by " + song.PlayedBy.UserName);
                 $("#currentPlayedBy").show();
@@ -138,6 +141,7 @@ function RoomController(roomName, nodeUrl) {
         $("#currentSong").html("");
         $("#currentSong").html("Nothing playing right now. Drag a track here!");
         $("#currentAlbum").attr("src", "sp://import/img/placeholders/300-album.png");
+        $(".hidden.title").html("");
         $("#currentLink").attr("href", "");
         $("#currentPlayedBy").html("");
         $("#queue").html("");
@@ -305,6 +309,9 @@ function RoomController(roomName, nodeUrl) {
     }
 
     this.init = function (roomName, anonymous) {
+        if ( roomName === "null" || roomName === undefined ) {
+            roomName = "iteam";
+        }
         console.log("init");
         if (!roomName) {
             console.log("Room name must be specified")
@@ -314,7 +321,6 @@ function RoomController(roomName, nodeUrl) {
         this.clearCurrentSong();
         $("#roomLink").val("http://wejay.org/" + encodeURI(this.roomName));
         $("#roomLink").bind("click", function () { this.select(); });
-        //$("#roomLink").html("spotify:app:wejay:room:" + room);
         $("#shareFacebook").attr("href", "http://www.facebook.com/sharer.php?u={0}&t={1}".format($("#roomLink").val(), this.roomName.toUpperCase() + " WEJAY ROOM on Spotify. Join this room and control the music together. We are the DJ."));
         localStorage.setItem("room", this.roomName);
         if (!anonymous && !app.user.accessToken) {

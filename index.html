@@ -8,6 +8,7 @@
         <script src="http://81.201.221.135:5000/socket.io/socket.io.js" type="text/javascript"></script>
         <link rel="stylesheet" href="sp://import/css/adam.css"/> 
         <link rel="stylesheet" href="sp://import/css/api.css"/>
+        <link rel="stylesheet" href="sp://import/css/list.css"/>
         <link rel="stylesheet" href="http://wejay.org/content/css/bugfixes.css"/>
         <link rel="stylesheet" href="style/main.css"/>
         <script src="javascript/moment.min.js" type="text/javascript"></script>
@@ -17,7 +18,10 @@
         <script src="javascript/user.js" type="text/javascript"></script>
     </head>
     <body>
-        <div id="main">
+        <div id="offline">
+            <h1>This application is not available when offline</h1>
+        </div>
+        <div id="main">  
             <!-- wejay/start -->
             <section id="roomSection">
                 <section id="current">
@@ -27,19 +31,27 @@
                                 <div class="hover">
                                     <a id="start" href="#" title="play/pause room"></a>
                                 </div>
-                                <a id="currentLink" href="" onclick="">
-                                    <img class="image" alt="current albumcover" id="currentAlbum" src="sp://import/img/placeholders/300-album.png"/>
+                                <a id="currentLink" href="" draggable="true">
+                                    <span class="hidden title"></span>
+                                    <img class="image" draggable="false" alt="current albumcover" id="currentAlbum" src="sp://import/img/placeholders/300-album.png"/>
                                 </a>
                             </div>
                         </div>
+                        <h2 id="onair">on air</h2>
                         <h1 id="roomTitle">Room</h1>
                         <div class="right">
                             <h3 id="currentSong"></h3>
                             <h4 id="currentPlayedBy"></h4>
-                            <a class="button" title="Like this song" id="like" href="javascript:app.currentRoom.like()">Like</a>
-                            <a class="button" title="Block this song from playing" id="block" href="javascript:app.currentRoom.block()">Block</a>
-                            <a class="button" title="Skip this song" id="skip" href="javascript:app.currentRoom.skip()">Skip</a>
+                            <a class="button" title="Like this song" id="like" href="#">Like</a>
+                            <a class="button" title="Block this song from playing" id="block" href="#">Block</a>
+                            <a class="button" title="Skip this song" id="skip" href="#">Skip</a>
                         </div>
+                    </div>
+                    <div class="disclaimer wejay">
+                        <h1>Disclaimer</h1>
+                        <input type="checkbox" class="checkbox" >
+                        <input type="button" style="display:none;" value="enable login" class="button discl">
+                        <p>I understand that when I log into my Facebook-account, Wejay <strong>may use and store information</strong> from your Spotify Library.</p>
                     </div>
                     <div class="middle">
                         <div class="left">
@@ -52,9 +64,9 @@
                                 <h2>Logged in Wejays</h2>
                                 <ul id="users"></ul>
                                 <span class="buttons">
-                                    <a class="button" href="http://facebook.com/sharer.php?u=http://open.spotify.com/app/wejay" id="shareFacebook" title="Invite friends">Invite friends</a>
                                     <button class="sp-button" id="login">Login with Facebook</button>
                                     <button class="sp-button" id="logout">Logout</button>
+                                    <a class="button" href="http://facebook.com/sharer.php?u=http://open.spotify.com/app/wejay" id="share" title="Invite friends">Invite friends</a>
                                 </span>
                             </div>
                             <div class="toplist">
@@ -72,7 +84,7 @@
                 <!-- Logged in users -->
                 <script id="usersTemplate" type="text/x-jquery-tmpl">
                     {{if Online}}
-                        <li><a href="${(app.user.friends || []) .indexOf(FacebookId) >= 0 ? 'spotify:user:facebook:' + FacebookId : '#wejaysSection' }" ><img class="image" alt="${UserName}" src="http://graph.facebook.com/${FacebookId}/picture"><p>${UserName}</p><p class="time">${CheckedIn}</p></li></a>
+                        <li><a draggable="false" href="${(app.user.friends || []) .indexOf(FacebookId) >= 0 ? 'spotify:user:facebook:' + FacebookId : '#wejaysSection' }" ><img draggable="false" class="image" alt="${UserName}" src="http://graph.facebook.com/${FacebookId}/picture"><p>${UserName}</p><p class="time">${CheckedIn}</p></li></a>
                     {{/if}}
                 </script>
                 <!-- Current music in playlist -->
@@ -102,6 +114,12 @@
                         <script id="roomTopListTemplate" type="text/x-jquery-tmpl">
                             <dl><img alt="${UserName}" src="http://graph.facebook.com/${FacebookId}/picture"></dl>
                         </script>
+                    </span>
+                    <span class="disclaimer rooms">
+                        <h1>Disclaimer</h1>
+                        <input type="checkbox" class="checkbox" >
+                        <p>I understand that when I log into my Facebook-account, Wejay <strong>may use and store information</strong> from your Spotify Library.</p>
+                        <input type="button" style="display:none;" value="enable login" class="button discl">
                     </span>
                     <div class="banner">
                         <h2>Enter a Wejay Room</h2>
@@ -142,7 +160,7 @@
         <script type="text/javascript">
             // initialize Wejay App
             var app = new App();
-            app.init({ version: 1.00 });
+            app.init({ version: "1.0.1" });
             var ui = sp.require('sp://import/scripts/dnd');
         </script>
     </body>
