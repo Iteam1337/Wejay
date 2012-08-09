@@ -96,9 +96,9 @@ function RoomController(roomName, nodeUrl) {
         }
         m.Track.fromURI(trackUri, function (track) {
             var tpl = new m.Playlist();
-            
+
             // search through all songs in the existing playlist and see if the current track is already there
-            if (!tpl.data.all().some(function (t) { 
+            if (!tpl.data.all().some(function (t) {
                 return t === track.uri;
             })) {
                 tpl.add(track);
@@ -106,7 +106,7 @@ function RoomController(roomName, nodeUrl) {
 
             var player = sp.trackPlayer
               , currentTrack = player.getNowPlayingTrack();
-           
+
             player.context = tpl;
 
             console.log("");
@@ -186,6 +186,7 @@ function RoomController(roomName, nodeUrl) {
         }
     }
 
+    this.shareURL = "";
     this.currentSong = {};
 
     this.like = function () {
@@ -308,6 +309,7 @@ function RoomController(roomName, nodeUrl) {
         }
     }
 
+
     this.init = function (roomName, anonymous) {
         if ( roomName === "null" || roomName === undefined ) {
             roomName = "iteam";
@@ -319,34 +321,34 @@ function RoomController(roomName, nodeUrl) {
         }
         this.roomName = unescape(roomName).trim().toLowerCase();
         this.clearCurrentSong();
-        $( "#sharePopup" ).removeClass( "show" );
-        $( "#shareOnURL" ).text( "Share manually" );
-        $( "#manualShare" ).addClass( "hide" );
-        var userString = ( app.user.userName ) ? "\u2029\u2029" + app.user.userName : "\u2029\u2029";
-        var shareURL = "http://open.spotify.com/app/wejay/room/" + this.roomName;
-        var mailString = "mailto:?subject=Join our WEJAY room&body=Hi, if you follow the link below you can add music to our WEJAY room \"" + this.roomName + "\" from Spotify.\u2029\u2029" + shareURL + userString + "\u2029\u2029------------------------------------------------------\u2029\u2029WEJAY lets you and your colleagues add music to mixed democratic playlist which means you can all listen to your own favorite music while working. Recent research results shows that you work better when you get to listen to music.\u2029\u2029Read more about WEJAY and the research on http://wejay.org";
-        $( "#shareURL" ).val( shareURL );
-        $( "#shareURLInternal" ).val( "spotify:app:wejay:room" + this.roomName );
-        $( "#shareOnMail" ).attr( "href", mailString );
-        $( "#shareOnFacebook" ).attr( "href", "http://facebook.com/sharer.php?u=http://open.spotify.com/app/wejay/room/" + this.roomName );
-        $("#roomLink").val("http://wejay.org/" + encodeURI(this.roomName));
-        $("#roomLink").bind("click", function () { this.select(); });
-        localStorage.setItem("room", this.roomName);
-        if (!anonymous && !app.user.accessToken) {
-            app.user.authenticate(function () {
-                this.hub.checkin({ user: app.user.userName, room: this.roomName });
-                self.updateUsers();
-                self.updatePlaylist();
-            });
-        } else {
-            var name = (app.user.userName) ? app.user.userName : "Anonymous";
-            this.hub.checkin({ user: name, room: this.roomName });
-            self.updateUsers();
-            self.updatePlaylist();
-        }
-        // fill the top tracks for this user
-        self.loadTopTracks(function (userTopTracks) {
-            topTracks = userTopTracks;
+        var local = this;
+        this.getBitlyKey( local.roomName, function ( shareURL ) {
+          local.shareURL = shareURL;
+          $( "#sharePopup" ).removeClass( "show" );
+          $( "#shareOnURL" ).text( "Share URL" );
+          $( "#manualShare" ).addClass( "hide" );
+          var userString = ( app.user.userName ) ? "\u2029\u2029" + app.user.userName : "\u2029\u2029";
+          var mailString = "mailto:?subject=Join our WEJAY room&body=Hi, if you follow the link below you can add music to our WEJAY room \"" + local.roomName + "\" from Spotify.\u2029\u2029" + shareURL + userString + "\u2029\u2029------------------------------------------------------\u2029\u2029WEJAY lets you and your colleagues add music to mixed democratic playlist which means you can all listen to your own favorite music while working. Recent research results shows that you work better when you get to listen to music.\u2029\u2029Read more about WEJAY and the research on http://wejay.org";
+          $( "#shareURL" ).val( shareURL );
+          $( "#shareOnMail" ).attr( "href", mailString );
+          $( "#shareOnFacebook" ).attr( "href", "http://facebook.com/sharer.php?u=" + shareURL );
+          localStorage.setItem("room", local.roomName);
+          if (!anonymous && !app.user.accessToken) {
+              app.user.authenticate( function () {
+                  local.hub.checkin({ user: app.user.userName, room: local.roomName });
+                  self.updateUsers();
+                  self.updatePlaylist();
+              });
+          } else {
+              var name = (app.user.userName) ? app.user.userName : "Anonymous";
+              local.hub.checkin({ user: name, room: local.roomName });
+              self.updateUsers();
+              self.updatePlaylist();
+          }
+          // fill the top tracks for this user
+          self.loadTopTracks(function (userTopTracks) {
+              topTracks = userTopTracks;
+          });
         });
     }
 
@@ -363,9 +365,30 @@ function RoomController(roomName, nodeUrl) {
         });
     }
 
-    this.logoutUser = function () { 
+    this.logoutUser = function () {
         self.hub.userLogout();
-    } 
+    }
+
+    this.getBitlyKey = function ( url, callback ) {
+      var longurl = "http://open.spotify.com/app/wejay/room/" + url;
+      $.getJSON(
+          "http://api.bitly.com/v3/shorten?callback=?",
+          {
+            "format": "json",
+            "apiKey": app.bitlyKey,
+            "login": app.bitlyName,
+            "longUrl": longurl
+          },
+          function ( response ) {
+            console.log( "bitly", response );
+            if ( response.status_code === 200 ) {
+              callback( response.data.url );
+            } else {
+              callback( longurl );
+            }
+          }
+        );
+    }
 
     // checkin the current user to wejay
     this.checkin = function (force, callback) {

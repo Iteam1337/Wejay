@@ -45,7 +45,8 @@
         "http://*.facebook.com",
         "https://graph.facebook.com",
         "http://*.facebook.net",
-		"http://81.201.221.135"
+        "http://81.201.221.135",
+        "http://api.bitly.com"
     ],
     "VendorIdentifier": "se.iteam",
     "AcceptedLinkTypes":  [

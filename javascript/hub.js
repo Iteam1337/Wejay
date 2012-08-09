@@ -31,7 +31,7 @@ function Hub (nodeUrl, currentRoom, facebookUserId) {
 
     this.userLogout = function () {
         socket.emit( "ulogout", "" );
-    } 
+    }
 
     this.checkin = function(options) {
         console.log("checkin to node", options);
@@ -55,7 +55,7 @@ function Hub (nodeUrl, currentRoom, facebookUserId) {
     socket.on("onSongAdded", function(song) {
         currentRoom.updatePlaylist();
     })
-    
+
     socket.on("onCheckin", function (data) {
         currentRoom.updateUsers();
     });

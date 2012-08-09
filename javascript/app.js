@@ -10,11 +10,11 @@ function App () {
       , kbd  = sp.require( "sp://import/scripts/keyboard" )
       , accessToken
       , facebookId;
-      
+
     //
     // Before anything begins loading - the application hinders users who are offline
     m.session.observe( m.EVENT.STATECHANGED, function () {
-        if ( m.session.state >= 2 ) { 
+        if ( m.session.state >= 2 ) {
             $( "#offline" ).show();
             $( "#main" ).hide();
         } else {
@@ -22,7 +22,7 @@ function App () {
             $( "#main" ).show();
         }
     });
-    
+
     if ( m.session.state >= 2 ) {
         $( "#offline" ).show();
         $( "#main" ).hide();
@@ -45,6 +45,8 @@ function App () {
     this.currentRoom        = null;
     this.isPlayingFromWejay = false;
     this.acceptedLogin      = false;
+    this.bitlyName          = "ankjevelen";
+    this.bitlyKey           = "R_147ec88bf32a7d569749440093523de6";
 
     /* Event handlers */
     if ( !m.application ) {
@@ -225,7 +227,7 @@ function App () {
             var room = this.innerText;
             fillRoomToplist( room, this );
             $( this ).click( function () {
-                document.location = "spotify:app:wejay:room:" + room;	
+                document.location = "spotify:app:wejay:room:" + room;
             })
         });
     }
@@ -346,11 +348,8 @@ function App () {
 
         $( "#shareOnURL" ).on( "click", function ( e ) {
             $( "#manualShare" ).toggleClass( "hide" );
-            var externalUrl = "http://open.spotify.com/app/wejay/room/" + self.currentRoom.roomName
-              , internalUrl = "spotify:app:wejay:room:" + self.currentRoom.roomName
-              , value = ( $( "#shareOnURL" ).text() === "Share manually" ) ? "Hide manual share" : "Share manually";
-            $( "#shareURL" ).val( externalUrl );
-            $( "#shareURLInternal" ).val( internalUrl );
+            var value = ( $( "#shareOnURL" ).text() === "Share URL" ) ? "Hide url share" : "Share URL";
+            $( "#shareURL" ).val(  self.currentRoom.shareURL );
             $( "#shareOnURL" ).text( value );
         });
 

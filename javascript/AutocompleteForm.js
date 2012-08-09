@@ -3,7 +3,7 @@ function AutoCompleteForm () {
     var m = sp.require( "sp://import/scripts/api/models" ),
         v = sp.require( "sp://import/scripts/api/views" );
 
-    this.init = function (formQuery) { 
+    this.init = function ( formQuery ) {
         var autocompleteForm = $( formQuery ),
             placeholder      = autocompleteForm.append( "<div class=\"input token-input\"><input type=\"text\"></input><div class=\"auto-complete\"><div class=\"tracks\"></div></div></div>" ),
             searchInput      = placeholder.find( "input:first" ),
@@ -44,7 +44,7 @@ function AutoCompleteForm () {
         searchInput.on( "keyup", function () {
             var value = $( this ).val();
             clearTimeout( timer );
-            if ( value.length !== 0 ) { 
+            if ( value.length !== 0 ) {
                 timer = setTimeout( function () { handleInput( value ); }, 500 );
             } else {
                 $( ".tracks" ).hide();

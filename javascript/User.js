@@ -8,7 +8,7 @@ function User() {
 
     var self = this;
 
-    // TODO: 
+    // TODO:
     this.logoutFromFacebook = function () {
         var logoutUrl = "https://www.facebook.com/logout.php?next=http://wejay.org/logout&access_token=" + this.accessToken;
         auth.showAuthenticationDialog(logoutUrl, "http://wejay.org/logout", {
