@@ -142,7 +142,7 @@ function RoomController(roomName, nodeUrl) {
         $(".hidden.title").html("");
         $("#currentLink").attr("href", "");
         $("#currentPlayedBy").html("");
-        $("#queue").html( "<div class=\"nothing playing\"><p><strong>Hello!</strong>Nothing in the playlist right now. Add songs either by searching or draggin an album, track or playlist to this app.</p></div>" );
+        $("#queue").html( "<div class=\"nothing playing\"><p><strong>Hello!</strong>This room needs music! Add songs by searching or by dragging tracks or whole playlists to the WEJAY app in the sidebar. Don't forget to invite you colleagues - WEJAY was made to play music together!</p></div>" );
         $("#skip").html("Skip");
         $("#block").html("Block");
         $("#like").html("Like");
@@ -411,7 +411,7 @@ function RoomController(roomName, nodeUrl) {
                 if (result.length > 0) {
                     $("#queue").html($("#queueTemplate").tmpl(result));
                 } else {
-                    $("#queue").html( "<div class=\"nothing playing\"><p><strong>Hello!</strong>Nothing in the playlist right now. Add songs either by searching or draggin an album, track or playlist to this app.</p></div>" );
+                    $("#queue").html( "<div class=\"nothing playing\"><p><strong>Hello!</strong>This room needs music! Add songs by searching or by dragging tracks or whole playlists to the WEJAY app in the sidebar. Don't forget to invite you colleagues - WEJAY was made to play music together!</p></div>" );
                     if ($("#currentSong").html() === "") { $("#currentSong").html("Drag tracks here to start the room"); }
                 }
             }
