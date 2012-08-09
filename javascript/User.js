@@ -29,7 +29,8 @@ function User() {
             url: "http://wejay.org/Room/logout",
             type: "POST",
             traditional: true,
-            success: function (result) {
+            success: function ( result ) {
+                app.currentRoom.logoutUser( "test" );
                 app.currentRoom.updateUsers();
             },
             error: function (res) {

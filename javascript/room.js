@@ -16,8 +16,6 @@ function RoomController(roomName, nodeUrl) {
 
     this.currentTab = null;
 
-    this.queue = new m.Playlist();
-
     this.stop = function () {
         var player = sp.trackPlayer;
         player.setIsPlaying( false );
@@ -38,7 +36,7 @@ function RoomController(roomName, nodeUrl) {
             artist   : track.data.artists[ 0 ].name,
             mbid     : "",
             title    : track.data.name,
-            length   : parseInt( track.data.duration / 100 ),
+            length   : parseInt( track.data.duration / 1000 ),
             spotifyId: track.data.uri.replace( "spotify:track:", "" )
         };
         song.room = self.roomName;
@@ -88,16 +86,16 @@ function RoomController(roomName, nodeUrl) {
             song.position = new Date().setTime(0); // start from 0 seconds if no position was set
         }
         if (!song.SpotifyId) {
-            this.skip(); // no point in waiting for a song at this point with no id
+            //this.skip(); // no point in waiting for a song at this point with no id
             return;
         }
-        this.currentSong = song;
+        self.currentSong = song;
         var trackUri = "spotify:track:" + song.SpotifyId;
         if (song.position && song.position.getMinutes) {
             trackUri += "#" + addLeadingZero(song.position.getMinutes()) + ":" + addLeadingZero(song.position.getSeconds());
         }
         m.Track.fromURI(trackUri, function (track) {
-            var tpl = self.queue;
+            var tpl = new m.Playlist();
             
             // search through all songs in the existing playlist and see if the current track is already there
             if (!tpl.data.all().some(function (t) { 
@@ -144,7 +142,7 @@ function RoomController(roomName, nodeUrl) {
         $(".hidden.title").html("");
         $("#currentLink").attr("href", "");
         $("#currentPlayedBy").html("");
-        $("#queue").html("");
+        $("#queue").html( "<div class=\"nothing playing\"><p><strong>Hello!</strong>Nothing in the playlist right now. Add songs either by searching or draggin an album, track or playlist to this app.</p></div>" );
         $("#skip").html("Skip");
         $("#block").html("Block");
         $("#like").html("Like");
@@ -188,8 +186,10 @@ function RoomController(roomName, nodeUrl) {
         }
     }
 
+    this.currentSong = {};
+
     this.like = function () {
-        if (!this.currentSong) {
+        if (!self.currentSong) {
             throw "No current song";
         }
         var voteFunction = function () {
@@ -319,9 +319,18 @@ function RoomController(roomName, nodeUrl) {
         }
         this.roomName = unescape(roomName).trim().toLowerCase();
         this.clearCurrentSong();
+        $( "#sharePopup" ).removeClass( "show" );
+        $( "#shareOnURL" ).text( "Share manually" );
+        $( "#manualShare" ).addClass( "hide" );
+        var userString = ( app.user.userName ) ? "\u2029\u2029" + app.user.userName : "\u2029\u2029";
+        var shareURL = "http://open.spotify.com/app/wejay/room/" + this.roomName;
+        var mailString = "mailto:?subject=Join our WEJAY room&body=Hi, if you follow the link below you can add music to our WEJAY room \"" + this.roomName + "\" from Spotify.\u2029\u2029" + shareURL + userString + "\u2029\u2029------------------------------------------------------\u2029\u2029WEJAY lets you and your colleagues add music to mixed democratic playlist which means you can all listen to your own favorite music while working. Recent research results shows that you work better when you get to listen to music.\u2029\u2029Read more about WEJAY and the research on http://wejay.org";
+        $( "#shareURL" ).val( shareURL );
+        $( "#shareURLInternal" ).val( "spotify:app:wejay:room" + this.roomName );
+        $( "#shareOnMail" ).attr( "href", mailString );
+        $( "#shareOnFacebook" ).attr( "href", "http://facebook.com/sharer.php?u=http://open.spotify.com/app/wejay/room/" + this.roomName );
         $("#roomLink").val("http://wejay.org/" + encodeURI(this.roomName));
         $("#roomLink").bind("click", function () { this.select(); });
-        $("#shareFacebook").attr("href", "http://www.facebook.com/sharer.php?u={0}&t={1}".format($("#roomLink").val(), this.roomName.toUpperCase() + " WEJAY ROOM on Spotify. Join this room and control the music together. We are the DJ."));
         localStorage.setItem("room", this.roomName);
         if (!anonymous && !app.user.accessToken) {
             app.user.authenticate(function () {
@@ -353,6 +362,10 @@ function RoomController(roomName, nodeUrl) {
             }
         });
     }
+
+    this.logoutUser = function () { 
+        self.hub.userLogout();
+    } 
 
     // checkin the current user to wejay
     this.checkin = function (force, callback) {
@@ -397,9 +410,8 @@ function RoomController(roomName, nodeUrl) {
                 result = result.filter(function (song) { return song.SpotifyId; });
                 if (result.length > 0) {
                     $("#queue").html($("#queueTemplate").tmpl(result));
-                }
-                else {
-                    $("#queue").html("<span class=\"nothing playing\">Nothing in the playlist right now. Add songs either by searching or draggin an album, track or playlist to this app.</span>");
+                } else {
+                    $("#queue").html( "<div class=\"nothing playing\"><p><strong>Hello!</strong>Nothing in the playlist right now. Add songs either by searching or draggin an album, track or playlist to this app.</p></div>" );
                     if ($("#currentSong").html() === "") { $("#currentSong").html("Drag tracks here to start the room"); }
                 }
             }
@@ -430,7 +442,7 @@ function RoomController(roomName, nodeUrl) {
                         loggedInUsersInnerText = "LOGGED IN WEJAYS (" + onlineUsers + ")";
                     }
                 } else {
-                    $("#users").html("<li class=\"noOneIsLoggedIn\">When you log into this room your best mysic will be mixed into the playlist automatically. You can also invite your friends below.</li>");
+                    $("#users").html("<li class=\"noOneIsLoggedIn\">When you log into this room your best mysic will be mixed into the playlist automatically. You can also invite your colleagues below.</li>");
                 }
                 $(".logged.in h2").html(loggedInUsersInnerText);
             }

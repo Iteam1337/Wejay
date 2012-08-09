@@ -148,11 +148,6 @@ function App () {
                  });
             if ( newTracks.length ) {
                 app.user.authenticate( function () {
-                    /*
-                    newTracks.forEach(function (track) {
-                        self.currentRoom.addTrackUri(track);
-                    });
-                    */
                     self.currentRoom.updatePlaylist();
                 });
             }
@@ -225,7 +220,7 @@ function App () {
         });
     }
 
-    this.fillRooms = function(){
+    this.fillRooms = function () {
         $( ".rooms li" ).each( function () {
             var room = this.innerText;
             fillRoomToplist( room, this );
@@ -240,7 +235,7 @@ function App () {
     this.init = function ( version ) {
 
         this.version = version;
-        console.log("ready");
+        console.log( "ready" );
 
         var checkIfUserAcceptedAgreement = function () {
             var accepted = false;
@@ -261,7 +256,7 @@ function App () {
             // if the user has not accepted the disclaimer -- he/she will be reverted to the
             // "open a room"-section. Also, the standardroom will be the iteam-room.
             $( ".disclaimer:first" ).hide();
-            $( "#roomLogin" ).text( "Login/Register" );
+            $( "#disclaimerLoginOriginal" ).hide();
             if ( localStorage.room === undefined ) {
                 localStorage.room = "iteam";
             }
@@ -272,49 +267,49 @@ function App () {
             this.loadRooms();
         }
 
-        var ac = sp.require("javascript/AutocompleteForm");
-        ac.init(".auto-completeForm");
+        var ac = sp.require( "javascript/AutocompleteForm" );
+        ac.init( ".auto-completeForm" );
 
         //
         // when switching rooms -- the app should not autostart the music ...
         self.isPlayingFromWejay = false;
-        $("#start").removeClass("pause");
+        $( "#start" ).removeClass( "pause" );
         $( "#onair" ).hide();
 
         var userLogoutShow = function () {
-            $("#login").hide();
-            $("#roomLogin").hide();
-            $("#logout").show();
-            $("#roomLogout").show();
+            $( "#login" ).hide();
+            $( "#roomLogin" ).hide();
+            $( "#logout" ).show();
+            $( "#roomLogout" ).show();
         };
 
         var userLogoutHide = function () {
-            $("#login").show();
-            $("#roomLogin").show();
-            $("#logout").hide();
-            $("#roomLogout").hide();
+            $( "#login" ).show();
+            $( "#roomLogin" ).show();
+            $( "#logout" ).hide();
+            $( "#roomLogout" ).hide();
         };
 
-        $("#logout").click(function () {
+        $( "#logout" ).on( "click", function () {
             self.user.logout();
             userLogoutHide();
         });
 
-        $("#roomLogout").click(function () {
+        $( "#roomLogout" ).on( "click", function () {
             self.user.logout();
             userLogoutHide();
         });
 
-        $("#roomLogin").click(function () {
-            if ( checkIfUserAcceptedAgreement ) {
-                self.user.authenticate(function (room) {
+        $( "#roomLogin" ).on( "click", function () {
+            if ( checkIfUserAcceptedAgreement() ) {
+                self.user.authenticate( function ( room ) {
                     self.loadRooms();
                 });
                 userLogoutShow();
             }
         });
 
-        $("#login").click(function () {
+        $( "#login" ).click( function () {
             if ( checkIfUserAcceptedAgreement() ) {
                 self.user.authenticate(function (room) {
                     self.loadRooms();
@@ -323,41 +318,56 @@ function App () {
             }
         });
 
-        $("#roomSection").bind("drop", function (e) {
+        $( "#roomSection" ).on( "drop", function ( e ) {
             e.preventDefault();
-            var id = event.dataTransfer.getData("text");
-            console.log("dropped to section ", id);
+            var id = event.dataTransfer.getData( "text" );
+            console.log( "dropped to section ", id );
             if ( checkIfUserAcceptedAgreement() ) {
-                self.handleDroppedLinks([id]);
+                self.handleDroppedLinks( [ id ] );
             }
         });
 
-        $("#roomName").bind("focus", function (e) {
-            $("form.input").addClass("focus");
+        $( "#roomName" ).on( "focus", function ( e ) {
+            $( "form.input" ).addClass( "focus" );
         });
 
-        $("#roomName").bind("blur", function (e) {
-            $("form.input").removeClass("focus");
+        $( "#roomName" ).on( "blur", function ( e ) {
+            $( "form.input" ).removeClass( "focus" );
         });
 
-        $( "#roomSection" ).bind( "dragenter", function ( e ) {
+        $( "#roomSection" ).on( "dragenter", function ( e ) {
             e.preventDefault();
-            // e.dataTransfer.dropEffect = "copy";
             return true;
         });
 
-        $( "#roomSection" ).bind( "dragover", function ( e ) {
+        $( "#roomSection" ).on( "dragover", function ( e ) {
             return false;
+        });
+
+        $( "#shareOnURL" ).on( "click", function ( e ) {
+            $( "#manualShare" ).toggleClass( "hide" );
+            var externalUrl = "http://open.spotify.com/app/wejay/room/" + self.currentRoom.roomName
+              , internalUrl = "spotify:app:wejay:room:" + self.currentRoom.roomName
+              , value = ( $( "#shareOnURL" ).text() === "Share manually" ) ? "Hide manual share" : "Share manually";
+            $( "#shareURL" ).val( externalUrl );
+            $( "#shareURLInternal" ).val( internalUrl );
+            $( "#shareOnURL" ).text( value );
         });
 
         //
         // share popup
-        $( "#share" ).bind( "click", function ( e ) {
+        $( "#share" ).on( "click", function ( e ) {
             e.preventDefault();
             if ( checkIfUserAcceptedAgreement() ) {
-                m.application.showSharePopup( this, "spotify:app:wejay" );
+                $( "#sharePopup" ).toggleClass( "show" );
+                //m.application.showSharePopup( this, "spotify:app:wejay" );
             }
         });
+
+        $( "#closeShare" ).on( "click", function () {
+            $( "#sharePopup" ).removeClass( "show" );
+        });
+
 
         $( document ).on( "click", "#userToplist a", function ( e ) {
             e.preventDefault();
@@ -378,7 +388,7 @@ function App () {
 
         //
         // one way to correct the auto-completeForm show/hide-function
-        $( "body" ).click( function ( e ) {
+        $( "body" ).on( "click", function ( e ) {
             var parentClass = $( e.target ).parent().parent().hasClass( "auto-completeForm" );
             if ( $( ".auto-complete" ).hasClass( "show" ) ) {
                 if ( !parentClass ) {
@@ -391,19 +401,19 @@ function App () {
             }
         });
 
-        $(document).on("click", "#queue li .star", function () {
-            var element = $(this)
-              , CurrentClass = element.attr("class").match(/(no)+(\d){1}/)
-              , song = element.parent().find(".track").attr("href")
-              , SpotifyId = song.split(":")
+        $( document ).on( "click", "#queue li .star", function () {
+            var element = $( this )
+              , CurrentClass = element.attr( "class" ).match( /(no)+(\d){1}/ )
+              , song = element.parent().find( ".track" ).attr( "href" )
+              , SpotifyId = song.split( ":" )
               , length = SpotifyId.length - 1
-              , CurrentClassNumber = parseInt(CurrentClass[2]);
+              , CurrentClassNumber = parseInt( CurrentClass[ 2 ] );
 
-            CurrentClass = CurrentClass[0];
-            SpotifyId = SpotifyId[length];
+            CurrentClass = CurrentClass[ 0 ];
+            SpotifyId = SpotifyId[ length ];
             if ( checkIfUserAcceptedAgreement() ) {
-                if ( (CurrentClassNumber === 3) || (CurrentClassNumber === 5) ) {
-                    app.currentRoom.liveVote(SpotifyId, element, CurrentClassNumber);
+                if ( ( CurrentClassNumber === 3 ) || ( CurrentClassNumber === 5 ) ) {
+                    app.currentRoom.liveVote( SpotifyId, element, CurrentClassNumber );
                 }
             }
         });
@@ -412,14 +422,14 @@ function App () {
         var playApp = function () {
             app.isPlayingFromWejay = true;
             $( "#onair" ).show();
-            $( "#start" ).addClass("pause");
-            app.currentRoom.playSong(app.currentRoom.currentSong, true);
+            $( "#start" ).addClass( "pause" );
+            app.currentRoom.playSong( app.currentRoom.currentSong, true );
         },  pauseApp = function () {
             var player = sp.trackPlayer;
             app.isPlayingFromWejay = false;
             $( "#onair" ).hide();
-            $( "#start" ).removeClass("pause");
-            player.setIsPlaying(false);
+            $( "#start" ).removeClass( "pause" );
+            player.setIsPlaying( false );
         };
 
         //
@@ -435,10 +445,10 @@ function App () {
             }
         });
 
-        $("#start").click(function () {
+        $( "#start" ).on( "click", function () {
             //
             // If the user presses play -- then wejay should force-play each time the track changes
-            if ($(this).hasClass("pause")) {
+            if ( $( this ).hasClass( "pause" ) ) {
                 pauseApp();
             } else {
                 // wejay should play.
@@ -450,40 +460,43 @@ function App () {
         //
         // initialize the disclaimer
         if ( self.acceptedLogin === false ) {
-            $( ".disclaimer .checkbox" ).click( function() {
-                var self =  $( this ).parent()
-                  , text = self.find( "p" )
-                  , disc = self.find( ".discl" );
-                if ( $( this ).is( ":checked" ) ) {
-                    text.hide();
-                    disc.show();
-                } else {
-                    text.show();
-                    disc.hide();
+            $( "#login" ).attr( "disabled", true );
+            $( ".disclaimer .checkbox" ).hover(
+                function () {
+                    var button = $( ".disclaimer.rooms .sp-button" );
+                    $( "#login" ).attr( "disabled", false );
+                    button.addClass( "hover" );
                 }
-            });
-
-            $( ".disclaimer .discl" ).click( function () {
+                , function () {
+                    var button = $( ".disclaimer.rooms .sp-button" );
+                    $( "#login" ).attr( "disabled", true );
+                    button.removeClass( "hover" );
+                }
+            );
+            $( ".disclaimer .checkbox" ).click( function() {
                 $( ".disclaimer" ).remove();
+                $( "#login" ).attr( "disabled", false );
                 localStorage.acceptedLogin = "true";
-                $( "#roomLogin" ).text( "Login with Facebook" );
+                $( "#disclaimerLoginOriginal" ).addClass( "disc" );
+                $( "#disclaimerLoginOriginal" ).show();
                 self.acceptedLogin = true;
             });
         } else {
             $( ".disclaimer" ).remove();
+            $( ".disclaimerRooms" ).removeClass( "disclaimerRooms" );
         }
 
-        $( "#like" ).click( function () {
+        $( "#like" ).on( "click", function () {
             if ( checkIfUserAcceptedAgreement() ) {
                 app.currentRoom.like();
             }
         });
-        $( "#block" ).click( function () {
+        $( "#block" ).on( "click", function () {
             if ( checkIfUserAcceptedAgreement() ) {
                 app.currentRoom.block();
             }
         });
-        $( "#skip" ).click( function () {
+        $( "#skip" ).on( "click", function () {
             if ( checkIfUserAcceptedAgreement() ) {
                 app.currentRoom.skip();
             }
@@ -493,18 +506,18 @@ function App () {
 
         // fill default rooms
         self.fillRooms();
-
+        //
         // This generated a error before. Earlier the localStorage version of facebookUser was "[object Object]".
         // ... In the never version it's a stringified JSON-object.
-        var roomName = localStorage.getItem("room")
-          , localFacebookUser = localStorage.getItem("facebookUser");
-        self.user.facebookUser = (localFacebookUser === "[object Object]") ? "" : JSON.parse(localFacebookUser);
+        var roomName = localStorage.getItem( "room" )
+          , localFacebookUser = localStorage.getItem( "facebookUser" );
+        self.user.facebookUser = ( localFacebookUser === "[object Object]" ) ? "" : JSON.parse( localFacebookUser );
 
         if (self.user.facebookUser) {
             self.user.userName = self.user.facebookUser.name;
         }
 
-        self.currentRoom = new RoomController(unescape(roomName), nodeUrl);
+        self.currentRoom = new RoomController( unescape( roomName ), nodeUrl );
 
         var tab = m.application.arguments[0];
 
@@ -515,10 +528,10 @@ function App () {
         toplist.toplistType = m.TOPLISTTYPE.USER;
         toplist.matchType = m.TOPLISTMATCHES.TRACKS;
         toplist.userName = m.TOPLISTUSER_CURRENT;
-        toplist.observe(m.EVENT.CHANGE, function () {
+        toplist.observe( m.EVENT.CHANGE, function () {
             var i = 0, max = 10;
-            for (; i < max; i++) {
-                $("#userToplist").append($("#userToplistTemplate").tmpl(toplist.results[i]));
+            for ( ; i < max; i++ ) {
+                $( "#userToplist" ).append( $( "#userToplistTemplate" ).tmpl( toplist.results[ i ] ) );
             }
         });
         toplist.run();

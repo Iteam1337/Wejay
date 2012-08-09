@@ -103,6 +103,12 @@ a
 /*********************************************
 * DEFAULT ELEMENT STYLES
 *********************************************/
+
+input[type="submit"],
+button:hover
+{
+    cursor: pointer;    
+}
 section
 {
   display: none;
@@ -136,6 +142,10 @@ section.current
   position: relative;
   background: none;
 }
+#chooseSection .rooms li
+{
+    cursor: pointer;
+}
 #aboutSection section span,
 #chooseSection section span
 {
@@ -152,7 +162,7 @@ section.current
   background-color: rgba(0,0,0,.6);
   vertical-align: top;
   display: inline-block;
-  height: 115px;
+  height: 135px;
 }
 #chooseSection .buttons address
 {
@@ -174,10 +184,13 @@ section.current
 #chooseSection .banner
 {
   width: 315px;
+  position: relative;
 }
 #chooseSection .banner form
 {
-    position: relative;
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
 }
 
 #chooseSection .banner form input[type="submit"]
@@ -432,8 +445,40 @@ h3
 #queue .nothing.playing
 {
   display: block;
-  margin: 10px;
+  margin: 5px 10px 10px 0;
   color: #999;
+  position: absolute;
+  padding: 15px;
+  width: 300px;
+  background-image: -webkit-linear-gradient(top, #5798d2 0%,#3a87cd 100%);
+}
+#queue .nothing.playing:after
+{
+  top: -20px;
+  left: 15px;
+  display: block;
+  content: "";
+  color: #999;
+  position: absolute;
+  border-style: solid;
+  border-width: 10px;
+  border-color: transparent transparent #5798d2 transparent;
+}
+#queue .nothing.playing p
+{
+  color: white;
+  font-size: 1.2em;
+  line-height: 1.2em;
+  margin: 0;
+  padding: 0;
+}
+#queue .nothing.playing strong
+{
+  font-weight: 700;
+  line-height: 1em;
+  padding: 0;
+  margin: 0 0 5px;
+  display: block;
 }
 .auto-completeForm .input
 {
@@ -649,6 +694,9 @@ blockquote a
 {
   color: #fff;
 }
+/*
+ * DISCLAIMER
+ */
 .checkbox
 {
     background-image: url("../images/checkbox.png");
@@ -665,14 +713,7 @@ blockquote a
 .checkbox:hover
 {
     background-position: 0 54px;
-}
-.checkbox:checked
-{
-    background-position: 0 90px;
-}
-.checkbox:checked:hover
-{
-    background-position: 0 0;
+    background-color: rgba(230,255,230,.6);
 }
 .disclaimer
 {
@@ -682,6 +723,11 @@ blockquote a
     width: 630px;
     position: relative;
     height: 40px;
+    -webkit-transition: all 0.4s ease;
+}
+.disclaimer *
+{
+    -webkit-transition: background-color 0.4s ease;
 }
 .disclaimer h1,
 .disclaimer p
@@ -705,15 +751,61 @@ blockquote a
 .disclaimer p
 {
     width: 420px;
-    top: 18px;
+    top: 12px;
     left: 210px;
 }
-.disclaimer .discl
+
+/* ROOMS */
+.disclaimerRooms
 {
-    position: absolute;
-    top: 20px;
-    left: 210px;
+    width: 250px;
+    height: 115px;
+    background-color: rgba(255,25,49,.8) !important;
 }
+.disclaimerRooms .disclaimer
+{
+    background-color: transparent !important;
+    position: relative;
+    top: 0;
+    margin: 0 !important;
+    width: 230px !important;
+    height: 60px !important;
+}
+.disclaimerRooms .disclaimer p
+{
+    position: relative;
+    line-height: inherit;
+    top: 0;
+    left: 0;
+    margin: -5px 0 0 -20px !important;
+    padding: 0 !important;
+    width: 250px;
+}
+.disclaimerRooms .disclaimer input[type="button"]
+{
+    margin: 11px 0 0 10px;
+}
+.disclaimerRooms .disclaimer input[type="button"].hover
+{
+    -webkit-border-image: url("sp://import/img/info_group-button.png") 0 7 42 7;
+    text-shadow: 0 1px 0 #eee;
+}
+.disclaimerRooms .disclaimer .checkbox
+{
+    margin: 0;
+    padding: 0;
+    left: 0;
+    top: 97px;
+}
+#disclaimerLoginOriginal.disc p
+{
+    color: white;
+}
+
+/*
+ * END DISCLAIMER
+ */
+
 #header
 {
   background: url(../images/Wejay-small.png) no-repeat #fff;
@@ -796,7 +888,6 @@ blockquote a
   width: 330px !important;
   padding: 20px;
   background-color: rgba(0,0,0,.6);
-  /*border: 1px solid rgba(255,255,255,.2);*/
 }
 .middle .left #queue {
   max-height: 665px;
@@ -809,7 +900,6 @@ blockquote a
   display: inline-block;
   width: 240px;
   margin-bottom: 20px;
-  /*border: 1px solid rgba(255,255,255,.2);*/
 }
 .middle .right
 {
@@ -871,6 +961,68 @@ blockquote a
 .image
 {
   background-color: gray;
+}
+
+#sharePopup
+{
+  display: none;
+  height: 0;
+  margin: 20px auto;
+  padding: 0;
+  width: 630px;
+  position: relative;
+  background-image: -webkit-linear-gradient(top, #5798D2 0%,#3A87CD 100%);
+  color: white;
+  -webkit-transition: all .08s ease-in-out;
+}
+#sharePopup.show
+{
+  display: block;
+  height: auto;
+  padding: 20px;
+  -webkit-transition: all .08s ease-in-out;
+}
+#sharePopup #closeShare
+{
+  background: url("../images/window-controls-generic.png") 0 0 no-repeat;
+  -webkit-appearance: none;
+  border: none;
+  width: 18px;
+  height: 18px;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  cursor: pointer;
+}
+#sharePopup #shareOnMail:after,
+#sharePopup #shareOnFacebook:after
+{
+  margin-left: 3px;
+  content: url('sp://import/img/icon-external.png');
+  opacity: 0.5;
+  -webkit-transition: all .08s ease-in-out;
+}
+#sharePopup #shareOnMail:hover:after,
+#sharePopup #shareOnFacebook:hover:after
+{
+  opacity: 1;
+}
+#manualShare
+{
+  padding: 10px 0 0;
+}
+#manualShare input
+{
+  display: inline-block;
+  width: 45%;
+}
+#manualShare.hide
+{
+  display: none;
+}
+#sharePopup #closeShare:hover
+{
+  background-position: -30px 0;
 }
 footer
 {
@@ -940,7 +1092,7 @@ footer a
         padding: 0 5% 10px;
         width: 90%;
         height: auto !important;
-        position: initial;
+        position: relative;
         display: inline-block;
     }
     #roomSection .top .left
@@ -954,13 +1106,14 @@ footer a
     #roomSection .top #onair
     {
         top: initial;
-        bottom: 26px;
+        bottom: 4px;
     }
     #roomSection .top .right
     {
         float: right;
         width: auto;
         padding-bottom: 10px;
+        bottom: 0;
     }
     #roomSection .middle
     {
@@ -991,6 +1144,13 @@ footer a
     #roomSection .middle .left #queue
     {
         width: 100%;
+    }
+    #roomSection .middle .left #queue .nothing.playing
+    {
+        position: relative;
+        width: 95%;
+        margin: 0;
+        padding: 2.5%;
     }
     #roomSection .middle .left #queue .song
     {
@@ -1028,6 +1188,12 @@ footer a
     {
         width: 100%;
     }
+    #chooseSection .banner form
+    {
+        position: inherit;
+        bottom: 0;
+        left: 0;
+    }
     .middle .right div
     {
         width: 90%;
@@ -1064,6 +1230,65 @@ footer a
         width: 90%;
         margin: 0 0 20px;
         height: auto;
+    }
+    .disclaimer
+    {
+        margin: 0 0 20px;
+        position: relative;
+        width: 100%;
+        padding: 10px 0 0;
+        height: auto;
+    }
+    .disclaimer *
+    {
+        position: relative !important;
+        top: 0 !important;
+        left: 0 !important;
+    }
+    .disclaimer h1
+    {
+        padding-top: 10px;
+        text-align: left;
+        display: block;
+        width: 100%;
+    }
+    .disclaimer .checkbox
+    {
+        padding: 0;
+        margin: 16px 0 0 15px;
+        float: left;
+    }
+    .disclaimer.rooms
+    {
+        width: 100% !important;
+    }
+    .disclaimer p
+    {
+        position: relative;
+        width: 80%;
+        padding: 0 5% 0 0;
+        margin: 0;
+    }
+    .disclaimerRooms    
+    {
+        padding: 0 5% 15px !important;
+    }
+    .disclaimerRooms .disclaimer p
+    {
+        width: 100%;
+        display: block;
+    }
+    .disclaimerRooms .disclaimer .checkbox
+    {
+        margin: 12px 0 0 -20px;
+    }
+    #sharePopup
+    {
+        width: 90%;
+        padding: 20px 5% !important;
+        margin: 0 0 20px;
+        overflow: hidden;
+        text-align: left;
     }
     footer *
     {

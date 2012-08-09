@@ -2,7 +2,6 @@ function Hub (nodeUrl, currentRoom, facebookUserId) {
 
     console.log("connecting to node server", nodeUrl);
 
-
     if (typeof io === "undefined") {
         $( "#offline" ).show();
         $( "#main" ).hide();
@@ -21,6 +20,7 @@ function Hub (nodeUrl, currentRoom, facebookUserId) {
             traditional: true,
             type: "POST",
             success: function (result) {
+                console.log( result );
                 socket.emit("addSong", song);
                 if (callback) {
                     callback();
@@ -28,6 +28,10 @@ function Hub (nodeUrl, currentRoom, facebookUserId) {
             }
         });
     }
+
+    this.userLogout = function () {
+        socket.emit( "ulogout", "" );
+    } 
 
     this.checkin = function(options) {
         console.log("checkin to node", options);
@@ -38,6 +42,10 @@ function Hub (nodeUrl, currentRoom, facebookUserId) {
     this.checkout = function() {
         socket.disconnect();
     }
+
+    socket.on("userlogout", function ( data ) {
+        currentRoom.updateUsers();
+    });
 
     socket.on("connect", function (data) {
         currentRoom.clearCurrentSong();
