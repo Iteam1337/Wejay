@@ -232,6 +232,8 @@ function App () {
         });
     }
 
+    this.standardCopyLoggedOut = "I understand that by logging in with my Facebook account I enable WEJAY to use and store information from my Spotify library and listening history. This is done to provide a great listening experience.";
+
     /* INIT */
     // init function
     this.init = function ( version ) {
@@ -290,33 +292,23 @@ function App () {
             $( "#roomLogin" ).show();
             $( "#logout" ).hide();
             $( "#roomLogout" ).hide();
+            $( "#disclaimerLoginOriginal p" ).html( self.standardCopyLoggedOut );
         };
 
-        $( "#logout" ).on( "click", function () {
+
+
+        $( "#logout, #roomLogout" ).on( "click", function () {
             self.user.logout();
             userLogoutHide();
         });
 
-        $( "#roomLogout" ).on( "click", function () {
-            self.user.logout();
-            userLogoutHide();
-        });
-
-        $( "#roomLogin" ).on( "click", function () {
+        $( "#login, #roomLogin" ).on( "click", function () {
             if ( checkIfUserAcceptedAgreement() ) {
                 self.user.authenticate( function ( room ) {
+                    $( "#disclaimerLoginOriginal p" ).html( "Hi there " + app.user.userName + ", you are currently logged in to the room <a href=\"spotify:app:wejay:room:" + room +"\">" + room + "</a>" );
                     self.loadRooms();
+                    userLogoutShow();
                 });
-                userLogoutShow();
-            }
-        });
-
-        $( "#login" ).click( function () {
-            if ( checkIfUserAcceptedAgreement() ) {
-                self.user.authenticate(function (room) {
-                    self.loadRooms();
-                });
-                userLogoutShow();
             }
         });
 
@@ -359,12 +351,27 @@ function App () {
             e.preventDefault();
             if ( checkIfUserAcceptedAgreement() ) {
                 $( "#sharePopup" ).toggleClass( "show" );
-                //m.application.showSharePopup( this, "spotify:app:wejay" );
             }
         });
 
         $( "#closeShare" ).on( "click", function () {
             $( "#sharePopup" ).removeClass( "show" );
+        });
+
+        $( "#roomSelect" ).on( "submit", function ( e ) {
+          e.preventDefault();
+          var newRoomName = $( "#roomName" ).val().toLowerCase();
+          if ( /^([a-zåäöøæ0-9\_\-\ ]){3,15}$/.exec( newRoomName ) ) {
+            newRoomName = newRoomName.replace( /([åäæ])|([öø])/ig, function( str ) {
+              var arg = arguments
+              return ( arg[1] ) ? "a" : "o";
+            });
+            app.currentRoom.init( newRoomName, true );
+            document.location = 'spotify:app:wejay:room';
+          } else {
+            alert( "Something went wrong with the roomname" );
+          }
+          return false;
         });
 
 

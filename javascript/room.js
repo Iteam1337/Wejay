@@ -8,11 +8,13 @@ function RoomController(roomName, nodeUrl) {
     if ( roomName === "null" || roomName === undefined ) {
         roomName = "iteam";
     }
-    console.log( "New RoomController for room " + roomName );
-    var facebookId, self = this;
-    if ( roomName ) {
-        this.roomName = unescape( roomName ).trim().toLowerCase();
+    if ( !/^([a-zåäöøæ0-9\_\-\ ]){3,15}$/i.exec( roomName ) ) {
+      return;
     }
+    var facebookId, self = this;
+    this.roomName = roomName.toLowerCase();
+
+    console.log( "New RoomController for room " + roomName );
 
     this.currentTab = null;
 
@@ -135,7 +137,7 @@ function RoomController(roomName, nodeUrl) {
         });
     }
     this.clearCurrentSong = function () {
-        $("#roomTitle").html(encodeURI(this.roomName) + " Wejay Room");
+        $("#roomTitle").html(this.roomName + " Wejay Room");
         $("#currentSong").html("");
         $("#currentSong").html("Nothing playing right now. Drag a track here!");
         $("#currentAlbum").attr("src", "sp://import/img/placeholders/300-album.png");
@@ -319,7 +321,7 @@ function RoomController(roomName, nodeUrl) {
             console.log("Room name must be specified")
             throw "Room name must be specified"
         }
-        this.roomName = unescape(roomName).trim().toLowerCase();
+        this.roomName = roomName.toLowerCase();
         this.clearCurrentSong();
         var local = this;
         this.getBitlyKey( local.roomName, function ( shareURL ) {

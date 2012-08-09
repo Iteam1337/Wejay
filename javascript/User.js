@@ -30,7 +30,7 @@ function User() {
             type: "POST",
             traditional: true,
             success: function ( result ) {
-                app.currentRoom.logoutUser( "test" );
+                app.currentRoom.logoutUser();
                 app.currentRoom.updateUsers();
             },
             error: function (res) {
