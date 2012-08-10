@@ -45,6 +45,7 @@ function App () {
     this.currentRoom        = null;
     this.isPlayingFromWejay = false;
     this.acceptedLogin      = false;
+    this.loggedIntoRoom     = null;
     this.bitlyName          = "ankjevelen";
     this.bitlyKey           = "R_147ec88bf32a7d569749440093523de6";
 
@@ -80,6 +81,15 @@ function App () {
                     if ( !self.currentRoom.roomName ) {
                         alert( "You have to select a room first" );
                     }
+                }
+                if ( self.loggedIntoRoom === null ) {
+                    $( "#joinRoom, #leaveRoom" ).hide();
+                } else if ( self.loggedIntoRoom !== null && self.currentRoom.roomName !== self.loggedIntoRoom ) {
+                    $( "#joinRoom" ).show();
+                    $( "#leaveRoom" ).hide();
+                } else {
+                    $( "#leaveRoom" ).show();
+                    $( "#joinRoom" ).hide();
                 }
                 self.currentRoom.updatePlaylist();
                 break;
@@ -234,8 +244,14 @@ function App () {
 
     //
     // Copy for "Open a room"
-    this.loggedInCopy = function ( user, room ) {
-        return "Hi there " + user + ", you are currently logged in to the room <a href=\"spotify:app:wejay:room:" + room +"\">" + room + "</a>";
+    this.loggedInCopy = function ( noRoom ) {
+        var user = app.user.userName
+          , room = app.loggedIntoRoom;
+        if ( noRoom ) {
+            return "Hi there " + user + ", you are currently not logged into any room ..."; 
+        } else {
+            return "Hi there " + user + ", you are currently logged in to the room <a href=\"spotify:app:wejay:room:" + room +"\">" + room.toUpperCase() + "</a>";  
+        }
     }
     this.standardCopyLoggedOut = "I understand that by logging in with my Facebook account I enable WEJAY to use and store information from my Spotify library and listening history. This is done to provide a great listening experience.";
 
@@ -286,30 +302,29 @@ function App () {
         $( "#onair" ).hide();
 
         var userLogoutShow = function () {
-            $( "#login" ).hide();
-            $( "#roomLogin" ).hide();
-            $( "#logout" ).show();
+            $( "#login, #roomLogin" ).hide();
             $( "#roomLogout" ).show();
         };
 
         var userLogoutHide = function () {
-            $( "#login" ).show();
-            $( "#roomLogin" ).show();
-            $( "#logout" ).hide();
-            $( "#roomLogout" ).hide();
+            $( "#login, #roomLogin" ).show();
+            $( "#logout, #leaveRoom, #joinRoom, #roomLogout" ).hide();
             $( "#disclaimerLoginOriginal p" ).html( self.standardCopyLoggedOut );
         };
 
-        $( "#logout, #roomLogout" ).on( "click", function () {
+        $( "#roomLogout" ).on( "click", function () {
             self.user.logout();
+            app.loggedIntoRoom = null;
             userLogoutHide();
         });
 
         $( "#login, #roomLogin" ).on( "click", function () {
             if ( checkIfUserAcceptedAgreement() ) {
                 self.user.authenticate( function ( room ) {
-                    var copy = self.loggedInCopy( app.user.userName, room );
+                    self.loggedIntoRoom = room;
+                    var copy = self.loggedInCopy();
                     $( "#disclaimerLoginOriginal p" ).html( copy );
+                    $( "#leaveRoom" ).show();
                     self.loadRooms();
                     userLogoutShow();
                 });
@@ -365,11 +380,13 @@ function App () {
         $( "#roomSelect" ).on( "submit", function ( e ) {
           e.preventDefault();
           var newRoomName = $( "#roomName" ).val().toLowerCase();
-          if ( /^([a-z0-9\_\-\ ]){3,15}$/.exec( newRoomName ) ) {
+          if ( /^([a-z0-9\_\-\ ]){2,10}$/i.exec( newRoomName ) ) {
             app.currentRoom.init( newRoomName, true );
             document.location = 'spotify:app:wejay:room';
           } else {
-            alert( "Something went wrong with the roomname" );
+            var temp = newRoomName.match( /([^a-z0-9\_\-\ ])/ig, "$1" )
+              , matchString = temp.join(" ");
+            alert( "Something went wrong with the roomname. You used the following characters which is not allowed:\n" + matchString );
           }
           return false;
         });
@@ -406,6 +423,21 @@ function App () {
             }
         });
 
+        $( "#joinRoom" ).on( "click", function () {
+            app.currentRoom.checkin();
+            $( this ).hide();
+            $( "#leaveRoom" ).show();
+        });
+
+        $( "#leaveRoom" ).on( "click", function () {
+            self.user.logout();
+            $( this ).hide();
+            var copy = app.loggedInCopy( true );
+            $( "#disclaimerLoginOriginal p" ).html( copy );
+            app.loggedIntoRoom = "";
+            $( "#joinRoom" ).show();
+        });
+
         $( document ).on( "click", "#queue li .star", function () {
             var element = $( this )
               , CurrentClass = element.attr( "class" ).match( /(no)+(\d){1}/ )
@@ -437,8 +469,10 @@ function App () {
 
         //
         // bind space to play-pause
-        $( document ).on( "keyup", function ( e ) {
-            if ( e.target.nodeName !== "INPUT" && e.keyCode === 32 ) {
+        $( document ).on( "keydown", function ( e ) {
+            //
+            // If user is in tab "wejay", only then space acts as play-pause.
+            if ( e.target.nodeName !== "INPUT" && e.keyCode === 32 && document.location.hash === "#roomSection" ) {
                 e.preventDefault();
                 if ( app.isPlayingFromWejay ) {
                     pauseApp();

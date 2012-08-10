@@ -8,7 +8,7 @@ function RoomController(roomName, nodeUrl) {
     if ( roomName === "null" || roomName === undefined ) {
         roomName = "iteam";
     }
-    if ( !/^([a-z0-9\_\-\ ]){3,15}$/i.exec( roomName ) ) {
+    if ( !/^([a-z0-9\_\-\ ]){2,10}$/i.exec( roomName ) ) {
       return;
     }
     var facebookId, self = this;
@@ -311,7 +311,6 @@ function RoomController(roomName, nodeUrl) {
         }
     }
 
-
     this.init = function (roomName, anonymous) {
         if ( roomName === "null" || roomName === undefined ) {
             roomName = "iteam";
@@ -410,6 +409,11 @@ function RoomController(roomName, nodeUrl) {
                 if (callback) {
                     callback(self.roomName);
                 }
+                app.loggedIntoRoom = self.roomName;
+                var copy = app.loggedInCopy();
+                $( "#disclaimerLoginOriginal p" ).html( copy );
+                app.currentRoom.logoutUser();
+                app.currentRoom.updateUsers();
                 console.log(app.user.userName + " logged in to wejay room ", self.roomName);
                 //self.hub.checkin({ user: user, room: self.roomName });
             }
