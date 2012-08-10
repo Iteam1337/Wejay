@@ -18,7 +18,6 @@ function User() {
                 self.accessToken = null;
                 $("#rooms").html("");
                 localStorage.removeItem("facebookUser");
-                app.loggedIntoRoom = null;
             }
         });
     };

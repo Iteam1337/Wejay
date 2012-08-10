@@ -8,7 +8,7 @@ function RoomController(roomName, nodeUrl) {
     if ( roomName === "null" || roomName === undefined ) {
         roomName = "iteam";
     }
-    if ( !/^([a-z0-9\_\-\ ]){2,10}$/i.exec( roomName ) ) {
+    if ( !/^([a-z0-9\_\-\ ]){3,15}$/i.exec( roomName ) ) {
       return;
     }
     var facebookId, self = this;
@@ -136,9 +136,6 @@ function RoomController(roomName, nodeUrl) {
             console.log("******************************************************");
         });
     }
-
-    this.nothingPlayingCopy = "<div class=\"nothing playing\"><p><strong>Hello!</strong>A room needs music! Add songs by searching or by dragging tracks or whole playlists to the WEJAY app in the sidebar. Don't forget to invite you colleagues - WEJAY was made to play music together!</p></div>";
-
     this.clearCurrentSong = function () {
         $("#roomTitle").html(this.roomName + " Wejay Room");
         $("#currentSong").html("");
@@ -147,7 +144,7 @@ function RoomController(roomName, nodeUrl) {
         $(".hidden.title").html("");
         $("#currentLink").attr("href", "");
         $("#currentPlayedBy").html("");
-        $("#queue").html( this.nothingPlayingCopy );
+        $("#queue").html( "<div class=\"nothing playing\"><p><strong>Hello!</strong>A room needs music! Add songs by searching or by dragging tracks or whole playlists to the WEJAY app in the sidebar. Don't forget to invite your colleagues - WEJAY was made to play music together!</p></div>" );
         $("#skip").html("Skip");
         $("#block").html("Block");
         $("#like").html("Like");
@@ -314,6 +311,7 @@ function RoomController(roomName, nodeUrl) {
         }
     }
 
+
     this.init = function (roomName, anonymous) {
         if ( roomName === "null" || roomName === undefined ) {
             roomName = "iteam";
@@ -412,11 +410,6 @@ function RoomController(roomName, nodeUrl) {
                 if (callback) {
                     callback(self.roomName);
                 }
-                app.loggedIntoRoom = self.roomName;
-                var copy = app.loggedInCopy();
-                $( "#disclaimerLoginOriginal p" ).html( copy );
-                app.currentRoom.logoutUser();
-                app.currentRoom.updateUsers();
                 console.log(app.user.userName + " logged in to wejay room ", self.roomName);
                 //self.hub.checkin({ user: user, room: self.roomName });
             }
@@ -443,7 +436,7 @@ function RoomController(roomName, nodeUrl) {
                 if (result.length > 0) {
                     $("#queue").html($("#queueTemplate").tmpl(result));
                 } else {
-                    $("#queue").html( this.nothingPlayingCopy );
+                    $("#queue").html( "<div class=\"nothing playing\"><p><strong>Hello!</strong>This room needs music! Add songs by searching or by dragging tracks or whole playlists to the WEJAY app in the sidebar. Don't forget to invite you colleagues - WEJAY was made to play music together!</p></div>" );
                     if ($("#currentSong").html() === "") { $("#currentSong").html("Drag tracks here to start the room"); }
                 }
             }
