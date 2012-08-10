@@ -333,7 +333,7 @@ function RoomController(roomName, nodeUrl) {
           var mailString = "mailto:?subject=Join our WEJAY room&body=Hi, if you follow the link below you can add music to our WEJAY room \"" + local.roomName + "\" from Spotify.\u2029\u2029" + shareURL + userString + "\u2029\u2029------------------------------------------------------\u2029\u2029WEJAY lets you and your colleagues add music to mixed democratic playlist which means you can all listen to your own favorite music while working. Recent research results shows that you work better when you get to listen to music.\u2029\u2029Read more about WEJAY and the research on http://wejay.org";
           $( "#shareURL" ).val( shareURL );
           $( "#shareOnMail" ).attr( "href", mailString );
-          $( "#shareOnFacebook" ).attr( "href", "http://facebook.com/sharer.php?u=" + shareURL );
+          $( "#shareOnFacebook" ).attr( "href", "http://facebook.com/sharer.php?s=100&p[url]=" + shareURL + "&p[title]=" + escape("Play music with me on WEJAY") + "&p[images][0]=" + escape("http://wejay.org/Content/Images/Wejay256transparent.png") + "&p[summary]=" + escape("WEJAY is a Spotify app for playing music together at work. I've created the room " + local.roomName +  ", join me there!"));
           localStorage.setItem("room", local.roomName);
           if (!anonymous && !app.user.accessToken) {
               app.user.authenticate( function () {
