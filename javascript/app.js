@@ -232,6 +232,11 @@ function App () {
         });
     }
 
+    //
+    // Copy for "Open a room"
+    this.loggedInCopy = function ( user, room ) {
+        return "Hi there " + user + ", you are currently logged in to the room <a href=\"spotify:app:wejay:room:" + room +"\">" + room + "</a>";
+    }
     this.standardCopyLoggedOut = "I understand that by logging in with my Facebook account I enable WEJAY to use and store information from my Spotify library and listening history. This is done to provide a great listening experience.";
 
     /* INIT */
@@ -295,8 +300,6 @@ function App () {
             $( "#disclaimerLoginOriginal p" ).html( self.standardCopyLoggedOut );
         };
 
-
-
         $( "#logout, #roomLogout" ).on( "click", function () {
             self.user.logout();
             userLogoutHide();
@@ -305,7 +308,8 @@ function App () {
         $( "#login, #roomLogin" ).on( "click", function () {
             if ( checkIfUserAcceptedAgreement() ) {
                 self.user.authenticate( function ( room ) {
-                    $( "#disclaimerLoginOriginal p" ).html( "Hi there " + app.user.userName + ", you are currently logged in to the room <a href=\"spotify:app:wejay:room:" + room +"\">" + room + "</a>" );
+                    var copy = self.loggedInCopy( app.user.userName, room );
+                    $( "#disclaimerLoginOriginal p" ).html( copy );
                     self.loadRooms();
                     userLogoutShow();
                 });
@@ -361,11 +365,7 @@ function App () {
         $( "#roomSelect" ).on( "submit", function ( e ) {
           e.preventDefault();
           var newRoomName = $( "#roomName" ).val().toLowerCase();
-          if ( /^([a-zåäöøæ0-9\_\-\ ]){3,15}$/.exec( newRoomName ) ) {
-            newRoomName = newRoomName.replace( /([åäæ])|([öø])/ig, function( str ) {
-              var arg = arguments
-              return ( arg[1] ) ? "a" : "o";
-            });
+          if ( /^([a-z0-9\_\-\ ]){3,15}$/.exec( newRoomName ) ) {
             app.currentRoom.init( newRoomName, true );
             document.location = 'spotify:app:wejay:room';
           } else {
@@ -373,7 +373,6 @@ function App () {
           }
           return false;
         });
-
 
         $( document ).on( "click", "#userToplist a", function ( e ) {
             e.preventDefault();
@@ -414,7 +413,6 @@ function App () {
               , SpotifyId = song.split( ":" )
               , length = SpotifyId.length - 1
               , CurrentClassNumber = parseInt( CurrentClass[ 2 ] );
-
             CurrentClass = CurrentClass[ 0 ];
             SpotifyId = SpotifyId[ length ];
             if ( checkIfUserAcceptedAgreement() ) {
@@ -423,7 +421,6 @@ function App () {
                 }
             }
         });
-
 
         var playApp = function () {
             app.isPlayingFromWejay = true;
@@ -448,6 +445,7 @@ function App () {
                 } else {
                     playApp();
                 }
+                return false;
             }
         });
 

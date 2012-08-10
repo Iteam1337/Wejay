@@ -8,7 +8,7 @@ function RoomController(roomName, nodeUrl) {
     if ( roomName === "null" || roomName === undefined ) {
         roomName = "iteam";
     }
-    if ( !/^([a-zåäöøæ0-9\_\-\ ]){3,15}$/i.exec( roomName ) ) {
+    if ( !/^([a-z0-9\_\-\ ]){3,15}$/i.exec( roomName ) ) {
       return;
     }
     var facebookId, self = this;

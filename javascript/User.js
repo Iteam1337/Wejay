@@ -16,9 +16,7 @@ function User() {
                 self.facebookId = null;
                 self.facebookUser = null;
                 self.accessToken = null;
-
                 $("#rooms").html("");
-
                 localStorage.removeItem("facebookUser");
             }
         });
@@ -97,7 +95,8 @@ function User() {
                     app.loadRooms();
                     localStorage.setItem("facebookUser", JSON.stringify(facebookUser));
                     self.friends = localStorage.getItem("friends");
-                    //facebookUser(this); // inherit all facebook properties to this user class
+                    //
+                    // facebookUser(this); // inherit all facebook properties to this user class
                     if (!app.currentRoom) {
                         app.currentRoom = new RoomController();
                     }

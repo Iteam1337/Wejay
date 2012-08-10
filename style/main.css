@@ -912,7 +912,7 @@ blockquote a
 }
 .middle .right #users
 {
-  max-height: 300px;
+  max-height: 315px;
   overflow: auto;
   display: block;
   margin: 10px 0;
