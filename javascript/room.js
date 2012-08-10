@@ -144,7 +144,7 @@ function RoomController(roomName, nodeUrl) {
         $(".hidden.title").html("");
         $("#currentLink").attr("href", "");
         $("#currentPlayedBy").html("");
-        $("#queue").html( "<div class=\"nothing playing\"><p><strong>Hello!</strong>A room needs music! Add songs by searching or by dragging tracks or whole playlists to the WEJAY app in the sidebar. Don't forget to invite you colleagues - WEJAY was made to play music together!</p></div>" );
+        $("#queue").html( "<div class=\"nothing playing\"><p><strong>Hello!</strong>A room needs music! Add songs by searching or by dragging tracks or whole playlists to the WEJAY app in the sidebar. Don't forget to invite your colleagues - WEJAY was made to play music together!</p></div>" );
         $("#skip").html("Skip");
         $("#block").html("Block");
         $("#like").html("Like");
