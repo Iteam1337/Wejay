@@ -548,13 +548,13 @@ h3
   top: 57px;
   left: 2px;
   z-index: 100; 
-  width: 150px;
+  width: 136px;
   text-align: center;
   background:rgba(0,0,0,.7);
   font-family: 'League Gothic', serif, Arial, Helvetica, sans-serif;
   font-weight: normal;
   text-transform: uppercase;
-  font-size: 30px;
+  font-size: 25px;
   line-height: 20px;
 }
 .auto-completeForm input

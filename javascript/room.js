@@ -6,7 +6,7 @@ var sp = getSpotifyApi(1)
 
 function RoomController(roomName, nodeUrl) {
     if ( roomName === "null" || roomName === undefined ) {
-        roomName = "iteam";
+        roomName = "example";
     }
     if ( !/^([a-z0-9\_\-\ ]){2,10}$/i.exec( roomName ) ) {
       return;
@@ -315,7 +315,7 @@ function RoomController(roomName, nodeUrl) {
 
     this.init = function (roomName, anonymous) {
         if ( roomName === "null" || roomName === undefined ) {
-            roomName = "iteam";
+            roomName = "null";
         }
         console.log("init");
         if (!roomName) {

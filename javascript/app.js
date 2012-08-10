@@ -82,6 +82,9 @@ function App () {
                         alert( "You have to select a room first" );
                     }
                 }
+                if ( self.currentRoom.roomName === "example" ) {
+                    document.location = "spotify:app:wejay:choose";
+                }
                 if ( self.loggedIntoRoom === null ) {
                     $( "#joinRoom, #leaveRoom" ).hide();
                 } else if ( self.loggedIntoRoom !== null && self.currentRoom.roomName !== self.loggedIntoRoom ) {
@@ -287,9 +290,9 @@ function App () {
             $( ".disclaimer:first" ).hide();
             $( "#disclaimerLoginOriginal" ).hide();
             if ( localStorage.room === undefined ) {
-                localStorage.room = "iteam";
+                localStorage.room = "example";
+                document.location = "spotify:app:wejay:choose";
             }
-            document.location = "spotify:app:wejay:choose";
         }
 
         if ( app.user.accessToken ) {
