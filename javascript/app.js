@@ -85,8 +85,9 @@ function App () {
                 if ( self.loggedIntoRoom === null ) {
                     $( "#joinRoom, #leaveRoom" ).hide();
                 } else if ( self.loggedIntoRoom !== null && self.currentRoom.roomName !== self.loggedIntoRoom ) {
-                    $( "#joinRoom" ).show();
-                    $( "#leaveRoom" ).hide();
+                    app.currentRoom.checkin();
+                    $( "#joinRoom" ).hide();
+                    $( "#leaveRoom" ).show();
                 } else {
                     $( "#leaveRoom" ).show();
                     $( "#joinRoom" ).hide();
@@ -203,6 +204,9 @@ function App () {
                 result = result.slice( 0, 9 );
                 $( div ).html( $( "#roomTopListTemplate" ).tmpl( result ) );
                 $( div ).append( "<a>" + room + "</a>" );
+                $( "#enterRoomBanner" ).hide();
+            }, error: function ( r ) {
+                $( "#enterRoomBanner" ).show();
             }
         });
     };
@@ -377,17 +381,28 @@ function App () {
             $( "#sharePopup" ).removeClass( "show" );
         });
 
+        var loginFunction = function ( newRoomName ) {
+            if ( /^([a-z0-9\_\-\ ]){2,10}$/i.exec( newRoomName ) ) {
+                app.currentRoom.init( newRoomName, true );
+                document.location = 'spotify:app:wejay:room';
+            } else {
+                var temp = newRoomName.match( /([^a-z0-9\_\-\ ])/ig, "$1" )
+                    , matchString = temp.join(" ");
+                alert( "Something went wrong with the roomname. You used the following characters which is not allowed:\n" + matchString );
+            }
+        }
+
         $( "#roomSelect" ).on( "submit", function ( e ) {
           e.preventDefault();
           var newRoomName = $( "#roomName" ).val().toLowerCase();
-          if ( /^([a-z0-9\_\-\ ]){2,10}$/i.exec( newRoomName ) ) {
-            app.currentRoom.init( newRoomName, true );
-            document.location = 'spotify:app:wejay:room';
-          } else {
-            var temp = newRoomName.match( /([^a-z0-9\_\-\ ])/ig, "$1" )
-              , matchString = temp.join(" ");
-            alert( "Something went wrong with the roomname. You used the following characters which is not allowed:\n" + matchString );
-          }
+          loginFunction( newRoomName );
+          return false;
+        });
+
+        $( "#roomSelectBanner" ).on( "submit", function ( e ) {
+          e.preventDefault();
+          var newRoomName = $( "#roomNameBanner" ).val().toLowerCase();
+          loginFunction( newRoomName );
           return false;
         });
 
@@ -436,6 +451,7 @@ function App () {
             $( "#disclaimerLoginOriginal p" ).html( copy );
             app.loggedIntoRoom = "";
             $( "#joinRoom" ).show();
+            document.location = "spotify:app:wejay:choose";
         });
 
         $( document ).on( "click", "#queue li .star", function () {
@@ -515,7 +531,7 @@ function App () {
                 $( ".disclaimer" ).remove();
                 $( "#login" ).attr( "disabled", false );
                 localStorage.acceptedLogin = "true";
-                $( "#disclaimerLoginOriginal" ).addClass( "disc" );
+                $( ".disclaimerRooms" ).removeClass( "disclaimerRooms" );
                 $( "#disclaimerLoginOriginal" ).show();
                 self.acceptedLogin = true;
             });

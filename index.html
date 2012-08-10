@@ -126,6 +126,13 @@
                         <script id="roomTopListTemplate" type="text/x-jquery-tmpl">
                             <dl><img alt="${UserName}" src="http://graph.facebook.com/${FacebookId}/picture"></dl>
                         </script>
+                        <div id="enterRoomBanner">
+                            <p>None of your facebook friends have created a room yet, be the first one in your workspace to create a WEJAY room. You can later share a link to the room.</p>
+                            <form id="roomSelectBanner" action="#roomSection">
+                                <input type="text" value="" id="roomNameBanner" placeholder="CHOOSE ROOM NAME">
+                                <input type="submit" value="CREATE ROOM" />
+                            </form>
+                        </div>
                     </span>
                     <div class="banner">
                         <h2>Enter a WEJAY Room</h2>

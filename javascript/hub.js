@@ -45,6 +45,7 @@ function Hub (nodeUrl, currentRoom, facebookUserId) {
 
     socket.on("userlogout", function ( data ) {
         currentRoom.updateUsers();
+        currentRoom.updatePlaylist();
     });
 
     socket.on("connect", function (data) {
