@@ -1,29 +1,35 @@
 <!doctype html>
 <html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <title>Wejay</title>
-        <script src="javascript/jquery-1.7.2.min.js" type="text/javascript"></script>
-        <script src="javascript/jquery.tmpl.min.js" type="text/javascript"></script>
-        <script src="http://81.201.221.135:5000/socket.io/socket.io.js" type="text/javascript"></script>
-        <link rel="stylesheet" href="sp://import/css/adam.css"/>
-        <link rel="stylesheet" href="sp://import/css/api.css"/>
-        <link rel="stylesheet" href="sp://import/css/list.css"/>
-        <link rel="stylesheet" href="http://wejay.org/content/css/bugfixes.css"/>
-        <link rel="stylesheet" href="style/main.css"/>
-        <script src="javascript/moment.min.js" type="text/javascript"></script>
-        <script src="javascript/hub.js" type="text/javascript"></script>
-        <script src="javascript/room.js" type="text/javascript"></script>
-        <script src="javascript/app.js" type="text/javascript"></script>
-        <script src="javascript/user.js" type="text/javascript"></script>
-    </head>
-    <body>
-        <div id="offline">
-            <h1>This application is not available when offline</h1>
-        </div>
-        <div id="main">
-            <!-- wejay/start -->
-            <section id="roomSection">
+<head>
+    <meta charset="utf-8">
+    <title>Wejay</title>
+    <script src="javascript/jquery-1.7.2.min.js" type="text/javascript"></script>
+    <script src="javascript/jquery.tmpl.min.js" type="text/javascript"></script>
+    <script src="http://81.201.221.135:5000/socket.io/socket.io.js" type="text/javascript"></script>
+    <link rel="stylesheet" href="sp://import/css/adam.css" />
+    <link rel="stylesheet" href="sp://import/css/api.css" />
+    <link rel="stylesheet" href="sp://import/css/list.css" />
+    <link rel="stylesheet" href="http://wejay.org/content/css/bugfixes.css" />
+    <link rel="stylesheet" href="style/main.css" />
+    <script src="javascript/moment.min.js" type="text/javascript"></script>
+    <script src="javascript/underscore-min.js" type="text/javascript"></script>
+    <script src="javascript/hub.js" type="text/javascript"></script>
+    <script src="javascript/room.js" type="text/javascript"></script>
+    <script src="javascript/app.js" type="text/javascript"></script>
+    <script src="javascript/user.js" type="text/javascript"></script>
+</head>
+<body>
+    <div id="branding">
+        <img src="Images/Wejay128-inverted.png" />
+        <a href="http://wejay.org" class="link external inverted" title="wejay.org">wejay.org</a>
+    </div>
+    <div id="offline">
+        <h1>
+            This application is not available when offline</h1>
+    </div>
+    <div id="main">
+        <!-- wejay/start -->
+        <section id="roomSection">
                 <section id="current">
                     <div class="top">
                         <div class="left">
@@ -42,9 +48,17 @@
                         <div class="right">
                             <h3 id="currentSong"></h3>
                             <h4 id="currentPlayedBy"></h4>
-                            <a class="button" title="Like this song" id="like" href="#">Like</a>
-                            <a class="button" title="Block this song from playing" id="block" href="#">Block</a>
-                            <a class="button" title="Skip this song" id="skip" href="#">Skip</a>
+                            <a class="button" title="Like this song" id="like" href="#"></a>
+                            <a class="button" title="vote" id="voteButton" href="#">Vote</a>
+                            <div id="voteOverlay">
+                                <div>
+                                    <a class="close" title="close"></a>
+                                    <h1>Skip or block?</h1>
+                                    <p>Blocking will stop this song from playing  when you are logged in - forever. Skip will cancel this song for now and jump to the next.</p>
+                                    <a class="button" title="Skip this song" id="skip" href="#">Skip</a>
+                                    <a class="button" title="Block this song from ever playing again" id="block" href="#">Block</a>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="disclaimer wejay">
@@ -95,7 +109,7 @@
                 <!-- Logged in users -->
                 <script id="usersTemplate" type="text/x-jquery-tmpl">
                     {{if Online}}
-                        <li><a draggable="false" href="${(app.user.friends || []) .indexOf(FacebookId) >= 0 ? 'spotify:user:facebook:' + FacebookId : '#wejaysSection' }" ><img draggable="false" class="image" alt="${UserName}" src="http://graph.facebook.com/${FacebookId}/picture"><p>${UserName}</p><p class="time">${CheckedIn}</p></li></a>
+                        <li><a draggable="false" href="${(app.user.friends || []) .indexOf(FacebookId) >= 0 ? 'spotify:user:facebook:' + FacebookId : '#wejaysSection' }" ><img draggable="false" class="image" alt="${unescape(UserName)}" src="http://graph.facebook.com/${FacebookId}/picture"><p>${unescape(UserName)}</p><p class="time">${CheckedIn}</p></li></a>
                     {{/if}}
                 </script>
                 <!-- Current music in playlist -->
@@ -104,12 +118,12 @@
                 </script>
                 <!-- Current music in playlist -->
                 <script id="userToplistTemplate" type="text/x-jquery-tmpl">
-                    <li><a href="${uri}"><strong>${album.artist.name}</strong> - ${name}</a></li>
+                    <li><a class="addSongToQueue" href="${uri}"></a><a href="${uri}" class="songInTopList"><strong>${album.artist.name}</strong> - ${name}</a></li>
                 </script>
             </section>
-            <!-- wejay/end -->
-            <!-- open a room/start -->
-            <section id="chooseSection" class="current">
+        <!-- wejay/end -->
+        <!-- open a room/start -->
+        <section id="chooseSection" class="current">
                 <section>
                     <span id="loginInformation">
                         <h1>We are the DJ.</h1>
@@ -159,9 +173,9 @@
                     <address>By logging in with your Facebook account you accept that WEJAY may use and store information from your Spotify library.</address>
                 </footer>
             </section>
-            <!-- open a room/end -->
-            <!-- about/start -->
-            <section id="aboutSection">
+        <!-- open a room/end -->
+        <!-- about/start -->
+        <section id="aboutSection">
                 <section>
                     <span>
                         <h1>About Wejay</h1>
@@ -169,22 +183,22 @@
                         <p>Enter <a href="http://wejay.org">WEJAY</a>! Research shows that music promotes productivity, as long as you get a say in its selection. Wejay plays the music you and your colleagues select, in a You and your colleagues queues music in a room. The queue will be ordered in a way that will feel fair to all. The sound will be streamed from Spotify via the Wejay App to your speakers.</a></p>
                     </span>
                     <span>
-            						<h2>About Iteam</h2>
-            						<p>The brains behind WEJAY are <a href="http://iteam.se">Iteam</a>, Stockholm-based system developers focused on inventing the future. We have used Wejay in different incarnations and perfected its selection algorithms at our own office for over ten years. We are hiring!</p>
+                        <h2>About Iteam</h2>
+                        <p>The brains behind WEJAY are <a href="http://iteam.se">Iteam</a>, Stockholm-based system developers focused on inventing the future. We have used Wejay in different incarnations and perfected its selection algorithms at our own office for over ten years. We are hiring!</p>
                     </span>
                 </section>
                 <footer class="bottom">
                     <address>WEJAY have an automatic bot called MAESTRO which will try to match your music taste. Both WEJAY and MAESTRO will respect the logged in users vote. Use your voting power to assure WEJAY waits until you log out before playing that incessant summer hit from 1992. MAESTRO only plays music that you have played more than once, and to keep things fresh it will not play the same song more than once a day.</address>
                 </footer>
             </section>
-            <!-- about/end -->
-        </div>
-        <script src="http://wejay.org/scripts/bugfixes.js" type="text/javascript"></script>
-        <script type="text/javascript">
-            // initialize Wejay App
-            var app = new App();
-            app.init({ version: "1.0.1" });
-            var ui = sp.require('sp://import/scripts/dnd');
-        </script>
-    </body>
+        <!-- about/end -->
+    </div>
+    <script src="http://wejay.org/scripts/bugfixes.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        // initialize Wejay App
+        var app = new App();
+        app.init({ version: "1.0.1" });
+        var ui = sp.require('sp://import/scripts/dnd');
+    </script>
+</body>
 </html>

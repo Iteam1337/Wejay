@@ -2,9 +2,9 @@ var auth = sp.require("sp://import/scripts/api/auth");
 // user class which handles all authentication with facebook and stores accesstokens, usernames, etc
 function User() {
     // properties
-    this.facebookId   = null;
+    this.facebookId = null;
     this.facebookUser = null;
-    this.accessToken  = null;
+    this.accessToken = null;
 
     var self = this;
 
@@ -28,9 +28,10 @@ function User() {
             url: "http://wejay.org/Room/logout",
             type: "POST",
             traditional: true,
-            success: function ( result ) {
+            success: function (result) {
                 app.currentRoom.logoutUser();
                 app.currentRoom.updateUsers();
+                app.loggedIntoRoom = null;
             },
             error: function (res) {
                 console.log("failed to logout");
@@ -77,9 +78,9 @@ function User() {
             }
         }
 
-        var appID = "154112144637878"
-          , path = "https://www.facebook.com/dialog/oauth?"
-          , successUrl = "https://www.facebook.com/connect/login_success.html";
+        var appID = "154112144637878",
+            path = "https://www.facebook.com/dialog/oauth?",
+            successUrl = "https://www.facebook.com/connect/login_success.html";
 
         auth.authenticateWithFacebook(appID, ["email", "read_stream"], {
 
@@ -91,8 +92,9 @@ function User() {
                     self.userName = unescape(facebookUser.name);
                     self.facebookId = facebookUser.id;
                     self.accessToken = accessToken;
-                    $("#logout").show();
-                    $("#login").hide();
+                    $("#logout, #roomLogout, #leaveRoom").show();
+                    $("#roomLogin, #login").hide();
+                    $("#disclaimerLoginOriginal p").html(App.standardCopyLoggedOut);
                     app.loadRooms();
                     localStorage.setItem("facebookUser", JSON.stringify(facebookUser));
                     self.friends = localStorage.getItem("friends");
@@ -115,6 +117,8 @@ function User() {
 
             onFailure: function (error) {
                 console.log("Authentication failed with error: " + error);
+                $("#logout, #roomLogout, #leaveRoom").hide();
+                $("#roomLogin, #login").show();
             },
 
             onComplete: function () {

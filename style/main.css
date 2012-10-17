@@ -73,12 +73,39 @@ a
 }
 
 /*********************************************
+* BRANDING
+*********************************************/
+
+#branding 
+{
+    background-color: #1a1a1a;
+    padding: 10px 0 0;
+    width: 100%;
+    height: 40px;
+    position: relative;
+}
+#branding img
+{
+    position: absolute;
+    width: 96px;
+    margin: -30px 0 0 -64px;
+    left: 50%;
+}
+#branding a
+{
+    position: absolute;
+    top: 15px;
+    right: 20px;
+}
+/*********************************************
 * SLIDES
 *********************************************/
 #main
 {
   min-width: 465px;
   text-align: center;
+  margin-top: -20px;
+  padding-top: 20px;
 }
 #offline
 {
@@ -126,8 +153,8 @@ section.current
   background: -webkit-linear-gradient(top, rgb(26,26,26) 0%,rgb(60,60,60) 70%,rgb(90,90,90) 100%);
   width: 100%;
   height: auto;
-  margin-top: -10px;
-  padding-top: 10px;
+  margin-top: 0;
+  padding-top: 0;
   min-height: 480px;
 }
 
@@ -448,11 +475,13 @@ h3
 {
   display: inline-block;
   height: 14px;
-  width: 14px;
-  background: url("sp://import/img/mainlist-star-simple-dark.png");
+  width: 16px;
+  background: url("../images/heart.png");
   vertical-align: top;
   margin: 12px 0 0 5px;
   position: absolute;
+  background-repeat: no-repeat;
+  cursor: pointer;
 }
 #queue .star.no1
 {
@@ -460,11 +489,11 @@ h3
 }
 #queue .star.no3
 {
-    background-position: 16px 0;
+    background-position: 0 -13px;
 }
 #queue .star.no3:hover
 {
-    background-position: 32px 0;  
+    background-position: -16px -13px;
 }
 #queue .star.no5
 {
@@ -472,7 +501,7 @@ h3
 }
 #queue .star.no5:hover
 {
-    background-position: 0 0;
+    opacity: .8;
 }
 #queue .song .track
 {
@@ -916,6 +945,85 @@ blockquote a
   bottom: 21px;
   position: absolute;
 }
+#like
+{
+  width: 30px;
+  height: 21px;
+  display: inline-block;
+  content: "";
+  vertical-align: bottom;
+}
+#like:after
+{
+  background: url( "../images/heart.png" ) no-repeat 0 -14px;
+  width: 16px;
+  height: 14px;
+  display: block;
+  content: "";
+  border: none;
+  position: absolute;
+  bottom: 2px;
+  left: 7px;
+}
+#like:hover:after
+{
+  background-position: -16px 0;
+}
+#like.liked:after
+{
+  background-position: 0 0 !important;
+}
+.top .right #voteOverlay
+{
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+  margin: 0;
+  padding: 0;
+  z-index: 250;
+  display: none;
+  background: rgba(0,0,0,.7);
+  position: fixed;
+}
+.top .right #voteOverlay.show
+{
+  display: block;
+}
+.top .right #voteOverlay div
+{
+  width: 200px;
+  height: 150px;
+  left: 50%;
+  top: 50%;
+  margin: -85px 0 0 -110px;
+  padding: 20px;
+  position: absolute;
+  background: url("sp://wejay/images/bg_plaid.png");
+  z-index: 251;
+}
+.top .right #voteOverlay div p
+{
+    margin-bottom: 20px;
+}
+.top .right #voteOverlay div .close
+{
+    width: 15px;
+    height: 15px;
+    right: 5px;
+    top: 5px;
+    margin: 0;
+    padding: 0;
+    position: absolute;
+    z-index: 251;
+    background: url("sp://wejay/images/window-controls-generic.png") -30px 0 no-repeat;
+    content: "";
+}
+.top .right #voteOverlay div .close:hover,
+.top .right #voteOverlay div .close:active
+{
+    background-position: 0 0;
+}
 .top #onair
 {
     line-height: 1em;
@@ -1116,22 +1224,45 @@ footer a
 {
   margin: 0;
   padding: 0;
+  webkit-transition: background-color .08s ease-in-out;
 }
-#userToplist li a
+#userToplist li a.addSongToQueue
+{
+  display: inline-block;
+  height: 14px;
+  width: 14px;
+  background: url("../images/crosses.png");
+  vertical-align: bottom;
+  margin: 2px 0 5px 5px;
+  background-repeat: no-repeat;
+}
+#userToplist li a.addSongToQueue:hover
+{
+  background-position: 0 -13px;
+}
+#userToplist li a.songInTopList
 {
   padding: 5px 10px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  display: block;
+  display: inline-block;
   margin: 0;
-  -webkit-transition: background-color .08s ease-in-out;
+  max-width: 197px;
+}
+#userToplist li a.songInTopList strong
+{
+  max-width: 100px;
+  display: inline-block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 #userToplist li:nth-child(odd)
 {
   background-color: rgba(255,255,255,.05);
 }
-#userToplist li a:hover
+#userToplist li:hover
 {
   background-color: rgba(255,255,255,.08);
 }
