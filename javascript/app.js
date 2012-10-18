@@ -130,8 +130,12 @@ function App() {
                     self.loadRooms();
                     self.userLogoutShow();
                 }
+                console.log("links", links);
                 links.forEach(function (link) {
-                    var type = m.Link.getType(link);
+                    var type = m.Link.getType(link),
+                        max = 10,
+                        i = 0;
+                    console.log("type", type);
                     if (m.Link.TYPE.PROFILE === type || m.Link.TYPE.FACEBOOK_USER === type) {
                         console.log("this is currently not available");
                     } else {
@@ -143,27 +147,33 @@ function App() {
                             //
                             // adding user generated playlist
                             var playlist = m.Playlist.fromURI(link),
-                              tracks = playlist.data.all();
+                                tracks = playlist.data.all();
                             console.log("playlist: ", tracks);
                             tracks.forEach(function (uri) {
-                                self.currentRoom.addTrackUri(uri);
+                                if (i < max) { // max tracks that can be added at one time is ... 10. TODO: UI-notification
+                                    self.currentRoom.addTrackUri(uri);
+                                    i++;
+                                }
                             });
-                            self.currentRoom.updatePlaylist();
-                            self.linkPlaylist(playlist);
+                            //self.linkPlaylist(playlist);
                         } else if (m.Link.TYPE.ALBUM === type) {
                             //
                             // adding album
                             m.Album.fromURI(link, function (album) {
-                                console.log("album: ", album);
                                 var albumLink = album.data.uri,
-                                  tracks = album.data.tracks;
+                                    tracks = album.data.tracks;
+                                console.log("tracks FOREACH", tracks);
                                 tracks.forEach(function (uri) {
-                                    self.currentRoom.addTrackUri(uri.uri);
+                                    if (i < max) {
+                                        self.currentRoom.addTrackUri(uri.uri);
+                                        i++;
+                                    }
                                 });
                             });
                         }
                     }
                 });
+                self.currentRoom.updatePlaylist();
             });
         }
     };

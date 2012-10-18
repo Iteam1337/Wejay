@@ -128,8 +128,10 @@ function RoomController(roomName, nodeUrl) {
             //
             // the user controls if the player should force-play every song. This is by pressing the play-icon on the cover.
             if (forcePlay || (currentTrack === null && app.isPlayingFromWejay) || (((currentTrack === null) || (currentTrack.track.uri != track.uri)) && app.isPlayingFromWejay)) {
+                /*
                 sp.trackPlayer.setContextCanSkipNext(trackUri, false);
                 sp.trackPlayer.setContextCanSkipPrevious(trackUri, false);
+                */
                 m.player.play(trackUri, tpl);
             }
 
@@ -461,44 +463,46 @@ function RoomController(roomName, nodeUrl) {
 
     // Update playlist ul
     this.updatePlaylist = function () {
-
-        console.log("updating queue...");
+        var url = "http://wejay.org/Room/Playlist?room=" + self.roomName;
         $.ajax({
-            url: "http://wejay.org/Room/Playlist?room=" + self.roomName,
+            url: url,
             type: "GET",
             processData: false,
-            contentType: "application/json",
-            dataType: "text",
+            contentType: "application/json; charset=utf-8",
+            dataType: "text json",
             error: function (e) {
-                console.log("Error updating queue", e);
+                console.log("___ - Error updating queue", e);
             },
             success: function (r) {
-                var result = r ? JSON.parse(r).Playlist : [];
-                result = result.filter(function (song) { return song.SpotifyId; });
-                console.log("컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴�");
+                var result = r ? r.Playlist.filter(function (song) { return song.SpotifyId; }) : [];
                 if (result.length > 0) {
-                    var playlist = result,
-                        newDiff = _.pluck(playlist, "OrderId");
+                    var newDiff = _.pluck(result, "OrderId");
+
+                    console.log(self.oldPlayListDiffers.length, "!==", newDiff.length);
+                    console.log(_.difference(newDiff, self.oldPlayListDiffers).length, "!==", 0);
+                    console.log(self.oldPlayListDiffers);
+                    console.log(newDiff);
+
                     if (self.oldPlayListDiffers.length !== newDiff.length || _.difference(newDiff, self.oldPlayListDiffers).length !== 0) {
-                        console.log("updating playlist", playlist);
+                        console.log("___ + updating playlist", result);
                         self.oldPlayListDiffers = newDiff;
-                        return $("#queue").html($("#queueTemplate").tmpl(playlist));
+                        $("#queue").html($("#queueTemplate").tmpl(result));
+                        return true;
                     } else {
+                        console.log("___ = no change in playlist");
                         return false;
-                        console.log("no change");
                     }
                 } else {
-                    console.log("empty playlist");
+                    console.log("___ - empty playlist");
                     $("#queue").html(this.nothingPlayingCopy);
                     if ($("#currentSong").html() === "") {
                         $("#currentSong").html("Drag tracks here to start the room");
                     }
                     return false;
-
                 }
-                console.log("컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴�");
             }
         });
+
     }
 
     // Update users online list

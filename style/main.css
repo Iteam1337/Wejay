@@ -349,7 +349,7 @@ h3
 
 #currentHolder .hover
 {
-  opacity: 0;
+  opacity: 0.6;
   -webkit-transition: opacity .08s ease-in-out;
 }
 #currentHolder:hover .hover
@@ -1105,9 +1105,10 @@ blockquote a
 }
 #start
 {
+  margin: -21px 0 0 -21px;
   position: absolute;
-  bottom: 4%;
-  right: 4%;
+  top: 50%;
+  left: 50%;
   width: 43px;
   height: 43px;
   border: none;
