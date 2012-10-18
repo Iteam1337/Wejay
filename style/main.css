@@ -232,6 +232,18 @@ section.current
   width: 260px;
   display: inline-block;
 }
+#chooseSection .banner
+{
+  color:  #fff;
+  font-size: 120%;
+  line-height: 1.4em;
+  background: -webkit-linear-gradient(top, #82b919 0%,#618B13 100%);
+}
+#chooseSection .banner h2
+{
+    font-size: 30px;
+    line-height: 1em;
+}
 #chooseSection #enterRoomBanner
 {
   position: relative;
@@ -532,7 +544,7 @@ h3
   position: absolute;
   padding: 15px;
   width: 300px;
-  background-image: -webkit-linear-gradient(top, #5798d2 0%,#3a87cd 100%);
+  background-image: -webkit-linear-gradient(top, #5798d2 0%,#0063CB 100%);
 }
 #queue .nothing.playing:after
 {

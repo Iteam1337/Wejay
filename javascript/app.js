@@ -59,7 +59,7 @@ function App() {
     }
 
     this.updateServerTime = function (data) {
-        self.timeDiff = (self.timeDiff !== null) ? self.timeDiff : ((data.hasOwnProperty("serverTime") ? new Date().getTime() - data.serverTime : new Date().getTime()));
+        self.timeDiff = (self.timeDiff !== null) ? self.timeDiff : ((data.hasOwnProperty("serverTime") ? (new Date().getTime()) - data.serverTime : new Date().getTime()));
     };
 
     this.tabTo = function (tab) {
@@ -212,9 +212,13 @@ function App() {
                     return user1.CheckedIn - user2.CheckedIn;
                 });
                 result = result.slice(0, 9);
-                $(div).html($("#roomTopListTemplate").tmpl(result));
-                $(div).append("<a>" + room + "</a>");
-                $("#enterRoomBanner").hide();
+                if (result.length === 0) {
+                    $("#enterRoomBanner").show();
+                } else {
+                    $(div).html($("#roomTopListTemplate").tmpl(result));
+                    $(div).append("<a>" + room + "</a>");
+                    $("#enterRoomBanner").hide();
+                }
             }, error: function (r) {
                 $("#enterRoomBanner").show();
             }

@@ -87,10 +87,7 @@ function RoomController(roomName, nodeUrl) {
         }
         if (song.Played) {
             var played = eval(song.Played.replace(/\/Date\(([-\d]+)\)\//gi, "new Date( $1 )")),
-            //diff = ( ( ( new Date().getTime() ) - app.timeDiff ) - played.getTime() );
-
                 diff = new Date().getTime() - played.getTime();
-
             if (diff < 0) { diff = 0; }
             song.position = new Date(diff);
         } else {
@@ -480,13 +477,12 @@ function RoomController(roomName, nodeUrl) {
 
                     console.log(self.oldPlayListDiffers.length, "!==", newDiff.length);
                     console.log(_.difference(newDiff, self.oldPlayListDiffers).length, "!==", 0);
-                    console.log(self.oldPlayListDiffers);
-                    console.log(newDiff);
 
-                    if (self.oldPlayListDiffers.length !== newDiff.length || _.difference(newDiff, self.oldPlayListDiffers).length !== 0) {
-                        console.log("___ + updating playlist", result);
+                    if (self.oldPlayListDiffers.length !== newDiff.length || _.difference(newDiff, self.oldPlayListDiffers).length !== 0 || result.length !== $("#queue li").length) {
+                        console.log("___ + updating playlist");
                         self.oldPlayListDiffers = newDiff;
-                        $("#queue").html($("#queueTemplate").tmpl(result));
+                        var html = $("#queueTemplate").tmpl(result);
+                        $("#queue").html(html);
                         return true;
                     } else {
                         console.log("___ = no change in playlist");
