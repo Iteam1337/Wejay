@@ -87,7 +87,8 @@ function RoomController(roomName, nodeUrl) {
         }
         if (song.Played) {
             var played = eval(song.Played.replace(/\/Date\(([-\d]+)\)\//gi, "new Date( $1 )")),
-                diff = new Date().getTime() - played.getTime();
+                //diff = (new Date().getTime()) - played.getTime();
+                diff = (new Date().getTime() - app.timeDiff) - played.getTime()
             if (diff < 0) { diff = 0; }
             song.position = new Date(diff);
         } else {
@@ -456,8 +457,6 @@ function RoomController(roomName, nodeUrl) {
         });
     }
 
-    this.oldPlayListDiffers = [];
-
     // Update playlist ul
     this.updatePlaylist = function () {
         var url = "http://wejay.org/Room/Playlist?room=" + self.roomName;
@@ -473,24 +472,20 @@ function RoomController(roomName, nodeUrl) {
             success: function (r) {
                 var result = r ? r.Playlist.filter(function (song) { return song.SpotifyId; }) : [];
                 if (result.length > 0) {
-                    var newDiff = _.pluck(result, "OrderId");
-
-                    console.log(self.oldPlayListDiffers.length, "!==", newDiff.length);
-                    console.log(_.difference(newDiff, self.oldPlayListDiffers).length, "!==", 0);
-
-                    if (self.oldPlayListDiffers.length !== newDiff.length || _.difference(newDiff, self.oldPlayListDiffers).length !== 0 || result.length !== $("#queue li").length) {
-                        console.log("___ + updating playlist");
-                        self.oldPlayListDiffers = newDiff;
-                        var html = $("#queueTemplate").tmpl(result);
-                        $("#queue").html(html);
-                        return true;
+                    var newHtml = $("#queueTemplate").tmpl(result);
+                    if ($("#queue").text() !== newHtml.text()) {
+                        console.log("___ + new playlist", result);
+                        var render = $("<ul/>", { id: "queue", html: newHtml });
+                        $("#queue").replaceWith(render);
+                        return false;
                     } else {
-                        console.log("___ = no change in playlist");
+                        console.log("___ = nothing new");
                         return false;
                     }
                 } else {
+                    var newHtml = this.nothingPlayingCopy;
                     console.log("___ - empty playlist");
-                    $("#queue").html(this.nothingPlayingCopy);
+                    $("#queue").html(newHtml);
                     if ($("#currentSong").html() === "") {
                         $("#currentSong").html("Drag tracks here to start the room");
                     }
