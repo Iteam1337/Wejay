@@ -479,7 +479,7 @@ function RoomController(roomName, nodeUrl) {
                 var result = r ? r.Playlist.filter(function (song) { return song.SpotifyId; }): [];
                 if (result.length > 0) {
                     // slice the array to limit the playlist to 15 songs.
-                    $("#currentQueueNumber").text("Current queue (" + result.length + ((result.length === 1) ? " track" : " tracks") + ")");
+                    $("#currentQueueNumber").text("Current queue (" + result.length + ")");
                     var newHtml = $("#queueTemplate").tmpl(result.slice(0, 15));
                     if ($("#queue").text() !== newHtml.text()) {
                         console.log("___ + new playlist", result);
@@ -516,24 +516,20 @@ function RoomController(roomName, nodeUrl) {
             dataType: "text",
             success: function (r) {
                 var result = r ? JSON.parse(r).Data : [],
-                    loggedInUsersInnerText = "NO LOGGED IN WEJAYS";
-                result = result.filter(function (user) { return user.FacebookId && user.FacebookId != "null"; });
+                    loggedInUsersTitle = "NO LOGGED IN WEJAYS",
+                    loggedInUsersInnerText = "<li class=\"noOneIsLoggedIn\">When you log into this room your best music will be mixed into the playlist automatically. You can also invite your colleagues below.</li>";
+                result = result.filter(function (user) { return user.FacebookId && user.FacebookId != "null" && user.Online; });
                 if (result.length > 0) {
-                    var onlineUsers = 0;
                     for (var i in result) {
                         var newDate = parseInt(result[i].CheckedIn.replace(/\/Date\(/, "").replace(/\/\)/, ""));
                         result[i].CheckedIn = "Logged in since " + moment(new Date(newDate)).format("HH:mm MM/DD");
-                        if (result[i].Online !== false) onlineUsers++;
                     }
-                    // limit users shown to 10
-                    $("#users").html($("#usersTemplate").tmpl(result.slice(0,10)));
-                    if (onlineUsers !== 0) {
-                        loggedInUsersInnerText = "LOGGED IN WEJAYS (" + onlineUsers + ")";
-                    }
-                } else {
-                    $("#users").html("<li class=\"noOneIsLoggedIn\">When you log into this room your best mysic will be mixed into the playlist automatically. You can also invite your colleagues below.</li>");
+                    loggedInUsersTitle = "LOGGED IN WEJAYS (" + result.length + ")";
+                    loggedInUsersInnerText = $("#usersTemplate").tmpl(result.slice(0, 10));
                 }
-                $(".logged.in h2").html(loggedInUsersInnerText);
+
+                $(".logged.in h2").html(loggedInUsersTitle);
+                $("#users").html(loggedInUsersInnerText);
             }
         });
     };

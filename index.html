@@ -105,9 +105,7 @@
                 </footer>
                 <!-- Logged in users -->
                 <script id="usersTemplate" type="text/x-jquery-tmpl">
-                    {{if Online}}
-                        <li><a draggable="false" href="${(app.user.friends || []) .indexOf(FacebookId) >= 0 ? 'spotify:user:facebook:' + FacebookId : '#wejaysSection' }" ><img draggable="false" class="image" alt="${unescape(UserName)}" src="http://graph.facebook.com/${FacebookId}/picture"><p>${unescape(UserName)}</p><p class="time">${CheckedIn}</p></li></a>
-                    {{/if}}
+                    <li><a draggable="false" href="${(app.user.friends || []) .indexOf(FacebookId) >= 0 ? 'spotify:user:facebook:' + FacebookId : '#wejaysSection' }" ><img draggable="false" class="image" alt="${unescape(UserName)}" src="http://graph.facebook.com/${FacebookId}/picture"><p>${unescape(UserName)}</p><p class="time">${CheckedIn}</p></li></a>
                 </script>
                 <!-- Current music in playlist -->
                 <script id="queueTemplate" type="text/x-jquery-tmpl">
