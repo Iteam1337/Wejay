@@ -479,7 +479,7 @@ function RoomController(roomName, nodeUrl) {
                 var result = r ? r.Playlist.filter(function (song) { return song.SpotifyId; }): [];
                 if (result.length > 0) {
                     // slice the array to limit the playlist to 15 songs.
-                    $("#currentQueueNumber").text("Current queue (" + result.length + " tracks)");
+                    $("#currentQueueNumber").text("Current queue (" + result.length + ((result.length === 1) ? " track" : " tracks") + ")");
                     var newHtml = $("#queueTemplate").tmpl(result.slice(0, 15));
                     if ($("#queue").text() !== newHtml.text()) {
                         console.log("___ + new playlist", result);
