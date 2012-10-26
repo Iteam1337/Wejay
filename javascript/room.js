@@ -85,6 +85,8 @@ function RoomController(roomName, nodeUrl) {
         if (!song) {
             return;
         }
+        $("#voteOverlay").removeClass("show");
+        $("#currentHolder .hover").show();
         if (song.Played) {
             var played = eval(song.Played.replace(/\/Date\(([-\d]+)\)\//gi, "new Date( $1 )")),
                 //diff = (new Date().getTime()) - played.getTime();
@@ -130,6 +132,7 @@ function RoomController(roomName, nodeUrl) {
                 sp.trackPlayer.setContextCanSkipNext(trackUri, false);
                 sp.trackPlayer.setContextCanSkipPrevious(trackUri, false);
                 */
+                console.log(m.player)
                 m.player.play(trackUri, tpl);
             }
 
@@ -153,6 +156,8 @@ function RoomController(roomName, nodeUrl) {
         $("#roomTitle").html(this.roomName + " Wejay Room");
         $("#currentSong").html("");
         $("#currentSong").html("Nothing playing right now. Drag a track here!");
+        $("#currentQueueNumber").text("CURRENT QUEUE");
+        $("#currentHolder .hover").hide();
         $("#currentAlbum").attr("src", "sp://import/img/placeholders/300-album.png");
         $(".hidden.title").html("");
         $("#currentLink").attr("href", "");
@@ -188,6 +193,7 @@ function RoomController(roomName, nodeUrl) {
                     $("#skip").html("Skip");
                     self.hub.songSkipped(thisSong);
                     console.log("skipped successfully");
+                    $("#voteOverlay").removeClass("show");
                 },
                 error: function (res) {
                     console.log("skip failed", res);
@@ -470,9 +476,11 @@ function RoomController(roomName, nodeUrl) {
                 console.log("___ - Error updating queue", e);
             },
             success: function (r) {
-                var result = r ? r.Playlist.filter(function (song) { return song.SpotifyId; }) : [];
+                var result = r ? r.Playlist.filter(function (song) { return song.SpotifyId; }): [];
                 if (result.length > 0) {
-                    var newHtml = $("#queueTemplate").tmpl(result);
+                    // slice the array to limit the playlist to 15 songs.
+                    $("#currentQueueNumber").text("Current queue (" + result.length + " tracks)");
+                    var newHtml = $("#queueTemplate").tmpl(result.slice(0, 15));
                     if ($("#queue").text() !== newHtml.text()) {
                         console.log("___ + new playlist", result);
                         var render = $("<ul/>", { id: "queue", html: newHtml });
@@ -486,7 +494,9 @@ function RoomController(roomName, nodeUrl) {
                     var newHtml = this.nothingPlayingCopy;
                     console.log("___ - empty playlist");
                     $("#queue").html(newHtml);
+                    $("#currentQueueNumber").text("Current queue");
                     if ($("#currentSong").html() === "") {
+                        $("#currentHolder .hover").hide();
                         $("#currentSong").html("Drag tracks here to start the room");
                     }
                     return false;
@@ -515,7 +525,8 @@ function RoomController(roomName, nodeUrl) {
                         result[i].CheckedIn = "Logged in since " + moment(new Date(newDate)).format("HH:mm MM/DD");
                         if (result[i].Online !== false) onlineUsers++;
                     }
-                    $("#users").html($("#usersTemplate").tmpl(result));
+                    // limit users shown to 10
+                    $("#users").html($("#usersTemplate").tmpl(result.slice(0,10)));
                     if (onlineUsers !== 0) {
                         loggedInUsersInnerText = "LOGGED IN WEJAYS (" + onlineUsers + ")";
                     }

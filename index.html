@@ -20,11 +20,9 @@
 <body>
     <div id="branding">
         <img src="Images/Wejay128-inverted.png" />
-        <a href="http://wejay.org" class="link external inverted" title="wejay.org">wejay.org</a>
     </div>
     <div id="offline">
-        <h1>
-            This application is not available when offline</h1>
+        <h1>This application is not available when offline</h1>
     </div>
     <div id="main">
         <!-- wejay/start -->
@@ -48,7 +46,7 @@
                             <h3 id="currentSong"></h3>
                             <h4 id="currentPlayedBy"></h4>
                             <a class="button" title="Like this song" id="like" href="#"></a>
-                            <a class="button" title="vote" id="voteButton" href="#">Vote</a>
+                            <a class="button" title="vote" id="voteButton" href="#">Skip</a>
                             <div id="voteOverlay">
                                 <div>
                                     <a class="close" title="close"></a>
@@ -78,7 +76,7 @@
                     </div>
                     <div class="middle">
                         <div class="left">
-                            <h2>CURRENT QUEUE</h2>
+                            <h2 id="currentQueueNumber">CURRENT QUEUE</h2>
                             <div class="auto-completeForm"></div>
                             <ul id="queue">
                             </ul>
@@ -103,7 +101,7 @@
                 </section>
                 <blockquote>Add music to this room by dragging tracks to this app</blockquote>
                 <footer class="bottom">
-                    <address>Active song selections are always played first and sorted in a way so that users get equal play time. When the active playlist is empty, the MAESTRO bot keeps playing music logged-in users have added before.</address>
+                    <address>Active song selections are always played first and sorted in a way so that users get equal play time. When the active playlist is empty, the MAESTRO bot keeps playing music logged-in users have added before.<a href="http://wejay.org" class="link external inverted" title="wejay.org">wejay.org</a></address>
                 </footer>
                 <!-- Logged in users -->
                 <script id="usersTemplate" type="text/x-jquery-tmpl">
@@ -113,7 +111,7 @@
                 </script>
                 <!-- Current music in playlist -->
                 <script id="queueTemplate" type="text/x-jquery-tmpl">
-                    <li><span class="star no${Vote}"></span><div class="song"><a class="track ${PlayedBy.FacebookId == (app.user ? app.user.facebookId : '') ? 'mine' : ''}" href="spotify:track:${SpotifyId}"><strong>${Artist}</strong> - ${Title}</a><a class="user" href="spotify:user:facebook:${PlayedBy.FacebookId}">Added by ${unescape(PlayedBy.UserName)}</a></div></li>
+                    <li><!--<span class="star no${Vote}"></span>--><div class="song"><a class="track ${PlayedBy.FacebookId == (app.user ? app.user.facebookId : '') ? 'mine' : ''}" href="spotify:track:${SpotifyId}"><strong>${Artist}</strong> - ${Title}</a><a class="user" href="spotify:user:facebook:${PlayedBy.FacebookId}">Added by ${unescape(PlayedBy.UserName)}</a></div></li>
                 </script>
                 <!-- Current music in playlist -->
                 <script id="userToplistTemplate" type="text/x-jquery-tmpl">
@@ -169,7 +167,7 @@
                     </span>
                 </section>
                 <footer class="bottom">
-                    <address>By logging in with your Facebook account you accept that WEJAY may use and store information from your Spotify library.</address>
+                    <address>By logging in with your Facebook account you accept that WEJAY may use and store information from your Spotify library.<a href="http://wejay.org" class="link external inverted" title="wejay.org">wejay.org</a></address>
                 </footer>
             </section>
         <!-- open a room/end -->
@@ -178,16 +176,20 @@
                 <section>
                     <span>
                         <h1>About Wejay</h1>
-                        <p>Most of us work in an open-plan office. There are many approaches to music in the workplace - complete silence, isolation-via-headphones, a musical dictator or the path of least resistance (mainstream commercial radio satisfying nobody). None of these solutions seem very palatable.</p>
-                        <p>Enter <a href="http://wejay.org">WEJAY</a>! Research shows that music promotes productivity, as long as you get a say in its selection. Wejay plays the music you and your colleagues select, in a You and your colleagues queues music in a room. The queue will be ordered in a way that will feel fair to all. The sound will be streamed from Spotify via the Wejay App to your speakers.</a></p>
+                        <div class="rows">
+                            <p>Most of us work in an open-plan office. There are many approaches to music in the workplace - complete silence, isolation-via-headphones, a musical dictator or the path of least resistance (mainstream commercial radio satisfying nobody). None of these solutions seem very palatable.</p>
+                            <p>Enter <a href="http://wejay.org">WEJAY</a>! Research shows that music promotes productivity, as long as you get a say in its selection. Wejay plays the music you and your colleagues select, in a You and your colleagues queues music in a room. The queue will be ordered in a way that will feel fair to all. The sound will be streamed from Spotify via the Wejay App to your speakers.</a></p>
+                        </div>
                     </span>
                     <span>
                         <h2>About Iteam</h2>
-                        <p>The brains behind WEJAY are <a href="http://iteam.se">Iteam</a>, Stockholm-based system developers focused on inventing the future. We have used Wejay in different incarnations and perfected its selection algorithms at our own office for over ten years. We are hiring!</p>
+                        <div class="rows">
+                            <p>The brains behind WEJAY are <a href="http://iteam.se">Iteam</a>, Stockholm-based system developers focused on inventing the future. We have used Wejay in different incarnations and perfected its selection algorithms at our own office for over ten years. We are hiring!</p>
+                        </div>
                     </span>
                 </section>
                 <footer class="bottom">
-                    <address>WEJAY have an automatic bot called MAESTRO which will try to match your music taste. Both WEJAY and MAESTRO will respect the logged in users vote. Use your voting power to assure WEJAY waits until you log out before playing that incessant summer hit from 1992. MAESTRO only plays music that you have played more than once, and to keep things fresh it will not play the same song more than once a day.</address>
+                    <address>WEJAY have an automatic bot called MAESTRO which will try to match your music taste. Both WEJAY and MAESTRO will respect the logged in users vote. Use your voting power to assure WEJAY waits until you log out before playing that incessant summer hit from 1992. MAESTRO only plays music that you have played more than once, and to keep things fresh it will not play the same song more than once a day.<a href="http://wejay.org" class="link external inverted" title="wejay.org">wejay.org</a></address>
                 </footer>
             </section>
         <!-- about/end -->

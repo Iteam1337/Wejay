@@ -203,6 +203,23 @@ section.current
   display: block;
   margin: 3px 0 20px 0;
 }
+#chooseSection #loginInformation
+{
+  height: 250px;
+  background: url("../images/landscape.jpg") 50% 40% no-repeat;
+  background-size: 100% auto;
+}
+#chooseSection #loginInformation h1,
+#chooseSection #loginInformation p
+{
+  max-width: 330px;
+  color: Black;
+  text-shadow: 0 0 4px rgba(255,255,255,.5);
+}
+#chooseSection section span p
+{
+  max-width: 330px;
+}
 #chooseSection .buttons
 {
   margin-left: 20px;
@@ -212,6 +229,10 @@ section.current
 {
   width: 315px;
   position: relative;
+  color: white;
+  font-size: 110%;
+  line-height: 1.4em;
+  background: -webkit-linear-gradient(top, #82B919 0%,#618B13 100%);
 }
 #chooseSection .banner form
 {
@@ -231,13 +252,6 @@ section.current
 {
   width: 260px;
   display: inline-block;
-}
-#chooseSection .banner
-{
-  color:  #fff;
-  font-size: 120%;
-  line-height: 1.4em;
-  background: -webkit-linear-gradient(top, #82b919 0%,#618B13 100%);
 }
 #chooseSection .banner h2
 {
@@ -298,6 +312,16 @@ section.current
   float: right;
   background: none;
   margin-top: 15px;
+}
+
+#aboutSection .rows
+{
+  -webkit-column-count: 2;
+  -webkit-column-gap: 15px;
+  background: none;
+  padding: 0;
+  margin: 0;
+  border: none;
 }
 
 #roomSection section
@@ -529,8 +553,12 @@ h3
 {
   margin: 5px 0;
   display: inline-block;
+  /* används när HJÄRTA-funktionen finns tillgänglig
   width: 280px;
   padding: 0 0 0 30px;
+  */
+  width: 310px;
+  padding: 0 10px;
 }
 #queue a
 {
@@ -724,7 +752,6 @@ h3
   padding-bottom: 40px;
   clear:both;
 }
-
 .banner blockquote
 {
   font-size: 10px;
@@ -1072,7 +1099,6 @@ blockquote a
   background-color: rgba(0,0,0,.6);
 }
 .middle .left #queue {
-  max-height: 665px;
   overflow: auto;
 }
 .middle .right div
@@ -1090,7 +1116,6 @@ blockquote a
 }
 .middle .right #users
 {
-  max-height: 315px;
   overflow: auto;
   display: block;
   margin: 10px 0;
@@ -1232,6 +1257,7 @@ footer *
 footer a
 {
   color: black;
+  display: block;
 }
 #userToplist li
 {
@@ -1279,6 +1305,8 @@ footer a
 {
   background-color: rgba(255,255,255,.08);
 }
+
+
 
 @media (max-width:680px)
 {

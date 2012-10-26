@@ -327,6 +327,9 @@ function App() {
     // init function
     this.init = function (version) {
 
+        m.player.observe(m.EVENT.CHANGE, function (event) {
+            console.log('Something changed!', arguments);
+        });
         this.version = version;
         console.log("ready");
         if (!self.checkIfFBUserExists) {
@@ -426,6 +429,7 @@ function App() {
         $("#share").on("click", function (e) {
             e.preventDefault();
             if (self.checkIfUserAcceptedAgreement()) {
+                //m.application.showSharePopup(document.getElementById('header'), 'spotify:app:wejay');
                 $("#sharePopup").toggleClass("show");
             }
         });
