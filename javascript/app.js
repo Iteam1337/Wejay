@@ -429,7 +429,6 @@ function App() {
         $("#share").on("click", function (e) {
             e.preventDefault();
             if (self.checkIfUserAcceptedAgreement()) {
-                //m.application.showSharePopup(document.getElementById('header'), 'spotify:app:wejay');
                 $("#sharePopup").toggleClass("show");
             }
         });

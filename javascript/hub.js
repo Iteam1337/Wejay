@@ -20,7 +20,6 @@ function Hub(nodeUrl, currentRoom, facebookUserId) {
             traditional: true,
             type: "POST",
             success: function (result) {
-                console.log(result);
                 socket.emit("addSong", song);
                 if (callback) {
                     callback();

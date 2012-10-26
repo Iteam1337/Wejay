@@ -27,7 +27,6 @@ function RoomController(roomName, nodeUrl) {
     };
 
     this.addTrackUri = function (uri) {
-        console.log("adding track uri: " + uri);
         if (!uri) {
             return;
         }
@@ -89,7 +88,6 @@ function RoomController(roomName, nodeUrl) {
         $("#currentHolder .hover").show();
         if (song.Played) {
             var played = eval(song.Played.replace(/\/Date\(([-\d]+)\)\//gi, "new Date( $1 )")),
-                //diff = (new Date().getTime()) - played.getTime();
                 diff = (new Date().getTime() - app.timeDiff) - played.getTime()
             if (diff < 0) { diff = 0; }
             song.position = new Date(diff);
@@ -118,8 +116,6 @@ function RoomController(roomName, nodeUrl) {
             var player = sp.trackPlayer,
                 currentTrack = player.getNowPlayingTrack();
             player.context = tpl;
-
-            //$( "#voteOverlay" ).hide();
 
             console.log("");
             console.log("******************************************************");
@@ -165,17 +161,13 @@ function RoomController(roomName, nodeUrl) {
         $("#queue").html(this.nothingPlayingCopy);
         $("#skip").html("Skip");
         $("#block").html("Block");
-        //$("#like").html("Like");
-        //this.stop();
         $("#like").removeClass("liking");
         $("#like").removeClass("liked");
         $("#like").removeClass("failed");
     };
     this.dispose = function () {
-        console.log("dispose", this);
         this.hub.checkout();
         this.hub = null;
-        //this = null;
     };
     this.skip = function (noNotification) {
         var thisSong = app.currentRoom.currentSong;
@@ -192,7 +184,6 @@ function RoomController(roomName, nodeUrl) {
                 success: function (result) {
                     $("#skip").html("Skip");
                     self.hub.songSkipped(thisSong);
-                    console.log("skipped successfully");
                     $("#voteOverlay").removeClass("show");
                 },
                 error: function (res) {
@@ -225,7 +216,6 @@ function RoomController(roomName, nodeUrl) {
             if ($("#like").hasClass("liking")) {
                 return;
             }
-            //$("#like").html("Liking...");
             $("#like").addClass("liking");
             console.log("liking song", self.currentSong.Title);
             $.ajax({
@@ -240,17 +230,13 @@ function RoomController(roomName, nodeUrl) {
                 success: function (result) {
                     $("#like").removeClass("liking")
                     $("#like").addClass("liked");
-                    //$("#like").html("Liked");
                     var name = (app.user.userName) ? app.user.userName : "Anonymous",
                         obj = { user: name, room: self.roomName, mbId: self.currentSong.SpotifyId, value: 5 };
-                    console.log("liked successfully");
                 },
                 error: function () {
                     $("#like").removeClass("liking")
                     $("#like").addClass("failed");
-                    //$("#like").html("Failed");
                     setTimeout(function () {
-                        //$("#like").html("Like");
                         $("#like").removeClass("failed");
                     }, 1000);
                 }
@@ -352,7 +338,7 @@ function RoomController(roomName, nodeUrl) {
         if (roomName === "null" || roomName === undefined) {
             roomName = "null";
         }
-        console.log("init");
+        console.log("init", roomName);
         if (!roomName) {
             console.log("Room name must be specified")
             throw "Room name must be specified"
@@ -428,7 +414,6 @@ function RoomController(roomName, nodeUrl) {
               "longUrl": longurl
           },
           function (response) {
-              console.log("bitly", response);
               if (response.status_code === 200) {
                   callback(response.data.url);
               } else {
@@ -482,17 +467,14 @@ function RoomController(roomName, nodeUrl) {
                     $("#currentQueueNumber").text("Current queue (" + result.length + ")");
                     var newHtml = $("#queueTemplate").tmpl(result.slice(0, 15));
                     if ($("#queue").text() !== newHtml.text()) {
-                        console.log("___ + new playlist", result);
                         var render = $("<ul/>", { id: "queue", html: newHtml });
                         $("#queue").replaceWith(render);
                         return false;
                     } else {
-                        console.log("___ = nothing new");
                         return false;
                     }
                 } else {
                     var newHtml = this.nothingPlayingCopy;
-                    console.log("___ - empty playlist");
                     $("#queue").html(newHtml);
                     $("#currentQueueNumber").text("Current queue");
                     if ($("#currentSong").html() === "") {
