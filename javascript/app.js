@@ -38,7 +38,7 @@ function App() {
     //
     // global Toplist
     var topTracks = [],
-         topArtists = [];
+        topArtists = [];
 
     // public properties
     this.user = new User();
@@ -80,7 +80,6 @@ function App() {
                 if (arg.length > 1) {
                     var newRoom = arg[1].toLowerCase();
                     if (self.currentRoom.roomName != newRoom) {
-                        console.log("new room", newRoom);
                         self.currentRoom.init(unescape(newRoom), true);
                     }
                 } else {
@@ -95,9 +94,12 @@ function App() {
 
                 if (self.loggedIntoRoom === null) {
                     $("#joinRoom, #leaveRoom").hide();
-                } else if (self.loggedIntoRoom !== null && self.currentRoom.roomName !== self.loggedIntoRoom) {
-                    app.currentRoom.checkin();
-                    app.user.loadFriends();
+                } else if (self.loggedIntoRoom === "" && self.currentRoom.roomName !== self.loggedIntoRoom) {
+                    app.currentRoom.checkin(false, function (room) {
+                        app.loggedIntoRoom = room;
+                        self.handleLoginInfo();
+                        app.currentRoom.updateUsers();
+                    });
                     $("#joinRoom").hide();
                     $("#leaveRoom").show();
                 } else {
@@ -127,18 +129,15 @@ function App() {
             app.user.authenticate(function (room) {
                 if (self.loggedIntoRoom !== room) {
                     self.loggedIntoRoom = room;
-                    var copy = self.loggedInCopy();
-                    $("#disclaimerLoginOriginal p").html(copy);
+                    self.handleLoginInfo();
                     $("#leaveRoom").show();
                     self.loadRooms();
                     self.userLogoutShow();
                 }
-                console.log("links", links);
                 links.forEach(function (link) {
                     var type = m.Link.getType(link),
                         max = 10,
                         i = 0;
-                    console.log("type", type);
                     if (m.Link.TYPE.PROFILE === type || m.Link.TYPE.FACEBOOK_USER === type) {
                         console.log("this is currently not available");
                     } else {
@@ -151,7 +150,6 @@ function App() {
                             // adding user generated playlist
                             var playlist = m.Playlist.fromURI(link),
                                 tracks = playlist.data.all();
-                            console.log("playlist: ", tracks);
                             tracks.forEach(function (uri) {
                                 if (i < max) { // max tracks that can be added at one time is ... 10. TODO: UI-notification
                                     self.currentRoom.addTrackUri(uri);
@@ -165,7 +163,6 @@ function App() {
                             m.Album.fromURI(link, function (album) {
                                 var albumLink = album.data.uri,
                                     tracks = album.data.tracks;
-                                console.log("tracks FOREACH", tracks);
                                 tracks.forEach(function (uri) {
                                     if (i < max) {
                                         self.currentRoom.addTrackUri(uri.uri);
@@ -226,11 +223,6 @@ function App() {
                 $("#enterRoomBanner").show();
             }
         });
-    };
-
-    this.checkIfUserInRoom = function () {
-        var user = app.user.userName,
-            room = app.loggedIntoRoom;
     };
 
     this.currentRoomList = [];
@@ -296,6 +288,11 @@ function App() {
         }
     };
 
+    this.handleLoginInfo = function (force) {
+        var copy = self.loggedInCopy(force);
+        $("#disclaimerLoginOriginal p").html(copy);
+    }
+
     this.standardCopyLoggedOut = "I understand that by logging in with my Facebook account I enable WEJAY to use and store information from my Spotify library and listening history. This is done to provide a great listening experience.";
 
     this.userLogoutShow = function () {
@@ -324,26 +321,51 @@ function App() {
         if (!app.user.accessToken) {
             app.user.authenticate();
         }
-    }
+    };
+
+    this.playApp = function () {
+        app.isPlayingFromWejay = true;
+        $("#onair").show();
+        $("#start").addClass("pause");
+        app.currentRoom.playSong(app.currentRoom.currentSong, true);
+    };
+    this.pauseApp = function () {
+        var player = sp.trackPlayer;
+        app.isPlayingFromWejay = false;
+        $("#onair").hide();
+        $("#start").removeClass("pause");
+        player.setIsPlaying(false);
+    };
+
+    m.player.observe(m.EVENT.CHANGE, function (event) {
+        var player = event.data;
+        if (player.curcontext === false && player.playstate === false && app.isPlayingFromWejay === true) {
+            self.pauseApp();
+        } else {
+            console.log(sp);
+            for (var i in player) {
+                console.log(i + " => " + player[i]);
+            }
+        }
+    });
 
     /* INIT */
     // init function
     this.init = function (version) {
 
-        m.player.observe(m.EVENT.CHANGE, function (event) {
-            console.log('Something changed!', arguments);
-        });
         this.version = version;
         console.log("ready");
         if (!self.checkIfFBUserExists) {
             self.checkIfFBUserExists = true;
             // TODO:
+            /*
             if (localStorage.facebookUser !== undefined && localStorage.accessToken !== undefined) {
-                console.log("this");
-                var facebookUser = JSON.parse(localStorage.facebookUser),
-                accessToken = localStorage.accessToken;
-                self.user.handleSuccessfullLogin(facebookUser, accessToken);
+            console.log("this");
+            var facebookUser = JSON.parse(localStorage.facebookUser),
+            accessToken = localStorage.accessToken;
+            self.user.handleSuccessfullLogin(facebookUser, accessToken);
             }
+            */
         }
 
         var acceptedLogin = (localStorage.acceptedLogin) ? localStorage.acceptedLogin : false;
@@ -377,7 +399,7 @@ function App() {
 
         $("#roomLogout").on("click", function () {
             self.user.logoutFromFacebook();
-            app.loggedIntoRoom = null;
+            app.loggedIntoRoom = "";
             self.userLogoutHide();
         });
 
@@ -385,8 +407,7 @@ function App() {
             if (self.checkIfUserAcceptedAgreement()) {
                 self.user.authenticate(function (room) {
                     self.loggedIntoRoom = room;
-                    var copy = self.loggedInCopy();
-                    $("#disclaimerLoginOriginal p").html(copy);
+                    self.handleLoginInfo();
                     $("#leaveRoom").show();
                     self.loadRooms();
                     self.userLogoutShow();
@@ -498,16 +519,19 @@ function App() {
         });
 
         $("#joinRoom").on("click", function () {
-            app.currentRoom.checkin();
+            app.currentRoom.checkin(false, function (room) {
+                app.loggedIntoRoom = room;
+                self.handleLoginInfo();
+                app.currentRoom.updateUsers();
+            });
             $(this).hide();
             $("#leaveRoom").show();
         });
 
         $("#leaveRoom").on("click", function () {
-            self.user.logout();
             $(this).hide();
-            var copy = app.loggedInCopy(true);
-            $("#disclaimerLoginOriginal p").html(copy);
+            self.user.logout();
+            self.handleLoginInfo(true);
             app.loggedIntoRoom = "";
             $("#joinRoom").show();
             document.location = "spotify:app:wejay:choose";
@@ -529,19 +553,6 @@ function App() {
             }
         });
 
-        var playApp = function () {
-            app.isPlayingFromWejay = true;
-            $("#onair").show();
-            $("#start").addClass("pause");
-            app.currentRoom.playSong(app.currentRoom.currentSong, true);
-        }, pauseApp = function () {
-            var player = sp.trackPlayer;
-            app.isPlayingFromWejay = false;
-            $("#onair").hide();
-            $("#start").removeClass("pause");
-            player.setIsPlaying(false);
-        };
-
         //
         // bind space to play-pause
         $(document).on("keydown", function (e) {
@@ -550,9 +561,9 @@ function App() {
             if (e.target.nodeName !== "INPUT" && e.keyCode === 32 && document.location.hash === "#roomSection") {
                 e.preventDefault();
                 if (app.isPlayingFromWejay) {
-                    pauseApp();
+                    self.pauseApp();
                 } else {
-                    playApp();
+                    self.playApp();
                 }
                 return false;
             }
@@ -562,10 +573,10 @@ function App() {
             //
             // If the user presses play -- then wejay should force-play each time the track changes
             if ($(this).hasClass("pause")) {
-                pauseApp();
+                self.pauseApp();
             } else {
                 // wejay should play.
-                playApp();
+                self.playApp();
             }
         });
 

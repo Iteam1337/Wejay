@@ -13,7 +13,6 @@ function RoomController(roomName, nodeUrl) {
     }
     var facebookId, self = this;
     this.roomName = roomName.toLowerCase();
-    localStorage.roomName = this.roomName;
 
     console.log("New RoomController for room " + roomName);
 
@@ -115,20 +114,18 @@ function RoomController(roomName, nodeUrl) {
 
             var player = sp.trackPlayer,
                 currentTrack = player.getNowPlayingTrack();
+
             player.context = tpl;
 
-            console.log("");
-            console.log("******************************************************");
-            console.log("TrackURI", trackUri);
-            console.log("currentTrack", currentTrack);
             //
             // the user controls if the player should force-play every song. This is by pressing the play-icon on the cover.
             if (forcePlay || (currentTrack === null && app.isPlayingFromWejay) || (((currentTrack === null) || (currentTrack.track.uri != track.uri)) && app.isPlayingFromWejay)) {
-                /*
-                sp.trackPlayer.setContextCanSkipNext(trackUri, false);
-                sp.trackPlayer.setContextCanSkipPrevious(trackUri, false);
-                */
-                console.log(m.player)
+                sp.trackPlayer.setContextCanSkipPrev(tpl.uri, false);
+                sp.trackPlayer.setContextCanSkipNext(tpl.uri, false);
+                sp.trackPlayer.setContextCanShuffle(tpl.uri, false);
+                sp.trackPlayer.setContextCanRepeat(tpl.uri, false);
+                sp.trackPlayer.setRepeat(false);
+                sp.trackPlayer.setShuffle(false);
                 m.player.play(trackUri, tpl);
             }
 
@@ -144,7 +141,6 @@ function RoomController(roomName, nodeUrl) {
             else {
                 $("#currentPlayedBy").hide();
             }
-            console.log("******************************************************");
         });
     };
     this.nothingPlayingCopy = "<div class=\"nothing playing\"><p><strong>Hello!</strong>A room needs music! Add songs by searching or by dragging tracks or whole playlists to the WEJAY app in the sidebar. Don't forget to invite you colleagues - WEJAY was made to play music together!</p></div>";
@@ -425,7 +421,6 @@ function RoomController(roomName, nodeUrl) {
 
     // checkin the current user to wejay
       this.checkin = function (force, callback) {
-        console.log("checkin")
         if (!app.user.facebookId) {
             throw "You have not set room and user or facebook details yet";
         }
@@ -443,8 +438,8 @@ function RoomController(roomName, nodeUrl) {
                 if (callback) {
                     callback(self.roomName);
                 }
+                //self.hub.checkin({ user: app.user.userName, room: self.roomName });
                 console.log(app.user.userName + " logged in to wejay room ", self.roomName);
-                //self.hub.checkin({ user: user, room: self.roomName });
             }
         });
     }
@@ -510,7 +505,6 @@ function RoomController(roomName, nodeUrl) {
                     loggedInUsersTitle = "LOGGED IN WEJAYS (" + result.length + ")";
                     loggedInUsersInnerText = $("#usersTemplate").tmpl(result.slice(0, 10));
                 }
-
                 $(".logged.in h2").html(loggedInUsersTitle);
                 $("#users").html(loggedInUsersInnerText);
             }
