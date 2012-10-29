@@ -1031,11 +1031,11 @@ blockquote a
 }
 .top .right #voteOverlay div
 {
-  width: 200px;
-  height: 150px;
+  width: 330px;
+  height: 136px;
   left: 50%;
   top: 50%;
-  margin: -85px 0 0 -110px;
+  margin: -68px 0 0 -165px;
   padding: 20px;
   position: absolute;
   background: url("sp://wejay/images/bg_plaid.png");
@@ -1044,6 +1044,7 @@ blockquote a
 .top .right #voteOverlay div p
 {
     margin-bottom: 20px;
+    line-height: 1.4em;
 }
 .top .right #voteOverlay div .close
 {
@@ -1122,7 +1123,6 @@ blockquote a
   overflow-x: hidden;
 }
 .middle .right .toplist ul {
-  max-height: 240px;
   overflow: auto;
 }
 .middle .right.userlist

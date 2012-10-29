@@ -76,6 +76,7 @@ function App() {
             case "choose":
                 this.loadRooms();
                 self.pauseApp();
+                console.log("chooose");
                 break;
             case "room":
                 if (arg.length > 1) {
@@ -95,10 +96,11 @@ function App() {
 
                 if (self.loggedIntoRoom === null) {
                     $("#joinRoom, #leaveRoom").hide();
-                } else if (self.loggedIntoRoom === "" && self.currentRoom.roomName !== self.loggedIntoRoom) {
+                } else if (self.loggedIntoRoom === "" || self.currentRoom.roomName !== self.loggedIntoRoom) {
+
                     app.currentRoom.checkin(false, function (room) {
                         app.loggedIntoRoom = room;
-                        self.handleLoginInfo();
+                        app.handleLoginInfo();
                         app.currentRoom.updateUsers();
                     });
                     $("#joinRoom").hide();
@@ -341,11 +343,26 @@ function App() {
 
     m.player.observe(m.EVENT.CHANGE, function (event) {
         var player = event.data;
-        if (player.curtrack === false && player.playstate === false && app.isPlayingFromWejay === true) {
-            self.pauseApp();
-        } else if (m.player.canPlayNext === true && m.player.canPlayNext === true && app.isPlayingFromWejay === true) {
-            self.pauseApp();
+        if (app.isPlayingFromWejay === true) {
+            if (m.player.context === null) {
+                self.pauseApp();
+            } else if (player.volume === false && player.shuffle === false && player.repeat === false) {
+                if (player.curtrack === false && player.playstate === false) {
+                    self.pauseApp();
+                } else if (m.player.canPlayNext === true && m.player.canPlayNext === true) {
+                    self.pauseApp();
+                }
+            }
+        } else if (m.player.context !== null && m.player.canPlayNext === false && m.player.canPlayNext === false) {
+            if (player.volume === false && player.shuffle === false && player.repeat === false) {
+                if (player.curtrack === false && player.playstate === false && sp.trackPlayer.getIsPlaying() === false) {
+                    if (window.location.hash !== "#chooseSection") {
+                        self.playApp();
+                    }
+                }
+            }
         }
+
     });
 
     /* INIT */

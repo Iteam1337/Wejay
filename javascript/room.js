@@ -439,7 +439,7 @@ function RoomController(roomName, nodeUrl) {
                     callback(self.roomName);
                 }
                 //self.hub.checkin({ user: app.user.userName, room: self.roomName });
-                console.log(app.user.userName + " logged in to wejay room ", self.roomName);
+                //console.log(app.user.userName + " logged in to wejay room ", self.roomName);
             }
         });
     }
