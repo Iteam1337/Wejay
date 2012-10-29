@@ -31,7 +31,7 @@ function User() {
             success: function (result) {
                 app.currentRoom.logoutUser();
                 app.currentRoom.updateUsers();
-                app.loggedIntoRoom = null;
+                //app.loggedIntoRoom = null;
             },
             error: function (res) {
                 console.log("failed to logout");

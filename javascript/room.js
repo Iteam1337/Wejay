@@ -424,7 +424,8 @@ function RoomController(roomName, nodeUrl) {
     };
 
     // checkin the current user to wejay
-    this.checkin = function (force, callback) {
+      this.checkin = function (force, callback) {
+        console.log("checkin")
         if (!app.user.facebookId) {
             throw "You have not set room and user or facebook details yet";
         }

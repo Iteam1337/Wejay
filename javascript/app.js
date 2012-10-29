@@ -88,13 +88,16 @@ function App() {
                         alert("You have to select a room first");
                     }
                 }
+
                 if (self.currentRoom.roomName === "example") {
                     document.location = "spotify:app:wejay:choose";
                 }
+
                 if (self.loggedIntoRoom === null) {
                     $("#joinRoom, #leaveRoom").hide();
                 } else if (self.loggedIntoRoom !== null && self.currentRoom.roomName !== self.loggedIntoRoom) {
                     app.currentRoom.checkin();
+                    app.user.loadFriends();
                     $("#joinRoom").hide();
                     $("#leaveRoom").show();
                 } else {
