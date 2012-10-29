@@ -75,6 +75,7 @@ function App() {
         switch (tab) {
             case "choose":
                 this.loadRooms();
+                self.pauseApp();
                 break;
             case "room":
                 if (arg.length > 1) {
@@ -329,6 +330,7 @@ function App() {
         $("#start").addClass("pause");
         app.currentRoom.playSong(app.currentRoom.currentSong, true);
     };
+
     this.pauseApp = function () {
         var player = sp.trackPlayer;
         app.isPlayingFromWejay = false;
@@ -339,13 +341,10 @@ function App() {
 
     m.player.observe(m.EVENT.CHANGE, function (event) {
         var player = event.data;
-        if (player.curcontext === false && player.playstate === false && app.isPlayingFromWejay === true) {
+        if (player.curtrack === false && player.playstate === false && app.isPlayingFromWejay === true) {
             self.pauseApp();
-        } else {
-            console.log(sp);
-            for (var i in player) {
-                console.log(i + " => " + player[i]);
-            }
+        } else if (m.player.canPlayNext === true && m.player.canPlayNext === true && app.isPlayingFromWejay === true) {
+            self.pauseApp();
         }
     });
 
