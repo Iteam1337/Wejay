@@ -256,7 +256,7 @@ function App() {
                         $("#rooms").html("");
                     } else {
                         r.forEach(function (thisRoom) {
-                            self.currentRoomList.filter(function (cr) {
+                            self.currentRoomList.forEach( function (cr) {
                                 if (cr.Name === thisRoom["Name"]) {
                                     updatedFriendsList = true;
                                     return;
