@@ -215,13 +215,15 @@ section.current
 #chooseSection #loginInformation
 {
   height: 250px;
-  background: url("../images/landscape.jpg") 50% 40% no-repeat;
-  background-size: 100% auto;
+  background: url("../images/top.png") 50% 40% no-repeat;
+  background-size: 101% auto;
 }
 #chooseSection #loginInformation h1,
 #chooseSection #loginInformation p
 {
   max-width: 330px;
+  color: Black;
+  text-shadow: 1px 1px 1px rgba(255,255,255,.5);
 }
 #chooseSection #loginInformation p
 {
