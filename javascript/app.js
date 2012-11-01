@@ -254,9 +254,7 @@ function App() {
                         $("#enterRoomBanner").show();
                         $(".wejayRoomsCopy").hide();
                         $("#rooms").html("");
-                    } else if (r.length > 0) {
-                        $("#enterRoomBanner").hide();
-                        $(".wejayRoomsCopy").show();
+                    } else {
                         r.forEach(function (thisRoom) {
                             self.currentRoomList.filter(function (cr) {
                                 if (cr.Name === thisRoom["Name"]) {
@@ -267,6 +265,8 @@ function App() {
                         });
                         if (!updatedFriendsList) {
                             self.currentRoomList = r;
+                            $("#enterRoomBanner").hide();
+                            $(".wejayRoomsCopy").show();
                             $("#rooms").html($("#roomListTemplate").tmpl(r));
                             self.fillRooms();
                         }
