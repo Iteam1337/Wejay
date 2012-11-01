@@ -247,9 +247,14 @@ function App() {
                 type: "POST",
                 success: function (r) {
                     var updatedFriendsList = false;
-                    r = r.filter(function (i) { return i.Name && i.Name.toLowerCase() !== "null"; });
-                    console.log("loadRooms // app.user.loadFriends()", r);
-                    if (r.length > 0) {
+                    r = r.filter(function (i) { return i.Name && i.Name.toLowerCase() !== "null" && i.Name.toLowerCase() !== "example"; });
+                    if (r.length === 0) {
+                        $("#enterRoomBanner").show();
+                        $(".wejayRoomsCopy").hide();
+                        $("#rooms").html("");
+                    } else if (r.length > 0) {
+                        $("#enterRoomBanner").hide();
+                        $(".wejayRoomsCopy").show();
                         r.forEach(function (thisRoom) {
                             self.currentRoomList.filter(function (cr) {
                                 if (cr.Name === thisRoom["Name"]) {
@@ -286,8 +291,10 @@ function App() {
             room = app.loggedIntoRoom;
         if (noRoom) {
             return "Hi there " + unescape(user) + ", you are currently not logged into any room ...";
+        } else if (room === "example") {
+            return "Hi there " + unescape(user) + ", please choose a room-name to begin using Wejay!"
         } else {
-            return "Hi there " + unescape(user) + ", you are currently logged in to the room <a href=\"spotify:app:wejay:room:" + room + "\">" + room.toUpperCase() + "</a>";
+            return "Hi there " + unescape(user) + ", you are currently logged in to the room: <a href=\"spotify:app:wejay:room:" + room + "\">" + room.toUpperCase() + "</a>";
         }
     };
 
@@ -344,9 +351,7 @@ function App() {
     m.player.observe(m.EVENT.CHANGE, function (event) {
         var player = event.data;
         if (app.isPlayingFromWejay === true) {
-            if (m.player.context === null) {
-                self.pauseApp();
-            } else if (player.volume === false && player.shuffle === false && player.repeat === false) {
+            if (player.volume === false && player.shuffle === false && player.repeat === false) {
                 if (player.curtrack === false && player.playstate === false) {
                     self.pauseApp();
                 } else if (m.player.canPlayNext === true && m.player.canPlayNext === true) {
@@ -478,9 +483,11 @@ function App() {
         });
 
         var loginFunction = function (newRoomName) {
-            if (/^([a-z0-9\_\-\ ]){2,10}$/i.exec(newRoomName)) {
+            if (/^([a-z0-9\_\-\ ]){2,10}$/i.exec(newRoomName) !== null) {
                 app.currentRoom.init(newRoomName, true);
                 document.location = 'spotify:app:wejay:room';
+            } else if (newRoomName.length >= 11 || newRoomName.length <= 1) {
+                alert("Your roomname should contain between 2 and 10 letters.");
             } else {
                 var temp = newRoomName.match(/([^a-z0-9\_\-\ ])/ig, "$1"),
                     matchString = temp.join(" ");

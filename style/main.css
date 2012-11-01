@@ -191,6 +191,14 @@ section.current
   display: inline-block;
   height: 135px;
 }
+#chooseSection .banner h2
+{
+  height: 30px;
+}
+#chooseSection .banner h2, #chooseSection .banner p
+{
+  display: block;
+}
 #chooseSection .buttons address
 {
   margin: 0;
@@ -991,6 +999,7 @@ blockquote a
   display: inline-block;
   content: "";
   vertical-align: bottom;
+  position: relative;
 }
 #like:after
 {
@@ -1002,7 +1011,7 @@ blockquote a
   border: none;
   position: absolute;
   bottom: 2px;
-  left: 7px;
+  left: 0;
 }
 #like:hover:after
 {
@@ -1035,7 +1044,7 @@ blockquote a
   height: 136px;
   left: 50%;
   top: 50%;
-  margin: -68px 0 0 -165px;
+  margin: -68px 0 0 -185px;
   padding: 20px;
   position: absolute;
   background: url("sp://wejay/images/bg_plaid.png");
@@ -1268,7 +1277,7 @@ footer a
 #userToplist li a.addSongToQueue
 {
   display: inline-block;
-  height: 14px;
+  height: 13px;
   width: 14px;
   background: url("../images/crosses.png");
   vertical-align: bottom;
