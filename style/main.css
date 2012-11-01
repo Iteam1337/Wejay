@@ -1445,7 +1445,7 @@ footer a
     #aboutSection section span, #chooseSection section span
     {
         width: 90%;
-        padding: 0 5%;
+        padding: 0 5% 15px;
     }
     #aboutSection section, #chooseSection section 
     {
@@ -1565,5 +1565,10 @@ footer a
     #roomSection .middle .right #users li
     {
         width: 100%;
+    }
+    #aboutSection .rows
+    {
+        -webkit-column-count: 0;
+        -webkit-column-gap: 0;
     }
 }

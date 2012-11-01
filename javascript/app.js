@@ -75,8 +75,9 @@ function App() {
         switch (tab) {
             case "choose":
                 this.loadRooms();
-                self.pauseApp();
-                console.log("chooose");
+                if (app.isPlayingFromWejay) {
+                    self.pauseApp();
+                }
                 break;
             case "room":
                 if (arg.length > 1) {
@@ -87,6 +88,7 @@ function App() {
                 } else {
                     if (!self.currentRoom.roomName) {
                         alert("You have to select a room first");
+                        document.location = "spotify:app:wejay:choose";
                     }
                 }
 
