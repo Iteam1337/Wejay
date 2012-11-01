@@ -215,7 +215,7 @@ section.current
 #chooseSection #loginInformation
 {
   height: 250px;
-  background: url("../images/top.png") 50% 40% no-repeat;
+  background: url("../images/top.png") 50% 43.5% no-repeat;
   background-size: 101% auto;
 }
 #chooseSection #loginInformation h1,
@@ -1328,6 +1328,11 @@ footer a
     {
         min-height: 0;
         padding-top: 10px;
+    }
+    #chooseSection #loginInformation
+    {
+        height: auto !important;
+        background: #f7f8fa;
     }
     #roomSection section
     {
