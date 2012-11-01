@@ -42,6 +42,7 @@ h1, h2, h3, h4
   font-family: Arial, Helvetica, sans-serif;
   line-height: 0.9em;
   font-weight: normal;
+  text-shadow: 1px 1px 0 black;
 }
 h1
 {
@@ -221,8 +222,10 @@ section.current
 #chooseSection #loginInformation p
 {
   max-width: 330px;
+}
+#chooseSection #loginInformation p
+{
   color: Black;
-  text-shadow: 0 0 4px rgba(255,255,255,.5);
 }
 #chooseSection section span p
 {
@@ -320,6 +323,7 @@ section.current
   float: right;
   background: none;
   margin-top: 15px;
+  text-shadow: 1px 1px 0 Black;
 }
 
 #aboutSection .rows
@@ -851,7 +855,7 @@ blockquote a
 }
 .disclaimer
 {
-    background-color: rgba(255,25,49,.8) !important;
+    background-color: rgba(170,170,170,.8) !important;
     margin: 20px auto;
     padding: 5px 20px 15px !important;
     width: 630px;
@@ -877,7 +881,6 @@ blockquote a
 }
 .disclaimer h1
 {
-    text-shadow: 1px 1px 0 black;
     width: 110px;
     top: 20px;
     left: 20px;
@@ -894,7 +897,7 @@ blockquote a
 {
     width: 250px;
     height: 115px;
-    background-color: rgba(255,25,49,.8) !important;
+    background-color: rgba(170,170,170,.8) !important;
 }
 .disclaimerRooms .disclaimer
 {
