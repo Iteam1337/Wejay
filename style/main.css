@@ -43,6 +43,8 @@ h1, h2, h3, h4
   line-height: 0.9em;
   font-weight: normal;
   text-shadow: 1px 1px 0 black;
+  display: block;
+  height: 21px;
 }
 h1
 {
@@ -217,6 +219,11 @@ section.current
   height: 250px;
   background: url("../images/top.png") 50% 43.5% no-repeat;
   background-size: 101% auto;
+}
+#chooseSection #disclaimerLogin
+{
+  display: block;
+  height: 21px;
 }
 #chooseSection #loginInformation h1,
 #chooseSection #loginInformation p

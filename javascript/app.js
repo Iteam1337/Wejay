@@ -31,6 +31,45 @@ function App() {
     }
 
     //
+    // This is used to check if the information
+    // saved into localStorage is valid when loading the app.
+    var checkLocalStorage = [
+        { name: "facebookUser", type: "json" },
+        { name: "acceptedLogin", type: "boolean" },
+        { name: "friends", type: "commaNumber" },
+        { name: "room", type: "room" }
+    ];
+    for (var obj in checkLocalStorage) {
+        var check = checkLocalStorage[obj],
+            name = check.name,
+            type = check.type,
+            object = localStorage[name],
+            test = true;
+        if (object !== undefined) {
+            switch (type) {
+                case "json":
+                    try { JSON.parse(object); }
+                    catch (e) { test = false; }
+                    break;
+                case "boolean":
+                    test = (object === "true")
+                    break;
+                case "commaNumber":
+                    test = !isNaN(object.split(",")[0]);
+                    break;
+                case "room":
+                    test = (/^([a-z0-9\_\-\ ]){2,10}$/i.exec(object) !== null)
+                    break;
+            }
+            if (test === false) {
+                delete localStorage[name];
+                console.log("deleted " + name + " from localStorage");
+            }
+        }
+        
+    }
+
+    //
     // Global connection to node server
     var socket,
         nodeUrl = "http://81.201.221.135:5000";
