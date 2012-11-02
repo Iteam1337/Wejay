@@ -52,7 +52,7 @@ function Hub(nodeUrl, currentRoom, facebookUserId) {
     });
 
     socket.on("connect", function (data) {
-        currentRoom.clearCurrentSong();
+        currentRoom.clearCurrentSong(true);
         currentRoom.updateUsers();
     });
 

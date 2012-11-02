@@ -142,7 +142,7 @@ function RoomController(roomName, nodeUrl) {
 
     this.nothingPlayingCopy = "<div class=\"nothing playing\"><p><strong>Hello!</strong>A room needs music! Add songs by searching or by dragging tracks or whole playlists to the WEJAY app in the sidebar. Don't forget to invite you colleagues - WEJAY was made to play music together!</p></div>";
 
-    this.clearCurrentSong = function () {
+    this.clearCurrentSong = function (force) {
         $("#roomTitle").html(this.roomName + " Wejay Room");
         $("#currentSong").html("Nothing playing right now. Drag a track here!");
         $("#currentHolder .hover").hide();
@@ -153,7 +153,7 @@ function RoomController(roomName, nodeUrl) {
         $("#skip").html("Skip");
         $("#block").html("Block");
         $("#like").removeClass("liking liked failed");
-        if ($("#queue li").length < 2 && $("#queue").html() !== this.nothingPlayingCopy) {
+        if (force ||$("#queue li").length < 2 && $("#queue").html() !== this.nothingPlayingCopy) {
             $("#currentQueueNumber").text("CURRENT QUEUE");
             $("#queue").html(this.nothingPlayingCopy);
         }
@@ -337,7 +337,7 @@ function RoomController(roomName, nodeUrl) {
             throw "Room name must be specified"
         }
         this.roomName = roomName.toLowerCase();
-        this.clearCurrentSong();
+        this.clearCurrentSong(true);
         var local = this;
         this.getBitlyKey(local.roomName, function (shareURL) {
             local.shareURL = shareURL;

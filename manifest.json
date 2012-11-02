@@ -1,57 +1,67 @@
 {
-    "AppName": {
-        "en": "WEJAY"
+  "AppName":
+  {
+    "en": "WEJAY"
+  },
+  "BundleVersion": "1.0.2",
+  "AppDescription":
+  {
+    "en": "We are the DJ. Listen to music together while you work"
+  },
+  "DefaultTabs":
+  [
+    {
+      "arguments": "room",
+      "title":
+	  {
+        "en": "Wejay"
+      }
     },
-    "BundleVersion": "1.0.2",
-    "AppDescription": {
-        "en": "We are the DJ. Listen to music together while you work"
+    {
+      "arguments": "choose",
+      "title":
+	  {
+        "en": "Open a Room"
+      }
     },
-    "DefaultTabs": [
-        {
-            "arguments": "room",
-            "title": {
-                "en": "Wejay"
-            }
-        },
-        {
-            "arguments": "choose",
-            "title": {
-                "en": "Open a Room"
-            }
-        },
-        {
-            "arguments": "about",
-            "title": {
-                "en": "About"
-            }
-        }
-    ],
-    "SupportedLanguages": [
-        "en"
-    ],
-    "BundleIdentifier": "wejay",
-    "AppIcon": {
-        "36x18": "Images/icon.png",
-        "64x64": "Images/wejay64.png",
-		"128x128": "Images/wejay128.png"
-    },
-    "BundleType": "Application",
-    "RequiredInterface": 1,
-    "RequiredPermissions": [
-        "http://wejay.org:81",
-        "http://*.wejay.org",
-        "http://*.fbcdn.net",
-        "http://ws.spotify.com",
-        "http://*.facebook.com",
-        "https://graph.facebook.com",
-        "http://*.facebook.net",
-        "http://81.201.221.135",
-        "http://api.bitly.com"
-    ],
-    "VendorIdentifier": "se.iteam",
-    "AcceptedLinkTypes":  [
-        "album",
-        "playlist",
-        "track"
-    ]
+    {
+      "arguments": "about",
+      "title":
+	  {
+        "en": "About"
+      }
+    }
+  ],
+  "SupportedLanguages":
+  [
+    "en"
+  ],
+  "BundleIdentifier": "wejay",
+  "AppIcon":
+  {
+    "36x18": "Images/icon.png",
+    "64x64": "Images/wejay64.png",
+    "128x128": "Images/wejay128.png"
+  },
+  "BundleType": "Application",
+  "RequiredInterface": 1,
+  "RequiredPermissions":
+  [
+    "http://wejay.org:81",
+    "http://*.wejay.org",
+    "http://*.fbcdn.net",
+    "http://ws.spotify.com",
+    "http://*.facebook.com",
+    "https://graph.facebook.com",
+    "http://*.facebook.net",
+    "http://81.201.221.135",
+    "http://api.bitly.com"
+  ],
+  "VendorIdentifier": "se.iteam",
+  "AcceptedLinkTypes":
+  [
+    "album",
+    "playlist",
+    "track"
+  ]
 }
