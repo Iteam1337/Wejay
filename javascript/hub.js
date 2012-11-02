@@ -57,7 +57,9 @@ function Hub(nodeUrl, currentRoom, facebookUserId) {
     });
 
     socket.on("onSongAdded", function (song) {
-        currentRoom.updatePlaylist();
+        if (song) {
+            currentRoom.updatePlaylist();
+        }
     });
 
     socket.on("onCheckin", function (data) {
@@ -81,8 +83,8 @@ function Hub(nodeUrl, currentRoom, facebookUserId) {
             console.log("No spotify Id, ignoring...");
         } else {
             currentRoom.playSong(currentSong);
+            currentRoom.updatePlaylist();
         }
-        currentRoom.updatePlaylist();
     });
 
 }

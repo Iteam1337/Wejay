@@ -80,9 +80,7 @@ function RoomController(roomName, nodeUrl) {
     };
 
     this.playSong = function (song, forcePlay) {
-        if (!song) {
-            return;
-        }
+        if (!song) return;
         $("#voteOverlay").removeClass("show");
         $("#currentHolder .hover").show();
         if (song.Played) {
@@ -99,9 +97,7 @@ function RoomController(roomName, nodeUrl) {
         }
         self.currentSong = song;
         var trackUri = "spotify:track:" + song.SpotifyId;
-        if (song.position && song.position.getMinutes) {
-            trackUri += "#" + addLeadingZero(song.position.getMinutes()) + ":" + addLeadingZero(song.position.getSeconds());
-        }
+        if (song.position && song.position.getMinutes) trackUri += "#" + addLeadingZero(song.position.getMinutes()) + ":" + addLeadingZero(song.position.getSeconds());
         m.Track.fromURI(trackUri, function (track) {
             var tpl = new m.Playlist();
 
@@ -143,23 +139,24 @@ function RoomController(roomName, nodeUrl) {
             }
         });
     };
+
     this.nothingPlayingCopy = "<div class=\"nothing playing\"><p><strong>Hello!</strong>A room needs music! Add songs by searching or by dragging tracks or whole playlists to the WEJAY app in the sidebar. Don't forget to invite you colleagues - WEJAY was made to play music together!</p></div>";
+
     this.clearCurrentSong = function () {
         $("#roomTitle").html(this.roomName + " Wejay Room");
-        $("#currentSong").html("");
         $("#currentSong").html("Nothing playing right now. Drag a track here!");
-        $("#currentQueueNumber").text("CURRENT QUEUE");
         $("#currentHolder .hover").hide();
         $("#currentAlbum").attr("src", "sp://import/img/placeholders/300-album.png");
         $(".hidden.title").html("");
         $("#currentLink").attr("href", "");
         $("#currentPlayedBy").html("");
-        $("#queue").html(this.nothingPlayingCopy);
         $("#skip").html("Skip");
         $("#block").html("Block");
-        $("#like").removeClass("liking");
-        $("#like").removeClass("liked");
-        $("#like").removeClass("failed");
+        $("#like").removeClass("liking liked failed");
+        if ($("#queue li").length < 2 && $("#queue").html() !== this.nothingPlayingCopy) {
+            $("#currentQueueNumber").text("CURRENT QUEUE");
+            $("#queue").html(this.nothingPlayingCopy);
+        }
     };
     this.dispose = function () {
         this.hub.checkout();

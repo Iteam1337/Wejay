@@ -23,13 +23,13 @@ function AutoCompleteForm() {
                             length = (results.length <= 15) ? results.length : 15;
                         if (length !== 0) {
                             for (var i = 0; i < length; i++) {
-                                var res = results[i]
-                                    , a = res.uri
-                                    , title = res.name
-                                    , cover = res.album.data.cover
-                                    , artist = res.artists[0].name
-                                    , string = "<a href=\"" + a + "\"><img src=\"" + cover + "\"><strong>" + artist + "</strong> " + title + "</a>"
-                                    , availability = res.availability;
+                                var res = results[i],
+                                    a = res.uri,
+                                    title = res.name,
+                                    cover = res.album.data.cover,
+                                    artist = res.artists[0].name,
+                                    string = "<a href=\"" + a + "\"><img src=\"" + cover + "\"><strong>" + artist + "</strong> " + title + "</a>",
+                                    availability = res.availability;
                                 $(".tracks").append(string);
                             }
                         } else {
