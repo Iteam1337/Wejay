@@ -217,7 +217,7 @@ section.current
 #chooseSection #loginInformation
 {
   height: 250px;
-  background: url("../images/top.png") 50% 43.5% no-repeat;
+  background: url("../images/top.png") 50% 46% no-repeat;
   background-size: 101% auto;
 }
 #chooseSection #disclaimerLogin
