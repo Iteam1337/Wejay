@@ -45,7 +45,15 @@ function RoomController(roomName, nodeUrl) {
             spotifyId: track.data.uri.replace("spotify:track:", "")
         };
         song.room = self.roomName;
-        self.hub.queueSong(song);
+        var existsInQueue = $("#queue li a.track").filter(function (int, element) { return (element.href.split(":")[2] === song.spotifyId) }).length > 0;
+
+        if (!existsInQueue) {
+            self.hub.queueSong(song);
+        } else {
+            // TODO: felhantering.
+            // Här ska ett meddelande dyka upp till användaren om att låten
+            // redan existerar i listan.
+        }
     };
 
     this.getTrack = function (searchString, callback, errorCallback) {

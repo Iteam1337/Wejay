@@ -1,9 +1,13 @@
 {
   "AppName":
   {
-    "en": "WEJAY"
+    "en": "wejay"
   },
   "BundleVersion": "1.0.2",
+  "Dependencies": {
+    "api": "0.1.0",
+    "resources": "0.1.0"
+  },
   "AppDescription":
   {
     "en": "We are the DJ. Listen to music together while you work"
@@ -13,21 +17,21 @@
     {
       "arguments": "room",
       "title":
-	  {
+      {
         "en": "Wejay"
       }
     },
     {
       "arguments": "choose",
       "title":
-	  {
+      {
         "en": "Open a Room"
       }
     },
     {
       "arguments": "about",
       "title":
-	  {
+      {
         "en": "About"
       }
     }

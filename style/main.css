@@ -26,6 +26,30 @@ html, body
   background-color: #ecebe8;
 }
 
+
+/*********************************************
+* Disables userselect, and enables them for
+* specific elements.
+**********************************************/
+html * 
+{
+  -webkit-user-select: none;
+  -webkit-user-drag: none;    
+}
+
+#roomName,
+#roomNameBanner,
+.auto-completeForm .input.token-input input[type=text],
+#sharePopup #shareURL
+{
+    -webkit-user-select: auto;
+}
+#userToplist li a:not(.addSongToQueue),
+.auto-completeForm .input.token-input .tracks a
+{
+    -webkit-user-drag: element;
+}
+
 /*********************************************
 * HEADERS
 *********************************************/
@@ -119,6 +143,63 @@ a
     width: 210px;
     margin: -30px 0 0 -105px;
     left: 50%;
+}
+
+/*********************************************
+* ERRORHANDELING
+*********************************************/
+#errorHolder
+{
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    z-index: 10000;
+    height: auto;
+    width: 100%;
+    background-color: hsla(0, 0%, 12%, .9);
+    padding: 0;
+    display: block;
+}
+#errorHolder div
+{
+    padding: 0 10px;
+    margin: 6px auto 0;
+    display: block;
+    position: relative;
+    width: 660px;
+    min-height: 38px;
+}
+#errorHolder div h1
+{
+    padding: 6px 0 0;
+    margin: 0;
+    display: inline-block;
+    vertical-align: top;
+}
+#errorHolder div p
+{
+    vertical-align: super;
+    display: inline-block;
+    width: 583px;
+    border-left: 1px solid white;
+    color: white;
+    height: 100%;
+    padding: 0 0 0 20px;
+    margin: 0 0 0 20px;
+    min-height: 33px;
+}
+#errorHolder div .close
+{
+    position: absolute;
+    right: 5px;
+    top: 0;
+    height: 25px;
+    width: 25px;
+    padding: 0;
+    margin: 0;
+    color: White;
+    cursor: pointer;
+    background: url("../Images/glyphicons_207_remove_2_white.png") no-repeat 50% 50%;
 }
 
 /*********************************************
@@ -1492,7 +1573,6 @@ blockquote a
 {
   background-color: gray;
 }
-
 #sharePopup
 {
   display: none;
