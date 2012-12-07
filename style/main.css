@@ -22,6 +22,7 @@ html, body
   overflow-x: hidden;
   width: 100%;
   height: 100%;
+  min-height:100%;
   background-color: #ecebe8;
 }
 
@@ -44,7 +45,6 @@ h1, h2, h3, h4
   font-weight: normal;
   text-shadow: 1px 1px 0 black;
   display: block;
-  height: 21px;
 }
 h1
 {
@@ -52,6 +52,7 @@ h1
   font-weight: normal;
   text-transform: uppercase;
   font-size: 30px;
+  margin:0 0 15px 0;
 }
 h2
 {
@@ -84,21 +85,11 @@ a
     background-color: #1a1a1a;
     padding: 10px 0 0;
     width: 100%;
-    height: 40px;
-    position: relative;
 }
 #branding img
 {
-    position: absolute;
-    width: 96px;
-    margin: -30px 0 0 -64px;
-    left: 50%;
-}
-#branding a
-{
-    position: absolute;
-    top: 15px;
-    right: 20px;
+    display:block;
+    margin:0 auto;
 }
 /*********************************************
 * SLIDES
@@ -133,7 +124,34 @@ a
 /*********************************************
 * DEFAULT ELEMENT STYLES
 *********************************************/
+#overlay 
+{
+    height:100%;
+    width:100%;
+    position:fixed;
+    top:0;
+    left:0;
+    background:rgba(0,0,0,0.8);
+    z-index:10000;
+    display:none;
+}
 
+#overlay #facebook 
+{
+    width: 500px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-left: -250px;
+    background: rgba(255, 255, 255, 1);
+    padding: 20px;
+    box-sizing: border-box;
+    margin-top:-82px;
+}
+#disclaimerLogin {
+    color: #F9B24D;
+    text-shadow: none;
+}
 input[type="submit"],
 button:hover
 {
@@ -176,8 +194,15 @@ section.current
 {
     cursor: pointer;
 }
-#aboutSection section span,
-#chooseSection section span
+#aboutSection section span
+{
+  display: inline-block;
+  background-color: rgba(0,0,0,.6);
+  width: 630px;
+  padding:20px;
+  margin: 0 0 20px;
+}
+#loginInformation
 {
   display: inline-block;
   background-color: rgba(0,0,0,.6);
@@ -185,14 +210,18 @@ section.current
   width: 630px;
   margin: 0 0 20px;
 }
+#chooseSection #roomsInformation 
+{
+    width:315px;
+    padding: 20px;
+}
 #chooseSection .banner,
 #chooseSection .buttons
 {
-  padding: 20px 20px 40px;
+  padding: 20px;
   background-color: rgba(0,0,0,.6);
   vertical-align: top;
   display: inline-block;
-  height: 135px;
 }
 #chooseSection .banner h2
 {
@@ -210,20 +239,39 @@ section.current
 }
 #roomName
 {
-  width: 205px;
-  display: block;
-  margin: 3px 0 20px 0;
+    width: 150px;
+    display: inline-block;
+    box-shadow: inset 0px 1px 5px rgba(0,0,0,0.3);
+    padding: 5px;
 }
 #chooseSection #loginInformation
 {
   height: 250px;
   background: url("../images/top.png") 50% 46% no-repeat;
   background-size: 101% auto;
+  position:relative;
+}
+#chooseSection #loginInformation #tutorialBtn 
+{
+    background: -webkit-linear-gradient(top, #F9B24D 0%,#F7970C 100%);
+    color: white;
+    padding: 10px 15px;
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    text-align: center;
+    font-family: 'League Gothic', Sans-Serif;
+    font-size: 24px;
+    text-transform: uppercase;
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, .5);
+    cursor: pointer;
+    box-shadow: 0px 0px 5px rgba(0,0,0,0.8);
 }
 #chooseSection #disclaimerLogin
 {
   display: block;
   height: 21px;
+  margin: 5px 0;
 }
 #chooseSection #loginInformation h1,
 #chooseSection #loginInformation p
@@ -242,49 +290,47 @@ section.current
 }
 #chooseSection .buttons
 {
-  margin-left: 20px;
-  width: 250px;
+  width:100%;
+  box-sizing:border-box;
 }
 #chooseSection .banner
 {
-  width: 315px;
+  width:100%;
+  box-sizing:border-box;
   position: relative;
   color: white;
   font-size: 110%;
   line-height: 1.4em;
-  background: -webkit-linear-gradient(top, #82B919 0%,#618B13 100%);
-}
-#chooseSection .banner form
-{
-  position: absolute;
-  bottom: 20px;
-  left: 20px;
+  background: -webkit-linear-gradient(top,  #f9b24d 0%,#f7970c 100%); /* Chrome10+,Safari5.1+ */
+  margin-bottom:20px;
 }
 
 #chooseSection .banner form input[type="submit"]
 {
-  margin-left: -15px;
-  position: absolute;
-  top: 8px;
-  right: -70px;
+    display: inline-block;
 }
-#chooseSection .banner .input
+#chooseSection .banner #roomSelect
 {
-  width: 260px;
-  display: inline-block;
+    width: 100%;
+    display: inline-block;
+}
+#chooseSection .banner .input:focus 
+{
+    background:#fff;
 }
 #chooseSection .banner h2
 {
     font-size: 30px;
     line-height: 1em;
+    margin: 0 0 10px 0;
 }
 #chooseSection #enterRoomBanner
 {
-  position: relative;
-  background: -webkit-linear-gradient(top, #82b919 0%,#72a117 100%);
-  padding: 20px;
-  margin-top: 20px;
-  display: none;
+    position: relative;
+    background: -webkit-linear-gradient(top, #F9B24D 0%,#F7970C 100%);
+    padding: 20px;
+    margin-top: 20px;
+    display: none;
 }
 #chooseSection #enterRoomBanner:after
 {
@@ -296,7 +342,7 @@ section.current
   position: absolute;
   border-style: solid;
   border-width: 10px;
-  border-color: transparent transparent #82b919 transparent;
+  border-color: transparent transparent #F9B24D transparent;
 }
 #chooseSection #enterRoomBanner p
 {
@@ -334,17 +380,252 @@ section.current
   margin-top: 15px;
   text-shadow: 1px 1px 0 Black;
 }
+#chooseSection #tutorial 
+{
+    background:rgba(0,0,0,0.3);
+    width:100%;
+    margin-bottom:20px;
+    box-sizing:border-box;
+    color:#fff;
+    display:none;
+}
+#chooseSection #tutorial
+{
+    width:670px;
+    overflow:hidden;
+}
+#chooseSection #tutorial #tutorialNavigation 
+{
+    background:rgba(0,0,0,0.6);
+    position: relative;
+    height: 50px;
+    padding:5px 0;
+}
+#chooseSection #tutorial #tutorialSteps 
+{
+    width:2020px;
+    overflow:hidden;
+    margin:0;
+}
+#chooseSection #tutorial #tutorialSteps #stepOne,
+#chooseSection #tutorial #tutorialSteps #stepTwo,
+#chooseSection #tutorial #tutorialSteps #stepThree
+{
+    display:inline-block;
+    width:670px;
+    overflow:hidden;
+    position:relative;
+    margin:0;
+    vertical-align:top;
+    box-sizing:border-box;
+    height: 465px;
+    padding:20px;
+}
+#chooseSection #tutorial h2 
+{
+    font-size:36px;
+}
+#chooseSection #tutorial .subtitle 
+{
+    font-family: 'League Gothic', Sans-Serif;
+    font-size: 21px;
+    color: #999;
+    margin-bottom: 20px;
+    margin-top: 15px;
+    text-transform:uppercase;
+    line-height:1.5;
+}
+#chooseSection #tutorial li .aboutImage
+{
+    list-style:none;
+    height:100px;
+    width:100px;
+    overflow:hidden;
+    display:inline-block;
+    margin-right:20px;
+}
+#chooseSection #tutorial li .aboutImage img 
+{
+    width:100%;
+}
+#chooseSection #tutorial li .aboutPerson 
+{
+    display:inline-block;
+    vertical-align:top;
+}
+#chooseSection #tutorial li .aboutPerson h3 
+{
+    font-weight:bold;
+    text-transform:uppercase;
+    font-family:'League Gothic';
+    font-size:18px;
+    color:#aaa;
+}
+#chooseSection #tutorial #tutorialSteps .stepInfo
+{
+    width:200px;
+    height:100%;
+    position:absolute;
+    left:0;
+    top:0;
+    background:#000;
+    padding:20px;
+    box-sizing:border-box;
+}
+#chooseSection #tutorial #tutorialSteps .stepInner 
+{
+    position:absolute;
+    left:220px;
+} 
+#chooseSection #tutorial .roomQueue 
+{
+    padding: 0;
+}
 
+#chooseSection #tutorial .roomQueue li .tooltip 
+{
+    position: relative;
+    display: inline-block;
+    top: -7px;
+}
+#chooseSection #tutorial #tutorialSteps .tutorialAlbums li, #chooseSection #tutorial #tutorialSteps .roomQueue li 
+{
+    list-style:none;
+    margin-right:10px;
+    position:relative;
+    background:rgba(0,0,0,0.3);
+    padding:5px;
+}
+#chooseSection #tutorial #tutorialSteps .tutorialAlbums li 
+{
+    display:inline-block;
+    background:none;
+    margin:0;
+    padding:0;
+}
+#chooseSection #tutorial .roomQueue li
+{
+    position:relative;
+    font-family:'League Gothic', Sans-Serif;
+    color:#999;
+    font-size:16px;
+    padding:0;
+    margin-bottom:0;
+    vertical-align:top;
+    display:none;
+    text-transform:uppercase;
+}
+#chooseSection #tutorial #tutorialSteps .roomQueue li:nth-child(2n+1)
+{
+    background:rgba(0,0,0,0.6);
+}
+#chooseSection #tutorial #tutorialSteps .tutorialAlbums li img, #chooseSection #tutorial #tutorialSteps .roomQueue li img
+{
+    width:25px;
+    height:25px;
+    box-shadow: 0px 0px 10px rgba(0,0,0,0.3);
+    -webkit-transition:all 500ms ease;
+    margin-right: 10px;
+}
+#chooseSection #tutorial #tutorialSteps .tutorialAlbums li img 
+{
+    display:inline-block;
+    width:50px;
+    height:50px;
+
+}
+#chooseSection #tutorial #tutorialSteps .tutorialAlbums li .block, #chooseSection #tutorial #tutorialSteps .roomQueue li .block
+{
+    background:rgba(255,0,0,0.4);
+    position:absolute;
+    top:0;
+    left:0;
+    width:50px;
+    height:50px;
+}
+#chooseSection #tutorial #tutorialSteps .roomQueue li .blockWrap 
+{
+    display:inline;
+    position:relative;
+} 
+#chooseSection #tutorial #tutorialSteps .roomQueue li .block 
+{
+    width:25px;
+    height:25px;
+    top:-13px;
+}
+#chooseSection #tutorial #tutorialNavigation #getStarted 
+{
+    width: 150px;
+    margin: 0 auto;
+    text-align: center;
+    background: -webkit-linear-gradient(top,  #f9b24d 0%,#f7970c 100%); /* Chrome10+,Safari5.1+ */
+    padding: 10px;
+    margin-top: 6px;
+    font-family: 'League Gothic', sans-serif;
+    font-size: 24px;
+    text-shadow: 1px 1px 0px black;
+    cursor: pointer;
+    display:none;
+}
+#chooseSection #tutorial #tutorialNavigation .prev, #chooseSection #tutorial #tutorialNavigation .next
+{
+    width:50px;
+    height:50px;
+	width: 0; 
+	height: 0; 
+	border-top: 20px solid transparent;
+	border-bottom: 20px solid transparent;	
+	border-right: 20px solid rgba(255,255,255,0.3);
+	position:absolute;
+	left:20px;
+	top:50%;
+	cursor:pointer;
+	z-index:1000;
+	-webkit-transition:all 500ms ease;
+	margin-top:-20px;
+}
+#chooseSection #tutorial #tutorialNavigation .next 
+{
+	border-left: 20px solid rgba(255,255,255,0.3);
+	border-right: none;
+	left:auto;
+	right:20px;
+}
+#chooseSection #tutorial #tutorialNavigation .next:hover
+{
+    border-left:20px solid rgba(255,255,255,0.6);
+}
+#chooseSection #tutorial #tutorialNavigation .prev:hover 
+{
+    border-right: 20px solid rgba(255,255,255,0.6);
+}
+#stepTwo .rules, #stepThree .rules 
+{
+    padding: 0;
+    font-family: 'League Gothic', sans-serif;
+    font-size: 24px;
+    text-transform: uppercase;
+    position: relative;
+    line-height:1.2;
+}
+#stepTwo .rules .rulesTitle, #stepThree .rules .rulesTitle
+{
+    margin-bottom:10px;
+}
+#stepTwo .rules li, #stepThree .rules li
+{
+    color:#999;
+    padding:0;
+    font-size:16px;
+}
 #aboutSection .rows
 {
-  -webkit-column-count: 2;
-  -webkit-column-gap: 15px;
   background: none;
   padding: 0;
   margin: 0;
   border: none;
 }
-
 #roomSection section
 {
   line-height: 1.2em;
@@ -413,10 +694,6 @@ h3
 {
   opacity: 1;
 }
-#current a
-{
-  cursor: pointer;
-}
 
 #current h3
 {
@@ -443,6 +720,10 @@ h3
 {
   margin-bottom: 0;
 }
+#users li a 
+{
+    cursor:default;
+}
 #noUsers
 {
   color:#fff;
@@ -451,31 +732,40 @@ h3
 }
 .rooms
 {
-  width: 640px;
-  margin:auto;
+  width:100%;
+}
+.loadingIndicator 
+{
+    width: 30px;
+    height: 30px;
+    overflow: hidden;
+    margin: 20px auto 0 auto;
+    display:none;
 }
 .rooms li
 {
-  list-style: none;
-  list-style-type: none;
-  clear: none;
-  float:left;
-  margin: 0;
-  width: 150px;
-  height:150px;
-  border-radius: 5px;
-  text-align:center;
-  text-transform: uppercase;
-  color:#fff;
-  overflow:hidden;
-  padding:2px;
-  position:relative;
-  cursor: hand;
+    list-style: none;
+    margin: 0;
+    width: 100%;
+    color: white;
+    overflow: hidden;
+    padding: 9px 10px 3px;
+    position: relative;
+    box-sizing:border-box;
+}
+.rooms li:nth-child(odd) 
+{
+    background:rgba(255,255,255,.05);
+}
+.rooms li:hover 
+{
+    background:rgba(255,255,255,.08);
 }
 .rooms li a
 {
   color:#fff;
-  padding: 14px 7px 7px;
+  width:100%;
+  display:block;
 }
 .rooms img
 {
@@ -585,6 +875,21 @@ h3
 {
   color: #fff;
 }
+#queue .nothing.playing, #likeHover 
+{
+  background-image: -webkit-linear-gradient(top, #5798d2 0%,#0063CB 100%);    
+  position: absolute;
+}
+
+#likeHover 
+{
+    color:#fff;
+    padding:15px;
+    left:-10px;
+    bottom:-60px;
+    display:none;
+}
+
 #queue .nothing.playing
 {
   display: block;
@@ -593,9 +898,9 @@ h3
   position: absolute;
   padding: 15px;
   width: 300px;
-  background-image: -webkit-linear-gradient(top, #5798d2 0%,#0063CB 100%);
 }
-#queue .nothing.playing:after
+
+#queue .nothing.playing:after, #likeHover:after
 {
   top: -20px;
   left: 15px;
@@ -634,18 +939,10 @@ h3
 }
 .rooms a
 {
-  position: absolute;
-  top: 57px;
-  left: 2px;
-  z-index: 100; 
-  width: 136px;
-  text-align: center;
-  background:rgba(0,0,0,.7);
-  font-family: 'League Gothic', serif, Arial, Helvetica, sans-serif;
-  font-weight: normal;
-  text-transform: uppercase;
-  font-size: 25px;
-  line-height: 20px;
+    font-family: 'League Gothic', serif, Arial, Helvetica, sans-serif;
+    font-weight: normal;
+    font-size: 25px;
+    line-height: 20px;
 }
 .auto-completeForm input
 {
@@ -855,7 +1152,7 @@ blockquote a
     border-radius: 3px;
     position: absolute;
     left: 150px;
-    top: 19px;
+    top: -20px;
 }
 .checkbox:hover
 {
@@ -900,13 +1197,13 @@ blockquote a
     top: 12px;
     left: 210px;
 }
-
+.disclaimer .checkbox {
+    top: 19px;
+}
 /* ROOMS */
 .disclaimerRooms
 {
     width: 250px;
-    height: 115px;
-    background-color: rgba(170,170,170,.8) !important;
 }
 .disclaimerRooms .disclaimer
 {
@@ -915,7 +1212,6 @@ blockquote a
     top: 0;
     margin: 0 !important;
     width: 230px !important;
-    height: 60px !important;
 }
 .disclaimerRooms .disclaimer p
 {
@@ -925,11 +1221,11 @@ blockquote a
     left: 0;
     margin: -5px 0 0 -20px !important;
     padding: 0 !important;
-    width: 250px;
+    color:#000;
 }
 .disclaimerRooms .disclaimer input[type="button"]
 {
-    margin: 11px 0 0 10px;
+    margin: 10px 0 0 10px;
 }
 .disclaimerRooms .disclaimer input[type="button"].hover
 {
@@ -938,10 +1234,9 @@ blockquote a
 }
 .disclaimerRooms .disclaimer .checkbox
 {
-    margin: 0;
+    margin: 25px 0 0 0;
     padding: 0;
-    left: 0;
-    top: 97px;
+    left:0;
 }
 #disclaimerLoginOriginal.disc p
 {
@@ -978,13 +1273,14 @@ blockquote a
 {
   margin: 20px auto;
   padding: 20px;
-  width: 630px;
+  width: 670px;
   display: block;
-  height: 202px !important;
+  height: 242px !important;
   text-align: left;
   position: relative;
   background-color: rgba(0,0,0,.6);
   /*border: 1px solid rgba(255,255,255,.2);*/
+  box-sizing:border-box;
 }
 .top .left,
 .top .right
@@ -1003,6 +1299,10 @@ blockquote a
   left: 240px;
   bottom: 21px;
   position: absolute;
+}
+#currentArtist a:hover, #currentTrack a:hover
+{
+    text-decoration:underline;
 }
 #like
 {
@@ -1105,7 +1405,7 @@ blockquote a
 }
 .middle h2
 {
-  margin-bottom: 20px;
+  margin:0 0 10px 0;
 }
 .middle .left,
 .middle .right
@@ -1123,13 +1423,14 @@ blockquote a
 .middle .left #queue {
   overflow: auto;
 }
-.middle .right div
+.middle .right .toplist, .middle .right .logged
 {
   padding: 20px;
   background-color: rgba(0,0,0,.6);
   display: inline-block;
-  width: 240px;
   margin-bottom: 20px;
+  width:100%;
+  box-sizing: border-box;
 }
 .middle .right
 {
@@ -1158,7 +1459,6 @@ blockquote a
 {
   float: left;
   clear: both;
-  margin: 10px 0 0 -1px;
   width: 120%;
 }
 #start
@@ -1173,6 +1473,7 @@ blockquote a
   background: url("sp://import/img/play-button-M.png") transparent;
   background-position-x: -178px;
   display: block;
+  cursor: default;
 }
 #start:hover 
 {
@@ -1331,6 +1632,10 @@ footer a
 
 @media (max-width:680px)
 {
+    h1 
+    {
+        margin-top: 20px;
+    }
     section.current
     {
         min-height: 0;
@@ -1375,7 +1680,15 @@ footer a
         padding-bottom: 10px;
         bottom: 0;
     }
-    #roomSection .middle
+    .middle h2 
+    {
+        margin:0 0 10px 0;
+    }
+    #currentQueueNumber 
+    {
+        margin:20px 0;
+    }
+    #roomSection .middle, #chooseSection .middle
     {
         width: 100%;
     }
@@ -1395,7 +1708,7 @@ footer a
         width: 96%;
         max-width: 96%;
     }
-    #roomSection .middle .left
+    #roomSection .middle .left, #chooseSection .middle .left
     {
         width: 90% !important;
         margin: 0 0 20px;
@@ -1421,7 +1734,7 @@ footer a
     {
         margin: 12px 0 0 3.8%;    
     }
-    #roomSection .middle .right
+    #roomSection .middle .right, #chooseSection .middle .right
     {
         width: 100% !important;
         margin: 0;
@@ -1447,17 +1760,13 @@ footer a
     #chooseSection .banner input[type="text"]
     {
         width: 100%;
+        box-sizing: border-box;
     }
     #chooseSection .banner form
     {
         position: inherit;
         bottom: 0;
         left: 0;
-    }
-    .middle .right div
-    {
-        width: 90%;
-        padding: 0 5% 10px;
     }
     #aboutSection section span, #chooseSection section span
     {
@@ -1469,16 +1778,42 @@ footer a
         width: 100%;
         margin: 0;
     }
+    #chooseSection #loginInformation #tutorialBtn 
+    {
+        display:none;
+    }
     #chooseSection .rooms
     {
         width: 100%;
     }
     #chooseSection .banner
     {
-        width: 90%;
-        padding: 0 5% 20px;
+        width: 100%;
+        padding: 20px;
         height: auto;
         margin: 0 0 20px;
+    }
+    #chooseSection #enterRoomBanner 
+    {
+        margin-top:0;
+    }
+    #chooseSection #enterRoomBanner #roomSelectBanner #roomNameBanner 
+    {
+        width:100%;
+        box-sizing:border-box;
+    }
+    #chooseSection #enterRoomBanner #roomSelectBanner input[type="submit"] 
+    {
+        display: block;
+        float: none;
+        width: 100%;
+        background: -webkit-linear-gradient(top, #F9B24D 0%,#F7970C 100%);
+        padding: 5px;
+        box-shadow: 0px 0px 5px rgba(0,0,0,0.3);
+    }
+    .disclaimerRooms .disclaimer input[type="button"]
+    {
+        margin: 11px 0 0 10px;
     }
     #chooseSection .banner form input[type="submit"]
     {
@@ -1486,8 +1821,8 @@ footer a
     }
     #chooseSection .buttons
     {
-        padding: 0 5% 15px;
-        width: 90%;
+        padding: 20px;
+        width: 100%;
         margin: 0 0 20px;
         height: auto;
     }

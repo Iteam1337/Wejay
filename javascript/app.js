@@ -66,7 +66,7 @@ function App() {
                 console.log("deleted " + name + " from localStorage");
             }
         }
-        
+
     }
 
     //
@@ -111,6 +111,9 @@ function App() {
         $(currentTab).addClass("current");
         $(currentTab).parents("section").addClass("current");
         $(currentTab).children("section").first().addClass("current");
+        if (!localStorage.acceptedLogin) {
+            return document.location = "spotify:app:wejay:choose";
+        }
         switch (tab) {
             case "choose":
                 this.loadRooms();
@@ -138,7 +141,6 @@ function App() {
                 if (self.loggedIntoRoom === null) {
                     $("#joinRoom, #leaveRoom").hide();
                 } else if (self.loggedIntoRoom === "" || self.currentRoom.roomName !== self.loggedIntoRoom) {
-
                     app.currentRoom.checkin(false, function (room) {
                         app.loggedIntoRoom = room;
                         app.handleLoginInfo();
@@ -261,6 +263,7 @@ function App() {
                 } else {
                     $(div).html($("#roomTopListTemplate").tmpl(result));
                     $(div).append("<a>" + room + "</a>");
+                    console.log(room);
                     $("#enterRoomBanner").hide();
                 }
             }, error: function (r) {
@@ -270,53 +273,52 @@ function App() {
     };
 
     this.currentRoomList = [];
+    var loaded = false;
 
     // Load all rooms to startpage
     this.loadRooms = function () {
         if (!app.user.facebookId) {
             return;
         }
-        app.user.loadFriends(function (users) {
-            users.push(app.user.facebookId); // add current user as well
-            $.ajax({
-                url: "http://wejay.org/room/GetRoomsForUsers",
-                traditional: true,
-                dataType: "json",
-                data: {
-                    facebookIds: users
-                },
-                type: "POST",
-                success: function (r) {
-                    var updatedFriendsList = false;
-                    r = r.filter(function (i) { return i.Name && i.Name.toLowerCase() !== "null" && i.Name.toLowerCase() !== "example"; });
-                    if (r.length === 0) {
-                        $("#enterRoomBanner").show();
-                        $(".wejayRoomsCopy").hide();
-                        $("#rooms").html("");
-                    } else {
-                        r.forEach(function (thisRoom) {
-                            self.currentRoomList.forEach( function (cr) {
-                                if (cr.Name === thisRoom["Name"]) {
-                                    updatedFriendsList = true;
-                                    return;
-                                }
-                            });
-                        });
-                        if (!updatedFriendsList) {
+        // Loaded twice
+        if (!loaded) {
+            $('.loadingIndicator').show();
+            app.user.loadFriends(function (users) {
+                users.push(app.user.facebookId); // add current user as well
+                $.ajax({
+                    url: "http://wejay.org/room/GetRoomsForUsers",
+                    traditional: true,
+                    dataType: "json",
+                    data: {
+                        facebookIds: users
+                    },
+                    type: "POST",
+                    success: function (r) {
+                        var updatedFriendsList = false;
+                        r = r.filter(function (i) { return i.Name && i.Name.toLowerCase() !== "null" && i.Name.toLowerCase() !== "example"; });
+
+                        if (r.length === 0) {
+                            $("#enterRoomBanner").show();
+                            $(".wejayRoomsCopy").hide();
+                            $("#rooms").html("");
+                        } else {
                             self.currentRoomList = r;
                             $("#enterRoomBanner").hide();
                             $(".wejayRoomsCopy").show();
                             $("#rooms").html($("#roomListTemplate").tmpl(r));
-                            self.fillRooms();
                         }
                     }
-                }
+                });
+
+                $('.loadingIndicator').hide();
             });
-        });
+
+            loaded = true;
+        }
     };
 
     this.fillRooms = function () {
-        $(".rooms li").each(function () {
+        $(".rooms li ").each(function () {
             var room = this.innerText;
             fillRoomToplist(room, this);
             $(this).click(function () {
@@ -328,6 +330,7 @@ function App() {
     //
     // Copy for "Open a room"
     this.loggedInCopy = function (noRoom) {
+        $("#overlay").hide();
         var user = app.user.userName,
             room = app.loggedIntoRoom;
         if (noRoom) {
@@ -414,20 +417,16 @@ function App() {
     /* INIT */
     // init function
     this.init = function (version) {
-
         this.version = version;
-        console.log("ready");
+
         if (!self.checkIfFBUserExists) {
-            self.checkIfFBUserExists = true;
-            // TODO:
-            /*
-            if (localStorage.facebookUser !== undefined && localStorage.accessToken !== undefined) {
-            console.log("this");
-            var facebookUser = JSON.parse(localStorage.facebookUser),
-            accessToken = localStorage.accessToken;
-            self.user.handleSuccessfullLogin(facebookUser, accessToken);
+            if (localStorage.facebookUser !== undefined && localStorage.acceptedLogin !== undefined) {
+                app.user.facebookUser = localStorage.facebookUser;
+                var facebookUser = JSON.parse(localStorage.facebookUser),
+                accessToken = localStorage.acceptedLogin;
+
+                self.user.authenticate();
             }
-            */
         }
 
         var acceptedLogin = (localStorage.acceptedLogin) ? localStorage.acceptedLogin : false;
@@ -452,6 +451,71 @@ function App() {
 
         var ac = sp.require("javascript/AutocompleteForm");
         ac.init(".auto-completeForm");
+
+        $("#tutorialBtn").on("click", function () {
+            $("#getStarted").hide();
+
+            $("#tutorial").show();
+            $("#stepOne").show().addClass("open");
+            $("#tutorialNavigation .prev").hide();
+            $("#tutorialNavigation .next").show();
+            $("#loginInformation").hide();
+        });
+
+        function tutorialNextPrev(direction) {
+            if (direction == "next") {
+                $("#tutorialSteps").find(".open").removeClass("open").hide().next().addClass("open").show();
+            }
+            else {
+                $("#tutorialSteps").find(".open").removeClass("open").hide().prev().addClass("open").show();
+            }
+
+            var active = $("#tutorialSteps").find(".open").attr("id");
+
+            if (active === "stepTwo" || active === "stepThree") {
+                $(".roomQueue li").hide();
+
+                $("#" + active).find(".roomQueue li").each(function (i) {
+                    $(this).delay(1000 * i).show(0);
+                });
+
+                if (active === "stepThree") {
+                    $("#getStarted").show();
+                }
+                else {
+                    $("#getStarted").hide();
+                }
+            }
+
+            if ($("#stepOne").hasClass("open")) {
+                $("#tutorialNavigation .prev").hide();
+            }
+            else {
+                $("#tutorialNavigation .prev").show();
+            }
+
+            if ($("#stepThree").hasClass("open")) {
+                $("#tutorialNavigation .next").hide();
+            }
+            else {
+                $("#tutorialNavigation .next").show();
+            }
+        }
+
+        $(".next").on("click", function () {
+            tutorialNextPrev("next");
+        });
+
+        $(".prev").on("click", function () {
+            tutorialNextPrev("prev");
+        });
+
+        $("#getStarted").on("click", function () {
+            $("#roomName").focus();
+            $("#tutorial").hide();
+            $("#loginInformation").show();
+            $("#roomsInformation").show();
+        });
 
         //
         // when switching rooms -- the app should not autostart the music ...
@@ -648,6 +712,7 @@ function App() {
         //
         // initialize the disclaimer
         if (self.acceptedLogin === false) {
+            $("#overlay").show().find(".rooms").show();
             $("#login").attr("disabled", true);
             $(".disclaimer .checkbox").hover(
                 function () {
@@ -671,14 +736,23 @@ function App() {
             });
         } else {
             $(".disclaimer").remove();
-            $(".disclaimerRooms").removeClass("disclaimerRooms");
+            $("#overlay").hide();
+            self.loadRooms();
         }
-
+        $("#like").on({
+            mouseenter: function () {
+                $("#likeHover").show();
+            },
+            mouseleave: function () {
+                $("#likeHover").hide();
+            }
+        });
         $("#like").on("click", function () {
             if (self.checkIfUserAcceptedAgreement()) {
                 app.currentRoom.like();
             }
         });
+
         $("#block").on("click", function () {
             if (self.checkIfUserAcceptedAgreement()) {
                 app.currentRoom.block();

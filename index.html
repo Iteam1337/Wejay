@@ -19,10 +19,33 @@
 </head>
 <body>
     <div id="branding">
-        <img src="Images/Wejay128-inverted.png" />
+        <a href="spotify:app:wejay:choose">
+            <img src="Images/wejay-logo.png" id="logo" /></a>
     </div>
     <div id="offline">
-        <h1>This application is not available when offline</h1>
+        <h1>
+            This application is not available when offline</h1>
+    </div>
+    <div id="overlay">
+        <div id="facebook" class="buttons disclaimerRooms">
+            <h2 id="disclaimerLogin">
+                Login to find your colleagues</h2>
+            <div class="disclaimer rooms">
+                <p>WEJAY is a social music app. If your colleagues have already created a WEJAY ROOM you can login to find them.</p>
+                <input type="checkbox" class="checkbox">
+                <input type="button" class="sp-button" disabled value="Login with Facebook">
+            </div>
+            <div id="disclaimerLoginOriginal">
+                <p>I understand that when I log into my Facebook account below, Facebook will be able to associate information about my Spotify
+                use, such as library and listening history, with my Facebook account. Facebook's collection and use of this information
+                will be governed by the Facebook Privacy Policy.
+                </p>
+                <button class="sp-button" id="roomLogin">
+                    Login with Facebook</button>
+                <button class="sp-button" id="roomLogout">
+                    Logout</button>
+            </div>
+        </div>
     </div>
     <div id="main">
         <!-- wejay/start -->
@@ -43,15 +66,21 @@
                         <h2 id="onair">on air</h2>
                         <h1 id="roomTitle">Room</h1>
                         <div class="right">
-                            <h3 id="currentSong"></h3>
+                            <h3 id="currentSong">
+                                <span id="currentArtist"></span> - 
+                                <span id="currentTrack"></span>
+                            </h3>
                             <h4 id="currentPlayedBy"></h4>
                             <a class="button" title="Like this song" id="like" href="#"></a>
+                            <div id="likeHover">
+                             By loving tracks they will be played more often.
+                            </div>
                             <a class="button" title="vote" id="voteButton" href="#">Skip</a>
                             <div id="voteOverlay">
                                 <div>
                                     <a class="close" title="close"></a>
                                     <h1>Skip or block?</h1>
-                                    <p>Do you want to skip this song or also block it from ever being played when you are logged in? Be careful when skipping others music, it might backfire ;)</p>
+                                    <p>Do you want to skip this song or also block it from ever being played when you are logged in? Be careful when skipping other's music, it might backfire ;)</p>
                                     <a class="button" title="Skip this song" id="skip" href="#">Skip</a>
                                     <a class="button" title="Block this song from ever playing again" id="block" href="#">Block</a>
                                 </div>
@@ -120,49 +149,134 @@
         <!-- open a room/start -->
         <section id="chooseSection" class="current">
                 <section>
+                   <div id="tutorial">
+                    <ul id="tutorialSteps">
+                        <li id="stepOne">
+                            <h2>Three co-workers drags tracks to the wejay app</h2>
+                            <div class="subtitle">by adding tracks to a wejay room, your music will be mixed into a democratic playing queue</div>
+                            <ul id="persons">
+                                <li>
+                                    <div class="aboutImage"><img src="images/portrait/girl1.jpg" /></div>
+                                    <div class="aboutPerson">
+                                        <h3>Johanna adds 4 songs</h3>
+                                        <ul class="tutorialAlbums">
+                                            <li><img src="Images/covers/nirvana.jpg" /></li>
+                                            <li><img src="Images/covers/nirvana.jpg" /></li>
+                                            <li><img src="Images/covers/nirvana.jpg" /></li>
+                                            <li><img src="Images/covers/nirvana.jpg" /></li>
+                                        </ul>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="aboutImage"><img src="images/portrait/man.jpg" /></div>
+                                    <div class="aboutPerson">
+                                        <h3>Christian adds 1 song and blocks 1 of Johanna's</h3>
+                                        <ul class="tutorialAlbums">
+                                            <li><img src="Images/covers/dylan.jpg" /></li>
+                                            <li><div class="block"></div><img src="Images/covers/nirvana.jpg" /></li>
+                                        </ul>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="aboutImage"><img src="images/portrait/girl2.jpg" /></div>
+                                    <div class="aboutPerson">
+                                        <h3>Sophie adds 3 songs</h3>
+                                        <ul class="tutorialAlbums">
+                                            <li><img src="Images/covers/jayz.jpg" /></li>
+                                            <li><img src="Images/covers/jayz.jpg" /></li>
+                                            <li><img src="Images/covers/jayz.jpg" /></li>
+                                        </ul>
+                                    </div>
+                                </li>
+                            </ul>
+                        </li>
+                        <li id="stepTwo">
+                            <div class="stepInfo"><ul class="rules">
+                                <div class="rulesTitle">Mixing rules:</div>
+                                <li>1. Mix tracks - No one can highjack the office music system</li>
+                                <li>2. Sporadic users gets priority</li>
+                                <li>3. Veto - Everyone can block tracks</li>
+                               </ul></div>
+                            <div class="stepInner">
+                                <h2>The Room Queue</h2>
+                                <div class="subtitle">A set of complex rules decides the order of each track played</div>
+                                <ul class="roomQueue">
+                                   <li><img src="Images/covers/nirvana.jpg" /><div class="tooltip">Johanna's first song will be first</div></li>
+                                   <li><img src="Images/covers/jayz.jpg" /><div class="tooltip">Sophie is a sporadic user. She will have priority over Christian.</div></li>
+                                   <li><img src="Images/covers/dylan.jpg" /><div class="tooltip">Christian's first song</div></li>
+                                   <li><div class="blockWrap"><img src="Images/covers/nirvana.jpg" /><div class="block"></div></div><div class="tooltip">Johanna's second song is blocked by Christian.</div></li>
+                                   <li><img src="Images/covers/jayz.jpg" /><div class="tooltip">Johanna's and Sophie's queues will be mixed in a zebra order.</div></li>
+                                   <li><img src="Images/covers/nirvana.jpg" /></li>
+                                   <li><img src="Images/covers/jayz.jpg" /></li>
+                                   <li><img src="Images/covers/nirvana.jpg" /></li>
+                               </ul>
+                           </div>
+                       </li>
+                       <li id="stepThree">
+                            <div class="stepInfo"><ul class="rules">
+                            <ul class="rules">
+                                <div class="rulesTitle">Intelligent rules:</div>
+                                <li>1. Only play music that has been added two times before</li>
+                                <li>2. Give priority to music all logged in users love or have played</li>
+                                <li>3. Never play the same track more than once per day</li>
+                                <li>4. Try to find patterns. Christmas music in December, Party music on Fridays.</li>
+                           </ul>
+                            </div>
+                            <div class="stepInner">
+                                <h2>The queue is empty, The Maestro bot starts adding tracks</h2>
+                        <div class="subtitle">After a few weeks you will start seeing the automatic bot called Maestro. It will be your assistant DJ.</div>
+                           <ul class="roomQueue">
+                               <li><img src="Images/covers/journey.jpg" /><div class="tooltip">Journey is loved by Sophie and has been added by Christian</div></li>
+                               <li><img src="Images/covers/britney.jpg" /><div class="tooltip ">Britney has been played by Johanna twice</div></li>
+                               <li><img src="Images/covers/lanadelrey.jpg" /><div class="tooltip">Lana Del Rey is often played on thursdays</div></li>
+                           </ul>
+                           </div>
+                       </li>
+                       </ul>
+                       <div id="tutorialNavigation">
+                        <a href="#" class="prev"></a>
+                        <div id="getStarted">Get started</div>
+                        <a href="#" class="next"></a>
+                       </div>
+                    </div>
                     <span id="loginInformation">
                         <h1>We are the DJ.</h1>
                         <p>You work better to the tunes of your favorite music, and Wejay makes that happen - for everyone at the office.</p>
+                        <div id="tutorialBtn">How does it work?</div>
                     </span>
-                    <span>
-                        <h1>WEJAY Rooms</h1>
-                        <p class="wejayRoomsCopy">All music in WEJAY is played in rooms. A room is where you and your colleagues listen to music together. Join a room to add your tracks and listen to music together.</p>
-                        <ul class="rooms" id="rooms"></ul>
-                        <script id="roomListTemplate" type="text/x-jquery-tmpl">
-                            <li><a href="spotify:app:wejay:room:${Name}">${Name}</a></li>
-                        </script>
-                        <script id="roomTopListTemplate" type="text/x-jquery-tmpl">
-                            <dl><img alt="${UserName}" src="http://graph.facebook.com/${FacebookId}/picture"></dl>
-                        </script>
+                    <div class="middle">
+                    <div class="left">
+                        <span id="roomsInformation">
+                            <h1>WEJAY Rooms</h1>
+                            <p class="wejayRoomsCopy">All music in WEJAY is played in rooms. A room is where you and your colleagues listen to music together. Join a room to add your tracks and listen to music together.</p>
+                            <ul class="rooms" id="rooms"></ul>
+                            <script id="roomListTemplate" type="text/x-jquery-tmpl">
+                                <li><a href="spotify:app:wejay:room:${Name}">${Name}</a></li>
+                            </script>
+                            <div class="loadingIndicator">
+                                <img src="images/loading.gif" />
+                            </div>
+                        </span>
                         <div id="enterRoomBanner">
                             <p>None of your facebook friends have created a room yet, be the first one in your workspace to create a WEJAY room. You can later share a link to the room.</p>
                             <form id="roomSelectBanner" action="#roomSection">
                                 <input type="text" value="" id="roomNameBanner" placeholder="CHOOSE ROOM NAME">
                                 <input type="submit" value="CREATE ROOM" />
-                            </form>
+                            </form>    
                         </div>
-                    </span>
+                    </div>
+                    <div class="right">
                     <div class="banner">
                         <h2>Enter a WEJAY Room</h2>
-                        <p>Enter the name of a room not in the list above to join it. If it doesn't exist, it will be created (use only letters and numbers, no weird characters).</p>
-                        <form id="roomSelect" action="#roomSection" class="input">
+                        <p>Enter the name of a room in the list to join it. If it doesn't exist, it will be created (use only letters and numbers).</p>
+                        <form id="roomSelect" action="#roomSection">
                             <input type="text" value="" id="roomName" placeholder="Wejay Room Name" />
                             <input type="submit" class="sp-button" value="Enter" />
                         </form>
                     </div>
-                    <span class="buttons disclaimerRooms">
-                        <h2 id="disclaimerLogin">Login to find your colleagues</h2>
-                        <div class="disclaimer rooms">
-                            <p>If your colleagues have already created a WEJAY ROOM you can login below to find them. Please note that by logging in with Facebook you agree to our terms and conditions.</p>
-                            <input type="checkbox" class="checkbox" >
-                            <input type="button" class="sp-button" disabled value="Login with Facebook">
-                        </div>
-                        <div id="disclaimerLoginOriginal">
-                            <p>I understand that by logging in with my Facebook account I enable WEJAY to use and store information from my Spotify library and listening history. This is done to provide a great listening experience.</p>
-                            <button class="sp-button" id="roomLogin">Login with Facebook</button>
-                            <button class="sp-button" id="roomLogout">Logout</button>
-                        </div>
-                    </span>
+                    
+                    </div>
+                    </div>
                 </section>
                 <footer class="bottom">
                     <address>By logging in with your Facebook account you accept that WEJAY may use and store information from your Spotify library.<a href="http://wejay.org" class="link external inverted" title="wejay.org">wejay.org</a></address>

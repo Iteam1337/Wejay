@@ -125,8 +125,8 @@ function RoomController(roomName, nodeUrl) {
                 m.player.play(trackUri, tpl);
             }
 
-            var curr = track.data.artists[0].name + " - " + track.data.name;
-            $("#currentSong").html(curr);
+            $("#currentArtist").html('<a href="' + track.data.artists[0].uri + '">' + track.data.artists[0].name + '</a>');
+            $("#currentTrack").html('<a href="' + track.data.uri + '">' + track.data.name + '</a>');
             $("#currentAlbum").attr("src", track.data.album.cover);
             $("#currentLink").attr("href", track.data.uri);
             $(".hidden.title").html(track.data.name);
@@ -144,7 +144,7 @@ function RoomController(roomName, nodeUrl) {
 
     this.clearCurrentSong = function (force) {
         $("#roomTitle").html(this.roomName + " Wejay Room");
-        $("#currentSong").html("Nothing playing right now. Drag a track here!");
+        //$("#currentSong").html("Nothing playing right now. Drag a track here!");
         $("#currentHolder .hover").hide();
         $("#currentAlbum").attr("src", "sp://import/img/placeholders/300-album.png");
         $(".hidden.title").html("");
@@ -153,7 +153,7 @@ function RoomController(roomName, nodeUrl) {
         $("#skip").html("Skip");
         $("#block").html("Block");
         $("#like").removeClass("liking liked failed");
-        if (force ||$("#queue li").length < 2 && $("#queue").html() !== this.nothingPlayingCopy) {
+        if (force || $("#queue li").length < 2 && $("#queue").html() !== this.nothingPlayingCopy) {
             $("#currentQueueNumber").text("CURRENT QUEUE");
             $("#queue").html(this.nothingPlayingCopy);
         }
@@ -417,7 +417,7 @@ function RoomController(roomName, nodeUrl) {
     };
 
     // checkin the current user to wejay
-      this.checkin = function (force, callback) {
+    this.checkin = function (force, callback) {
         if (!app.user.facebookId) {
             throw "You have not set room and user or facebook details yet";
         }
@@ -454,7 +454,7 @@ function RoomController(roomName, nodeUrl) {
                 console.log("___ - Error updating queue", e);
             },
             success: function (r) {
-                var result = r ? r.Playlist.filter(function (song) { return song.SpotifyId; }): [];
+                var result = r ? r.Playlist.filter(function (song) { return song.SpotifyId; }) : [];
                 if (result.length > 0) {
                     // slice the array to limit the playlist to 15 songs.
                     $("#currentQueueNumber").text("Current queue (" + result.length + ")");
