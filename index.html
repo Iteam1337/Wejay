@@ -14,6 +14,7 @@
     <script src="javascript/moment.min.js" type="text/javascript"></script>
     <script src="javascript/hub.js" type="text/javascript"></script>
     <script src="javascript/room.js" type="text/javascript"></script>
+    <script src="javascript/notifier.js" type="text/javascript"></script>
     <script src="javascript/app.js" type="text/javascript"></script>
     <script src="javascript/user.js" type="text/javascript"></script>
 </head>
@@ -134,11 +135,11 @@
                 </footer>
                 <!-- Logged in users -->
                 <script id="usersTemplate" type="text/x-jquery-tmpl">
-                    <li><a draggable="false" href="${(app.user.friends || []) .indexOf(FacebookId) >= 0 ? 'spotify:user:facebook:' + FacebookId : '#wejaysSection' }" ><img draggable="false" class="image" alt="${unescape(UserName)}" src="http://graph.facebook.com/${FacebookId}/picture"><p>${unescape(UserName)}</p><p class="time">${CheckedIn}</p></li></a>
+                    <li><span><img class="image" alt="${unescape(UserName)}" src="http://graph.facebook.com/${FacebookId}/picture"><p>${unescape(UserName)}</p><p class="time">${CheckedIn}</p></span></li>
                 </script>
                 <!-- Current music in playlist -->
                 <script id="queueTemplate" type="text/x-jquery-tmpl">
-                    <li><!--<span class="star no${Vote}"></span>--><div class="song"><a class="track ${PlayedBy.FacebookId == (app.user ? app.user.facebookId : '') ? 'mine' : ''}" href="spotify:track:${SpotifyId}"><strong>${Artist}</strong> - ${Title}</a><a class="user" href="spotify:user:facebook:${PlayedBy.FacebookId}">Added by ${unescape(PlayedBy.UserName)}</a></div></li>
+                    <li><!--<span class="star no${Vote}"></span>--><div class="song"><a class="track ${PlayedBy.FacebookId == (app.user ? app.user.facebookId : '') ? 'mine' : ''}" href="spotify:track:${SpotifyId}"><strong>${Artist}</strong> - ${Title}</a><span class="user">Added by ${unescape(PlayedBy.UserName)}</span></div></li>
                 </script>
                 <!-- Current music in playlist -->
                 <script id="userToplistTemplate" type="text/x-jquery-tmpl">
@@ -306,6 +307,11 @@
             </section>
         <!-- about/end -->
     </div>
+    <!-- NOTIFIER -->
+    <div id="notifierHolder">
+      <span id="closeNotifierHolder"></span>
+    </div>
+    <!-- NOTIFIER/end -->
     <script src="http://wejay.org/scripts/bugfixes.js" type="text/javascript"></script>
     <script type="text/javascript">
         // initialize Wejay App

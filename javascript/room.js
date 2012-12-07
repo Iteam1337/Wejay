@@ -466,7 +466,8 @@ function RoomController(roomName, nodeUrl) {
                 if (result.length > 0) {
                     // slice the array to limit the playlist to 15 songs.
                     $("#currentQueueNumber").text("Current queue (" + result.length + ")");
-                    var newHtml = $("#queueTemplate").tmpl(result.slice(0, 15));
+                    //var newHtml = $("#queueTemplate").tmpl(result.slice(0, 15));
+                    var newHtml = $("#queueTemplate").tmpl(result);
                     if ($("#queue").text() !== newHtml.text()) {
                         var render = $("<ul/>", { id: "queue", html: newHtml });
                         $("#queue").replaceWith(render);
@@ -491,6 +492,7 @@ function RoomController(roomName, nodeUrl) {
 
     // Update users online list
     this.updateUsers = function () {
+        console.log("updateUsers");
         $.ajax({
             url: "http://wejay.org/Room/GetOnlineUsers?room=" + self.roomName,
             type: "GET",
@@ -498,17 +500,28 @@ function RoomController(roomName, nodeUrl) {
             contentType: "application/json",
             dataType: "text",
             success: function (r) {
-                var result = r ? JSON.parse(r).Data : [],
+                var loggedIn = false,
+                    result = r ? JSON.parse(r).Data : [],
                     loggedInUsersTitle = "NO LOGGED IN WEJAYS",
                     loggedInUsersInnerText = "<li class=\"noOneIsLoggedIn\">When you log into this room your best music will be mixed into the playlist automatically. You can also invite your colleagues below.</li>";
                 result = result.filter(function (user) { return user.FacebookId && user.FacebookId != "null" && user.Online; });
+
                 if (result.length > 0) {
-                    for (var i in result) {
-                        var newDate = parseInt(result[i].CheckedIn.replace(/\/Date\(/, "").replace(/\/\)/, ""));
-                        result[i].CheckedIn = "Logged in since " + moment(new Date(newDate)).format("HH:mm MM/DD");
-                    }
+                    result = result.map(function (user) {
+                        var newDate = moment(user.CheckedIn).valueOf(),
+                            timeleft = moment(newDate).add("hours", 1).from(new Date()),
+                            newCheckedIn = "Will be signed out " + timeleft;
+                        if (user.FacebookId === app.user.facebookUser.id) loggedIn = true;
+                        return { UserName: unescape(user.UserName), FacebookId: user.FacebookId, CheckedIn: newCheckedIn };
+                    });
                     loggedInUsersTitle = "LOGGED IN WEJAYS (" + result.length + ")";
                     loggedInUsersInnerText = $("#usersTemplate").tmpl(result.slice(0, 10));
+                }
+                if (!loggedIn && self.roomName === app.loggedIntoRoom) {
+                    $("#leaveRoom").hide();
+                    $("#joinRoom").show();
+                    app.handleLoginInfo(true);
+                    app.loggedIntoRoom = "";
                 }
                 $(".logged.in h2").html(loggedInUsersTitle);
                 $("#users").html(loggedInUsersInnerText);
