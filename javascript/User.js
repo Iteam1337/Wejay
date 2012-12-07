@@ -78,11 +78,6 @@ function User() {
             }
         }
 
-        console.log(self.accessToken);
-        console.log(app.user);
-
-        console.log("here");
-
         var appID = "154112144637878",
             path = "https://www.facebook.com/dialog/oauth?",
             successUrl = "https://www.facebook.com/connect/login_success.html";
