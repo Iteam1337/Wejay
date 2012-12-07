@@ -78,6 +78,11 @@ function User() {
             }
         }
 
+        console.log(self.accessToken);
+        console.log(app.user);
+
+        console.log("here");
+
         var appID = "154112144637878",
             path = "https://www.facebook.com/dialog/oauth?",
             successUrl = "https://www.facebook.com/connect/login_success.html";
@@ -97,6 +102,7 @@ function User() {
                     $("#disclaimerLoginOriginal p").html(App.standardCopyLoggedOut);
                     app.loadRooms();
                     localStorage.setItem("facebookUser", JSON.stringify(facebookUser));
+                    localStorage.setItem("accessToken", accessToken);
                     self.friends = localStorage.getItem("friends");
                     //
                     // facebookUser(this); // inherit all facebook properties to this user class

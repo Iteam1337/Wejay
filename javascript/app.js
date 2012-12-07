@@ -37,7 +37,8 @@ function App() {
         { name: "facebookUser", type: "json" },
         { name: "acceptedLogin", type: "boolean" },
         { name: "friends", type: "commaNumber" },
-        { name: "room", type: "room" }
+        { name: "room", type: "room" },
+        { name: "accessToken", type: "string" }
     ];
     for (var obj in checkLocalStorage) {
         var check = checkLocalStorage[obj],
@@ -59,6 +60,9 @@ function App() {
                     break;
                 case "room":
                     test = (/^([a-z0-9\_\-\ ]){2,10}$/i.exec(object) !== null)
+                    break;
+                case "string":
+                    test = (typeof object === "string")
                     break;
             }
             if (test === false) {
@@ -419,14 +423,19 @@ function App() {
     this.init = function (version) {
         this.version = version;
 
-        if (!self.checkIfFBUserExists) {
-            if (localStorage.facebookUser !== undefined && localStorage.acceptedLogin !== undefined) {
-                app.user.facebookUser = localStorage.facebookUser;
-                var facebookUser = JSON.parse(localStorage.facebookUser),
-                accessToken = localStorage.acceptedLogin;
-
-                self.user.authenticate();
-            }
+        if ((!self.checkIfFBUserExists) && (localStorage.facebookUser !== undefined && localStorage.acceptedLogin !== undefined && localStorage.accessToken !== undefined && localStorage.room !== undefined)) {
+            var facebookUser = JSON.parse(localStorage.facebookUser);
+            app.user.facebookId = facebookUser.id;
+            app.user.facebookUser = facebookUser;
+            app.user.accessToken = localStorage.accessToken;
+            app.user.authenticate();
+            app.loggedIntoRoom = localStorage.room;
+            self.userLogoutShow();
+        } else {
+            app.user.facebookId = "";
+            app.user.facebookUser = {};
+            app.user.accessToken = "";
+            self.userLogoutHide();
         }
 
         var acceptedLogin = (localStorage.acceptedLogin) ? localStorage.acceptedLogin : false;
@@ -782,22 +791,10 @@ function App() {
             $("#voteOverlay").toggleClass("show");
         });
 
-        self.userLogoutHide();
-
         // fill default rooms
         self.fillRooms();
-        //
-        // This generated a error before. Earlier the localStorage version of facebookUser was "[object Object]".
-        // ... In the never version it's a stringified JSON-object.
-        var roomName = localStorage.getItem("room"),
-            localFacebookUser = localStorage.getItem("facebookUser");
-        self.user.facebookUser = (localFacebookUser === "[object Object]") ? "" : JSON.parse(localFacebookUser);
 
-        if (self.user.facebookUser) {
-            self.user.userName = self.user.facebookUser.name;
-        }
-
-        self.currentRoom = new RoomController(unescape(roomName), nodeUrl);
+        self.currentRoom = new RoomController(unescape(localStorage.room || "example"), nodeUrl);
 
         var tab = m.application.arguments[0];
 
