@@ -229,7 +229,7 @@ function App() {
     };
 
     // when links are dropped to the application we want to add those to the queue
-    m.application.observe(m.EVENT.LINKSCHANGED, function () {
+    m.application.observe(m.EVENT.LINKSCHANGED, function (e) {
         var links = m.application.links;
         console.log("dropped links", links);
         self.handleDroppedLinks(links);
@@ -553,8 +553,28 @@ function App() {
         $("#roomSection").on("drop", function (e) {
             e.preventDefault();
             var id = event.dataTransfer.getData("text");
-            console.log("dropped to section ", id);
-            if (self.checkIfUserAcceptedAgreement()) {
+            if (e.target.id === "searchInputField") {
+                var type = m.Link.getType(id), dropped = false;
+                if (type === 2) {
+                    m.Album.fromURI(id, function (album) {
+                        var albumLink = album.data.uri,
+                            tracks = album.data.tracks;
+                        dropped = tracks[0].artists[0].name + " " + tracks[0].album.name;
+                    });
+                }
+                if (type === 4) {
+                    m.Track.fromURI(id, function (track) {
+                        dropped = track.data.artists[0].name + " " + track.data.name;
+                    });
+                }
+                if (type === 5) {
+                    dropped = m.Playlist.fromURI(id).data.name;
+                }
+                if (dropped !== false) {
+                    e.target.value = dropped;
+                    $(e.target).trigger("dosearch");  
+                }
+            } else if (self.checkIfUserAcceptedAgreement()) {
                 self.handleDroppedLinks([id]);
             }
         });

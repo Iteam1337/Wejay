@@ -53,6 +53,8 @@ function RoomController(roomName, nodeUrl) {
             // TODO: felhantering.
             // Här ska ett meddelande dyka upp till användaren om att låten
             // redan existerar i listan.
+            var existingSong = "\"" + song.artist + " - " + song.title + "\" is already in the playlist, let's skip this.";
+            NOTIFIER.show(existingSong);
         }
     };
 
@@ -134,6 +136,7 @@ function RoomController(roomName, nodeUrl) {
             }
 
             $("#currentArtist").html('<a href="' + track.data.artists[0].uri + '">' + track.data.artists[0].name + '</a>');
+            $("#currentArtist").append(' - ');
             $("#currentTrack").html('<a href="' + track.data.uri + '">' + track.data.name + '</a>');
             $("#currentAlbum").attr("src", track.data.album.cover);
             $("#currentLink").attr("href", track.data.uri);
@@ -492,7 +495,6 @@ function RoomController(roomName, nodeUrl) {
 
     // Update users online list
     this.updateUsers = function () {
-        console.log("updateUsers");
         $.ajax({
             url: "http://wejay.org/Room/GetOnlineUsers?room=" + self.roomName,
             type: "GET",

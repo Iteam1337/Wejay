@@ -5,7 +5,7 @@ function AutoCompleteForm() {
 
     this.init = function (formQuery) {
         var autocompleteForm = $(formQuery),
-            placeholder = autocompleteForm.append("<div class=\"input token-input\"><input type=\"text\"></input><div class=\"auto-complete\"><div class=\"tracks\"></div></div></div>"),
+            placeholder = autocompleteForm.append("<div class=\"input token-input\"><input type=\"text\" id=\"searchInputField\"></input><div class=\"auto-complete\"><div class=\"tracks\"></div></div></div>"),
             searchInput = placeholder.find("input:first"),
             lastSearch = "",
             timer;
@@ -74,6 +74,12 @@ function AutoCompleteForm() {
             } else {
                 $(".tracks").hide();
             }
+        });
+        searchInput.on("dosearch", function () {
+            var value = $(this).val();
+            $(this).focus();
+            $(this).trigger("click");
+            handleInput(value);
         });
         $(".tracks").on("mouseover", function (e) {
             var current = e.target,
