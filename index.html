@@ -29,22 +29,16 @@
     </div>
     <div id="overlay">
         <div id="facebook" class="buttons disclaimerRooms">
-            <h2 id="disclaimerLogin">
-                Login to find your colleagues</h2>
+            <h2 id="disclaimerLogin">SOCIAL PLAYER FOR OPEN WORKSPACES</h2>
             <div class="disclaimer rooms">
-                <p>WEJAY is a social music app. If your colleagues have already created a WEJAY ROOM you can login to find them.</p>
-                <input type="checkbox" class="checkbox">
-                <input type="button" class="sp-button" disabled value="Login with Facebook">
-            </div>
-            <div id="disclaimerLoginOriginal">
-                <p>I understand that when I log into my Facebook account below, Facebook will be able to associate information about my Spotify
+                <p>After you have logged in you and your colleagues can add songs to a shared playlist which will be organized in a democratic way. For example, if some of your colleagues add 30 songs from their favorite death metal band - you can interrupt that with your favorite music and the democratic mix will see to it that you both get your music played.</p>
+                <p>To get started, just open a WEJAY ROOM on one computer with speakers and everyone else can add songs to that playlist.</p>
+                <p id="disclaimerText">I understand that when I log into my Facebook account below, Facebook will be able to associate information about my Spotify
                 use, such as library and listening history, with my Facebook account. Facebook's collection and use of this information
                 will be governed by the Facebook Privacy Policy.
                 </p>
-                <button class="sp-button" id="roomLogin">
-                    Login with Facebook</button>
-                <button class="sp-button" id="roomLogout">
-                    Logout</button>
+                <input type="checkbox" class="checkbox">
+                <button class="sp-button" id="roomLogin" disabled>Login with Facebook</button>
             </div>
         </div>
     </div>
@@ -77,6 +71,9 @@
                              By loving tracks they will be played more often.
                             </div>
                             <a class="button" title="vote" id="voteButton" href="#">Skip</a>
+                            <div id="skipHover">
+                                By skipping tracks you tell WEJAY what you don't like.
+                            </div>
                             <div id="voteOverlay">
                                 <div>
                                     <a class="close" title="close"></a>
@@ -88,12 +85,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="disclaimer wejay">
-                        <h1>Disclaimer</h1>
-                        <input type="checkbox" class="checkbox" >
-                        <p>I understand that by logging in with my Facebook account I enable Wejay to use and store information from my Spotify library and listening history. This is done to provide a great listening experience.</p>
-                    </div>
-                    <div id="sharePopup">
+                     <div id="sharePopup">
                         <input type="button" id="closeShare" title="close" value="">
                         <h1>Share this room</h1>
                         <p>The fun begins when your colleagues start adding music. Use your favorite method to get the news out there!</p>
@@ -248,8 +240,8 @@
                     <div class="middle">
                     <div class="left">
                         <span id="roomsInformation">
-                            <h1>WEJAY Rooms</h1>
-                            <p class="wejayRoomsCopy">All music in WEJAY is played in rooms. A room is where you and your colleagues listen to music together. Join a room to add your tracks and listen to music together.</p>
+                            <h1>FIND YOUR COLLEAGUESs</h1>
+                            <p class="wejayRoomsCopy">You and your colleagues add songs in a WEJAY room. To find if your colleagues have created a room. Please login and find the rooms below.</p>
                             <ul class="rooms" id="rooms"></ul>
                             <script id="roomListTemplate" type="text/x-jquery-tmpl">
                                 <li><a href="spotify:app:wejay:room:${Name}">${Name}</a></li>
@@ -257,6 +249,8 @@
                             <div class="loadingIndicator">
                                 <img src="images/loading.gif" />
                             </div>
+                            <button class="sp-button" id="btnLogin">Login with Facebook</button>
+                            <button class="sp-button" id="btnLogout">Logout</button>
                         </span>
                         <div id="enterRoomBanner">
                             <p>None of your facebook friends have created a room yet, be the first one in your workspace to create a WEJAY room. You can later share a link to the room.</p>
@@ -268,14 +262,13 @@
                     </div>
                     <div class="right">
                     <div class="banner">
-                        <h2>Enter a WEJAY Room</h2>
-                        <p>Enter the name of a room in the list to join it. If it doesn't exist, it will be created (use only letters and numbers).</p>
+                        <h2>Find a WEJAY Room</h2>
+                        <p>If you want to enter an existing WEJAY room, just type the name below.</p>
                         <form id="roomSelect" action="#roomSection">
                             <input type="text" value="" id="roomName" placeholder="Wejay Room Name" />
                             <input type="submit" class="sp-button" value="Enter" />
                         </form>
                     </div>
-                    
                     </div>
                     </div>
                 </section>

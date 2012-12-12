@@ -229,13 +229,14 @@ a
     top: 50%;
     left: 50%;
     margin-left: -250px;
-    background: rgba(255, 255, 255, 1);
+    background: rgba(0,0,0,0.7);
     padding: 20px;
     box-sizing: border-box;
-    margin-top:-82px;
+    margin-top:-165px;
+    height:330px;
 }
 #disclaimerLogin {
-    color: #F9B24D;
+    color: #fff;
     text-shadow: none;
 }
 input[type="submit"],
@@ -886,6 +887,10 @@ h3
   margin:0;
   overflow: hidden;
 }
+#btnLogin, #btnLogout 
+{
+    margin-top:20px;
+}
 #queue
 {
   width: 330px;
@@ -961,13 +966,13 @@ h3
 {
   color: #fff;
 }
-#queue .nothing.playing, #likeHover 
+#queue .nothing.playing, #likeHover, #skipHover 
 {
   background-image: -webkit-linear-gradient(top, #5798d2 0%,#0063CB 100%);    
   position: absolute;
 }
 
-#likeHover 
+#likeHover,#skipHover
 {
     color:#fff;
     padding:15px;
@@ -975,7 +980,10 @@ h3
     bottom:-60px;
     display:none;
 }
-
+#skipHover 
+{
+    left:30px;
+}
 #queue .nothing.playing
 {
   display: block;
@@ -986,7 +994,7 @@ h3
   width: 300px;
 }
 
-#queue .nothing.playing:after, #likeHover:after
+#queue .nothing.playing:after, #likeHover:after, #skipHover:after
 {
   top: -20px;
   left: 15px;
@@ -1212,19 +1220,21 @@ input[type=text]
   border:0px;
   padding:3px;
 }
-
 blockquote,
 address
 {
   clear: both;
-  padding: 10px;
-  line-height: 18px;
+  padding:0 10px;
   width: 80%;
   margin: 0 auto;
 }
 blockquote a
 {
   color: #fff;
+}
+#roomSection blockquote 
+{
+    padding-bottom:20px;
 }
 /*
  * DISCLAIMER
@@ -1251,7 +1261,6 @@ blockquote a
 {
     background-color: rgba(170,170,170,.8) !important;
     margin: 20px auto;
-    padding: 5px 20px 15px !important;
     width: 630px;
     position: relative;
     height: 40px;
@@ -1307,13 +1316,13 @@ blockquote a
     line-height: inherit;
     top: 0;
     left: 0;
-    margin: -5px 0 0 -20px !important;
+    margin: 5px 0;
     padding: 0 !important;
-    color:#000;
+    color:#999;
 }
 .disclaimerRooms .disclaimer input[type="button"]
 {
-    margin: 10px 0 0 10px;
+    margin: 10px 0 0 30px;
 }
 .disclaimerRooms .disclaimer input[type="button"].hover
 {
@@ -1322,7 +1331,7 @@ blockquote a
 }
 .disclaimerRooms .disclaimer .checkbox
 {
-    margin: 25px 0 0 0;
+    margin: 209px 0 0 0;
     padding: 0;
     left:0;
 }
@@ -1334,7 +1343,15 @@ blockquote a
     display: block;
     margin: 20px 0 25px;
 }
-
+#disclaimerText 
+{
+    color:#666;
+}
+#roomLogin 
+{
+    margin-top:10px;
+    margin-left:30px;
+}
 /*
  * END DISCLAIMER
  */
@@ -1355,6 +1372,8 @@ blockquote a
   font-size: 42px;
   overflow: hidden;
   line-height: 1em;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .top
@@ -1651,8 +1670,9 @@ footer
   z-index: 0;
   clear: both;
   padding: 15px;
+  height:100px;
   background-color: #ecebe8;
-  bottom: -150px;
+  bottom: 0;
   z-index: 4;
 }
 footer *
@@ -1661,7 +1681,6 @@ footer *
   text-align: left;
   width: 640px;
   margin: 0 auto;
-  padding: 10px 0;
 }
 footer a
 {
@@ -1963,7 +1982,7 @@ footer a
     }
     .disclaimerRooms .disclaimer .checkbox
     {
-        margin: 12px 0 0 -20px;
+        margin: 12px 0 0 0px;
     }
     #sharePopup
     {
@@ -1977,6 +1996,11 @@ footer a
     {
         width: 90%;
     }
+    #currentSong 
+    {
+        max-height: 50px;
+        overflow: hidden;
+    }
 }
 
 @media (max-width:460px)
@@ -1985,10 +2009,15 @@ footer a
     {
         position: absolute;
         top: 10px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        width: 90%;
+        box-sizing: border-box;
     }
     #roomSection .top .left
     {
-        margin: 60px auto 0;
+        margin: 80px auto 0;
         float: none;
         position: relative;
         width: 200px;
@@ -2010,5 +2039,17 @@ footer a
     {
         -webkit-column-count: 0;
         -webkit-column-gap: 0;
+    }
+    #overlay #facebook {
+        width: 300px;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        margin-left: -150px;
+        background: rgba(0, 0, 0, 0.7);
+        padding: 20px;
+        box-sizing: border-box;
+        margin-top: -215px;
+        height: 430px;
     }
 }

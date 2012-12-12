@@ -354,13 +354,13 @@ function App() {
     this.standardCopyLoggedOut = "I understand that by logging in with my Facebook account I enable WEJAY to use and store information from my Spotify library and listening history. This is done to provide a great listening experience.";
 
     this.userLogoutShow = function () {
-        $("#login, #roomLogin").hide();
-        $("#roomLogout, #leaveRoom").show();
+        $("#login, #roomLogin, #btnLogin, #facebook").hide();
+        $("#roomLogout, #leaveRoom, #btnLogout").show();
     };
 
     this.userLogoutHide = function () {
-        $("#login, #roomLogin").show();
-        $("#logout, #leaveRoom, #joinRoom, #roomLogout").hide();
+        $("#login, #roomLogin, #btnLogin").show();
+        $("#logout, #leaveRoom, #joinRoom, #roomLogout, #btnLogout").hide();
         $("#disclaimerLoginOriginal p").html(self.standardCopyLoggedOut);
     };
 
@@ -532,13 +532,14 @@ function App() {
         $("#start").removeClass("pause");
         $("#onair").hide();
 
-        $("#roomLogout").on("click", function () {
+        $("#roomLogout, #btnLogout").on("click", function () {
             self.user.logoutFromFacebook();
             app.loggedIntoRoom = "";
             self.userLogoutHide();
         });
 
-        $("#login, #roomLogin").on("click", function () {
+        $("#login, #roomLogin, #btnLogin").on("click", function () {
+            console.warn('hej');
             if (self.checkIfUserAcceptedAgreement()) {
                 self.user.authenticate(function (room) {
                     self.loggedIntoRoom = room;
@@ -724,23 +725,35 @@ function App() {
             $("#overlay").show().find(".rooms").show();
             $("#login").attr("disabled", true);
             $(".disclaimer .checkbox").hover(
-                function () {
-                    var button = $(".disclaimer.rooms .sp-button");
-                    $("#login").attr("disabled", false);
-                    button.addClass("hover");
-                },
-                function () {
-                    var button = $(".disclaimer.rooms .sp-button");
-                    $("#login").attr("disabled", true);
-                    button.removeClass("hover");
-                }
+
+                    function () {
+                        if (!$(this).hasClass("checked")) {
+                            var button = $(".disclaimer.rooms .sp-button");
+                            $("#roomLogin").attr("disabled", false);
+                            button.addClass("hover");
+                            $(this).css("background-position", "0 0");
+                        }
+                    },
+                    function () {
+                        if (!$(this).hasClass("checked")) {
+                            var button = $(".disclaimer.rooms .sp-button");
+                            $("#roomLogin").attr("disabled", true);
+                            button.removeClass("hover");
+                            $(this).css("background-position", "0 36px");
+                        }
+                    }
+
             );
             $(".disclaimer .checkbox").click(function () {
-                $(".disclaimer").remove();
-                $("#login").attr("disabled", false);
+                console.log('hej');
+                //                $(".disclaimer").remove();
+                //                $("#login").attr("disabled", false);
+                //                $(".disclaimerRooms").removeClass("disclaimerRooms");
+                //                $("#disclaimerLoginOriginal").show();
+                $(this).css("background-position", "0 0");
+                $(this).addClass("checked");
+                $("#roomLogin").attr("disabled", false);
                 localStorage.acceptedLogin = "true";
-                $(".disclaimerRooms").removeClass("disclaimerRooms");
-                $("#disclaimerLoginOriginal").show();
                 self.acceptedLogin = true;
             });
         } else {
@@ -772,7 +785,14 @@ function App() {
                 app.currentRoom.skip();
             }
         });
-
+        $("#voteButton").on({
+            mouseenter: function () {
+                $("#skipHover").show();
+            },
+            mouseleave: function () {
+                $("#skipHover").hide();
+            }
+        });
         $("#voteButton").on("click", function () {
             if (self.checkIfUserAcceptedAgreement()) {
                 $("#voteOverlay").toggleClass("show");
