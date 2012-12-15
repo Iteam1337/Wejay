@@ -332,7 +332,7 @@ function App() {
     };
 
     //
-    // Copy for "Open a room"
+    // Copy for "rooms"
     this.loggedInCopy = function (noRoom) {
         $("#overlay").hide();
         var user = app.user.userName,
@@ -445,7 +445,7 @@ function App() {
         } else {
             //
             // if the user has not accepted the disclaimer -- he/she will be reverted to the
-            // "open a room"-section. Also, the standardroom will be the iteam-room.
+            // "rooms"-section. Also, the standardroom will be the iteam-room.
             $(".disclaimer:first").hide();
             $("#disclaimerLoginOriginal").hide();
             if (localStorage.room === undefined) {
@@ -601,8 +601,8 @@ function App() {
             if (/^([a-z0-9\_\-\ ]){2,10}$/i.exec(newRoomName) !== null) {
                 app.currentRoom.init(newRoomName, true);
                 document.location = 'spotify:app:wejay:room';
-            } else if (newRoomName.length >= 11 || newRoomName.length <= 1) {
-                alert("Your roomname should contain between 2 and 10 letters.");
+            } else if (newRoomName.length >= 16 || newRoomName.length <= 1) {
+                alert("Your roomname should contain between 2 and 16 letters.");
             } else {
                 var temp = newRoomName.match(/([^a-z0-9\_\-\ ])/ig, "$1"),
                     matchString = temp.join(" ");
