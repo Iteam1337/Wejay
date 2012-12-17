@@ -71,7 +71,7 @@ h1, h2, h3, h4
 }
 h1
 {
-  font-family: 'League Gothic', serif, Arial, Helvetica, sans-serif;
+  font-family: 'League Gothic', Arial, Helvetica, sans-serif;
   font-weight: normal;
   text-transform: uppercase;
   font-size: 30px;
@@ -79,7 +79,7 @@ h1
 }
 h2
 {
-  font-family: 'League Gothic', serif, Arial, Helvetica, sans-serif;
+  font-family: 'League Gothic', Arial, Helvetica, sans-serif;
   font-weight: normal;
   text-transform: uppercase;
   font-size: 24px;
@@ -231,7 +231,7 @@ a
     background: rgba(0,0,0,0.7);
     padding: 20px;
     box-sizing: border-box;
-    margin-top:-165px;
+    margin-top:-190px;
     height:380px;
 }
 #disclaimerLogin {
@@ -430,7 +430,7 @@ section.current
 }
 #chooseSection #enterRoomBanner #roomSelectBanner input
 {
-  font-family: 'League Gothic', serif, Arial, Helvetica, sans-serif;
+  font-family: 'League Gothic', Arial, Helvetica, sans-serif;
   font-weight: normal;
   text-transform: uppercase;
   font-size: 30px;
@@ -782,7 +782,7 @@ h3
 }
 .rooms a
 {
-    font-family: 'League Gothic', serif, Arial, Helvetica, sans-serif;
+    font-family: 'League Gothic', Arial, Helvetica, sans-serif;
     font-weight: normal;
     font-size: 25px;
     line-height: 20px;

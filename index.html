@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <title>Wejay</title>
-    <script src="javascript/jquery-1.7.2.min.js" type="text/javascript"></script>
+    <script src="javascript/jquery-1.8.3.min.js" type="text/javascript"></script>
     <script src="javascript/jquery.tmpl.min.js" type="text/javascript"></script>
     <script src="javascript/socket.io.js" type="text/javascript"></script>
     <link rel="stylesheet" href="sp://import/css/adam.css" />
@@ -17,6 +17,9 @@
     <script src="javascript/notifier.js" type="text/javascript"></script>
     <script src="javascript/app.js" type="text/javascript"></script>
     <script src="javascript/user.js" type="text/javascript"></script>
+    <script src="javascript/greensock/TweenMax.min.js"></script>
+    <script src="javascript/jquery.superscrollorama.js"></script>
+    <script src="javascript/angular.min.js"></script>
 </head>
 <body ng-app="tutorial">
     <div id="tutorialWrap">
@@ -58,9 +61,6 @@
             <ng-queue></ng-queue>
         </div>
     </div>
-        <script src="javascript/greensock/TweenMax.min.js"></script>
-    <script src="javascript/jquery.superscrollorama.js"></script>
-    <script src="javascript/angular.min.js"></script>
     <script>
         function SongCtrl($scope) {
             var songs = [
@@ -127,7 +127,6 @@
                         var controller = $.superscrollorama();
                         $('.tutAdd').each(function () {
                             var id = $(this).attr('id');
-                            console.log(id);
                             controller.addTween('#' + id, TweenMax.from($('#' + id), 1, { css: { opacity: 0 }, onComplete: function () { $('#' + id).addClass('open'); $('.queue' + id).addClass('open').fadeIn(); $('#queueLength').html('(' + $('#tutQueue .open').length + ')'); } }));
                         });
                     });
@@ -167,6 +166,7 @@
                 use, such as library and listening history, with my Facebook account. Facebook's collection and use of this information
                 will be governed by the Facebook Privacy Policy.
                 </p>
+                 <div id="tutorialBtn">How does it work?</div>
                 <input type="checkbox" class="checkbox">
                 <button class="sp-button" id="roomLogin" disabled>Login with Facebook</button>
             </div>
@@ -275,13 +275,14 @@
                 <section>
                                        <span id="loginInformation">
                         <p>WEJAY is built for teams. When you and your colleages start mixing your music with WEJAY, all of you will be more productive and social.</p>
-                        <div id="tutorialBtn">How does it work?</div>
+                       
                     </span>
                     <div class="middle">
                     <div class="left">
                         <span id="roomsInformation">
                             <h1>FIND YOUR COLLEAGUES</h1>
                             <p>If any of your facebook friends have created a room, it will be shown below. Otherwise, create one yourself. It takes less than one second. ;-)</p>
+                            <ul class="rooms" id="rooms"></ul>
                             <script id="roomListTemplate" type="text/x-jquery-tmpl">
                                 <li><a href="spotify:app:wejay:room:${Name}">${Name}</a></li>
                             </script>
