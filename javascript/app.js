@@ -462,13 +462,7 @@ function App() {
         ac.init(".auto-completeForm");
 
         $("#tutorialBtn").on("click", function () {
-            $("#getStarted").hide();
-
-            $("#tutorial").show();
-            $("#stepOne").show().addClass("open");
-            $("#tutorialNavigation .prev").hide();
-            $("#tutorialNavigation .next").show();
-            $("#loginInformation").hide();
+            $("#tutorialWrap").fadeIn();
         });
 
         function tutorialNextPrev(direction) {
@@ -539,7 +533,6 @@ function App() {
         });
 
         $("#login, #roomLogin, #btnLogin").on("click", function () {
-            console.warn('hej');
             if (self.checkIfUserAcceptedAgreement()) {
                 self.user.authenticate(function (room) {
                     self.loggedIntoRoom = room;

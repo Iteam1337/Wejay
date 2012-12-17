@@ -23,7 +23,6 @@ html, body
   width: 100%;
   height: 100%;
   min-height:100%;
-  background-color: #ecebe8;
 }
 
 
@@ -233,7 +232,7 @@ a
     padding: 20px;
     box-sizing: border-box;
     margin-top:-165px;
-    height:330px;
+    height:380px;
 }
 #disclaimerLogin {
     color: #fff;
@@ -260,7 +259,7 @@ section.current
   position: absolute;
   background: -webkit-linear-gradient(top, rgb(26,26,26) 0%,rgb(60,60,60) 70%,rgb(90,90,90) 100%);
   width: 100%;
-  height: auto;
+  height: 100%;
   margin-top: 0;
   padding-top: 0;
   min-height: 480px;
@@ -337,22 +336,6 @@ section.current
   background: url("../images/top.png") 50% 46% no-repeat;
   background-size: 101% auto;
   position:relative;
-}
-#chooseSection #loginInformation #tutorialBtn 
-{
-    background: -webkit-linear-gradient(top, #F9B24D 0%,#F7970C 100%);
-    color: white;
-    padding: 10px 15px;
-    position: absolute;
-    bottom: 20px;
-    right: 20px;
-    text-align: center;
-    font-family: 'League Gothic', Sans-Serif;
-    font-size: 24px;
-    text-transform: uppercase;
-    text-shadow: 1px 1px 1px rgba(0, 0, 0, .5);
-    cursor: pointer;
-    box-shadow: 0px 0px 5px rgba(0,0,0,0.8);
 }
 #chooseSection #disclaimerLogin
 {
@@ -466,245 +449,6 @@ section.current
   background: none;
   margin-top: 15px;
   text-shadow: 1px 1px 0 Black;
-}
-#chooseSection #tutorial 
-{
-    background:rgba(0,0,0,0.3);
-    width:100%;
-    margin-bottom:20px;
-    box-sizing:border-box;
-    color:#fff;
-    display:none;
-}
-#chooseSection #tutorial
-{
-    width:670px;
-    overflow:hidden;
-}
-#chooseSection #tutorial #tutorialNavigation 
-{
-    background:rgba(0,0,0,0.6);
-    position: relative;
-    height: 50px;
-    padding:5px 0;
-}
-#chooseSection #tutorial #tutorialSteps 
-{
-    width:2020px;
-    overflow:hidden;
-    margin:0;
-}
-#chooseSection #tutorial #tutorialSteps #stepOne,
-#chooseSection #tutorial #tutorialSteps #stepTwo,
-#chooseSection #tutorial #tutorialSteps #stepThree
-{
-    display:inline-block;
-    width:670px;
-    overflow:hidden;
-    position:relative;
-    margin:0;
-    vertical-align:top;
-    box-sizing:border-box;
-    height: 465px;
-    padding:20px;
-}
-#chooseSection #tutorial h2 
-{
-    font-size:36px;
-}
-#chooseSection #tutorial .subtitle 
-{
-    font-family: 'League Gothic', Sans-Serif;
-    font-size: 21px;
-    color: #999;
-    margin-bottom: 20px;
-    margin-top: 15px;
-    text-transform:uppercase;
-    line-height:1.5;
-}
-#chooseSection #tutorial li .aboutImage
-{
-    list-style:none;
-    height:100px;
-    width:100px;
-    overflow:hidden;
-    display:inline-block;
-    margin-right:20px;
-}
-#chooseSection #tutorial li .aboutImage img 
-{
-    width:100%;
-}
-#chooseSection #tutorial li .aboutPerson 
-{
-    display:inline-block;
-    vertical-align:top;
-}
-#chooseSection #tutorial li .aboutPerson h3 
-{
-    font-weight:bold;
-    text-transform:uppercase;
-    font-family:'League Gothic';
-    font-size:18px;
-    color:#aaa;
-}
-#chooseSection #tutorial #tutorialSteps .stepInfo
-{
-    width:200px;
-    height:100%;
-    position:absolute;
-    left:0;
-    top:0;
-    background:#000;
-    padding:20px;
-    box-sizing:border-box;
-}
-#chooseSection #tutorial #tutorialSteps .stepInner 
-{
-    position:absolute;
-    left:220px;
-} 
-#chooseSection #tutorial .roomQueue 
-{
-    padding: 0;
-}
-
-#chooseSection #tutorial .roomQueue li .tooltip 
-{
-    position: relative;
-    display: inline-block;
-    top: -7px;
-}
-#chooseSection #tutorial #tutorialSteps .tutorialAlbums li, #chooseSection #tutorial #tutorialSteps .roomQueue li 
-{
-    list-style:none;
-    margin-right:10px;
-    position:relative;
-    background:rgba(0,0,0,0.3);
-    padding:5px;
-}
-#chooseSection #tutorial #tutorialSteps .tutorialAlbums li 
-{
-    display:inline-block;
-    background:none;
-    margin:0;
-    padding:0;
-}
-#chooseSection #tutorial .roomQueue li
-{
-    position:relative;
-    font-family:'League Gothic', Sans-Serif;
-    color:#999;
-    font-size:16px;
-    padding:0;
-    margin-bottom:0;
-    vertical-align:top;
-    display:none;
-    text-transform:uppercase;
-}
-#chooseSection #tutorial #tutorialSteps .roomQueue li:nth-child(2n+1)
-{
-    background:rgba(0,0,0,0.6);
-}
-#chooseSection #tutorial #tutorialSteps .tutorialAlbums li img, #chooseSection #tutorial #tutorialSteps .roomQueue li img
-{
-    width:25px;
-    height:25px;
-    box-shadow: 0px 0px 10px rgba(0,0,0,0.3);
-    -webkit-transition:all 500ms ease;
-    margin-right: 10px;
-}
-#chooseSection #tutorial #tutorialSteps .tutorialAlbums li img 
-{
-    display:inline-block;
-    width:50px;
-    height:50px;
-
-}
-#chooseSection #tutorial #tutorialSteps .tutorialAlbums li .block, #chooseSection #tutorial #tutorialSteps .roomQueue li .block
-{
-    background:rgba(255,0,0,0.4);
-    position:absolute;
-    top:0;
-    left:0;
-    width:50px;
-    height:50px;
-}
-#chooseSection #tutorial #tutorialSteps .roomQueue li .blockWrap 
-{
-    display:inline;
-    position:relative;
-} 
-#chooseSection #tutorial #tutorialSteps .roomQueue li .block 
-{
-    width:25px;
-    height:25px;
-    top:-13px;
-}
-#chooseSection #tutorial #tutorialNavigation #getStarted 
-{
-    width: 150px;
-    margin: 0 auto;
-    text-align: center;
-    background: -webkit-linear-gradient(top,  #f9b24d 0%,#f7970c 100%); /* Chrome10+,Safari5.1+ */
-    padding: 10px;
-    margin-top: 6px;
-    font-family: 'League Gothic', sans-serif;
-    font-size: 24px;
-    text-shadow: 1px 1px 0px black;
-    cursor: pointer;
-    display:none;
-}
-#chooseSection #tutorial #tutorialNavigation .prev, #chooseSection #tutorial #tutorialNavigation .next
-{
-    width:50px;
-    height:50px;
-	width: 0; 
-	height: 0; 
-	border-top: 20px solid transparent;
-	border-bottom: 20px solid transparent;	
-	border-right: 20px solid rgba(255,255,255,0.3);
-	position:absolute;
-	left:20px;
-	top:50%;
-	cursor:pointer;
-	z-index:1000;
-	-webkit-transition:all 500ms ease;
-	margin-top:-20px;
-}
-#chooseSection #tutorial #tutorialNavigation .next 
-{
-	border-left: 20px solid rgba(255,255,255,0.3);
-	border-right: none;
-	left:auto;
-	right:20px;
-}
-#chooseSection #tutorial #tutorialNavigation .next:hover
-{
-    border-left:20px solid rgba(255,255,255,0.6);
-}
-#chooseSection #tutorial #tutorialNavigation .prev:hover 
-{
-    border-right: 20px solid rgba(255,255,255,0.6);
-}
-#stepTwo .rules, #stepThree .rules 
-{
-    padding: 0;
-    font-family: 'League Gothic', sans-serif;
-    font-size: 24px;
-    text-transform: uppercase;
-    position: relative;
-    line-height:1.2;
-}
-#stepTwo .rules .rulesTitle, #stepThree .rules .rulesTitle
-{
-    margin-bottom:10px;
-}
-#stepTwo .rules li, #stepThree .rules li
-{
-    color:#999;
-    padding:0;
-    font-size:16px;
 }
 #aboutSection .rows
 {
@@ -839,6 +583,7 @@ h3
     padding: 9px 10px 3px;
     position: relative;
     box-sizing:border-box;
+    text-transform: uppercase;
 }
 .rooms li:nth-child(odd) 
 {
@@ -1227,6 +972,7 @@ address
   padding:0 10px;
   width: 80%;
   margin: 0 auto;
+  text-align:left;
 }
 blockquote a
 {
@@ -1290,7 +1036,6 @@ blockquote a
 }
 .disclaimer p
 {
-    width: 420px;
     top: 12px;
     left: 210px;
 }
@@ -1308,7 +1053,7 @@ blockquote a
     position: relative;
     top: 0;
     margin: 0 !important;
-    width: 230px !important;
+    width:100%;
 }
 .disclaimerRooms .disclaimer p
 {
@@ -1331,7 +1076,7 @@ blockquote a
 }
 .disclaimerRooms .disclaimer .checkbox
 {
-    margin: 209px 0 0 0;
+    margin: 256px 0 0 0;
     padding: 0;
     left:0;
 }
@@ -1662,24 +1407,25 @@ blockquote a
 }
 footer
 {
-  border-top: 1px solid rgba(255,255,255,.2);
-  box-shadow: 0 -1px 0 rgba(0,0,0,.2);
-  width: 100%;
-  display: inline-block;
-  margin: 0 0 0 -15px;
-  z-index: 0;
-  clear: both;
-  padding: 15px;
-  height:100px;
-  background-color: #ecebe8;
-  bottom: 0;
-  z-index: 4;
+    border-top: 1px solid rgba(255, 255, 255, .2);
+    box-shadow: 0 -1px 0 rgba(0,0,0,.2);
+    width: 100%;
+    display: inline-block;
+    margin: 0 0 0 -15px;
+    z-index: 0;
+    clear: both;
+    padding: 15px;
+    bottom: 0;
+    z-index: 4;
+    position: fixed;
+    height: 100px;
+    background: #ecebe8;
+    left: 0;
 }
 footer *
 {
   color: #636363;
-  text-align: left;
-  width: 640px;
+  max-width: 670px;
   margin: 0 auto;
 }
 footer a
@@ -1733,7 +1479,243 @@ footer a
 {
   background-color: rgba(255,255,255,.08);
 }
-
+/* Tutorial
+-------------------------------------------------*/
+    #tutorialWrap 
+    {
+        width:80%;
+        display:none;
+    }
+    #tutorialBtn 
+    {
+        background: -webkit-linear-gradient(top, #F9B24D 0%,#F7970C 100%);
+        color: white;
+        padding: 10px 15px;
+        bottom: 20px;
+        right: 20px;
+        text-align: center;
+        font-family: 'League Gothic', Sans-Serif;
+        font-size: 24px;
+        text-transform: uppercase;
+        text-shadow: 1px 1px 1px rgba(0, 0, 0, .5);
+        cursor: pointer;
+        box-shadow: 0px 0px 5px rgba(0,0,0,0.8);
+        width: 100%;
+        margin-top: 10px;
+        box-sizing: border-box;
+    }
+    #tutClose 
+    {
+        background: black;
+        color: white;
+        border-radius: 50px;
+        border: 2px solid white;
+        width: 30px;
+        height: 30px;
+        position: absolute;
+        top: -10px;
+        right: -10px;
+        z-index: 999999;
+        font-weight: bold;
+        text-align: center;
+        box-shadow: 0px 0px 10px rgba(0,0,0,1);
+        font-size: 16px;
+        padding: 6px 0 0 0;
+        box-sizing: border-box;
+        cursor:pointer;
+    }
+        #tutorial
+        {
+            width: 60%;
+            position: absolute;
+            color: white;
+            text-align: center;
+            font-family: 'League Gothic', Sans-Serif;
+            text-transform: uppercase;
+            background: #333;
+            top: 100px;
+            left: 50%;
+            z-index: 99999;
+            line-height: 1;
+            margin-left: -40%;
+        }
+        #tutStart
+        {
+            max-height: 100%;
+            width: 100%;
+            font-size: 100px;
+            text-transform: uppercase;
+            padding: 30% 0;
+            box-sizing: border-box;
+        }
+        .subtitle 
+        {
+            color:#666;
+            font-size:24px;
+        }
+        .arrow 
+        {
+            -webkit-transform:rotate(90deg);
+            -webkit-transition:all 500ms ease;
+            position:relative;
+            -webkit-animation-name:aniArrow;
+            -webkit-animation-duration: 1s;
+            -webkit-animation-delay: 1s;
+            -webkit-animation-direction:alternate;
+            -webkit-animation-iteration-count:infinite;
+        }
+        @-webkit-keyframes aniArrow 
+        {
+            from 
+            {
+                top:0;
+            }
+            to 
+            {
+                top:50px;
+            }
+        }
+        #tutLogo
+        {
+            display: block;
+            margin: 50px auto;
+        }
+        .tutAdd, #coworkers
+        {
+            padding: 25% 0;
+            display: inline-block;
+            width: 100%;
+            position:relative;
+        }
+        #tutorial .ng-scope:nth-child(odd) .tutAdd
+        {
+            background:#222;
+        }
+        .tutAdd .image
+        {
+            width: 300px;
+            height: 300px;
+            margin: 0 auto;
+        }
+        .tutAdd .image img
+        {
+            width: 100%;
+            box-shadow: 0px 0px 20px rgba(33,33,33,1);
+        }
+        .songDesc
+        {
+            font-size: 3em;
+        }
+        .songDesc h3
+        {
+            color: #555;
+            font-size: 36px;
+            font-family: 'League Gothic';
+            margin: 30px 0 20px 0;
+        }
+        .songDesc p
+        {
+            margin: 0;
+        }
+        .desc
+        {
+            color: #666;
+        }
+        #coworkers 
+        {
+            font-size:48px;
+            
+        }
+        #coworkers li 
+        {
+            list-style:none;
+            display:inline-block;
+            font-size:24px;
+            color:#666;
+            margin-right:20px;
+        }
+        #coworkers li:last-child 
+        {
+            margin-right:0;
+        }
+        .coworkerImg 
+        {
+            margin-bottom:20px;
+            display:block;
+            width:200px;
+        }
+        .coworkerImg img 
+        {
+            width:200px;
+        }
+        .userImg 
+        {
+            position: absolute;
+            top: 0;
+            height: 120px;
+            left: 0;
+        }
+        #tutQueue
+        {
+            position:fixed;
+            width: 20%;
+            height: 100%;
+            background: #444;
+            right: 0;
+            top: 0;
+            font-family:'League Gothic', Sans-Serif;
+            z-index:99999;
+        }
+        #tutInner 
+        {
+            padding: 20px;
+        }
+        }
+        #queueLength 
+        {
+            color:#666;
+        }
+        #tutQueue h3 
+        {
+            color:#fff;
+            font-family:'League Gothic', Sans-Serif;
+            font-size:24px;
+        }
+        #tutQueue ul
+        {
+            padding: 0;
+        }
+        .tutQueue
+        {
+            list-style: none;
+            padding: 5px 0;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            width: 100%;
+            display:none;
+            font-size: 18px;
+        }
+        #tutQueue .addedBy 
+        {
+            color:#666;
+        }
+        #tutQueue .addedBy:before 
+        {
+            content:"added by ";
+        }
+        .queueImg {
+            float: left;
+            height: 35px;
+            margin-right: 20px;
+            position: relative;
+            top: 1px;
+        }
+        .blocked 
+        {
+            opacity: 0.6;
+            color: #400;
+        }
 
 
 @media (max-width:680px)
@@ -2001,6 +1983,29 @@ footer a
         max-height: 50px;
         overflow: hidden;
     }
+    #tutorialWrap 
+    {
+        width: 80%;
+        margin: 0 auto;
+        left: auto;
+        top: auto;
+    }
+    #tutorial 
+    {
+        width:80%;
+        left:40%;
+        top:0;
+    }
+    #tutClose 
+    {
+        top:20px;
+        left:50%;
+        margin-left:-15px;
+    }
+    .userImg 
+    {
+        height:60px;
+    }
 }
 
 @media (max-width:460px)
@@ -2050,6 +2055,7 @@ footer a
         padding: 20px;
         box-sizing: border-box;
         margin-top: -215px;
-        height: 430px;
+        height: 470px;
     }
 }
+
