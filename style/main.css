@@ -333,7 +333,7 @@ section.current
 #chooseSection #loginInformation
 {
   height: 250px;
-  background: url("../images/top.png") 50% 46% no-repeat;
+  background: url("../images/top.jpg") 50% 46% no-repeat;
   background-size: 101% auto;
   position:relative;
 }
@@ -343,16 +343,20 @@ section.current
   height: 21px;
   margin: 5px 0;
 }
+
 #chooseSection #loginInformation h1,
 #chooseSection #loginInformation p
 {
   max-width: 330px;
-  color: Black;
-  text-shadow: 1px 1px 1px rgba(255,255,255,.5);
+  color: white;
+  text-shadow: 1px 1px 1px rgba(0,0,0,.5);
 }
 #chooseSection #loginInformation p
 {
-  color: Black;
+  color: white;
+  text-shadow: 1px 1px 1px rgba(0,0,0,.5);
+  background: rgba(0,0,0,0.5);
+  padding: 20px;
 }
 #chooseSection section span p
 {
