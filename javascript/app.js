@@ -461,8 +461,13 @@ function App() {
         var ac = sp.require("javascript/AutocompleteForm");
         ac.init(".auto-completeForm");
 
-        $("#tutorialBtn").on("click", function () {
-            $("#tutorialWrap").fadeIn();
+        $("#tutorialBtn").click(function () {
+            $("#tutorialWrap").show();
+            var controller = $.superscrollorama();
+            $('.tutAdd').each(function () {
+                var id = $(this).attr('id');
+                controller.addTween('#' + id, TweenMax.from($('#' + id), 1, { css: { opacity: 0 }, onComplete: function () { $('#' + id).addClass('open'); $('.queue' + id).addClass('open').fadeIn(); $('#queueLength').html('(' + $('#tutQueue .open').length + ')'); } }));
+            });
         });
 
         function tutorialNextPrev(direction) {

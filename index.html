@@ -11,15 +11,15 @@
     <link rel="stylesheet" href="sp://import/css/list.css" />
     <link rel="stylesheet" href="http://wejay.org/content/css/bugfixes.css" />
     <link rel="stylesheet" href="style/main.css" />
+    <script src="javascript/greensock/TweenMax.min.js"></script>
+    <script src="javascript/jquery.superscrollorama.js"></script>
+    <script src="javascript/angular.min.js"></script>
     <script src="javascript/moment.min.js" type="text/javascript"></script>
     <script src="javascript/hub.js" type="text/javascript"></script>
     <script src="javascript/room.js" type="text/javascript"></script>
     <script src="javascript/notifier.js" type="text/javascript"></script>
     <script src="javascript/app.js" type="text/javascript"></script>
     <script src="javascript/user.js" type="text/javascript"></script>
-    <script src="javascript/greensock/TweenMax.min.js"></script>
-    <script src="javascript/jquery.superscrollorama.js"></script>
-    <script src="javascript/angular.min.js"></script>
 </head>
 <body ng-app="tutorial">
     <div id="tutorialWrap">
@@ -105,7 +105,7 @@
                 restrict: 'E',
                 replace: true,
                 scope: true,
-                template: '<div check-last ng-repeat="song in songs"><div id="fadeIn{{song.queue}}" class="tutAdd"><div class="image"><img ng-src="images/covers/{{song.img}}" /></div><div class="songDesc"><img ng-src="images/portrait/{{song.userImg}}" class="userImg"><h3>{{song.title}}</h3><p>{{song.song}}</p><div class="desc">{{song.desc}}</div></div></div></div>'
+                template: '<div  ng-repeat="song in songs"><div id="fadeIn{{song.queue}}" class="tutAdd"><div class="image"><img ng-src="images/covers/{{song.img}}" /></div><div class="songDesc"><img ng-src="images/portrait/{{song.userImg}}" class="userImg"><h3>{{song.title}}</h3><p>{{song.song}}</p><div class="desc">{{song.desc}}</div></div></div></div>'
             };
         })
 
@@ -117,21 +117,6 @@
                 scope: true,
                 template: '<div id="tutInner"><h3>Current queue <span id="queueLength">(0)</span></h3><ul><li ng-repeat="queue in queues" class="tutQueue {{queue.class}} queuefadeIn{{queue.queueID}}"><img ng-src="images/covers/{{queue.img}}" class="queueImg">{{queue.song}}<div class="addedBy">{{queue.user}}</div></li></ul></div>'
             };
-        });
-
-        // If the last one is loaded, add the fade in effects from Superscrollorama
-        tutorial.directive('checkLast', function () {
-            return function (scope, element, attrs) {
-                if (scope.$last === true) {
-                    element.ready(function () {
-                        var controller = $.superscrollorama();
-                        $('.tutAdd').each(function () {
-                            var id = $(this).attr('id');
-                            controller.addTween('#' + id, TweenMax.from($('#' + id), 1, { css: { opacity: 0 }, onComplete: function () { $('#' + id).addClass('open'); $('.queue' + id).addClass('open').fadeIn(); $('#queueLength').html('(' + $('#tutQueue .open').length + ')'); } }));
-                        });
-                    });
-                }
-            }
         });
 
         // Remove from queue on fade out
