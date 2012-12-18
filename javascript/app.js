@@ -341,7 +341,7 @@ function App() {
     };
 
     //
-    // Copy for "Open a room"
+    // Copy for "rooms"
     this.loggedInCopy = function (noRoom) {
         $("#overlay").hide();
         var user = app.user.userName,
@@ -363,13 +363,13 @@ function App() {
     this.standardCopyLoggedOut = "I understand that by logging in with my Facebook account I enable WEJAY to use and store information from my Spotify library and listening history. This is done to provide a great listening experience.";
 
     this.userLogoutShow = function () {
-        $("#login, #roomLogin").hide();
-        $("#roomLogout, #leaveRoom").show();
+        $("#login, #roomLogin, #btnLogin, #facebook").hide();
+        $("#roomLogout, #leaveRoom, #btnLogout").show();
     };
 
     this.userLogoutHide = function () {
-        $("#login, #roomLogin").show();
-        $("#logout, #leaveRoom, #joinRoom, #roomLogout").hide();
+        $("#login, #roomLogin, #btnLogin").show();
+        $("#logout, #leaveRoom, #joinRoom, #roomLogout, #btnLogout").hide();
         $("#disclaimerLoginOriginal p").html(self.standardCopyLoggedOut);
     };
 
@@ -454,7 +454,7 @@ function App() {
         } else {
             //
             // if the user has not accepted the disclaimer -- he/she will be reverted to the
-            // "open a room"-section. Also, the standardroom will be the iteam-room.
+            // "rooms"-section. Also, the standardroom will be the iteam-room.
             $(".disclaimer:first").hide();
             $("#disclaimerLoginOriginal").hide();
             if (localStorage.room === undefined) {
@@ -470,14 +470,13 @@ function App() {
         var ac = sp.require("javascript/AutocompleteForm");
         ac.init(".auto-completeForm");
 
-        $("#tutorialBtn").on("click", function () {
-            $("#getStarted").hide();
-
-            $("#tutorial").show();
-            $("#stepOne").show().addClass("open");
-            $("#tutorialNavigation .prev").hide();
-            $("#tutorialNavigation .next").show();
-            $("#loginInformation").hide();
+        $("#tutorialBtn").click(function () {
+            $("#tutorialWrap").show();
+            var controller = $.superscrollorama();
+            $('.tutAdd').each(function () {
+                var id = $(this).attr('id');
+                controller.addTween('#' + id, TweenMax.from($('#' + id), 1, { css: { opacity: 0 }, onComplete: function () { $('#' + id).addClass('open'); $('.queue' + id).addClass('open').fadeIn(); $('#queueLength').html('(' + $('#tutQueue .open').length + ')'); } }));
+            });
         });
 
         function tutorialNextPrev(direction) {
@@ -541,13 +540,13 @@ function App() {
         $("#start").removeClass("pause");
         $("#onair").hide();
 
-        $("#roomLogout").on("click", function () {
+        $("#roomLogout, #btnLogout").on("click", function () {
             self.user.logoutFromFacebook();
             app.loggedIntoRoom = "";
             self.userLogoutHide();
         });
 
-        $("#login, #roomLogin").on("click", function () {
+        $("#login, #roomLogin, #btnLogin").on("click", function () {
             if (self.checkIfUserAcceptedAgreement()) {
                 self.user.authenticate(function (room) {
                     self.loggedIntoRoom = room;
@@ -629,8 +628,8 @@ function App() {
             if (/^([a-z0-9\_\-\ ]){2,10}$/i.exec(newRoomName) !== null) {
                 app.currentRoom.init(newRoomName, true);
                 document.location = 'spotify:app:wejay:room';
-            } else if (newRoomName.length >= 11 || newRoomName.length <= 1) {
-                alert("Your roomname should contain between 2 and 10 letters.");
+            } else if (newRoomName.length >= 16 || newRoomName.length <= 1) {
+                alert("Your roomname should contain between 2 and 16 letters.");
             } else {
                 var temp = newRoomName.match(/([^a-z0-9\_\-\ ])/ig, "$1"),
                     matchString = temp.join(" ");
@@ -753,23 +752,35 @@ function App() {
             $("#overlay").show().find(".rooms").show();
             $("#login").attr("disabled", true);
             $(".disclaimer .checkbox").hover(
-                function () {
-                    var button = $(".disclaimer.rooms .sp-button");
-                    $("#login").attr("disabled", false);
-                    button.addClass("hover");
-                },
-                function () {
-                    var button = $(".disclaimer.rooms .sp-button");
-                    $("#login").attr("disabled", true);
-                    button.removeClass("hover");
-                }
+
+                    function () {
+                        if (!$(this).hasClass("checked")) {
+                            var button = $(".disclaimer.rooms .sp-button");
+                            $("#roomLogin").attr("disabled", false);
+                            button.addClass("hover");
+                            $(this).css("background-position", "0 0");
+                        }
+                    },
+                    function () {
+                        if (!$(this).hasClass("checked")) {
+                            var button = $(".disclaimer.rooms .sp-button");
+                            $("#roomLogin").attr("disabled", true);
+                            button.removeClass("hover");
+                            $(this).css("background-position", "0 36px");
+                        }
+                    }
+
             );
             $(".disclaimer .checkbox").click(function () {
-                $(".disclaimer").remove();
-                $("#login").attr("disabled", false);
+                console.log('hej');
+                //                $(".disclaimer").remove();
+                //                $("#login").attr("disabled", false);
+                //                $(".disclaimerRooms").removeClass("disclaimerRooms");
+                //                $("#disclaimerLoginOriginal").show();
+                $(this).css("background-position", "0 0");
+                $(this).addClass("checked");
+                $("#roomLogin").attr("disabled", false);
                 localStorage.acceptedLogin = "true";
-                $(".disclaimerRooms").removeClass("disclaimerRooms");
-                $("#disclaimerLoginOriginal").show();
                 self.acceptedLogin = true;
             });
         } else {
@@ -801,7 +812,14 @@ function App() {
                 app.currentRoom.skip();
             }
         });
-
+        $("#voteButton").on({
+            mouseenter: function () {
+                $("#skipHover").show();
+            },
+            mouseleave: function () {
+                $("#skipHover").hide();
+            }
+        });
         $("#voteButton").on("click", function () {
             if (self.checkIfUserAcceptedAgreement()) {
                 $("#voteOverlay").toggleClass("show");
