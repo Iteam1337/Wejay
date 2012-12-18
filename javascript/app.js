@@ -107,6 +107,7 @@ function App() {
         }
         var currentTab = document.location = "#" + tab + "Section",
             arg = m.application.arguments;
+        console.log(currentTab);
         $("section").removeClass("current");
         $(currentTab).addClass("current");
         $(currentTab).parents("section").addClass("current");
@@ -170,84 +171,96 @@ function App() {
 
     this.handleDroppedLinks = function (links) {
         console.log("dropped", links);
-        var droppedLinks = [];
         if (self.checkIfUserAcceptedAgreement()) {
             app.user.authenticate(function (room) {
-                if (self.loggedIntoRoom !== room) {
-                    self.loggedIntoRoom = room;
-                    self.handleLoginInfo();
+                if (app.loggedIntoRoom !== room) {
+                    app.loggedIntoRoom = room;
+                    app.handleLoginInfo();
                     $("#leaveRoom").show();
-                    self.loadRooms();
-                    self.userLogoutShow();
+                    app.loadRooms();
+                    app.userLogoutShow();
                 }
-                links.forEach(function (link) {
-                    var type = m.Link.getType(link),
-                        max = 10,
+                var max = 10,
+                    i = 0,
+                    count = links.length;
+                if (count < max) {
+                    links.forEach(function (link) {
+                        max = 10;
                         i = 0;
-                    if (m.Link.TYPE.PROFILE === type || m.Link.TYPE.FACEBOOK_USER === type) {
-                        console.log("this is currently not available");
-                    } else {
-                        if (m.Link.TYPE.TRACK === type) {
-                            //
-                            // adding single track
-                            self.currentRoom.addTrackUri(link);
-                        } else if (m.Link.TYPE.PLAYLIST === type) {
-                            //
-                            // adding user generated playlist
-                            var playlist = m.Playlist.fromURI(link),
-                                tracks = playlist.data.all(),
+                        var type = m.Link.getType(link);
+                        if (m.Link.TYPE.PROFILE === type || m.Link.TYPE.FACEBOOK_USER === type) {
+                            console.log("this is currently not available");
+                        } else {
+                            if (m.Link.TYPE.TRACK === type) {
+                                //
+                                // adding single track
+                                self.currentRoom.addTrackUri(link);
+                            } else if (m.Link.TYPE.PLAYLIST === type) {
+                                //
+                                // adding user generated playlist
+                                var playlist = m.Playlist.fromURI(link),
+                                    tracks = playlist.data.all();
                                 count = tracks.length;
-                            tracks = tracks.splice(0, 10);
-                            if (count < max) {
-                                tracks.splice(0, 10);
-                                tracks.forEach(function (uri) {
-                                    self.currentRoom.addTrackUri(uri);
-                                });
-                            } else {
-                                self.handleUserDroppingToManySongs(tracks, max);
-                            }
-                        } else if (m.Link.TYPE.ALBUM === type) {
-                            //
-                            // adding album
-                            m.Album.fromURI(link, function (album) {
-                                var albumLink = album.data.uri,
-                                    tracks = album.data.tracks,
-                                    count = tracks.length;
                                 tracks = tracks.splice(0, 10);
                                 if (count < max) {
+                                    tracks.splice(0, 10);
                                     tracks.forEach(function (uri) {
-                                        self.currentRoom.addTrackUri(uri.uri);
+                                        self.currentRoom.addTrackUri(uri);
                                     });
                                 } else {
-                                    self.handleUserDroppingToManySongs(tracks, max);
+                                    self.handleUserDroppingToManyObjects(tracks, max, "tracks");
                                 }
-                            });
+                            } else if (m.Link.TYPE.ALBUM === type) {
+                                //
+                                // adding album
+                                m.Album.fromURI(link, function (album) {
+                                    var albumLink = album.data.uri,
+                                        tracks = album.data.tracks,
+                                        count = tracks.length;
+                                    tracks = tracks.splice(0, 10);
+                                    if (count < max) {
+                                        tracks.forEach(function (uri) {
+                                            self.currentRoom.addTrackUri(uri.uri);
+                                        });
+                                    } else {
+                                        self.handleUserDroppingToManyObjects(tracks, max, "tracks");
+                                    }
+                                });
+                            }
                         }
-                    }
-                });
+                    });
+                } else {
+                    links.splice(0, 10);
+                    self.handleUserDroppingToManyObjects(links, max, "links");
+                }
                 self.currentRoom.updatePlaylist();
             });
         }
     };
 
-    this.handleUserDroppingToManySongs = function (tracks, max) {
+    this.handleUserDroppingToManyObjects = function (objects, max, isItTracks) {
+        isItTracks = (isItTracks !== undefined && isItTracks.toLowerCase() === "tracks") ? true : false;
         var newHtml = $("#addedTracksLimitReachedTemplate").tmpl({ max: max });
-        $("#addedTracksLimitReached").append(newHtml);
-        $("#overlay").show();
+        $("#addedTracksLimitReached").html(newHtml);
+        $("#overlayLimit").show();
         $("#addedTracksLimitReached").on("click", ".accept", function (e) {
-            tracks.forEach(function (uri) {
-                self.currentRoom.addTrackUri(uri);
-            });
-            self.removeUserDroppedTemplate();
+            if (isItTracks) {
+                objects.forEach(function (uri) {
+                    app.currentRoom.addTrackUri(uri);
+                });
+            } else {
+                app.handleDroppedLinks(objects);
+            }
+            app.removeUserDroppedTemplate();
         });
         $("#addedTracksLimitReached").on("click", ".cancel", function (e) {
-            self.removeUserDroppedTemplate();
+            app.removeUserDroppedTemplate();
         });
     };
 
     this.removeUserDroppedTemplate = function () {
         $("#addedTracksLimitReached").html("");
-        $("#overlay").hide();
+        $("#overlayLimit").hide();
     };
 
     // when links are dropped to the application we want to add those to the queue
@@ -343,7 +356,7 @@ function App() {
     //
     // Copy for "rooms"
     this.loggedInCopy = function (noRoom) {
-        $("#overlay").hide();
+        $("#overlay, #overlayLimit").hide();
         var user = app.user.userName,
             room = app.loggedIntoRoom;
         if (noRoom) {
@@ -428,8 +441,8 @@ function App() {
     });
 
     /* INIT */
-    // init function
     this.init = function (version) {
+<<<<<<< HEAD
         this.version = version;
 
         if ((!self.checkIfFBUserExists) && (localStorage.facebookUser !== undefined && localStorage.acceptedLogin !== undefined && localStorage.accessToken !== undefined && localStorage.room !== undefined)) {
@@ -859,6 +872,10 @@ function App() {
             }
         });
         toplist.run();
+=======
+        var directives = sp.require("javascript/Directives");
+        directives.init(version);
+>>>>>>> ... what?
     };
 }
 

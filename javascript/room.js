@@ -151,7 +151,7 @@ function RoomController(roomName, nodeUrl) {
         });
     };
 
-    this.nothingPlayingCopy = "<div class=\"nothing playing\"><p><strong>Hello!</strong>A room needs music! Add songs by searching or by dragging tracks or whole playlists to the WEJAY app in the sidebar. Don't forget to invite you colleagues - WEJAY was made to play music together!</p></div>";
+    this.nothingPlayingCopy = $("#nothingPlayingTemplate").tmpl();
 
     this.clearCurrentSong = function (force) {
         $("#roomTitle").html(this.roomName + " Wejay Room");
@@ -356,7 +356,7 @@ function RoomController(roomName, nodeUrl) {
             $("#shareOnURL").text("Share URL");
             $("#manualShare").addClass("hide");
             var userString = (app.user.userName) ? "\u2029\u2029" + app.user.userName : "\u2029\u2029",
-                mailString = encodeURI("mailto:?subject=Join our WEJAY room&body=Hi, if you follow the link below you can add music to our WEJAY room \"" + local.roomName + "\" from Spotify.\u2029\u2029" + shareURL + userString + "\u2029\u2029------------------------------------------------------\u2029\u2029WEJAY lets you and your colleagues add music to mixed democratic playlist which means you can all listen to your own favorite music while working. Recent research results shows that you work better when you get to listen to music.\u2029\u2029Read more about WEJAY and the research on http://wejay.org");
+                mailString = encodeURI("mailto:?subject=Join our WEJAY room&body=Hi, if you follow the link below you can add music to our WEJAY room \"" + local.roomName + "\" from Spotify.\u2029\u2029" + shareURL + userString + "\u2029\u2029\u2029\u2029WEJAY lets you and your colleagues add music to mixed democratic playlist which means you can all listen to your own favorite music while working. Recent research results shows that you work better when you get to listen to music.\u2029\u2029Read more about WEJAY and the research on http://wejay.org");
             $("#shareURL").val(shareURL);
             $("#shareOnMail").attr("href", mailString);
             $("#shareOnFacebook").attr("href", "http://facebook.com/sharer.php?s=100&p[url]=" + shareURL + "&p[title]=" + escape("Play music with me on WEJAY") + "&p[images][0]=" + escape("http://wejay.org/Content/Images/Wejay256transparent.png") + "&p[summary]=" + escape("WEJAY is a Spotify app for playing music together at work. I've created the room " + local.roomName + ", join me there!"));
@@ -505,7 +505,7 @@ function RoomController(roomName, nodeUrl) {
                 var loggedIn = false,
                     result = r ? JSON.parse(r).Data : [],
                     loggedInUsersTitle = "NO LOGGED IN WEJAYS",
-                    loggedInUsersInnerText = "<li class=\"noOneIsLoggedIn\">When you log into this room your best music will be mixed into the playlist automatically. You can also invite your colleagues below.</li>";
+                    loggedInUsersInnerText = $("#noOneIsLoggedInTemplate").tmpl()
                 result = result.filter(function (user) { return user.FacebookId && user.FacebookId != "null" && user.Online; });
 
                 if (result.length > 0) {

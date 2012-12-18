@@ -105,9 +105,10 @@ a
 
 #branding 
 {
-    background-color: #1a1a1a;
     padding: 10px 0 0;
     width: 100%;
+    z-index: 10;
+    position: absolute;
 }
 #branding img
 {
@@ -209,6 +210,7 @@ a
 /*********************************************
 * DEFAULT ELEMENT STYLES
 *********************************************/
+#overlayLimit,
 #overlay 
 {
     height:100%;
@@ -229,6 +231,7 @@ a
     left: 50%;
     margin-left: -250px;
     background: rgba(0,0,0,0.7);
+<<<<<<< HEAD
     padding: 20px;
     box-sizing: border-box;
     margin-top:-190px;
@@ -256,6 +259,35 @@ a
     height: 28px;
 }
 
+=======
+    padding: 20px;
+    box-sizing: border-box;
+    margin-top:-190px;
+    height:380px;
+}
+
+#overlayLimit #addedTracksLimitReached 
+{
+    width: 350px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-left: -175px;
+    background-image: -webkit-linear-gradient(top, #5798D2 0%,#0063CB 100%);
+    padding: 20px;
+    box-sizing: border-box;
+    margin-top:-125px;
+    height:250px; 
+    color: #fff;
+}
+
+#overlayLimit #addedTracksLimitReached h2
+{
+    line-height: 1.2;
+    height: 28px;
+}
+
+>>>>>>> ... what?
 #disclaimerLogin {
     color: #fff;
     text-shadow: none;
@@ -271,27 +303,42 @@ section
   opacity: 0;
   text-align: center;
   background: none;
+  min-height: 0;
+  height: 0;
+  padding: 0;
+  margin: 0;
 }
-
+#background
+{
+    position: fixed;
+    min-height: 100%;
+    min-width: 100%;
+    z-index: 0;
+    background: -webkit-linear-gradient(top, rgb(26,26,26) 0%,rgb(60,60,60) 70%,rgb(90,90,90) 100%) top left;
+    top: 0;
+    left: 0;
+}
 section.current
 {
   opacity: 1;
   display: block;
   z-index: 1;
   position: absolute;
-  background: -webkit-linear-gradient(top, rgb(26,26,26) 0%,rgb(60,60,60) 70%,rgb(90,90,90) 100%);
   width: 100%;
+<<<<<<< HEAD
   height: 100%;
+=======
+  min-height: 100%;
+>>>>>>> ... what?
   margin-top: 0;
-  padding-top: 0;
-  min-height: 480px;
+  padding-top: 30px;
 }
 
-#aboutSection section,
-#chooseSection section
+#aboutSection section.current,
+#chooseSection section.current
 {
-  margin: 20px auto 0;
-  padding: 0;
+  margin: 0px auto 0;
+  padding: 51px 0 0 !important;
   width: 670px;
   display: inline-block;
   text-align: left;
