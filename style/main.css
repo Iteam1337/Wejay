@@ -231,35 +231,6 @@ a
     left: 50%;
     margin-left: -250px;
     background: rgba(0,0,0,0.7);
-<<<<<<< HEAD
-    padding: 20px;
-    box-sizing: border-box;
-    margin-top:-190px;
-    height:380px;
-}
-
-#overlay #addedTracksLimitReached 
-{
-    width: 350px;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    margin-left: -175px;
-    background-image: -webkit-linear-gradient(top, #5798D2 0%,#0063CB 100%);
-    padding: 20px;
-    box-sizing: border-box;
-    margin-top:-125px;
-    height:250px; 
-    color: #fff;
-}
-
-#overlay #addedTracksLimitReached h2
-{
-    line-height: 1.2;
-    height: 28px;
-}
-
-=======
     padding: 20px;
     box-sizing: border-box;
     margin-top:-190px;
@@ -287,7 +258,6 @@ a
     height: 28px;
 }
 
->>>>>>> ... what?
 #disclaimerLogin {
     color: #fff;
     text-shadow: none;
@@ -325,11 +295,7 @@ section.current
   z-index: 1;
   position: absolute;
   width: 100%;
-<<<<<<< HEAD
-  height: 100%;
-=======
   min-height: 100%;
->>>>>>> ... what?
   margin-top: 0;
   padding-top: 30px;
 }
