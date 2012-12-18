@@ -75,13 +75,9 @@ function App() {
 
     //
     // Global connection to node server
-    var socket,
-        nodeUrl = "http://81.201.221.135:5000";
+    var socket;
 
-    //
-    // global Toplist
-    var topTracks = [],
-        topArtists = [];
+    this.nodeUrl = "http://81.201.221.135:5000";
 
     // public properties
     this.user = new User();
@@ -199,26 +195,32 @@ function App() {
                             //
                             // adding user generated playlist
                             var playlist = m.Playlist.fromURI(link),
-                                tracks = playlist.data.all();
-                            tracks.forEach(function (uri) {
-                                if (i < max) { // max tracks that can be added at one time is ... 10. TODO: UI-notification
+                                tracks = playlist.data.all(),
+                                count = tracks.length;
+                            tracks = tracks.splice(0, 10);
+                            if (count < max) {
+                                tracks.splice(0, 10);
+                                tracks.forEach(function (uri) {
                                     self.currentRoom.addTrackUri(uri);
-                                    i++;
-                                }
-                            });
-                            //self.linkPlaylist(playlist);
+                                });
+                            } else {
+                                self.handleUserDroppingToManySongs(tracks, max);
+                            }
                         } else if (m.Link.TYPE.ALBUM === type) {
                             //
                             // adding album
                             m.Album.fromURI(link, function (album) {
                                 var albumLink = album.data.uri,
-                                    tracks = album.data.tracks;
-                                tracks.forEach(function (uri) {
-                                    if (i < max) {
+                                    tracks = album.data.tracks,
+                                    count = tracks.length;
+                                tracks = tracks.splice(0, 10);
+                                if (count < max) {
+                                    tracks.forEach(function (uri) {
                                         self.currentRoom.addTrackUri(uri.uri);
-                                        i++;
-                                    }
-                                });
+                                    });
+                                } else {
+                                    self.handleUserDroppingToManySongs(tracks, max);
+                                }
                             });
                         }
                     }
@@ -228,6 +230,26 @@ function App() {
         }
     };
 
+    this.handleUserDroppingToManySongs = function (tracks, max) {
+        var newHtml = $("#addedTracksLimitReachedTemplate").tmpl({ max: max });
+        $("#addedTracksLimitReached").append(newHtml);
+        $("#overlay").show();
+        $("#addedTracksLimitReached").on("click", ".accept", function (e) {
+            tracks.forEach(function (uri) {
+                self.currentRoom.addTrackUri(uri);
+            });
+            self.removeUserDroppedTemplate();
+        });
+        $("#addedTracksLimitReached").on("click", ".cancel", function (e) {
+            self.removeUserDroppedTemplate();
+        });
+    };
+
+    this.removeUserDroppedTemplate = function () {
+        $("#addedTracksLimitReached").html("");
+        $("#overlay").hide();
+    };
+
     // when links are dropped to the application we want to add those to the queue
     m.application.observe(m.EVENT.LINKSCHANGED, function (e) {
         var links = m.application.links;
@@ -235,21 +257,8 @@ function App() {
         self.handleDroppedLinks(links);
     });
 
-    /* helper functions */
-    var getTracksFromPlaylist = function (playlist) {
-        var result = [], i = 0,
-            length = playlist.data.length;
-        for (; i < length; i++) {
-            var track = playlist.data.getTrack(i);
-            if (track) {
-                result.push(track);
-            }
-        }
-        return result;
-    };
-
     // load images in the room banner
-    var fillRoomToplist = function (room, div) {
+    this.fillRoomToplist = function (room, div) {
         $.ajax({
             url: "http://wejay.org/Room/GetOnlineUsers?room=" + encodeURI(room),
             type: "GET",
@@ -277,7 +286,7 @@ function App() {
     };
 
     this.currentRoomList = [];
-    var loaded = false;
+    this.loaded = false;
 
     // Load all rooms to startpage
     this.loadRooms = function () {
@@ -285,7 +294,7 @@ function App() {
             return;
         }
         // Loaded twice
-        if (!loaded) {
+        if (!self.loaded) {
             $('.loadingIndicator').show();
             app.user.loadFriends(function (users) {
                 users.push(app.user.facebookId); // add current user as well
@@ -317,14 +326,14 @@ function App() {
                 $('.loadingIndicator').hide();
             });
 
-            loaded = true;
+            self.loaded = true;
         }
     };
 
     this.fillRooms = function () {
         $(".rooms li ").each(function () {
             var room = this.innerText;
-            fillRoomToplist(room, this);
+            self.fillRoomToplist(room, this);
             $(this).click(function () {
                 document.location = "spotify:app:wejay:room:" + room;
             });
@@ -814,7 +823,7 @@ function App() {
         // fill default rooms
         self.fillRooms();
 
-        self.currentRoom = new RoomController(unescape(localStorage.room || "example"), nodeUrl);
+        self.currentRoom = new RoomController(unescape(localStorage.room || "example"), self.nodeUrl);
 
         var tab = m.application.arguments[0];
 

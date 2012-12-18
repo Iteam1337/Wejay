@@ -21,7 +21,7 @@
 <body>
     <div id="branding">
         <a href="spotify:app:wejay:choose">
-            <img src="Images/wejay-logo.png" id="logo" /></a>
+            <img src="Images/wejay-logo.png" id="logo" alt="logo"/></a>
     </div>
     <div id="offline">
         <h1>
@@ -33,119 +33,121 @@
                 Login to find your colleagues</h2>
             <div class="disclaimer rooms">
                 <p>WEJAY is a social music app. If your colleagues have already created a WEJAY ROOM you can login to find them.</p>
-                <input type="checkbox" class="checkbox">
-                <input type="button" class="sp-button" disabled value="Login with Facebook">
-            </div>
-            <div id="disclaimerLoginOriginal">
-                <p>I understand that when I log into my Facebook account below, Facebook will be able to associate information about my Spotify
-                use, such as library and listening history, with my Facebook account. Facebook's collection and use of this information
-                will be governed by the Facebook Privacy Policy.
-                </p>
-                <button class="sp-button" id="roomLogin">
-                    Login with Facebook</button>
-                <button class="sp-button" id="roomLogout">
-                    Logout</button>
+                <input type="checkbox" class="checkbox" />
+                <input type="button" class="sp-button" value="Login with Facebook" />
             </div>
         </div>
+        <div id="addedTracksLimitReached"></div>
+        <!-- Current music in playlist -->
+        <script id="addedTracksLimitReachedTemplate" type="text/x-jquery-tmpl">
+            <h2>There is a limit of ${max} tracks</h2>
+            <p>Wejay only takes 10 songs each time. The reason is simple: everyone should be able to hear their own favorite music.</p>
+            <p>Did you just add all these tracks by a mistake? If not, Wejay will only add the first 10 songs.</p>
+            <p>You can still choose which songs to add by dragging them to Wejay!</p>
+            <button class="accept">Add</button>
+            <button class="cancel">Dont' add</button>
+        </script>
     </div>
     <div id="main">
         <!-- wejay/start -->
         <section id="roomSection">
-                <section id="current">
-                    <div class="top">
-                        <div class="left">
-                            <div id="currentHolder">
-                                <div class="hover">
-                                    <a id="start" href="#" title="play/pause room"></a>
-                                </div>
-                                <a id="currentLink" href="" draggable="true">
-                                    <span class="hidden title"></span>
-                                    <img class="image" draggable="false" alt="current albumcover" id="currentAlbum" src="sp://import/img/placeholders/300-album.png"/>
-                                </a>
+            <section id="current">
+                <div class="top">
+                    <div class="left">
+                        <div id="currentHolder">
+                            <div class="hover">
+                                <a id="start" href="#" title="play/pause room"></a>
                             </div>
+                            <a id="currentLink" href="" draggable="true">
+                                <span class="hidden title"></span>
+                                <img class="image" draggable="false" alt="current albumcover" id="currentAlbum" src="sp://import/img/placeholders/300-album.png"/>
+                            </a>
                         </div>
-                        <h2 id="onair">on air</h2>
-                        <h1 id="roomTitle">Room</h1>
-                        <div class="right">
-                            <h3 id="currentSong">
-                                <span id="currentArtist"></span> - 
-                                <span id="currentTrack"></span>
-                            </h3>
-                            <h4 id="currentPlayedBy"></h4>
-                            <a class="button" title="Like this song" id="like" href="#"></a>
-                            <div id="likeHover">
-                             By loving tracks they will be played more often.
-                            </div>
-                            <a class="button" title="vote" id="voteButton" href="#">Skip</a>
-                            <div id="voteOverlay">
-                                <div>
-                                    <a class="close" title="close"></a>
-                                    <h1>Skip or block?</h1>
-                                    <p>Do you want to skip this song or also block it from ever being played when you are logged in? Be careful when skipping other's music, it might backfire ;)</p>
-                                    <a class="button" title="Skip this song" id="skip" href="#">Skip</a>
-                                    <a class="button" title="Block this song from ever playing again" id="block" href="#">Block</a>
-                                </div>
+                    </div>
+                    <h2 id="onair">on air</h2>
+                    <h1 id="roomTitle">Room</h1>
+                    <div class="right">
+                        <h3 id="currentSong">
+                            <span id="currentArtist"></span>
+                            <span id="currentTrack"></span>
+                        </h3>
+                        <h4 id="currentPlayedBy"></h4>
+                        <a class="button" title="Like this song" id="like" href="#"></a>
+                        <div id="likeHover">
+                            By loving tracks they will be played more often.
+                        </div>
+                        <a class="button" title="vote" id="voteButton" href="#">Skip</a>
+                        <div id="voteOverlay">
+                            <div>
+                                <a class="close" title="close"></a>
+                                <h1>Skip or block?</h1>
+                                <p>Do you want to skip this song or also block it from ever being played when you are logged in? Be careful when skipping other's music, it might backfire ;)</p>
+                                <a class="button" title="Skip this song" id="skip" href="#">Skip</a>
+                                <a class="button" title="Block this song from ever playing again" id="block" href="#">Block</a>
                             </div>
                         </div>
                     </div>
-                    <div class="disclaimer wejay">
-                        <h1>Disclaimer</h1>
-                        <input type="checkbox" class="checkbox" >
-                        <p>I understand that by logging in with my Facebook account I enable Wejay to use and store information from my Spotify library and listening history. This is done to provide a great listening experience.</p>
+                </div>
+                <div class="disclaimer wejay">
+                    <h1>Disclaimer</h1>
+                    <input type="checkbox" class="checkbox" >
+                    <p>I understand that by logging in with my Facebook account I enable Wejay to use and store information from my Spotify library and listening history. This is done to provide a great listening experience.</p>
+                </div>
+                <div id="sharePopup">
+                    <input type="button" id="closeShare" title="close" value="">
+                    <h1>Share this room</h1>
+                    <p>The fun begins when your colleagues start adding music. Use your favorite method to get the news out there!</p>
+                    <a class="button" href="#" id="shareOnFacebook" title="Share room on Facebook">Share on Facebook</a>
+                    <a class="button" href="#" id="shareOnMail" title="Share by Mail">Share by Mail</a>
+                    <a class="button" href="#" id="shareOnURL" title="Share URL">Share URL</a>
+                    <div id="manualShare" class="hide">
+                        <input type="text" id="shareURL" value="">
                     </div>
-                    <div id="sharePopup">
-                        <input type="button" id="closeShare" title="close" value="">
-                        <h1>Share this room</h1>
-                        <p>The fun begins when your colleagues start adding music. Use your favorite method to get the news out there!</p>
-                        <a class="button" href="#" id="shareOnFacebook" title="Share room on Facebook">Share on Facebook</a>
-                        <a class="button" href="#" id="shareOnMail" title="Share by Mail">Share by Mail</a>
-                        <a class="button" href="#" id="shareOnURL" title="Share URL">Share URL</a>
-                        <div id="manualShare" class="hide">
-                            <input type="text" id="shareURL" value="">
+                </div>
+                <div class="middle">
+                    <div class="left">
+                        <h2 id="currentQueueNumber">CURRENT QUEUE</h2>
+                        <div class="auto-completeForm"></div>
+                        <ul id="queue">
+                        </ul>
+                    </div>
+                    <div class="right">
+                        <div class="logged in">
+                            <h2>Logged in Wejays</h2>
+                            <ul id="users"></ul>
+                            <span class="buttons">
+                                <button class="sp-button" id="login">Login</button>
+                                <button class="sp-button" id="leaveRoom">Leave room</button>
+                                <button class="sp-button" id="joinRoom">Join room</button>
+                                <a class="button" href="#" id="share" title="Invite colleagues">Invite colleagues</a>
+                            </span>
+                        </div>
+                        <div class="toplist">
+                            <h2>Your spotify toplist</h2>
+                            <ul id="userToplist"></ul>
                         </div>
                     </div>
-                    <div class="middle">
-                        <div class="left">
-                            <h2 id="currentQueueNumber">CURRENT QUEUE</h2>
-                            <div class="auto-completeForm"></div>
-                            <ul id="queue">
-                            </ul>
-                        </div>
-                        <div class="right">
-                            <div class="logged in">
-                                <h2>Logged in Wejays</h2>
-                                <ul id="users"></ul>
-                                <span class="buttons">
-                                    <button class="sp-button" id="login">Login</button>
-                                    <button class="sp-button" id="leaveRoom">Leave room</button>
-                                    <button class="sp-button" id="joinRoom">Join room</button>
-                                    <a class="button" href="#" id="share" title="Invite colleagues">Invite colleagues</a>
-                                </span>
-                            </div>
-                            <div class="toplist">
-                                <h2>Your spotify toplist</h2>
-                                <ul id="userToplist"></ul>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-                <blockquote>Add music to this room by dragging tracks to this app</blockquote>
-                <footer class="bottom">
-                    <address>Active song selections are always played first and sorted in a way so that users get equal play time. When the active playlist is empty, the MAESTRO bot keeps playing music logged-in users have added before.<a href="http://wejay.org" class="link external inverted" title="wejay.org">wejay.org</a></address>
-                </footer>
-                <!-- Logged in users -->
-                <script id="usersTemplate" type="text/x-jquery-tmpl">
-                    <li><span><img class="image" alt="${unescape(UserName)}" src="http://graph.facebook.com/${FacebookId}/picture"><p>${unescape(UserName)}</p><p class="time">${CheckedIn}</p></span></li>
-                </script>
-                <!-- Current music in playlist -->
-                <script id="queueTemplate" type="text/x-jquery-tmpl">
-                    <li><!--<span class="star no${Vote}"></span>--><div class="song"><a class="track ${PlayedBy.FacebookId == (app.user ? app.user.facebookId : '') ? 'mine' : ''}" href="spotify:track:${SpotifyId}"><strong>${Artist}</strong> - ${Title}</a><span class="user">Added by ${unescape(PlayedBy.UserName)}</span></div></li>
-                </script>
-                <!-- Current music in playlist -->
-                <script id="userToplistTemplate" type="text/x-jquery-tmpl">
-                    <li><a class="addSongToQueue" href="${uri}"></a><a href="${uri}" class="songInTopList"><strong>${album.artist.name}</strong> - ${name}</a></li>
-                </script>
+                </div>
             </section>
+            <blockquote>Add music to this room by dragging tracks to this app</blockquote>
+
+            <!-- Logged in users -->
+            <script id="usersTemplate" type="text/x-jquery-tmpl">
+                <li><span><img class="image" alt="${unescape(UserName)}" src="http://graph.facebook.com/${FacebookId}/picture"><p>${unescape(UserName)}</p><p class="time">${CheckedIn}</p></span></li>
+            </script>
+            <!-- Current music in playlist -->
+            <script id="queueTemplate" type="text/x-jquery-tmpl">
+                <li><div class="song"><a class="track ${PlayedBy.FacebookId == (app.user ? app.user.facebookId : '') ? 'mine' : ''}" href="spotify:track:${SpotifyId}"><strong>${Artist}</strong> - ${Title}</a><span class="user">Added by ${unescape(PlayedBy.UserName)}</span></div></li>
+            </script>
+            <!-- Current music in playlist -->
+            <script id="userToplistTemplate" type="text/x-jquery-tmpl">
+                <li><a class="addSongToQueue" href="${uri}"></a><a href="${uri}" class="songInTopList"><strong>${album.artist.name}</strong> - ${name}</a></li>
+            </script>
+
+            <footer class="bottom">
+                <address>Active song selections are always played first and sorted in a way so that users get equal play time. When the active playlist is empty, the MAESTRO bot keeps playing music logged-in users have added before.<a href="http://wejay.org" class="link external inverted" title="wejay.org">wejay.org</a></address>
+            </footer>
+        </section>
         <!-- wejay/end -->
         <!-- open a room/start -->
         <section id="chooseSection" class="current">
