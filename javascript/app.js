@@ -107,7 +107,6 @@ function App() {
         }
         var currentTab = document.location = "#" + tab + "Section",
             arg = m.application.arguments;
-        console.log(currentTab);
         $("section").removeClass("current");
         $(currentTab).addClass("current");
         $(currentTab).parents("section").addClass("current");

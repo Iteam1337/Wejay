@@ -334,8 +334,8 @@ function RoomController(roomName, nodeUrl) {
             $("#sharePopup").removeClass("show");
             $("#shareOnURL").text("Share URL");
             $("#manualShare").addClass("hide");
-            var userString = (app.user.userName) ? "\u2029\u2029" + app.user.userName : "\u2029\u2029",
-                mailString = encodeURI("mailto:?subject=Join our WEJAY room&body=Hi, if you follow the link below you can add music to our WEJAY room \"" + local.roomName + "\" from Spotify.\u2029\u2029" + shareURL + userString + "\u2029\u2029\u2029\u2029WEJAY lets you and your colleagues add music to mixed democratic playlist which means you can all listen to your own favorite music while working. Recent research results shows that you work better when you get to listen to music.\u2029\u2029Read more about WEJAY and the research on http://wejay.org");
+            var userString = (app.user.userName) ? "%0D%0A" + app.user.userName : "%0D%0A",
+                mailString = "mailto:?subject=Join our WEJAY room&body=Hi, if you follow the link below you can add music to our WEJAY room \"" + local.roomName + "\" from Spotify.%0D%0A%0D%0A" + shareURL + userString + "%0D%0A%0D%0A%0D%0A%0D%0AWEJAY lets you and your colleagues add music to mixed democratic playlist which means you can all listen to your own favorite music while working. Recent research results shows that you work better when you get to listen to music.\%0D%0ARead more about WEJAY and the research on http://wejay.org";
             $("#shareURL").val(shareURL);
             $("#shareOnMail").attr("href", mailString);
             $("#shareOnFacebook").attr("href", "http://facebook.com/sharer.php?s=100&p[url]=" + shareURL + "&p[title]=" + escape("Play music with me on WEJAY") + "&p[images][0]=" + escape("http://wejay.org/Content/Images/Wejay256transparent.png") + "&p[summary]=" + escape("WEJAY is a Spotify app for playing music together at work. I've created the room " + local.roomName + ", join me there!"));
