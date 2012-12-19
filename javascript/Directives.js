@@ -52,6 +52,10 @@ function Directives() {
             });
         });
 
+        $('#tutClose').click(function () {
+            $('#tutorialWrap').fadeOut();
+        });
+
         function tutorialNextPrev(direction) {
             if (direction == "next") {
                 $("#tutorialSteps").find(".open").removeClass("open").hide().next().addClass("open").show();
@@ -316,9 +320,11 @@ function Directives() {
             // If the user presses play -- then wejay should force-play each time the track changes
             if ($(this).hasClass("pause")) {
                 app.pauseApp();
+                $(this).removeClass('onair');
             } else {
                 // wejay should play.
                 app.playApp();
+                $(this).addClass('onair');
             }
         });
 
@@ -332,8 +338,7 @@ function Directives() {
                 function () {
                     if (!$(this).hasClass("checked")) {
                         var button = $(".disclaimer.rooms .sp-button");
-                        $("#roomLogin").attr("disabled", false);
-                        button.addClass("hover");
+                        button.attr('disabled', false).addClass("hover");
                         $(this).css("background-position", "0 0");
                     }
                 },
@@ -361,10 +366,10 @@ function Directives() {
         }
         $("#like").on({
             mouseenter: function () {
-                $("#likeHover").show();
+                $("#likeHover").fadeIn();
             },
             mouseleave: function () {
-                $("#likeHover").hide();
+                $("#likeHover").fadeOut();
             }
         });
         $("#like").on("click", function () {
@@ -385,10 +390,10 @@ function Directives() {
         });
         $("#voteButton").on({
             mouseenter: function () {
-                $("#skipHover").show();
+                $("#skipHover").fadeIn();
             },
             mouseleave: function () {
-                $("#skipHover").hide();
+                $("#skipHover").fadeOut();
             }
         });
         $("#voteButton").on("click", function () {

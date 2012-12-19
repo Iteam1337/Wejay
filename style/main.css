@@ -756,17 +756,18 @@ h3
   position: absolute;
 }
 
-#likeHover,#skipHover
+#likeHover, #skipHover
 {
     color:#fff;
     padding:15px;
     left:-10px;
-    bottom:-60px;
+    bottom:-75px;
     display:none;
 }
 #skipHover 
 {
     left:30px;
+    bottom:-60px;
 }
 #queue .nothing.playing
 {
@@ -1101,7 +1102,7 @@ blockquote a
     top: 0;
     left: 0;
     margin: 5px 0;
-    padding: 0 !important;
+    padding: 0;
     color:#999;
 }
 .disclaimerRooms .disclaimer input[type="button"]
@@ -1115,7 +1116,7 @@ blockquote a
 }
 .disclaimerRooms .disclaimer .checkbox
 {
-    margin: 256px 0 0 0;
+    margin: 126px 0 0 0;
     padding: 0;
     left:0;
 }
@@ -1130,11 +1131,7 @@ blockquote a
 #disclaimerText 
 {
     color:#666;
-}
-#roomLogin 
-{
-    margin-top:10px;
-    margin-left:30px;
+    padding-left:30px;
 }
 /*
  * END DISCLAIMER
@@ -1379,6 +1376,14 @@ blockquote a
 {
     opacity: 1;
 }
+#start.onair 
+{
+    background-position-x:-90px;
+}
+#start.onair:hover 
+{
+    background-position-x:43px;
+}
 .image
 {
   background-color: gray;
@@ -1525,13 +1530,11 @@ footer a
         width:80%;
         display:none;
     }
-    #tutorialBtn 
+    #tutorialBtn, #roomLogin
     {
         background: -webkit-linear-gradient(top, #F9B24D 0%,#F7970C 100%);
         color: white;
         padding: 10px 15px;
-        bottom: 20px;
-        right: 20px;
         text-align: center;
         font-family: 'League Gothic', Sans-Serif;
         font-size: 24px;
@@ -1539,9 +1542,23 @@ footer a
         text-shadow: 1px 1px 1px rgba(0, 0, 0, .5);
         cursor: pointer;
         box-shadow: 0px 0px 5px rgba(0,0,0,0.8);
-        width: 100%;
+        width: 49%;
         margin-top: 10px;
         box-sizing: border-box;
+        display: inline-block;
+    }
+    #facebook .sp-button, #facebook .sp-button:disabled
+    {
+        -webkit-border-image:none;
+    }
+    #facebook .sp-button:disabled 
+    {
+        opacity:0.3;
+        cursor:default !important;
+    }
+    #roomLogin 
+    {
+        background:-webkit-linear-gradient(top, #5798D2 0%,#0063CB 100%);
     }
     #tutClose 
     {
@@ -1644,13 +1661,15 @@ footer a
         .songDesc
         {
             font-size: 3em;
+            margin-top:20px;
         }
-        .songDesc h3
+        .tutAdd h3
         {
-            color: #555;
+            color: #eee;
             font-size: 36px;
             font-family: 'League Gothic';
-            margin: 30px 0 20px 0;
+            position: relative;
+            top: -150px;
         }
         .songDesc p
         {
@@ -1766,7 +1785,7 @@ footer a
     section.current
     {
         min-height: 0;
-        padding-top: 10px;
+        padding-top: 40px;
     }
     #chooseSection #loginInformation
     {
@@ -2012,6 +2031,10 @@ footer a
         margin: 0 0 20px;
         overflow: hidden;
         text-align: left;
+    }
+    footer 
+    {
+        position:static;
     }
     footer *
     {

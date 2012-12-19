@@ -139,7 +139,7 @@ function RoomController(roomName, nodeUrl) {
             $("#currentArtist").append(' - ');
             $("#currentTrack").html('<a href="' + track.data.uri + '">' + track.data.name + '</a>');
             $("#currentAlbum").attr("src", track.data.album.cover);
-            $("#currentLink").attr("href", track.data.uri);
+            $("#currentLink").attr("href", track.data.album.uri);
             $(".hidden.title").html(track.data.name);
             if (song.PlayedBy) {
                 $("#currentPlayedBy").html("Added by " + unescape(song.PlayedBy.UserName));
