@@ -120,6 +120,7 @@ function App() {
                 this.loadRooms();
                 if (app.isPlayingFromWejay) {
                     self.pauseApp();
+                    $('#start').removeClass('onair');
                 }
                 break;
             case "room":

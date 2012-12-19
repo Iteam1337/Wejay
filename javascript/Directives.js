@@ -43,7 +43,7 @@ function Directives() {
         var ac = sp.require("javascript/AutocompleteForm");
         ac.init(".auto-completeForm");
 
-        $("#tutorialBtn").click(function () {
+        $("#tutorialBtn, #aboutSection #tutorialBtn").click(function () {
             $("#tutorialWrap").show();
             var controller = $.superscrollorama();
             $('.tutAdd').each(function () {
