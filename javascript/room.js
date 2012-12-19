@@ -58,33 +58,6 @@ function RoomController(roomName, nodeUrl) {
         }
     };
 
-    this.getTrack = function (searchString, callback, errorCallback) {
-        if (!callback) {
-            throw "No callback provided";
-        }
-        var search = new m.Search(searchString);
-        search.localResults = m.LOCALSEARCHRESULTS.IGNORE;
-        search.pageSize = 1;
-        // only tracks
-        search.searchTracks = true;
-        search.searchAlbums = false;
-        search.searchArtists = false;
-        search.searchPlaylists = false;
-        search.observe(m.EVENT.CHANGE, function () {
-            if (!search.tracks || search.tracks.length === 0) {
-                callback(null);
-            } else {
-                callback(search.tracks[0].data);
-            }
-        });
-        // start search
-        try {
-            search.appendNext();
-        } catch (err) {
-            errorCallback(err);
-        }
-    };
-
     var addLeadingZero = function (number) {
         return ((parseInt(number) < 10) ? "0" : "") + parseInt(number);
     };
@@ -155,7 +128,7 @@ function RoomController(roomName, nodeUrl) {
 
     this.clearCurrentSong = function (force) {
         $("#roomTitle").html(this.roomName + " Wejay Room");
-        //$("#currentSong").html("Nothing playing right now. Drag a track here!");
+        $("#currentSong").html("Nothing playing right now. Drag a track here!");
         $("#currentHolder .hover").hide();
         $("#currentAlbum").attr("src", "sp://import/img/placeholders/300-album.png");
         $(".hidden.title").html("");
@@ -192,6 +165,7 @@ function RoomController(roomName, nodeUrl) {
                 },
                 error: function (res) {
                     console.log("skip failed", res);
+                    window.NOTIFIER.show("skip failed");
                     $("#skip").html("Skip Failed");
                     setTimeout(function () {
                         $("#skip").html("Skip");
@@ -237,7 +211,9 @@ function RoomController(roomName, nodeUrl) {
                     var name = (app.user.userName) ? app.user.userName : "Anonymous",
                         obj = { user: name, room: self.roomName, mbId: self.currentSong.SpotifyId, value: 5 };
                 },
-                error: function () {
+                error: function (e) {
+                    window.NOTIFIER.show("like failed");
+                    console.log("like failed", e);
                     $("#like").removeClass("liking")
                     $("#like").addClass("failed");
                     setTimeout(function () {
@@ -277,7 +253,9 @@ function RoomController(roomName, nodeUrl) {
                     $("#like").html("Like");
                     console.log("Blocked successfully");
                 },
-                error: function () {
+                error: function (e) {
+                    window.NOTIFIER.show("block failed");
+                    console.log("block failed", e);
                     $("#block").html("Failed");
                     setTimeout(function () {
                         $("#block").html("Block");
@@ -323,7 +301,8 @@ function RoomController(roomName, nodeUrl) {
                     element.removeClass("no" + number).addClass(newClass);
                 },
                 error: function (msg) {
-                    console.log(msg);
+                    window.NOTIFIER.show("vote failed, sorry about this");
+                    console.log("vote failed",msg);
                 }
             });
         }
@@ -462,6 +441,7 @@ function RoomController(roomName, nodeUrl) {
             contentType: "application/json; charset=utf-8",
             dataType: "text json",
             error: function (e) {
+                window.NOTIFIER.show("Error updating queue");
                 console.log("___ - Error updating queue", e);
             },
             success: function (r) {
@@ -511,10 +491,12 @@ function RoomController(roomName, nodeUrl) {
                 if (result.length > 0) {
                     result = result.map(function (user) {
                         var newDate = moment(user.CheckedIn).valueOf(),
-                            timeleft = moment(newDate).add("hours", 1).from(new Date()),
-                            newCheckedIn = "Will be signed out " + timeleft;
+                            timeleft = new Date(moment(newDate).add("hours", 1).diff(new Date())).getMinutes(),
+                            newCheckedIn = (timeleft > 55) ? "Just logged in" : (  timeleft < 2 ? "Will logout any second now" : "Logged in for " + timeleft + " more minutes" );
                         if (user.FacebookId === app.user.facebookUser.id) loggedIn = true;
-                        return { UserName: unescape(user.UserName), FacebookId: user.FacebookId, CheckedIn: newCheckedIn };
+                        return { UserName: unescape(user.UserName), FacebookId: user.FacebookId, CheckedIn: newCheckedIn, timeleft: timeleft };
+                    }).sort(function (a, b) {
+                        return b.timeleft - a.timeleft;
                     });
                     loggedInUsersTitle = "LOGGED IN WEJAYS (" + result.length + ")";
                     loggedInUsersInnerText = $("#usersTemplate").tmpl(result.slice(0, 10));
