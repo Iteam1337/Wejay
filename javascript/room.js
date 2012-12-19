@@ -253,7 +253,9 @@ function RoomController(roomName, nodeUrl) {
                     $("#like").html("Like");
                     console.log("Blocked successfully");
                 },
-                error: function () {
+                error: function (e) {
+                    window.NOTIFIER.show("block failed");
+                    console.log("block failed", e);
                     $("#block").html("Failed");
                     setTimeout(function () {
                         $("#block").html("Block");
