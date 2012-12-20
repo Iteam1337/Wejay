@@ -1595,8 +1595,8 @@ footer a
     z-index: 999999;
     font-weight: bold;
     text-align: center;
-    font-size: 16px;
-    padding: 6px 0 0 0;
+    font-size: 24px;
+    padding: 4px 0;
     box-sizing: border-box;
     cursor: pointer;
     text-shadow: 1px 1px 1px rgba(0, 0, 0, .5);
@@ -2076,15 +2076,9 @@ footer a
     }
     #tutorial 
     {
-        width:80%;
-        left:40%;
+        width:75%;
+        left:0;
         top:0;
-    }
-    #tutClose 
-    {
-        top:20px;
-        left:50%;
-        margin-left:-15px;
     }
     .userImg 
     {
