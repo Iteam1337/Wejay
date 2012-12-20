@@ -134,30 +134,32 @@ function Directives() {
 
         $("#roomSection").on("drop", function (e) {
             e.preventDefault();
+            function handleTheLastOutput(inputString) {
+                var divID = "#searchInputField"
+                $(divID).val(inputString);
+                $(divID).trigger("dosearch");
+            }
             var id = event.dataTransfer.getData("text"),
                 t = e.target,
-                tName = "auto-completeForm",
-                inputName = "#searchInputField";
+                tName = "auto-completeForm";
             if (t.className === tName || t.parentNode.className === tName || t.parentNode.parentNode.className === tName) {
                 var type = m.Link.getType(id), dropped = false;
                 if (type === 2) {
                     m.Album.fromURI(id, function (album) {
-                        var albumLink = album.data.uri,
-                            tracks = album.data.tracks;
-                        dropped = tracks[0].artists[0].name + " " + tracks[0].album.name;
+                        var tracks = album.data.tracks,
+                            inputString = tracks[0].artists[0].name + " " + tracks[0].album.name;
+                        return handleTheLastOutput(inputString);
                     });
                 }
                 if (type === 4) {
                     m.Track.fromURI(id, function (track) {
-                        dropped = track.data.artists[0].name + " " + track.data.name;
+                        var inputString = track.data.artists[0].name + " " + track.data.name;
+                        return handleTheLastOutput(inputString);
                     });
                 }
                 if (type === 5) {
-                    dropped = m.Playlist.fromURI(id).data.name;
-                }
-                if (dropped !== false) {
-                    $(inputName).val(dropped);
-                    $(inputName).trigger("dosearch");
+                    var inputString = m.Playlist.fromURI(id).data.name;
+                    handleTheLastOutput(inputString);
                 }
             } else if (app.checkIfUserAcceptedAgreement()) {
                 app.handleDroppedLinks([id]);

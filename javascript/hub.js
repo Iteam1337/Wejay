@@ -29,7 +29,6 @@ function Hub(nodeUrl, currentRoom, facebookUserId) {
     };
 
     this.checkCurrentSong = function (room, callback) {
-        console.log("checkCurrentSong");
         var data = { room: room };
         $.ajax({
             url: "http://api.wejay.org/NodeJs/CurrentSong",
