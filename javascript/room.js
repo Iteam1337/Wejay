@@ -35,6 +35,7 @@ function RoomController(roomName, nodeUrl) {
     };
 
     this.updateUsersInterval = null;
+    this.roomUpdateInterval = null;
 
     this.queueTrack = function (track) {
         var song = {
@@ -87,6 +88,14 @@ function RoomController(roomName, nodeUrl) {
 
     var addLeadingZero = function (number) {
         return ((parseInt(number) < 10) ? "0" : "") + parseInt(number);
+    };
+
+    this.forceCheckCurrentSong = function () {
+        self.hub.checkCurrentSong(self.roomName, function (error, song) {
+            if (error || song === null) {
+                self.clearCurrentSong(true);
+            }
+        });
     };
 
     this.playSong = function (song, forcePlay) {
@@ -193,6 +202,7 @@ function RoomController(roomName, nodeUrl) {
                     $("#voteOverlay").removeClass("show");
                 },
                 error: function (res) {
+                    window.NOTIFIER.show("skip failed");
                     console.log("skip failed", res);
                     $("#skip").html("Skip Failed");
                     setTimeout(function () {
@@ -240,6 +250,7 @@ function RoomController(roomName, nodeUrl) {
                         obj = { user: name, room: self.roomName, mbId: self.currentSong.SpotifyId, value: 5 };
                 },
                 error: function () {
+                    window.NOTIFIER.show("like failed");
                     $("#like").removeClass("liking")
                     $("#like").addClass("failed");
                     setTimeout(function () {
@@ -280,6 +291,7 @@ function RoomController(roomName, nodeUrl) {
                     console.log("Blocked successfully");
                 },
                 error: function () {
+                    window.NOTIFIER.show("block failed");
                     $("#block").html("Failed");
                     setTimeout(function () {
                         $("#block").html("Block");
@@ -325,7 +337,8 @@ function RoomController(roomName, nodeUrl) {
                     element.removeClass("no" + number).addClass(newClass);
                 },
                 error: function (msg) {
-                    console.log(msg);
+                    window.NOTIFIER.show("vote failed");
+                    console.log("vote failed", msg);
                 }
             });
         }
@@ -383,12 +396,21 @@ function RoomController(roomName, nodeUrl) {
             //
             // Update the userlist on interval
             if (self.updateUsersInterval !== null) {
-                clearInterval(self.updateUsersInterval)
+                clearInterval(self.updateUsersInterval);
             }
             self.updateUsersInterval = setInterval(function () {
                 self.updateUsers();
             }, ((60 * 1000) * 2));
 
+            //
+            // RoomUpdateInterval
+            if (self.roomUpdateInterval !== null) {
+                clearInterval(self.roomUpdateInterval);
+            }
+            self.roomUpdateInterval = setInterval(function () {
+                self.updatePlaylist();
+                self.forceCheckCurrentSong();
+            }, ((60 * 1000) * 10));
         });
     };
 
@@ -397,7 +419,6 @@ function RoomController(roomName, nodeUrl) {
         sp.social.getToplist("track", "user", userName, {
             onSuccess: function (r) {
                 var topTracks = r.tracks;
-                console.log("topTracks Loaded");
                 if (callback) {
                     callback(topTracks);
                 }
@@ -465,6 +486,7 @@ function RoomController(roomName, nodeUrl) {
             contentType: "application/json; charset=utf-8",
             dataType: "text json",
             error: function (e) {
+                window.NOTIFIER.show("error updating queue");
                 console.log("___ - Error updating queue", e);
             },
             success: function (r) {

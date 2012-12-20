@@ -28,6 +28,24 @@ function Hub(nodeUrl, currentRoom, facebookUserId) {
         });
     };
 
+    this.checkCurrentSong = function (room, callback) {
+        console.log("checkCurrentSong");
+        var data = { room: room };
+        $.ajax({
+            url: "http://api.wejay.org/NodeJs/CurrentSong",
+            data: data,
+            dataType: "json",
+            traditional: true,
+            type: "POST",
+            success: function (response) {
+                return callback(null, response);
+            },
+            error: function (response) {
+                return callback(response, null);
+            }
+        });
+    }; 
+
     this.userLogout = function () {
         socket.emit("ulogout", "");
     };
