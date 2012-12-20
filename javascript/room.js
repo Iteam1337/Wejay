@@ -143,7 +143,6 @@ function RoomController(roomName, nodeUrl) {
                 sp.trackPlayer.setShuffle(false);
                 m.player.play(trackUri, tpl);
             }
-
             $("#currentArtist").html('<a href="' + track.data.artists[0].uri + '">' + track.data.artists[0].name + '</a>');
             $("#currentArtist").append(' - ');
             $("#currentTrack").html('<a href="' + track.data.uri + '">' + track.data.name + '</a>');
