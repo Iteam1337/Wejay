@@ -123,6 +123,7 @@ function Directives() {
                     $("#leaveRoom").show();
                     app.loadRooms();
                     app.userLogoutShow();
+                    $("#overlay").fadeOut();
                 });
             }
         });

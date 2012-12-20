@@ -768,14 +768,14 @@ h3
     color:#fff;
     padding:15px;
     left:-10px;
-    bottom:-75px;
+    bottom:-80px;
     display:none;
     z-index: 1000;
 }
 #skipHover 
 {
     left:30px;
-    bottom:-60px;
+    bottom:-65px;
 }
 #queue .nothing.playing
 {
@@ -1583,40 +1583,37 @@ footer a
     {
         background:-webkit-linear-gradient(top, #5798D2 0%,#0063CB 100%);
     }
-    #tutClose 
-    {
-        background: black;
-        color: white;
-        border-radius: 50px;
-        border: 2px solid white;
-        width: 30px;
-        height: 30px;
-        position: absolute;
-        top: -10px;
-        right: -10px;
-        z-index: 999999;
-        font-weight: bold;
-        text-align: center;
-        box-shadow: 0px 0px 10px rgba(0,0,0,1);
-        font-size: 16px;
-        padding: 6px 0 0 0;
-        box-sizing: border-box;
-        cursor:pointer;
-    }
+#tutClose {
+    background: -webkit-linear-gradient(top, #F9B24D 0%,#F7970C 100%);
+    color: white;
+    border: 0;
+    width: 75%;
+    height: 30px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 999999;
+    font-weight: bold;
+    text-align: center;
+    font-size: 16px;
+    padding: 6px 0 0 0;
+    box-sizing: border-box;
+    cursor: pointer;
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, .5);
+}
         #tutorial
         {
-            width: 60%;
+            width: 75%;
             position: absolute;
             color: white;
             text-align: center;
             font-family: 'League Gothic', Sans-Serif;
             text-transform: uppercase;
             background: #333;
-            top: 100px;
-            left: 50%;
+            top: 0;
+            left: 0;
             z-index: 99999;
             line-height: 1;
-            margin-left: -40%;
         }
         #tutStart
         {
@@ -1744,13 +1741,14 @@ footer a
         #tutQueue
         {
             position:fixed;
-            width: 20%;
+            width: 25%;
             height: 100%;
             background: #444;
             right: 0;
             top: 0;
             font-family:'League Gothic', Sans-Serif;
             z-index:99999;
+            padding-right:1px;
         }
         #tutInner 
         {
@@ -2050,7 +2048,7 @@ footer a
     }
     .disclaimerRooms .disclaimer .checkbox
     {
-        margin: -200px 0 0 0px;
+        margin: -135px 0 0 0px;
     }
     #sharePopup
     {
