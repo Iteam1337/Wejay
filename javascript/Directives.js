@@ -133,13 +133,16 @@ function Directives() {
 
         $("#roomSection").on("drop", function (e) {
             e.preventDefault();
-            var id = event.dataTransfer.getData("text");
-            if (e.target.id === "searchInputField") {
+            var id = event.dataTransfer.getData("text"),
+                t = e.target,
+                tName = "auto-completeForm",
+                inputName = "#searchInputField";
+            if (t.className === tName || t.parentNode.className === tName || t.parentNode.parentNode.className === tName) {
                 var type = m.Link.getType(id), dropped = false;
                 if (type === 2) {
                     m.Album.fromURI(id, function (album) {
                         var albumLink = album.data.uri,
-                                    tracks = album.data.tracks;
+                            tracks = album.data.tracks;
                         dropped = tracks[0].artists[0].name + " " + tracks[0].album.name;
                     });
                 }
@@ -152,8 +155,8 @@ function Directives() {
                     dropped = m.Playlist.fromURI(id).data.name;
                 }
                 if (dropped !== false) {
-                    e.target.value = dropped;
-                    $(e.target).trigger("dosearch");
+                    $(inputName).val(dropped);
+                    $(inputName).trigger("dosearch");
                 }
             } else if (app.checkIfUserAcceptedAgreement()) {
                 app.handleDroppedLinks([id]);
