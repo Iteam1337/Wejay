@@ -1007,6 +1007,8 @@ table td
 #users li span p.time
 {
   font-size: 9px;
+  display: block;
+  margin-left: 70px;
 }
 input[type=text]
 {
@@ -1498,6 +1500,11 @@ footer a
   margin: 0;
   padding: 0;
   webkit-transition: background-color .08s ease-in-out;
+}
+#plusToAdd 
+{
+    margin-left:10px;
+    margin-top:10px;
 }
 #userToplist li a.addSongToQueue
 {
@@ -2088,6 +2095,17 @@ footer a
     #tutorialBtn, #roomLogin
     {
         width:100%;
+    }
+    #userToplist li a.songInTopList 
+    {
+        max-width:92%;
+        text-overflow:ellipsis;
+        overflow:hidden;
+        white-space:nowrap;
+    }
+    #userToplist li a.songInTopList strong 
+    {
+        max-width:100%;
     }
 }
 
