@@ -18,6 +18,7 @@ function Directives() {
             app.user.facebookUser = {};
             app.user.accessToken = "";
             app.userLogoutHide();
+            app.clearLocalStorage();
         }
 
         var acceptedLogin = (localStorage.acceptedLogin) ? localStorage.acceptedLogin : false;
@@ -279,6 +280,10 @@ function Directives() {
             document.location = "spotify:app:wejay:choose";
         });
 
+        $("#signoutFromTheApp").on("click", function () {
+            app.user.logoutFromFacebook();
+        });
+
         $(document).on("click", "#queue li .star", function () {
             var element = $(this),
                         CurrentClass = element.attr("class").match(/(no)+(\d){1}/),
@@ -328,36 +333,9 @@ function Directives() {
         //
         // initialize the disclaimer
         if (app.acceptedLogin === false) {
-            $("#overlay").show().find(".rooms").show();
-            $("#login").attr("disabled", true);
-            $(".disclaimer .checkbox").hover(
-                function () {
-                    if (!$(this).hasClass("checked")) {
-                        var button = $(".disclaimer.rooms .sp-button");
-                        button.attr('disabled', false).addClass("hover");
-                        $(this).css("background-position", "0 0");
-                    }
-                },
-                function () {
-                    if (!$(this).hasClass("checked")) {
-                        var button = $(".disclaimer.rooms .sp-button");
-                        $("#roomLogin").attr("disabled", true);
-                        button.removeClass("hover");
-                        $(this).css("background-position", "0 36px");
-                    }
-                }
-
-            );
-            $(".disclaimer .checkbox").click(function () {
-                $(this).css("background-position", "0 0");
-                $(this).addClass("checked");
-                $("#roomLogin").attr("disabled", false);
-                localStorage.acceptedLogin = "true";
-                app.acceptedLogin = true;
-            });
+            app.showLoginDisclaimer();
         } else {
-            $(".disclaimer").remove();
-            $("#overlay, #overlayLimit").hide();
+            $(".disclaimer, #overlay, #overlayLimit").hide();
             app.loadRooms();
         }
         $("#like").on({

@@ -166,6 +166,48 @@ function App() {
         self.tabTo(tab);
     });
 
+    this.clearLocalStorage = function () {
+        for (var obj in localStorage) {
+            delete localStorage[obj];
+        }
+        localStorage.room = "example";
+    };
+
+    this.showLoginDisclaimer = function () {
+        self.loaded = false;
+        delete localStorage.acceptedLogi;
+        app.acceptedLogin = false;
+        $("#overlay").show().find(".rooms").show();
+        $("#facebook").show();
+        $("#login").attr("disabled", true);
+        $(".disclaimer .checkbox").hover(
+                function () {
+                    if (!$(this).hasClass("checked")) {
+                        var button = $(".disclaimer.rooms .sp-button");
+                        button.attr('disabled', false).addClass("hover");
+                        $(this).css("background-position", "0 0");
+                    }
+                },
+                function () {
+                    if (!$(this).hasClass("checked")) {
+                        var button = $(".disclaimer.rooms .sp-button");
+                        $("#roomLogin").attr("disabled", true);
+                        button.removeClass("hover");
+                        $(this).css("background-position", "0 36px");
+                    }
+                }
+
+            );
+        $(".disclaimer .checkbox").click(function () {
+            $(this).css("background-position", "0 0");
+            $(this).addClass("checked");
+            $("#roomLogin").attr("disabled", false);
+            localStorage.acceptedLogin = "true";
+            app.acceptedLogin = true;
+            app.loadRooms();
+        });
+    };
+
     this.handleDroppedLinks = function (links) {
         console.log("dropped", links);
         if (self.checkIfUserAcceptedAgreement()) {

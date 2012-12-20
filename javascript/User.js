@@ -17,8 +17,9 @@ function User() {
                 self.facebookUser = null;
                 self.accessToken = null;
                 $("#rooms").html("");
-                localStorage.removeItem("facebookUser");
+                app.clearLocalStorage();
                 app.loggedIntoRoom = null;
+                app.showLoginDisclaimer();
             }
         });
     };
