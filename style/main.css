@@ -551,6 +551,7 @@ h3
   height: 200px;
   min-width: 200px;
   min-height: 200px;
+  border-radius:0;
 }
 
 #current
@@ -603,6 +604,10 @@ h3
 #users li a 
 {
     cursor:default;
+}
+#users li img 
+{
+    border-radius:0;
 }
 #noUsers
 {
@@ -2102,6 +2107,11 @@ footer a
     #userToplist li a.songInTopList strong 
     {
         max-width:100%;
+    }
+    #aboutSection section.current,
+    #chooseSection section.current
+    {
+        width:100%;
     }
 }
 
