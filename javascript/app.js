@@ -140,18 +140,15 @@ function App() {
                 }
 
                 if (self.loggedIntoRoom === null) {
-                    $("#joinRoom, #leaveRoom").hide();
+                    app.userLogoutHide();
                 } else if (self.loggedIntoRoom === "" || self.currentRoom.roomName !== self.loggedIntoRoom) {
                     app.currentRoom.checkin(false, function (room) {
                         app.loggedIntoRoom = room;
-                        app.handleLoginInfo();
                         app.currentRoom.updateUsers();
                     });
-                    $("#joinRoom").hide();
-                    $("#leaveRoom").show();
+                    app.userLogoutShow()
                 } else {
-                    $("#leaveRoom").show();
-                    $("#joinRoom").hide();
+                    app.userLogoutShow()
                 }
                 self.currentRoom.updatePlaylist();
                 break;
@@ -175,7 +172,6 @@ function App() {
             app.user.authenticate(function (room) {
                 if (app.loggedIntoRoom !== room) {
                     app.loggedIntoRoom = room;
-                    app.handleLoginInfo();
                     $("#leaveRoom").show();
                     app.loadRooms();
                     app.userLogoutShow();
@@ -353,37 +349,14 @@ function App() {
         });
     };
 
-    //
-    // Copy for "rooms"
-    this.loggedInCopy = function (noRoom) {
-        $("#overlay, #overlayLimit").hide();
-        var user = app.user.userName,
-            room = app.loggedIntoRoom;
-        if (noRoom) {
-            return "Hi there " + unescape(user) + ", you are currently not logged into any room ...";
-        } else if (room === "example") {
-            return "Hi there " + unescape(user) + ", please choose a room-name to begin using Wejay!"
-        } else {
-            return "Hi there " + unescape(user) + ", you are currently logged in to the room: <a href=\"spotify:app:wejay:room:" + room + "\">" + room.toUpperCase() + "</a>";
-        }
-    };
-
-    this.handleLoginInfo = function (force) {
-        var copy = self.loggedInCopy(force);
-        $("#disclaimerLoginOriginal p").html(copy);
-    }
-
-    this.standardCopyLoggedOut = "I understand that by logging in with my Facebook account I enable WEJAY to use and store information from my Spotify library and listening history. This is done to provide a great listening experience.";
-
     this.userLogoutShow = function () {
-        $("#login, #roomLogin, #btnLogin, #facebook").hide();
-        $("#roomLogout, #leaveRoom, #btnLogout").show();
+        $("#joinRoom, #facebook").hide();
+        $("#leaveRoom").show();
     };
 
     this.userLogoutHide = function () {
-        $("#login, #roomLogin, #btnLogin").show();
-        $("#logout, #leaveRoom, #joinRoom, #roomLogout, #btnLogout").hide();
-        $("#disclaimerLoginOriginal p").html(self.standardCopyLoggedOut);
+        $("#joinRoom").show();
+        $("#leaveRoom").hide();
     };
 
     this.checkIfUserAcceptedAgreement = function () {

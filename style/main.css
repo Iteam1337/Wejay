@@ -678,10 +678,6 @@ h3
   margin:0;
   overflow: hidden;
 }
-#btnLogin, #btnLogout 
-{
-    margin-top:20px;
-}
 #queue
 {
   width: 330px;

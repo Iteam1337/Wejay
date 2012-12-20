@@ -155,7 +155,12 @@ function RoomController(roomName, nodeUrl) {
 
     this.clearCurrentSong = function (force) {
         $("#roomTitle").html(this.roomName + " Wejay Room");
+<<<<<<< HEAD
         //$("#currentSong").html("Nothing playing right now. Drag a track here!");
+=======
+        $("#currentArtist").html("Nothing playing right now. Drag a track here!");
+        $("#currentTrack").html("");
+>>>>>>> #142 Removed the signout-button
         $("#currentHolder .hover").hide();
         $("#currentAlbum").attr("src", "sp://import/img/placeholders/300-album.png");
         $(".hidden.title").html("");
@@ -446,6 +451,7 @@ function RoomController(roomName, nodeUrl) {
                 if (callback) {
                     callback(self.roomName);
                 }
+                app.userLogoutShow();
                 //self.hub.checkin({ user: app.user.userName, room: self.roomName });
                 //console.log(app.user.userName + " logged in to wejay room ", self.roomName);
             }
@@ -511,18 +517,28 @@ function RoomController(roomName, nodeUrl) {
                 if (result.length > 0) {
                     result = result.map(function (user) {
                         var newDate = moment(user.CheckedIn).valueOf(),
+<<<<<<< HEAD
                             timeleft = moment(newDate).add("hours", 1).from(new Date()),
                             newCheckedIn = "Will be signed out " + timeleft;
                         if (user.FacebookId === app.user.facebookUser.id) loggedIn = true;
                         return { UserName: unescape(user.UserName), FacebookId: user.FacebookId, CheckedIn: newCheckedIn };
+=======
+                            momentDiff = new Date(moment(newDate).add("hours", 1).diff(new Date())),
+                            hour = momentDiff.getHours(),
+                            timeleft = momentDiff.getMinutes(),
+                            newCheckedIn = (hour > 1 || timeleft > 55) ? "Just logged in" : (timeleft < 2 ? "Will logout any second now" : "Logged in for " + timeleft + " more minutes");
+                        if (user.FacebookId === app.user.facebookUser.id) loggedIn = true;
+                        var returnTimeLeft = hour > 1 ? 100 : timeleft;
+                        return { UserName: unescape(user.UserName), FacebookId: user.FacebookId, CheckedIn: newCheckedIn, timeleft: returnTimeLeft };
+                    }).sort(function (a, b) {
+                        return b.timeleft - a.timeleft;
+>>>>>>> #142 Removed the signout-button
                     });
                     loggedInUsersTitle = "LOGGED IN WEJAYS (" + result.length + ")";
                     loggedInUsersInnerText = $("#usersTemplate").tmpl(result.slice(0, 10));
                 }
                 if (!loggedIn && self.roomName === app.loggedIntoRoom) {
-                    $("#leaveRoom").hide();
-                    $("#joinRoom").show();
-                    app.handleLoginInfo(true);
+                    app.userLogoutHide();
                     app.loggedIntoRoom = "";
                 }
                 $(".logged.in h2").html(loggedInUsersTitle);

@@ -29,7 +29,6 @@ function Directives() {
             // if the user has not accepted the disclaimer -- he/she will be reverted to the
             // "rooms"-section. Also, the standardroom will be the iteam-room.
             $(".disclaimer:first").hide();
-            $("#disclaimerLoginOriginal").hide();
             if (localStorage.room === undefined) {
                 localStorage.room = "example";
                 document.location = "spotify:app:wejay:choose";
@@ -117,17 +116,10 @@ function Directives() {
         $("#start").removeClass("pause");
         $("#onair").hide();
 
-        $("#roomLogout, #btnLogout").on("click", function () {
-            app.user.logoutFromFacebook();
-            app.loggedIntoRoom = "";
-            app.userLogoutHide();
-        });
-
-        $("#login, #roomLogin, #btnLogin").on("click", function () {
+        $("#roomLogin").on("click", function () {
             if (app.checkIfUserAcceptedAgreement()) {
                 app.user.authenticate(function (room) {
                     app.loggedIntoRoom = room;
-                    app.handleLoginInfo();
                     $("#leaveRoom").show();
                     app.loadRooms();
                     app.userLogoutShow();
@@ -267,7 +259,6 @@ function Directives() {
         $("#joinRoom").on("click", function () {
             app.currentRoom.checkin(false, function (room) {
                 app.loggedIntoRoom = room;
-                app.handleLoginInfo();
                 app.currentRoom.updateUsers();
             });
             $(this).hide();
@@ -276,10 +267,9 @@ function Directives() {
 
         $("#leaveRoom").on("click", function () {
             $(this).hide();
-            app.user.logout();
-            app.handleLoginInfo(true);
-            app.loggedIntoRoom = "";
             $("#joinRoom").show();
+            app.user.logout();
+            app.loggedIntoRoom = "";
             document.location = "spotify:app:wejay:choose";
         });
 

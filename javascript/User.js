@@ -63,8 +63,7 @@ function User() {
         // we are already authorized
         if (self.accessToken) {
             console.log("already authenticated");
-            $("#logout").show();
-            $("#login").hide();
+            app.userLogoutShow();
             if (callback && app.currentRoom) {
                 app.currentRoom.checkin(false, function (room) {
                     if (callback) {
@@ -92,9 +91,7 @@ function User() {
                     self.userName = unescape(facebookUser.name);
                     self.facebookId = facebookUser.id;
                     self.accessToken = accessToken;
-                    $("#logout, #roomLogout, #leaveRoom").show();
-                    $("#roomLogin, #login").hide();
-                    $("#disclaimerLoginOriginal p").html(App.standardCopyLoggedOut);
+                    app.userLogoutShow();
                     app.loadRooms();
                     localStorage.setItem("facebookUser", JSON.stringify(facebookUser));
                     localStorage.setItem("accessToken", accessToken);
@@ -118,8 +115,7 @@ function User() {
 
             onFailure: function (error) {
                 console.log("Authentication failed with error: " + error);
-                $("#logout, #roomLogout, #leaveRoom").hide();
-                $("#roomLogin, #login").show();
+                app.userLogoutHide();
             },
 
             onComplete: function () {
