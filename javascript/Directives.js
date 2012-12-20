@@ -329,6 +329,7 @@ function Directives() {
             }
         });
 
+        app.showDisplayNameAsLoggedIn();
 
         //
         // initialize the disclaimer

@@ -362,6 +362,14 @@ section.current
 {
   display: block;
 }
+#signedInAs 
+{
+    margin-bottom:10px;
+}
+#signedInAs span 
+{
+    font-weight:bold;
+}
 #chooseSection .buttons address
 {
   margin: 0;

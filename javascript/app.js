@@ -173,6 +173,10 @@ function App() {
         localStorage.room = "example";
     };
 
+    this.showDisplayNameAsLoggedIn = function () {
+        $("#signedInAs").html("Logged in as <span>" + app.user.facebookUser.name + "</span>");
+    };
+
     this.showLoginDisclaimer = function () {
         self.loaded = false;
         delete localStorage.acceptedLogi;
@@ -202,6 +206,7 @@ function App() {
             $(this).css("background-position", "0 0");
             $(this).addClass("checked");
             $("#roomLogin").attr("disabled", false);
+            app.showDisplayNameAsLoggedIn();
             localStorage.acceptedLogin = "true";
             app.acceptedLogin = true;
             app.loadRooms();
