@@ -323,6 +323,9 @@ section.current
   padding:20px;
   margin: 0 0 20px;
 }
+#aboutSection h3 {
+    margin-top: 0;
+}
 #aboutSection ul {
     margin: 20px;
 }
@@ -1582,6 +1585,8 @@ footer a
     #roomLogin 
     {
         background:-webkit-linear-gradient(top, #5798D2 0%,#0063CB 100%);
+        padding: 10px 15px 11px 15px;
+        position: relative;
     }
 #tutClose {
     background: -webkit-linear-gradient(top, #F9B24D 0%,#F7970C 100%);
@@ -1816,7 +1821,6 @@ footer a
     #chooseSection #loginInformation
     {
         height: auto !important;
-        background: #f7f8fa;
     }
     #roomSection section
     {
