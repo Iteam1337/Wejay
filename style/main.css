@@ -678,6 +678,10 @@ h3
   margin:0;
   overflow: hidden;
 }
+#btnLogin, #btnLogout 
+{
+    margin-top:20px;
+}
 #queue
 {
   width: 330px;
@@ -1665,6 +1669,12 @@ footer a
             height: 300px;
             margin: 0 auto;
         }
+        #fadeIn1 .image {
+            display: inline-block;
+            width: 100px;
+            height: 100px;
+            margin-right: 10px;
+        }
         .tutAdd .image img
         {
             width: 100%;
@@ -1680,6 +1690,7 @@ footer a
             color: #eee;
             font-size: 36px;
             font-family: 'League Gothic';
+            display:block;
         }
         .songDesc p
         {
