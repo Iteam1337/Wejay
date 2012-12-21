@@ -3,7 +3,7 @@
   {
     "en": "WEJAY"
   },
-  "BundleVersion": "1.0.2",
+  "BundleVersion": "1.0.3",
   "Dependencies": {
     "api": "0.1.0",
     "resources": "0.1.0"
