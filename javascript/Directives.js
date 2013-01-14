@@ -52,8 +52,12 @@ function Directives() {
             });
         });
 
-        $('#tutClose').click(function () {
-            $('#tutorialWrap').fadeOut();
+        $("#tutClose").click(function () {
+            $("#tutorialWrap").fadeOut();
+        });
+
+        $("#createRoom").click(function () {
+            $("#enterRoomBanner").show();
         });
 
         function tutorialNextPrev(direction) {
@@ -341,15 +345,17 @@ function Directives() {
         }
         $("#like").on({
             mouseenter: function () {
-                $("#likeHover").fadeIn();
+                $("#likeHover").show();
             },
             mouseleave: function () {
-                $("#likeHover").fadeOut();
+                $("#likeHover").hide();
             }
         });
         $("#like").on("click", function () {
             if (app.checkIfUserAcceptedAgreement()) {
-                app.currentRoom.like();
+                if (!$(this).hasClass("liked")) {
+                    app.currentRoom.like();
+                }
             }
         });
 
@@ -365,10 +371,10 @@ function Directives() {
         });
         $("#voteButton").on({
             mouseenter: function () {
-                $("#skipHover").fadeIn();
+                $("#skipHover").show();
             },
             mouseleave: function () {
-                $("#skipHover").fadeOut();
+                $("#skipHover").hide();
             }
         });
         $("#voteButton").on("click", function () {

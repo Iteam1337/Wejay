@@ -12,7 +12,7 @@ function User() {
     this.logoutFromFacebook = function () {
         var logoutUrl = "https://www.facebook.com/logout.php?next=http://wejay.org/logout&access_token=" + this.accessToken;
         auth.showAuthenticationDialog(logoutUrl, "http://wejay.org/logout", {
-            onSuccess: function () {
+            onSuccess: function (response) {
                 self.facebookId = null;
                 self.facebookUser = null;
                 self.accessToken = null;
@@ -20,6 +20,10 @@ function User() {
                 app.clearLocalStorage();
                 app.loggedIntoRoom = null;
                 app.showLoginDisclaimer();
+                console.log('logged out' + response);
+            },
+            onFailure: function (error) {
+                console.log(error);
             }
         });
     };
@@ -64,6 +68,7 @@ function User() {
         // we are already authorized
         if (self.accessToken) {
             console.log("already authenticated");
+            app.showDisplayNameAsLoggedIn(app.user.facebookUser);
             app.userLogoutShow();
             if (callback && app.currentRoom) {
                 app.currentRoom.checkin(false, function (room) {
@@ -88,6 +93,10 @@ function User() {
                 // get the current facebook user details
                 $.getJSON("https://graph.facebook.com/me?access_token=" + accessToken + "&callback=?", function (facebookUser) {
                     console.log("logged in user: ", facebookUser);
+                    $(".checkbox").removeClass("checked");
+                    $(".checkbox").css("background-position", "0px 36px");
+                    $("#roomLogin").attr("disabled", true);
+                    app.showDisplayNameAsLoggedIn(facebookUser);
                     self.facebookUser = facebookUser;
                     self.userName = unescape(facebookUser.name);
                     self.facebookId = facebookUser.id;

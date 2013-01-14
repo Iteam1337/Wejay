@@ -66,7 +66,7 @@ h1, h2, h3, h4
   font-family: Arial, Helvetica, sans-serif;
   line-height: 0.9em;
   font-weight: normal;
-  text-shadow: 1px 1px 0 black;
+  text-shadow: 1px 1px 0 rgba(0,0,0,0.5);
   display: block;
 }
 h1
@@ -274,7 +274,6 @@ section
   text-align: center;
   background: none;
   min-height: 0;
-  height: 0;
   padding: 0;
   margin: 0;
 }
@@ -306,7 +305,6 @@ section.current
   margin: 0px auto 0;
   padding: 51px 0 0 !important;
   width: 670px;
-  display: inline-block;
   text-align: left;
   position: relative;
   background: none;
@@ -345,6 +343,10 @@ section.current
 {
     width:315px;
     padding: 20px;
+}
+#createRoom 
+{
+    margin-top:10px;
 }
 #chooseSection .banner,
 #chooseSection .buttons
@@ -1247,6 +1249,10 @@ blockquote a
 {
   background-position: -16px 0;
 }
+.liked 
+{
+    pointer-events:none;
+}
 #like.liked:after
 {
   background-position: 0 0 !important;
@@ -1381,38 +1387,31 @@ blockquote a
 }
 #start
 {
-  margin: -21px 0 0 -21px;
+  margin: -33px 0 0 -33px;
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 43px;
-  height: 43px;
+  width: 66px;
+  height: 66px;
   border: none;
-  background: url("sp://import/img/play-button-M.png") transparent;
-  background-position-x: -178px;
+  background: url("sp://import/img/play-button-L.png") transparent;
+  background-position-x: 0px;
   display: block;
   cursor: default;
+  opacity:0.8;
 }
 #start:hover 
 {
-  background-position-x: -223px;
-}
-#start.pause 
-{
-  opacity: 0.8;
-  background-position-x: 43px;
-}
-#start.pause:hover 
-{
-    opacity: 1;
+  background-position-x: -68px;
+  opacity:1;
 }
 #start.onair 
 {
-    background-position-x:-90px;
+    background-position-x:-136px;
 }
 #start.onair:hover 
 {
-    background-position-x:43px;
+    background-position-x:-204px;
 }
 .image
 {
@@ -1484,22 +1483,18 @@ footer
     border-top: 1px solid rgba(255, 255, 255, .2);
     box-shadow: 0 -1px 0 rgba(0,0,0,.2);
     width: 100%;
-    display: inline-block;
-    margin: 0 0 0 -15px;
+    margin: 0;
     z-index: 0;
     clear: both;
     padding: 15px;
     bottom: 0;
     z-index: 4;
-    position: fixed;
-    height: 100px;
+    position: absolute;
+    height: 115px;
     background: #ecebe8;
     left: 0;
+    box-sizing:border-box;
 }
-    #roomSection footer 
-    {
-        position:static;
-    }
 footer *
 {
   color: #636363;
@@ -2075,9 +2070,15 @@ footer a
         overflow: hidden;
         text-align: left;
     }
+    footer 
+    {
+        position:relative;
+        height:auto;
+    }
     footer *
     {
         width: 90%;
+        
     }
     #currentSong 
     {
@@ -2173,4 +2174,25 @@ footer a
         height: 470px;
     }
 }
+@media (max-height:1200px) 
+{
+    #roomSection footer 
+    {
+        position:relative;
+    }
+}
+@media (max-height:1100px) 
+{
+    #aboutSection footer 
+    {
+        position:relative;
+    }
+}
 
+@media (max-height:800px) 
+{
+    #chooseSection footer
+    {
+        position:relative;
+    }
+}

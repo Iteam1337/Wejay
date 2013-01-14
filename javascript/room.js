@@ -532,13 +532,13 @@ function RoomController(roomName, nodeUrl) {
                     loggedInUsersInnerText = $("#noOneIsLoggedInTemplate").tmpl()
                 result = result.filter(function (user) { return user.FacebookId && user.FacebookId != "null" && user.Online; });
 
-                if (result.length > 0) {
+                if (result.length > 0 && app.user.facebookUser) {
                     result = result.map(function (user) {
                         var newDate = moment(user.CheckedIn).valueOf(),
                             momentDiff = new Date(moment(newDate).add("hours", 1).diff(new Date())),
                             hour = momentDiff.getHours(),
                             timeleft = momentDiff.getMinutes(),
-                            newCheckedIn = (hour > 1 || timeleft > 55) ? "Just logged in" : (timeleft < 2 ? "Will logout any second now" : "Logged in for " + timeleft + " more minutes");
+                            newCheckedIn = (hour > 1 || timeleft > 55) ? "Just logged in" : (timeleft < 2 ? "Will logout any second now" : "Logged in for " + timeleft + " minutes");
                         if (user.FacebookId === app.user.facebookUser.id) loggedIn = true;
                         var returnTimeLeft = hour > 1 ? 100 : timeleft;
                         return { UserName: unescape(user.UserName), FacebookId: user.FacebookId, CheckedIn: newCheckedIn, timeleft: returnTimeLeft };

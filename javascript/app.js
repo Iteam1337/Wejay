@@ -121,8 +121,12 @@ function App() {
                     self.pauseApp();
                     $('#start').removeClass('onair');
                 }
+                $("#enterRoomBanner").hide();
                 break;
             case "room":
+                if (self.currentRoom.roomName === "example") {
+                    document.location = "spotify:app:wejay:choose";
+                }
                 if (arg.length > 1) {
                     var newRoom = arg[1].toLowerCase();
                     if (self.currentRoom.roomName != newRoom) {
@@ -134,11 +138,6 @@ function App() {
                         document.location = "spotify:app:wejay:choose";
                     }
                 }
-
-                if (self.currentRoom.roomName === "example") {
-                    document.location = "spotify:app:wejay:choose";
-                }
-
                 if (self.loggedIntoRoom === null) {
                     app.userLogoutHide();
                 } else if (self.loggedIntoRoom === "" || self.currentRoom.roomName !== self.loggedIntoRoom) {
@@ -173,8 +172,10 @@ function App() {
         localStorage.room = "example";
     };
 
-    this.showDisplayNameAsLoggedIn = function () {
-        $("#signedInAs").html("Logged in as <span>" + app.user.facebookUser.name + "</span>");
+    this.showDisplayNameAsLoggedIn = function (FBUser) {
+        if (FBUser) {
+            $("#signedInAs").html("Logged in as <span>" + FBUser.name + "</span>");
+        }
     };
 
     this.showLoginDisclaimer = function () {
@@ -203,8 +204,15 @@ function App() {
 
             );
         $(".disclaimer .checkbox").click(function () {
-            $(this).css("background-position", "0 0");
-            $(this).addClass("checked");
+            
+            if (!$(this).hasClass("checked")) {
+                $(this).addClass("checked");
+                $(this).css("background-position", "0 0");
+            }
+            else {
+                $(this).removeClass("checked");
+                $(this).css("background-position", "0 36px");
+            }
             $("#roomLogin").attr("disabled", false);
             app.showDisplayNameAsLoggedIn();
             localStorage.acceptedLogin = "true";
@@ -370,6 +378,7 @@ function App() {
                             $("#enterRoomBanner").show();
                             $(".wejayRoomsCopy").hide();
                             $("#rooms").html("");
+                            $("<p><strong>No rooms found</strong></p>").insertBefore("#createRoom");
                         } else {
                             self.currentRoomList = r;
                             $("#enterRoomBanner").hide();
@@ -426,7 +435,6 @@ function App() {
     this.playApp = function () {
         app.isPlayingFromWejay = true;
         $("#onair").show();
-        $("#start").addClass("pause");
         app.currentRoom.playSong(app.currentRoom.currentSong, true);
     };
 
@@ -434,12 +442,13 @@ function App() {
         var player = sp.trackPlayer;
         app.isPlayingFromWejay = false;
         $("#onair").hide();
-        $("#start").removeClass("pause");
         player.setIsPlaying(false);
     };
 
     m.player.observe(m.EVENT.CHANGE, function (event) {
         var player = event.data;
+
+        console.log(app.isPlayingFromWejay);
         if (app.isPlayingFromWejay === true) {
             if (player.volume === false && player.shuffle === false && player.repeat === false) {
                 if (player.curtrack === false && player.playstate === false) {
@@ -447,7 +456,10 @@ function App() {
                 } else if (m.player.canPlayNext === true && m.player.canPlayNext === true) {
                     self.pauseApp();
                 }
+                $("#start").addClass("pause").addClass("onair");
             }
+        } else if (app.isPlayingFromWejay === false) {
+            $("#start").removeClass("pause").removeClass("onair");
         } else if (m.player.context !== null && m.player.canPlayNext === false && m.player.canPlayNext === false) {
             if (player.volume === false && player.shuffle === false && player.repeat === false) {
                 if (player.curtrack === false && player.playstate === false && sp.trackPlayer.getIsPlaying() === false) {
