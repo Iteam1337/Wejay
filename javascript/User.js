@@ -20,7 +20,6 @@ function User() {
                 app.clearLocalStorage();
                 app.loggedIntoRoom = null;
                 app.showLoginDisclaimer();
-                console.log('logged out' + response);
             },
             onFailure: function (error) {
                 console.log(error);
@@ -93,8 +92,7 @@ function User() {
                 // get the current facebook user details
                 $.getJSON("https://graph.facebook.com/me?access_token=" + accessToken + "&callback=?", function (facebookUser) {
                     console.log("logged in user: ", facebookUser);
-                    $(".checkbox").removeClass("checked");
-                    $(".checkbox").css("background-position", "0px 36px");
+                    $(".disclaimer .checkbox").removeClass("checked").css("background-position", "0px 36px");
                     $("#roomLogin").attr("disabled", true);
                     app.showDisplayNameAsLoggedIn(facebookUser);
                     self.facebookUser = facebookUser;

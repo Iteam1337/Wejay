@@ -129,6 +129,7 @@ function App() {
                 }
                 if (arg.length > 1) {
                     var newRoom = arg[1].toLowerCase();
+                    console.log(newRoom);
                     if (self.currentRoom.roomName != newRoom) {
                         self.currentRoom.init(unescape(newRoom), true);
                     }
@@ -180,7 +181,7 @@ function App() {
 
     this.showLoginDisclaimer = function () {
         self.loaded = false;
-        delete localStorage.acceptedLogi;
+        delete localStorage.acceptedLogin;
         app.acceptedLogin = false;
         $("#overlay").show().find(".rooms").show();
         $("#facebook").show();
@@ -204,15 +205,11 @@ function App() {
 
             );
         $(".disclaimer .checkbox").click(function () {
-            
             if (!$(this).hasClass("checked")) {
-                $(this).addClass("checked");
-                $(this).css("background-position", "0 0");
+                $(this).addClass("checked").css("background-position", "0 0");
+                console.log('add');
             }
-            else {
-                $(this).removeClass("checked");
-                $(this).css("background-position", "0 36px");
-            }
+
             $("#roomLogin").attr("disabled", false);
             app.showDisplayNameAsLoggedIn();
             localStorage.acceptedLogin = "true";
@@ -447,8 +444,6 @@ function App() {
 
     m.player.observe(m.EVENT.CHANGE, function (event) {
         var player = event.data;
-
-        console.log(app.isPlayingFromWejay);
         if (app.isPlayingFromWejay === true) {
             if (player.volume === false && player.shuffle === false && player.repeat === false) {
                 if (player.curtrack === false && player.playstate === false) {
