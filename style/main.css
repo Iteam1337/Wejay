@@ -1484,14 +1484,13 @@ footer
     box-shadow: 0 -1px 0 rgba(0,0,0,.2);
     width: 100%;
     margin: 0;
-    z-index: 0;
     clear: both;
     padding: 15px;
     bottom: 0;
     z-index: 4;
-    position: absolute;
     height: 115px;
     background: #ecebe8;
+    position:absolute;
     left: 0;
     box-sizing:border-box;
 }
@@ -2172,27 +2171,5 @@ footer a
         box-sizing: border-box;
         margin-top: -215px;
         height: 470px;
-    }
-}
-@media (max-height:1300px) 
-{
-    #roomSection footer 
-    {
-        position:relative;
-    }
-}
-@media (max-height:1100px) 
-{
-    #aboutSection footer 
-    {
-        position:relative;
-    }
-}
-
-@media (max-height:800px) 
-{
-    #chooseSection footer
-    {
-        position:relative;
     }
 }

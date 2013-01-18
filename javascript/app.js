@@ -124,18 +124,13 @@ function App() {
                 $("#enterRoomBanner").hide();
                 break;
             case "room":
-                if (self.currentRoom.roomName === "example") {
-                    document.location = "spotify:app:wejay:choose";
-                }
                 if (arg.length > 1) {
-                    var newRoom = arg[1].toLowerCase();
-                    console.log(newRoom);
                     if (self.currentRoom.roomName != newRoom) {
+                        var newRoom = arg[1].toLowerCase();
                         self.currentRoom.init(unescape(newRoom), true);
                     }
                 } else {
-                    if (!self.currentRoom.roomName) {
-                        alert("You have to select a room first");
+                    if (self.currentRoom.roomName === "example") {
                         document.location = "spotify:app:wejay:choose";
                     }
                 }
@@ -207,7 +202,6 @@ function App() {
         $(".disclaimer .checkbox").click(function () {
             if (!$(this).hasClass("checked")) {
                 $(this).addClass("checked").css("background-position", "0 0");
-                console.log('add');
             }
 
             $("#roomLogin").attr("disabled", false);
