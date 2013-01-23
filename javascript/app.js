@@ -2,14 +2,14 @@
 function App() {
 
     var self = this,
-        sp = getSpotifyApi(1),
-        ui = sp.require("sp://import/scripts/dnd"),
-        m = sp.require("sp://import/scripts/api/models"),
-        v = sp.require("sp://import/scripts/api/views"),
-        r = sp.require("sp://import/scripts/react"),
-        kbd = sp.require("sp://import/scripts/keyboard"),
-        accessToken,
-        facebookId;
+    sp = getSpotifyApi(1),
+    ui = sp.require("sp://import/scripts/dnd"),
+    m = sp.require("sp://import/scripts/api/models"),
+    v = sp.require("sp://import/scripts/api/views"),
+    r = sp.require("sp://import/scripts/react"),
+    kbd = sp.require("sp://import/scripts/keyboard"),
+    accessToken,
+    facebookId;
 
     //
     // Before anything begins loading - the application hinders users who are offline
@@ -29,41 +29,41 @@ function App() {
     } else {
         $("#offline").hide();
     }
-
+    
     //
     // This is used to check if the information
     // saved into localStorage is valid when loading the app.
     var checkLocalStorage = [
-        { name: "facebookUser", type: "json" },
-        { name: "acceptedLogin", type: "boolean" },
-        { name: "friends", type: "commaNumber" },
-        { name: "room", type: "room" },
-        { name: "accessToken", type: "string" }
+    { name: "facebookUser", type: "json" },
+    { name: "acceptedLogin", type: "boolean" },
+    { name: "friends", type: "commaNumber" },
+    { name: "room", type: "room" },
+    { name: "accessToken", type: "string" }
     ];
     for (var obj in checkLocalStorage) {
         var check = checkLocalStorage[obj],
-            name = check.name,
-            type = check.type,
-            object = localStorage[name],
-            test = true;
+        name = check.name,
+        type = check.type,
+        object = localStorage[name],
+        test = true;
         if (object !== undefined) {
             switch (type) {
                 case "json":
-                    try { JSON.parse(object); }
-                    catch (e) { test = false; }
-                    break;
+                try { JSON.parse(object); }
+                catch (e) { test = false; }
+                break;
                 case "boolean":
-                    test = (object === "true")
-                    break;
+                test = (object === "true")
+                break;
                 case "commaNumber":
-                    test = !isNaN(object.split(",")[0]);
-                    break;
+                test = !isNaN(object.split(",")[0]);
+                break;
                 case "room":
-                    test = (/^([a-z0-9\_\-\ ]){2,10}$/i.exec(object) !== null)
-                    break;
+                test = (/^([a-z0-9\_\-\ ]){2,10}$/i.exec(object) !== null)
+                break;
                 case "string":
-                    test = (typeof object === "string")
-                    break;
+                test = (typeof object === "string")
+                break;
             }
             if (test === false) {
                 delete localStorage[name];
@@ -101,58 +101,77 @@ function App() {
         self.timeDiff = (self.timeDiff !== null) ? self.timeDiff : ((data.hasOwnProperty("serverTime") ? (new Date().getTime()) - data.serverTime : new Date().getTime()));
     };
 
+    this.placeFooter = function () {
+        var contentHeight = $('.current section').height(),
+        windowHeight = $(window).height() - $('.current footer').height() - 60;
+
+        console.log(contentHeight);
+        console.log(windowHeight);
+
+        if (windowHeight < contentHeight) {
+            $('.current footer').css('position','relative');
+        }
+        else {
+            $('.current footer').css('position','absolute');
+        }
+    };
+
     this.tabTo = function (tab) {
         if (self.currentRoom && self.currentRoom.currentTab) {
             self.currentRoom.currentTab = tab;
         }
+
+
         var currentTab = document.location = "#" + tab + "Section",
-            arg = m.application.arguments;
+        arg = m.application.arguments;
+        if (arg.length > 1) {
+            if (self.currentRoom.roomName != newRoom) {
+                var newRoom = arg[1].toLowerCase();
+                self.currentRoom.init(unescape(newRoom), true);
+            }
+        }
+        if (self.currentRoom.roomName === "example" && tab === "room")
+            return document.location = "spotify:app:wejay:choose";
         $("section").removeClass("current");
         $(currentTab).addClass("current");
         $(currentTab).parents("section").addClass("current");
         $(currentTab).children("section").first().addClass("current");
+
         if (!localStorage.acceptedLogin) {
             return document.location = "spotify:app:wejay:choose";
         }
+
         switch (tab) {
             case "choose":
-                this.loadRooms();
-                if (app.isPlayingFromWejay) {
-                    self.pauseApp();
-                    $('#start').removeClass('onair');
-                }
-                $("#enterRoomBanner").hide();
-                break;
+            this.loadRooms();
+            if (app.isPlayingFromWejay) {
+                self.pauseApp();
+                $('#start').removeClass('onair');
+            }
+            $("#enterRoomBanner").hide();
+            break;
             case "room":
-                if (arg.length > 1) {
-                    if (self.currentRoom.roomName != newRoom) {
-                        var newRoom = arg[1].toLowerCase();
-                        self.currentRoom.init(unescape(newRoom), true);
-                    }
-                } else {
-                    if (self.currentRoom.roomName === "example") {
-                        document.location = "spotify:app:wejay:choose";
-                    }
-                }
-                if (self.loggedIntoRoom === null) {
-                    app.userLogoutHide();
-                } else if (self.loggedIntoRoom === "" || self.currentRoom.roomName !== self.loggedIntoRoom) {
-                    app.currentRoom.checkin(false, function (room) {
-                        app.loggedIntoRoom = room;
-                        app.currentRoom.updateUsers();
-                    });
-                    app.userLogoutShow()
-                } else {
-                    app.userLogoutShow()
-                }
-                self.currentRoom.updatePlaylist();
-                break;
+            if (self.loggedIntoRoom === null) {
+                app.userLogoutHide();
+            } else if (self.loggedIntoRoom === "" || self.currentRoom.roomName !== self.loggedIntoRoom) {
+                app.currentRoom.checkin(false, function (room) {
+                    app.loggedIntoRoom = room;
+                    app.currentRoom.updateUsers();
+                });
+                app.userLogoutShow()
+            } else {
+                app.userLogoutShow()
+            }
+            self.currentRoom.updatePlaylist();
+            break;
             case "wejays":
-                if (!self.currentRoom.roomName) {
-                    alert("You have to select a room first");
-                }
-                break;
+            if (!self.currentRoom.roomName) {
+                alert("You have to select a room first");
+            }
+            break;
         }
+
+        self.placeFooter();
     };
     //
     // tab switched in ui
@@ -182,21 +201,21 @@ function App() {
         $("#facebook").show();
         $("#login").attr("disabled", true);
         $(".disclaimer .checkbox").hover(
-                function () {
-                    if (!$(this).hasClass("checked")) {
-                        var button = $(".disclaimer.rooms .sp-button");
-                        button.attr('disabled', false).addClass("hover");
-                        $(this).css("background-position", "0 0");
-                    }
-                },
-                function () {
-                    if (!$(this).hasClass("checked")) {
-                        var button = $(".disclaimer.rooms .sp-button");
-                        $("#roomLogin").attr("disabled", true);
-                        button.removeClass("hover");
-                        $(this).css("background-position", "0 36px");
-                    }
+            function () {
+                if (!$(this).hasClass("checked")) {
+                    var button = $(".disclaimer.rooms .sp-button");
+                    button.attr('disabled', false).addClass("hover");
+                    $(this).css("background-position", "0 0");
                 }
+            },
+            function () {
+                if (!$(this).hasClass("checked")) {
+                    var button = $(".disclaimer.rooms .sp-button");
+                    $("#roomLogin").attr("disabled", true);
+                    button.removeClass("hover");
+                    $(this).css("background-position", "0 36px");
+                }
+            }
 
             );
         $(".disclaimer .checkbox").click(function () {
@@ -223,8 +242,8 @@ function App() {
                     app.userLogoutShow();
                 }
                 var max = 10,
-                    i = 0,
-                    count = links.length;
+                i = 0,
+                count = links.length;
                 if (count < max) {
                     links.forEach(function (link) {
                         max = 10;
@@ -241,7 +260,7 @@ function App() {
                                 //
                                 // adding user generated playlist
                                 var playlist = m.Playlist.fromURI(link),
-                                    tracks = playlist.data.all();
+                                tracks = playlist.data.all();
                                 count = tracks.length;
                                 tracks = tracks.splice(0, 10);
                                 if (count < max) {
@@ -257,8 +276,8 @@ function App() {
                                 // adding album
                                 m.Album.fromURI(link, function (album) {
                                     var albumLink = album.data.uri,
-                                        tracks = album.data.tracks,
-                                        count = tracks.length;
+                                    tracks = album.data.tracks,
+                                    count = tracks.length;
                                     tracks = tracks.splice(0, 10);
                                     if (count < max) {
                                         tracks.forEach(function (uri) {
@@ -271,39 +290,39 @@ function App() {
                             }
                         }
                     });
-                } else {
-                    links.splice(0, 10);
-                    self.handleUserDroppingToManyObjects(links, max, "links");
-                }
-                self.currentRoom.updatePlaylist();
+} else {
+    links.splice(0, 10);
+    self.handleUserDroppingToManyObjects(links, max, "links");
+}
+self.currentRoom.updatePlaylist();
+});
+}
+};
+
+this.handleUserDroppingToManyObjects = function (objects, max, isItTracks) {
+    isItTracks = (isItTracks !== undefined && isItTracks.toLowerCase() === "tracks") ? true : false;
+    var newHtml = $("#addedTracksLimitReachedTemplate").tmpl({ max: max });
+    $("#addedTracksLimitReached").html(newHtml);
+    $("#overlayLimit").show();
+    $("#addedTracksLimitReached").on("click", ".accept", function (e) {
+        if (isItTracks) {
+            objects.forEach(function (uri) {
+                app.currentRoom.addTrackUri(uri);
             });
+        } else {
+            app.handleDroppedLinks(objects);
         }
-    };
+        app.removeUserDroppedTemplate();
+    });
+    $("#addedTracksLimitReached").on("click", ".cancel", function (e) {
+        app.removeUserDroppedTemplate();
+    });
+};
 
-    this.handleUserDroppingToManyObjects = function (objects, max, isItTracks) {
-        isItTracks = (isItTracks !== undefined && isItTracks.toLowerCase() === "tracks") ? true : false;
-        var newHtml = $("#addedTracksLimitReachedTemplate").tmpl({ max: max });
-        $("#addedTracksLimitReached").html(newHtml);
-        $("#overlayLimit").show();
-        $("#addedTracksLimitReached").on("click", ".accept", function (e) {
-            if (isItTracks) {
-                objects.forEach(function (uri) {
-                    app.currentRoom.addTrackUri(uri);
-                });
-            } else {
-                app.handleDroppedLinks(objects);
-            }
-            app.removeUserDroppedTemplate();
-        });
-        $("#addedTracksLimitReached").on("click", ".cancel", function (e) {
-            app.removeUserDroppedTemplate();
-        });
-    };
-
-    this.removeUserDroppedTemplate = function () {
-        $("#addedTracksLimitReached").html("");
-        $("#overlayLimit").hide();
-    };
+this.removeUserDroppedTemplate = function () {
+    $("#addedTracksLimitReached").html("");
+    $("#overlayLimit").hide();
+};
 
     // when links are dropped to the application we want to add those to the queue
     m.application.observe(m.EVENT.LINKSCHANGED, function (e) {
@@ -379,98 +398,98 @@ function App() {
                     }
                 });
 
-                $('.loadingIndicator').hide();
-            });
+$('.loadingIndicator').hide();
+});
 
-            self.loaded = true;
-        }
-    };
+self.loaded = true;
+}
+};
 
-    this.fillRooms = function () {
-        $(".rooms li ").each(function () {
-            var room = this.innerText;
-            self.fillRoomToplist(room, this);
-            $(this).click(function () {
-                document.location = "spotify:app:wejay:room:" + room;
-            });
+this.fillRooms = function () {
+    $(".rooms li ").each(function () {
+        var room = this.innerText;
+        self.fillRoomToplist(room, this);
+        $(this).click(function () {
+            document.location = "spotify:app:wejay:room:" + room;
         });
-    };
-
-    this.userLogoutShow = function () {
-        $("#joinRoom, #facebook").hide();
-        $("#leaveRoom").show();
-    };
-
-    this.userLogoutHide = function () {
-        $("#joinRoom").show();
-        $("#leaveRoom").hide();
-    };
-
-    this.checkIfUserAcceptedAgreement = function () {
-        var accepted = false;
-        if (self.acceptedLogin) {
-            accepted = true;
-            self.checkIfUserIsLoggedIn();
-        } else {
-            $(".disclaimer").show();
-        }
-        return accepted;
-    };
-
-    this.checkIfUserIsLoggedIn = function () {
-        if (!app.user.accessToken) {
-            app.user.authenticate();
-        }
-    };
-
-    this.playApp = function () {
-        app.isPlayingFromWejay = true;
-        $("#onair").show();
-        app.currentRoom.playSong(app.currentRoom.currentSong, true);
-    };
-
-    this.pauseApp = function () {
-        var player = sp.trackPlayer;
-        app.isPlayingFromWejay = false;
-        $("#onair").hide();
-        player.setIsPlaying(false);
-    };
-
-    m.player.observe(m.EVENT.CHANGE, function (event) {
-        var player = event.data;
-        if (app.isPlayingFromWejay === true) {
-            if (player.volume === false && player.shuffle === false && player.repeat === false) {
-                if (player.curtrack === false && player.playstate === false) {
-                    self.pauseApp();
-                } else if (m.player.canPlayNext === true && m.player.canPlayNext === true) {
-                    self.pauseApp();
-                }
-                $("#start").addClass("pause").addClass("onair");
-            }
-        } else if (app.isPlayingFromWejay === false) {
-            $("#start").removeClass("pause").removeClass("onair");
-        } else if (m.player.context !== null && m.player.canPlayNext === false && m.player.canPlayNext === false) {
-            if (player.volume === false && player.shuffle === false && player.repeat === false) {
-                if (player.curtrack === false && player.playstate === false && sp.trackPlayer.getIsPlaying() === false) {
-                    if (window.location.hash !== "#chooseSection") {
-                        self.playApp();
-                    }
-                }
-            }
-        }
-
     });
+};
 
-    /* INIT */
-    this.init = function (version) {
-        var directives = sp.require("javascript/Directives");
-        directives.init(version);
-    };
+this.userLogoutShow = function () {
+    $("#joinRoom, #facebook").hide();
+    $("#leaveRoom").show();
+};
+
+this.userLogoutHide = function () {
+    $("#joinRoom").show();
+    $("#leaveRoom").hide();
+};
+
+this.checkIfUserAcceptedAgreement = function () {
+    var accepted = false;
+    if (self.acceptedLogin) {
+        accepted = true;
+        self.checkIfUserIsLoggedIn();
+    } else {
+        $(".disclaimer").show();
+    }
+    return accepted;
+};
+
+this.checkIfUserIsLoggedIn = function () {
+    if (!app.user.accessToken) {
+        app.user.authenticate();
+    }
+};
+
+this.playApp = function () {
+    app.isPlayingFromWejay = true;
+    $("#onair").show();
+    app.currentRoom.playSong(app.currentRoom.currentSong, true);
+};
+
+this.pauseApp = function () {
+    var player = sp.trackPlayer;
+    app.isPlayingFromWejay = false;
+    $("#onair").hide();
+    player.setIsPlaying(false);
+};
+
+m.player.observe(m.EVENT.CHANGE, function (event) {
+    var player = event.data;
+    if (app.isPlayingFromWejay === true) {
+        if (player.volume === false && player.shuffle === false && player.repeat === false) {
+            if (player.curtrack === false && player.playstate === false) {
+                self.pauseApp();
+            } else if (m.player.canPlayNext === true && m.player.canPlayNext === true) {
+                self.pauseApp();
+            }
+            $("#start").addClass("pause").addClass("onair");
+        }
+    } else if (app.isPlayingFromWejay === false) {
+        $("#start").removeClass("pause").removeClass("onair");
+    } else if (m.player.context !== null && m.player.canPlayNext === false && m.player.canPlayNext === false) {
+        if (player.volume === false && player.shuffle === false && player.repeat === false) {
+            if (player.curtrack === false && player.playstate === false && sp.trackPlayer.getIsPlaying() === false) {
+                if (window.location.hash !== "#chooseSection") {
+                    self.playApp();
+                }
+            }
+        }
+    }
+
+});
+
+/* INIT */
+this.init = function (version) {
+    var directives = sp.require("javascript/Directives");
+    directives.init(version);
+};
 }
 
 String.prototype.format = function () {
     var formatted = this, i = 0,
-        arg = arguments.length;
+    arg = arguments.length;
     for (; i < arg; i++) {
         var regexp = new RegExp("\\{' + i + '\\}', 'gi");
         formatted = formatted.replace(regexp, arguments[i]);

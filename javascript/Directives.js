@@ -115,6 +115,10 @@ function Directives() {
             $("#roomsInformation").show();
         });
 
+        $(window).resize(function() {
+            app.placeFooter();
+        });
+
         //
         // when switching rooms -- the app should not autostart the music ...
         app.isPlayingFromWejay = false;
@@ -145,14 +149,14 @@ function Directives() {
                 $(divID).trigger("dosearch");
             }
             var id = event.dataTransfer.getData("text"),
-                t = e.target,
-                tName = "auto-completeForm";
+            t = e.target,
+            tName = "auto-completeForm";
             if (t.className === tName || t.parentNode.className === tName || t.parentNode.parentNode.className === tName) {
                 var type = m.Link.getType(id), dropped = false;
                 if (type === 2) {
                     m.Album.fromURI(id, function (album) {
                         var tracks = album.data.tracks,
-                            inputString = tracks[0].artists[0].name + " " + tracks[0].album.name;
+                        inputString = tracks[0].artists[0].name + " " + tracks[0].album.name;
                         return handleTheLastOutput(inputString);
                     });
                 }
@@ -171,29 +175,29 @@ function Directives() {
             }
         });
 
-        $("#roomName").on("focus", function (e) {
-            $("form.input").addClass("focus");
-        });
+$("#roomName").on("focus", function (e) {
+    $("form.input").addClass("focus");
+});
 
-        $("#roomName").on("blur", function (e) {
-            $("form.input").removeClass("focus");
-        });
+$("#roomName").on("blur", function (e) {
+    $("form.input").removeClass("focus");
+});
 
-        $("#roomSection").on("dragenter", function (e) {
-            e.preventDefault();
-            return true;
-        });
+$("#roomSection").on("dragenter", function (e) {
+    e.preventDefault();
+    return true;
+});
 
-        $("#roomSection").on("dragover", function (e) {
-            return false;
-        });
+$("#roomSection").on("dragover", function (e) {
+    return false;
+});
 
-        $("#shareOnURL").on("click", function (e) {
-            $("#manualShare").toggleClass("hide");
-            var value = ($("#shareOnURL").text() === "Share URL") ? "Hide url share" : "Share URL";
-            $("#shareURL").val(app.currentRoom.shareURL);
-            $("#shareOnURL").text(value);
-        });
+$("#shareOnURL").on("click", function (e) {
+    $("#manualShare").toggleClass("hide");
+    var value = ($("#shareOnURL").text() === "Share URL") ? "Hide url share" : "Share URL";
+    $("#shareURL").val(app.currentRoom.shareURL);
+    $("#shareOnURL").text(value);
+});
 
         //
         // share popup
@@ -216,7 +220,7 @@ function Directives() {
                 alert("Your roomname should contain between 2 and 16 letters.");
             } else {
                 var temp = newRoomName.match(/([^a-z0-9\_\-\ ])/ig, "$1"),
-                            matchString = temp.join(" ");
+                matchString = temp.join(" ");
                 alert("Something went wrong with the roomname. You used the following characters which is not allowed:\n" + matchString);
             }
         };
@@ -290,11 +294,11 @@ function Directives() {
 
         $(document).on("click", "#queue li .star", function () {
             var element = $(this),
-                        CurrentClass = element.attr("class").match(/(no)+(\d){1}/),
-                        song = element.parent().find(".track").attr("href"),
-                        SpotifyId = song.split(":"),
-                        length = SpotifyId.length - 1,
-                        CurrentClassNumber = parseInt(CurrentClass[2]);
+            CurrentClass = element.attr("class").match(/(no)+(\d){1}/),
+            song = element.parent().find(".track").attr("href"),
+            SpotifyId = song.split(":"),
+            length = SpotifyId.length - 1,
+            CurrentClassNumber = parseInt(CurrentClass[2]);
             CurrentClass = CurrentClass[0];
             SpotifyId = SpotifyId[length];
             if (app.checkIfUserAcceptedAgreement()) {
