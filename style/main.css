@@ -1825,7 +1825,7 @@ footer a
     }
     section.current
     {
-        min-height: 0;
+        min-height:100%;
         padding-top: 40px;
     }
     #chooseSection #loginInformation
