@@ -105,9 +105,6 @@ function App() {
         var contentHeight = $('.current section').height(),
         windowHeight = $(window).height() - $('.current footer').height() - 60;
 
-        console.log(contentHeight);
-        console.log(windowHeight);
-
         if (windowHeight < contentHeight) {
             $('.current footer').css('position','relative');
         }
@@ -120,7 +117,6 @@ function App() {
         if (self.currentRoom && self.currentRoom.currentTab) {
             self.currentRoom.currentTab = tab;
         }
-
 
         var currentTab = document.location = "#" + tab + "Section",
         arg = m.application.arguments;

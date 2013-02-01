@@ -517,6 +517,7 @@ function RoomController(roomName, nodeUrl) {
             }
         });
 
+        app.placeFooter();
     }
 
     // Update users online list
@@ -565,5 +566,4 @@ function RoomController(roomName, nodeUrl) {
     if (this.roomName) {
         this.init(roomName, true); // default is anonymous
     }
-
 }
