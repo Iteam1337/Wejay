@@ -1,16 +1,34 @@
 function Hub(nodeUrl, currentRoom, facebookUserId) {
 
+    function handleError(message) {
+        message = message ? message : "Sorry, we can not connect to realtime service, try again soon";
+        $("#offline").show();
+        $("#offline p").text(message)
+        $("#online").hide();
+    }
+
     console.log("connecting to node server", nodeUrl);
 
     if (typeof io === "undefined") {
-        $("#offline").show();
-        $("#main").hide();
-        alert("Sorry, we can not connect to realtime service, try again soon");
-        return;
+        return handleError();
     }
 
-    var socket = io.connect(nodeUrl, { secure: false, rememberTransport: false, transports: ["xhr-polling", "jsonp-polling"] }),
+    function createConnection() {
+        return new io.connect(nodeUrl, { secure: false, rememberTransport: false, transports: ["xhr-polling", "jsonp-polling"] });
+    }
+
+    var socket = createConnection(),
         facebookId = facebookUserId;
+
+    socket.on("disconnect", function (data) {
+        socket.disconnect();
+        return handleError("Sorry, we lost your connection with our realtime service, try again soon");
+    });
+
+    socket.on("error", function (data) {
+        socket.disconnect();
+        return handleError();
+    });
 
     this.queueSong = function (song, callback) {
         $.ajax({

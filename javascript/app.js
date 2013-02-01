@@ -11,23 +11,34 @@ function App() {
     accessToken,
     facebookId;
 
+
+    function handleError(showReconnect, message) {
+        showReconnect ? $("#offline button").show() : $("#offline button").hide();
+        message = message ? message : "Sorry, we can not connect to realtime service, try again soon";
+        $("#offline").show();
+        $("#offline p").text(message);
+        $("#online").hide();
+    }
+
+    function hideOfflineContent(reset) {
+        $("#offline").hide();
+        $("#online").show();
+    }
+
     //
     // Before anything begins loading - the application hinders users who are offline
     m.session.observe(m.EVENT.STATECHANGED, function () {
         if (m.session.state >= 2) {
-            $("#offline").show();
-            $("#main").hide();
+            return handleError(true);
         } else {
-            $("#offline").hide();
-            $("#main").show();
+            return hideOfflineContent(true);
         }
     });
 
     if (m.session.state >= 2) {
-        $("#offline").show();
-        $("#main").hide();
+        return handleError();
     } else {
-        $("#offline").hide();
+        hideOfflineContent();
     }
     
     //
@@ -286,39 +297,39 @@ function App() {
                             }
                         }
                     });
-} else {
-    links.splice(0, 10);
-    self.handleUserDroppingToManyObjects(links, max, "links");
-}
-self.currentRoom.updatePlaylist();
-});
-}
-};
-
-this.handleUserDroppingToManyObjects = function (objects, max, isItTracks) {
-    isItTracks = (isItTracks !== undefined && isItTracks.toLowerCase() === "tracks") ? true : false;
-    var newHtml = $("#addedTracksLimitReachedTemplate").tmpl({ max: max });
-    $("#addedTracksLimitReached").html(newHtml);
-    $("#overlayLimit").show();
-    $("#addedTracksLimitReached").on("click", ".accept", function (e) {
-        if (isItTracks) {
-            objects.forEach(function (uri) {
-                app.currentRoom.addTrackUri(uri);
+            } else {
+                links.splice(0, 10);
+                self.handleUserDroppingToManyObjects(links, max, "links");
+            }
+                self.currentRoom.updatePlaylist();
             });
-        } else {
-            app.handleDroppedLinks(objects);
         }
-        app.removeUserDroppedTemplate();
-    });
-    $("#addedTracksLimitReached").on("click", ".cancel", function (e) {
-        app.removeUserDroppedTemplate();
-    });
-};
+    };
 
-this.removeUserDroppedTemplate = function () {
-    $("#addedTracksLimitReached").html("");
-    $("#overlayLimit").hide();
-};
+    this.handleUserDroppingToManyObjects = function (objects, max, isItTracks) {
+        isItTracks = (isItTracks !== undefined && isItTracks.toLowerCase() === "tracks") ? true : false;
+        var newHtml = $("#addedTracksLimitReachedTemplate").tmpl({ max: max });
+        $("#addedTracksLimitReached").html(newHtml);
+        $("#overlayLimit").show();
+        $("#addedTracksLimitReached").on("click", ".accept", function (e) {
+            if (isItTracks) {
+                objects.forEach(function (uri) {
+                    app.currentRoom.addTrackUri(uri);
+                });
+            } else {
+                app.handleDroppedLinks(objects);
+            }
+            app.removeUserDroppedTemplate();
+        });
+        $("#addedTracksLimitReached").on("click", ".cancel", function (e) {
+            app.removeUserDroppedTemplate();
+        });
+    };
+
+    this.removeUserDroppedTemplate = function () {
+        $("#addedTracksLimitReached").html("");
+        $("#overlayLimit").hide();
+    };
 
     // when links are dropped to the application we want to add those to the queue
     m.application.observe(m.EVENT.LINKSCHANGED, function (e) {
