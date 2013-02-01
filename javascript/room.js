@@ -143,6 +143,7 @@ function RoomController(roomName, nodeUrl) {
                 sp.trackPlayer.setShuffle(false);
                 m.player.play(trackUri, tpl);
             }
+
             $("#currentArtist").html('<a href="' + track.data.artists[0].uri + '">' + track.data.artists[0].name + '</a>');
             $("#currentArtist").append(' - ');
             $("#currentTrack").html('<a href="' + track.data.uri + '">' + track.data.name + '</a>');
@@ -351,7 +352,6 @@ function RoomController(roomName, nodeUrl) {
         }
     };
 
-
     this.init = function (roomName, anonymous) {
         if (roomName !== "example") {
             if (roomName === "null" || roomName === undefined) {
@@ -365,6 +365,7 @@ function RoomController(roomName, nodeUrl) {
             this.roomName = roomName.toLowerCase();
             this.clearCurrentSong(true);
             var local = this;
+
             this.getBitlyKey(local.roomName, function (shareURL) {
                 local.shareURL = shareURL;
                 $("#sharePopup").removeClass("show");
@@ -472,7 +473,7 @@ function RoomController(roomName, nodeUrl) {
                 }
                 app.userLogoutShow();
                 //self.hub.checkin({ user: app.user.userName, room: self.roomName });
-                //console.log(app.user.userName + " logged in to wejay room ", self.roomName);
+                console.log(app.user.userName + " logged in to wejay room ", self.roomName);
             }
         });
     }

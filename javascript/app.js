@@ -11,7 +11,6 @@ function App() {
     accessToken,
     facebookId;
 
-
     function handleError(showReconnect, message) {
         showReconnect ? $("#offline button").show() : $("#offline button").hide();
         message = message ? message : "Sorry, we can not connect to realtime service, try again soon";
@@ -23,8 +22,13 @@ function App() {
     function hideOfflineContent(reset) {
         $("#offline").hide();
         $("#online").show();
+        if (reset) {
+            //app.user.authenticate();
+            //app.currentRoom = new RoomController(unescape(localStorage.room || "example"), app.nodeUrl);
+            //app.currentRoom.playSong(app.currentRoom.currentSong, true);            
+        }
     }
-
+    
     //
     // Before anything begins loading - the application hinders users who are offline
     m.session.observe(m.EVENT.STATECHANGED, function () {
@@ -36,7 +40,7 @@ function App() {
     });
 
     if (m.session.state >= 2) {
-        return handleError();
+        handleError();
     } else {
         hideOfflineContent();
     }
@@ -114,13 +118,15 @@ function App() {
 
     this.placeFooter = function () {
         var contentHeight = $('.current section').height(),
-        windowHeight = $(window).height() - $('.current footer').height() - 60;
+        windowHeight = $(window).height() - $('.current footer').height() - 90;
 
         if (windowHeight < contentHeight) {
-            $('.current footer').css('position','relative');
+            $('.current footer').css('position', 'relative');
+            $('#aboutSection, #roomSection, #chooseSection').css('box-sizing', 'content-box');
         }
         else {
-            $('.current footer').css('position','absolute');
+            $('footer').css('position', 'absolute');
+            $('#aboutSection, #roomSection, #chooseSection').css('box-sizing', 'border-box');
         }
     };
 
@@ -178,7 +184,7 @@ function App() {
             break;
         }
 
-        self.placeFooter();
+       // self.placeFooter();
     };
     //
     // tab switched in ui
@@ -464,6 +470,7 @@ this.pauseApp = function () {
 
 m.player.observe(m.EVENT.CHANGE, function (event) {
     var player = event.data;
+
     if (app.isPlayingFromWejay === true) {
         if (player.volume === false && player.shuffle === false && player.repeat === false) {
             if (player.curtrack === false && player.playstate === false) {
