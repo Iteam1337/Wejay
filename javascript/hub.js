@@ -20,14 +20,9 @@ function Hub(nodeUrl, currentRoom, facebookUserId) {
     var socket = createConnection(),
         facebookId = facebookUserId;
 
-    socket.on("disconnect", function (data) {
-        socket.disconnect();
-        return handleError("Sorry, we lost your connection with our realtime service, try again soon");
-    });
-
     socket.on("error", function (data) {
         socket.disconnect();
-        return handleError();
+        return handleError("Sorry, we lost your connection with our realtime service, try again soon");
     });
 
     this.queueSong = function (song, callback) {
