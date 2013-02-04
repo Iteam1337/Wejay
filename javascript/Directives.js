@@ -57,7 +57,6 @@ function Directives() {
                 });
 
                 $('#tutorial .open').each(function () {
-                    console.log($('#tutQueue .open').length);
                     $('#queueLength').html('(' + $('#tutQueue .open').length + ')');
                 });
             });

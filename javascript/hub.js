@@ -63,8 +63,6 @@ function Hub(nodeUrl, currentRoom, facebookUserId) {
     };
 
     this.checkin = function (options) {
-        console.log("checkin to node", options);
-        console.log("currentRoom", currentRoom);
         socket.emit("checkin", options);
     };
 

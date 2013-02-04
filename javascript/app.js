@@ -11,8 +11,7 @@ function App() {
     accessToken,
     facebookId;
 
-    function handleError(showReconnect, message) {
-        showReconnect ? $("#offline button").show() : $("#offline button").hide();
+    function handleError(message) {
         message = message ? message : "Sorry, we can not connect to realtime service, try again soon";
         $("#offline").show();
         $("#offline p").text(message);
@@ -33,7 +32,7 @@ function App() {
     // Before anything begins loading - the application hinders users who are offline
     m.session.observe(m.EVENT.STATECHANGED, function () {
         if (m.session.state >= 2) {
-            return handleError(true);
+            return handleError();
         } else {
             return hideOfflineContent(true);
         }
@@ -49,11 +48,11 @@ function App() {
     // This is used to check if the information
     // saved into localStorage is valid when loading the app.
     var checkLocalStorage = [
-    { name: "facebookUser", type: "json" },
-    { name: "acceptedLogin", type: "boolean" },
-    { name: "friends", type: "commaNumber" },
-    { name: "room", type: "room" },
-    { name: "accessToken", type: "string" }
+        { name: "facebookUser", type: "json" },
+        { name: "acceptedLogin", type: "boolean" },
+        { name: "friends", type: "commaNumber" },
+        { name: "room", type: "room" },
+        { name: "accessToken", type: "string" }
     ];
     for (var obj in checkLocalStorage) {
         var check = checkLocalStorage[obj],
@@ -64,20 +63,20 @@ function App() {
         if (object !== undefined) {
             switch (type) {
                 case "json":
-                try { JSON.parse(object); }
-                catch (e) { test = false; }
+                    try { JSON.parse(object); }
+                    catch (e) { test = false; }
                 break;
-                case "boolean":
-                test = (object === "true")
+                    case "boolean":
+                    test = (object === "true")
                 break;
-                case "commaNumber":
-                test = !isNaN(object.split(",")[0]);
+                    case "commaNumber":
+                    test = !isNaN(object.split(",")[0]);
                 break;
                 case "room":
-                test = (/^([a-z0-9\_\-\ ]){2,10}$/i.exec(object) !== null)
+                    test = (/^([a-z0-9\_\-\ ]){2,10}$/i.exec(object) !== null)
                 break;
                 case "string":
-                test = (typeof object === "string")
+                    test = (typeof object === "string")
                 break;
             }
             if (test === false) {
@@ -363,7 +362,6 @@ function App() {
                 } else {
                     $(div).html($("#roomTopListTemplate").tmpl(result));
                     $(div).append("<a>" + room + "</a>");
-                    console.log(room);
                     $("#enterRoomBanner").hide();
                 }
             }, error: function (r) {
