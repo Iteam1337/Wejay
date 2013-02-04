@@ -1653,24 +1653,6 @@ footer a
         .arrow 
         {
             -webkit-transform:rotate(90deg);
-            -webkit-transition:all 500ms ease;
-            position:relative;
-            -webkit-animation-name:aniArrow;
-            -webkit-animation-duration: 1s;
-            -webkit-animation-delay: 1s;
-            -webkit-animation-direction:alternate;
-            -webkit-animation-iteration-count:infinite;
-        }
-        @-webkit-keyframes aniArrow 
-        {
-            from 
-            {
-                top:0;
-            }
-            to 
-            {
-                top:50px;
-            }
         }
         #tutLogo
         {
@@ -1680,9 +1662,13 @@ footer a
         .tutAdd, #coworkers
         {
             padding: 25% 0;
-            display: inline-block;
             width: 100%;
             position:relative;
+        }
+        .tutAdd 
+        {
+            opacity:0;
+            -webkit-transition: all 500ms ease;
         }
         #tutorial .ng-scope:nth-child(odd) .tutAdd
         {

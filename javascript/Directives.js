@@ -45,10 +45,21 @@ function Directives() {
 
         $("#tutorialBtn, #tutorialBtnHowDoesItWork").click(function () {
             $("#tutorialWrap").show();
-            var controller = $.superscrollorama();
-            $('.tutAdd').each(function () {
-                var id = $(this).attr('id');
-                controller.addTween('#' + id, TweenMax.from($('#' + id), 1, { css: { opacity: 0 }, onComplete: function () { $('#' + id).addClass('open'); $('.queue' + id).addClass('open').fadeIn(); $('#queueLength').html('(' + $('#tutQueue .open').length + ')'); } }));
+
+            $(window).scroll(function () {
+                b = $(window).scrollTop() + $(window).height();
+
+                $(".tutAdd").each(function () {
+                    a = $(this).offset().top + $(this).height();
+                    id = $(this).attr('id');
+                    (a < b) ? $(this).css('opacity', '1').addClass('open') : $(this).css('opacity', '0').removeClass('open');
+                    (a < b) ? $('.queue' + id).fadeIn().addClass('open') : $('.queue' + id).fadeOut().removeClass('open');
+                });
+
+                $('#tutorial .open').each(function () {
+                    console.log($('#tutQueue .open').length);
+                    $('#queueLength').html('(' + $('#tutQueue .open').length + ')');
+                });
             });
         });
 
@@ -60,54 +71,6 @@ function Directives() {
             $("#enterRoomBanner").show();
         });
 
-        function tutorialNextPrev(direction) {
-            if (direction == "next") {
-                $("#tutorialSteps").find(".open").removeClass("open").hide().next().addClass("open").show();
-            }
-            else {
-                $("#tutorialSteps").find(".open").removeClass("open").hide().prev().addClass("open").show();
-            }
-
-            var active = $("#tutorialSteps").find(".open").attr("id");
-
-            if (active === "stepTwo" || active === "stepThree") {
-                $(".roomQueue li").hide();
-
-                $("#" + active).find(".roomQueue li").each(function (i) {
-                    $(this).delay(1000 * i).show(0);
-                });
-
-                if (active === "stepThree") {
-                    $("#getStarted").show();
-                }
-                else {
-                    $("#getStarted").hide();
-                }
-            }
-
-            if ($("#stepOne").hasClass("open")) {
-                $("#tutorialNavigation .prev").hide();
-            }
-            else {
-                $("#tutorialNavigation .prev").show();
-            }
-
-            if ($("#stepThree").hasClass("open")) {
-                $("#tutorialNavigation .next").hide();
-            }
-            else {
-                $("#tutorialNavigation .next").show();
-            }
-        }
-
-        $(".next").on("click", function () {
-            tutorialNextPrev("next");
-        });
-
-        $(".prev").on("click", function () {
-            tutorialNextPrev("prev");
-        });
-
         $("#getStarted").on("click", function () {
             $("#roomName").focus();
             $("#tutorial").hide();
@@ -115,7 +78,7 @@ function Directives() {
             $("#roomsInformation").show();
         });
 
-        $(window).resize(function() {
+        $(window).resize(function () {
             app.placeFooter();
         });
 
@@ -175,29 +138,29 @@ function Directives() {
             }
         });
 
-$("#roomName").on("focus", function (e) {
-    $("form.input").addClass("focus");
-});
+        $("#roomName").on("focus", function (e) {
+            $("form.input").addClass("focus");
+        });
 
-$("#roomName").on("blur", function (e) {
-    $("form.input").removeClass("focus");
-});
+        $("#roomName").on("blur", function (e) {
+            $("form.input").removeClass("focus");
+        });
 
-$("#roomSection").on("dragenter", function (e) {
-    e.preventDefault();
-    return true;
-});
+        $("#roomSection").on("dragenter", function (e) {
+            e.preventDefault();
+            return true;
+        });
 
-$("#roomSection").on("dragover", function (e) {
-    return false;
-});
+        $("#roomSection").on("dragover", function (e) {
+            return false;
+        });
 
-$("#shareOnURL").on("click", function (e) {
-    $("#manualShare").toggleClass("hide");
-    var value = ($("#shareOnURL").text() === "Share URL") ? "Hide url share" : "Share URL";
-    $("#shareURL").val(app.currentRoom.shareURL);
-    $("#shareOnURL").text(value);
-});
+        $("#shareOnURL").on("click", function (e) {
+            $("#manualShare").toggleClass("hide");
+            var value = ($("#shareOnURL").text() === "Share URL") ? "Hide url share" : "Share URL";
+            $("#shareURL").val(app.currentRoom.shareURL);
+            $("#shareOnURL").text(value);
+        });
 
         //
         // share popup

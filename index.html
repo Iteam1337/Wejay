@@ -6,16 +6,12 @@
     <script src="javascript/Lib/jquery-1.8.3.min.js" type="text/javascript"></script>
     <script src="javascript/Lib/jquery.tmpl.min.js" type="text/javascript"></script>
     <script src="javascript/Lib/socket.io.js" type="text/javascript"></script>
-    <script src="javascript/Lib/greensock/TweenMax.min.js"></script>
-    <script src="javascript/Lib/jquery.superscrollorama.js"></script>
-    <script src="javascript/Lib/angular.min.js"></script>
     <script src="javascript/Lib/moment.min.js" type="text/javascript"></script>
     <script src="javascript/hub.js" type="text/javascript"></script>
     <script src="javascript/room.js" type="text/javascript"></script>
     <script src="javascript/notifier.js" type="text/javascript"></script>
     <script src="javascript/app.js" type="text/javascript"></script>
     <script src="javascript/user.js" type="text/javascript"></script>
-    <script src="javascript/tutorial.js" type="text/javascript"></script>
     <link rel="stylesheet" href="sp://import/css/adam.css" />
     <link rel="stylesheet" href="sp://import/css/api.css" />
     <link rel="stylesheet" href="sp://import/css/list.css" />
@@ -23,7 +19,6 @@
     <link rel="stylesheet" href="style/main.css" />
 </head>
 <body ng-app="tutorial">
-
     <!--
     ||
     || OFFLINE
@@ -31,11 +26,12 @@
     -->
     <div id="offline">
         <div>
-            <h1>This application is not available when offline</h1>
-            <p></p>
+            <h1>
+                This application is not available when offline</h1>
+            <p>
+            </p>
         </div>
     </div>
-
     <!--
     ||
     || ONLINE
@@ -43,16 +39,15 @@
     ||
     -->
     <div id="online">
-
         <!--
         ||
         || TUTORIAL
         ||
         -->
         <div id="tutorialWrap">
-            <div id="tutorial" ng-controller="SongCtrl">
+            <div id="tutorial">
                 <div id="tutClose">
-                   Close tutorial</div>
+                    Close tutorial</div>
                 <div id="tutStart">
                     <img src="images/wejay-logo-64x64.png" id="tutLogo" alt="wejay" />
                     How does it work?
@@ -82,13 +77,143 @@
                             Milton</li>
                     </ul>
                 </div>
-                <ng-fade></ng-fade>
+                <div id="fadeIn1" class="tutAdd">
+                    <h3>
+                        Ron adds five songs from the same album</h3>
+                    <div class="image">
+                        <img src="images/covers/icecube.jpg">
+                    </div>
+                                        <div class="image">
+                        <img src="images/covers/icecube.jpg">
+                    </div>
+                                        <div class="image">
+                        <img src="images/covers/icecube.jpg">
+                    </div>
+                                        <div class="image">
+                        <img src="images/covers/icecube.jpg">
+                    </div>
+                                        <div class="image">
+                        <img src="images/covers/icecube.jpg">
+                    </div>
+                    <div class="songDesc">
+                        <img ng-src="images/portrait/ron.jpg" class="userImg">
+                        <p>
+                            Ice Cube - Lethal Injection</p>
+                        <div class="desc">
+                        </div>
+                    </div>
+                </div>
+                <div id="fadeIn4" class="tutAdd">
+                    <h3>
+                        Ron adds another song</h3>
+                    <div class="image">
+                        <img src="images/covers/scarface.jpg">
+                    </div>
+                    <div class="songDesc">
+                        <img ng-src="images/portrait/ron.jpg" class="userImg">
+                        <p>
+                            Scarface - No Tears</p>
+                        <div class="desc">
+                        </div>
+                    </div>
+                </div>
+                <div id="fadeIn3" class="tutAdd">
+                    <h3>
+                        Michael adds</h3>
+                    <div class="image">
+                        <img src="images/covers/gangsta.jpg">
+                    </div>
+                    <div class="songDesc">
+                        <img ng-src="images/portrait/michael.jpg" class="userImg">
+                        <p>
+                            Geto Boys - Damn It Feels Good to Be a Gangsta</p>
+                        <div class="desc">
+                            Michael's track will be mixed in between Ron's.</div>
+                    </div>
+                </div>
+                <div id="fadeIn2" class="tutAdd">
+                    <h3>
+                        Samir adds</h3>
+                    <div class="image">
+                        <img src="images/covers/sv.jpg">
+                    </div>
+                    <div class="songDesc">
+                        <img ng-src="images/portrait/samir.jpg" class="userImg">
+                        <p>
+                            Slum Village - Get Dis Money</p>
+                        <div class="desc">
+                            Samir is a sporadic user. His song will have priority over Michael's</div>
+                    </div>
+                </div>
+                <div id="fadeIn5" class="tutAdd">
+                    <h3>
+                        Milton adds</h3>
+                    <div class="image">
+                        <img src="images/covers/prado.jpg">
+                    </div>
+                    <div class="songDesc">
+                        <img ng-src="images/portrait/milton.jpg" class="userImg">
+                        <p>
+                            Perez Prado - Mambo #8</p>
+                        <div class="desc">
+                            But the song is blocked by Samir</div>
+                    </div>
+                </div>
             </div>
-            <div id="tutQueue" ng-controller="QueueCtrl">
-                <ng-queue></ng-queue>
+            <div id="tutQueue">
+                <div id="tutInner">
+                    <h3>Current queue <span id="queueLength">(0)</span></h3>
+                    <ul>
+                        <li class="tutQueue queuefadeIn1">
+                            <img src="images/covers/icecube.jpg" class="queueImg">
+                            Ice Cube - The Shot (Intro)
+                            <div class="addedBy">Ron</div>
+                        </li>
+                                                                                                <li class="tutQueue queuefadeIn2">
+                            <img src="images/covers/sv.jpg" class="queueImg">
+                            Slum Village - Get Dis Money
+                            <div class="addedBy">Samir</div>
+                        </li>
+                                                                                                                     <li class="tutQueue queuefadeIn3">
+                            <img src="images/covers/gangsta.jpg" class="queueImg">
+                            Geto Boys - Damn It Feels Good to Be a Gangsta
+                            <div class="addedBy">Michael</div>
+                        </li>
+                                                <li class="tutQueue queuefadeIn1">
+                            <img src="images/covers/icecube.jpg" class="queueImg">
+                            Ice Cube - Really Doe
+                            <div class="addedBy">Ron</div>
+                        </li>
+                                                <li class="tutQueue queuefadeIn1">
+                            <img src="images/covers/icecube.jpg" class="queueImg">
+                            Ice Cube - Ghetto Bird
+                            <div class="addedBy">Ron</div>
+                        </li>
+                                                <li class="tutQueue queuefadeIn1">
+                            <img src="images/covers/icecube.jpg" class="queueImg">
+                            Ice Cube - You Know How We Do It
+                            <div class="addedBy">Ron</div>
+                        </li>
+                                                <li class="tutQueue queuefadeIn1">
+                            <img src="images/covers/icecube.jpg" class="queueImg">
+                            Ice Cube - Cave Bitch
+                            <div class="addedBy">Ron</div>
+                        </li>
+
+                                                                        <li class="tutQueue queuefadeIn4">
+                            <img src="images/covers/scarface.jpg" class="queueImg">
+                            Scarface - No Tears
+                            <div class="addedBy">Ron</div>
+                        </li>
+                                                                                                <li class="tutQueue blocked queuefadeIn5">
+                            <img src="images/covers/prado.jpg" class="queueImg">
+                            Perez Prado - Mambo #8
+                            <div class="addedBy">Milton</div>
+                        </li>
+                    </ul>
+                </div>
             </div>
         </div>
-
         <!--
         ||
         || OVERLAYS
@@ -126,8 +251,8 @@
             <div id="addedTracksLimitReached">
             </div>
         </div>
-
-        <div id="background"></div>
+        <div id="background">
+        </div>
         <!--
         ||
         || MAIN VIEW
@@ -317,7 +442,6 @@
                 </section>
             <!-- about/end -->
         </div>
-
         <!--
         ||
         || NOTIFIER
@@ -326,13 +450,12 @@
         <div id="notifierHolder">
             <span id="closeNotifierHolder"></span>
         </div>
-    <!--
+        <!--
     ||
     || END ONLINE
     ||
     -->
     </div>
-
     <!--
     ||
     || TEMPLATES
@@ -374,7 +497,6 @@
     <script id="noOneIsLoggedInTemplate" type="text/x-jquery-tmpl">
         <li class="noOneIsLoggedIn">When you log into this room your best music will be mixed into the playlist automatically. You can also invite your colleagues below.</li>
     </script>
-
     <!--
     ||
     || INITIALIZE WEJAY
