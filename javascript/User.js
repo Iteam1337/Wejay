@@ -92,7 +92,6 @@ function User() {
                 // get the current facebook user details
                 $.getJSON("https://graph.facebook.com/me?access_token=" + accessToken + "&callback=?", function (facebookUser) {
                     console.log("logged in user: ", facebookUser);
-                    $(".disclaimer .checkbox").removeClass("checked").css("background-position", "0px 36px");
                     $("#roomLogin").attr("disabled", true);
                     app.showDisplayNameAsLoggedIn(facebookUser);
                     self.facebookUser = facebookUser;

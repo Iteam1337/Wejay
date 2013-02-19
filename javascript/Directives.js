@@ -43,6 +43,8 @@ function Directives() {
         var ac = sp.require("javascript/AutocompleteForm");
         ac.init(".auto-completeForm");
 
+        //
+        // On tutorial open
         $("#tutorialBtn, #tutorialBtnHowDoesItWork").click(function () {
             $("#tutorialWrap").show();
 
@@ -59,6 +61,10 @@ function Directives() {
                 $('#tutorial .open').each(function () {
                     $('#queueLength').html('(' + $('#tutQueue .open').length + ')');
                 });
+
+                if (!$('#tutorial .open').length) {
+                    $('#queueLength').html('(0)');
+                }
             });
         });
 
@@ -77,6 +83,8 @@ function Directives() {
             $("#roomsInformation").show();
         });
 
+        //
+        // Check footer position on resize
         $(window).resize(function () {
             app.placeFooter();
         });
@@ -95,6 +103,7 @@ function Directives() {
                     app.loadRooms();
                     app.userLogoutShow();
                     $("#overlay").fadeOut();
+                    $("#fb-checkbox").removeClass("checked");
                 });
             }
         });
@@ -300,6 +309,22 @@ function Directives() {
         });
 
         app.showDisplayNameAsLoggedIn();
+
+        $("#fb-checkbox").click(function () {
+            if (!$(this).hasClass("checked")) {
+                $(this).addClass("checked");
+                $("#roomLogin").attr("disabled", false);
+            }
+            else {
+                $(this).removeClass("checked");
+                $("#roomLogin").attr("disabled", true);
+            }
+
+            app.showDisplayNameAsLoggedIn();
+            localStorage.acceptedLogin = "true";
+            app.acceptedLogin = true;
+            app.loadRooms();
+        });
 
         //
         // initialize the disclaimer

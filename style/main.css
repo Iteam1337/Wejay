@@ -1074,13 +1074,12 @@ blockquote a
     background-color: rgba(255,255,255,.3);
     border-radius: 3px;
     position: absolute;
-    left: 150px;
-    top: -20px;
+    left: 0;
+    top: 140px;
 }
-.checkbox:hover
+.checkbox.checked 
 {
-    background-position: 0 54px;
-    background-color: rgba(230,255,230,.6);
+    background-position: 0 0;
 }
 .disclaimer
 {
@@ -1090,10 +1089,6 @@ blockquote a
     position: relative;
     height: 40px;
     -webkit-transition: all 0.4s ease;
-}
-.disclaimer *
-{
-    -webkit-transition: background-color 0.4s ease;
 }
 .disclaimer h1,
 .disclaimer p
@@ -1118,9 +1113,7 @@ blockquote a
     top: 12px;
     left: 210px;
 }
-.disclaimer .checkbox {
-    top: 19px;
-}
+
 /* ROOMS */
 .disclaimerRooms
 {
@@ -1153,12 +1146,7 @@ blockquote a
     -webkit-border-image: url("sp://import/img/info_group-button.png") 0 7 42 7;
     text-shadow: 0 1px 0 #eee;
 }
-.disclaimerRooms .disclaimer .checkbox
-{
-    margin: 126px 0 0 0;
-    padding: 0;
-    left:0;
-}
+
 #disclaimerLoginOriginal.disc p
 {
     color: white;
@@ -2026,12 +2014,7 @@ footer a
         display: block;
         width: 100%;
     }
-    .disclaimer .checkbox
-    {
-        padding: 0;
-        margin: 16px 0 0 15px;
-        float: left;
-    }
+
     .disclaimer.rooms
     {
         width: 100% !important;
@@ -2051,10 +2034,6 @@ footer a
     {
         width: 80%;
         display: block;
-    }
-    .disclaimerRooms .disclaimer .checkbox
-    {
-        margin: -135px 0 0 0px;
     }
     #sharePopup
     {

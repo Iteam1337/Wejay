@@ -18,7 +18,7 @@
     <link rel="stylesheet" href="http://wejay.org/content/css/bugfixes.css" />
     <link rel="stylesheet" href="style/main.css" />
 </head>
-<body ng-app="tutorial">
+<body>
     <!--
     ||
     || OFFLINE
@@ -234,14 +234,14 @@
                         To get started, just open a WEJAY ROOM on one computer with speakers and everyone
                         else can add songs to that playlist.</p>
                     <p id="disclaimerText">
-                        I understand that when I log into my Facebook account below, Facebook will be able
+                        <label for="fb-checkbox">I understand that when I log into my Facebook account below, Facebook will be able
                         to associate information about my Spotify use, such as library and listening history,
                         with my Facebook account. Facebook's collection and use of this information will
-                        be governed by the Facebook Privacy Policy.
+                        be governed by the Facebook Privacy Policy.</label>
                     </p>
                     <div id="tutorialBtn">
                         How does it work?</div>
-                    <input type="checkbox" class="checkbox" />
+                    <input type="checkbox" class="checkbox" id="fb-checkbox"/>
                     <button class="sp-button" id="roomLogin" disabled>
                         Login with Facebook</button>
                 </div>

@@ -11,7 +11,8 @@ function App() {
     accessToken,
     facebookId;
 
-    function handleError(message) {
+    function handleError(showReconnect, message) {
+        showReconnect ? $("#offline button").show() : $("#offline button").hide();
         message = message ? message : "Sorry, we can not connect to realtime service, try again soon";
         $("#offline").show();
         $("#offline p").text(message);
@@ -27,12 +28,12 @@ function App() {
             //app.currentRoom.playSong(app.currentRoom.currentSong, true);            
         }
     }
-    
+
     //
     // Before anything begins loading - the application hinders users who are offline
     m.session.observe(m.EVENT.STATECHANGED, function () {
         if (m.session.state >= 2) {
-            return handleError();
+            return handleError(true);
         } else {
             return hideOfflineContent(true);
         }
@@ -43,16 +44,16 @@ function App() {
     } else {
         hideOfflineContent();
     }
-    
+
     //
     // This is used to check if the information
     // saved into localStorage is valid when loading the app.
     var checkLocalStorage = [
-        { name: "facebookUser", type: "json" },
-        { name: "acceptedLogin", type: "boolean" },
-        { name: "friends", type: "commaNumber" },
-        { name: "room", type: "room" },
-        { name: "accessToken", type: "string" }
+    { name: "facebookUser", type: "json" },
+    { name: "acceptedLogin", type: "boolean" },
+    { name: "friends", type: "commaNumber" },
+    { name: "room", type: "room" },
+    { name: "accessToken", type: "string" }
     ];
     for (var obj in checkLocalStorage) {
         var check = checkLocalStorage[obj],
@@ -65,19 +66,19 @@ function App() {
                 case "json":
                     try { JSON.parse(object); }
                     catch (e) { test = false; }
-                break;
-                    case "boolean":
+                    break;
+                case "boolean":
                     test = (object === "true")
-                break;
-                    case "commaNumber":
+                    break;
+                case "commaNumber":
                     test = !isNaN(object.split(",")[0]);
-                break;
+                    break;
                 case "room":
                     test = (/^([a-z0-9\_\-\ ]){2,10}$/i.exec(object) !== null)
-                break;
+                    break;
                 case "string":
                     test = (typeof object === "string")
-                break;
+                    break;
             }
             if (test === false) {
                 delete localStorage[name];
@@ -155,35 +156,35 @@ function App() {
 
         switch (tab) {
             case "choose":
-            this.loadRooms();
-            if (app.isPlayingFromWejay) {
-                self.pauseApp();
-                $('#start').removeClass('onair');
-            }
-            $("#enterRoomBanner").hide();
-            break;
+                this.loadRooms();
+                if (app.isPlayingFromWejay) {
+                    self.pauseApp();
+                    $('#start').removeClass('onair');
+                }
+                $("#enterRoomBanner").hide();
+                break;
             case "room":
-            if (self.loggedIntoRoom === null) {
-                app.userLogoutHide();
-            } else if (self.loggedIntoRoom === "" || self.currentRoom.roomName !== self.loggedIntoRoom) {
-                app.currentRoom.checkin(false, function (room) {
-                    app.loggedIntoRoom = room;
-                    app.currentRoom.updateUsers();
-                });
-                app.userLogoutShow()
-            } else {
-                app.userLogoutShow()
-            }
-            self.currentRoom.updatePlaylist();
-            break;
+                if (self.loggedIntoRoom === null) {
+                    app.userLogoutHide();
+                } else if (self.loggedIntoRoom === "" || self.currentRoom.roomName !== self.loggedIntoRoom) {
+                    app.currentRoom.checkin(false, function (room) {
+                        app.loggedIntoRoom = room;
+                        app.currentRoom.updateUsers();
+                    });
+                    app.userLogoutShow()
+                } else {
+                    app.userLogoutShow()
+                }
+                self.currentRoom.updatePlaylist();
+                break;
             case "wejays":
-            if (!self.currentRoom.roomName) {
-                alert("You have to select a room first");
-            }
-            break;
+                if (!self.currentRoom.roomName) {
+                    alert("You have to select a room first");
+                }
+                break;
         }
 
-       // self.placeFooter();
+        self.placeFooter();
     };
     //
     // tab switched in ui
@@ -211,36 +212,7 @@ function App() {
         app.acceptedLogin = false;
         $("#overlay").show().find(".rooms").show();
         $("#facebook").show();
-        $("#login").attr("disabled", true);
-        $(".disclaimer .checkbox").hover(
-            function () {
-                if (!$(this).hasClass("checked")) {
-                    var button = $(".disclaimer.rooms .sp-button");
-                    button.attr('disabled', false).addClass("hover");
-                    $(this).css("background-position", "0 0");
-                }
-            },
-            function () {
-                if (!$(this).hasClass("checked")) {
-                    var button = $(".disclaimer.rooms .sp-button");
-                    $("#roomLogin").attr("disabled", true);
-                    button.removeClass("hover");
-                    $(this).css("background-position", "0 36px");
-                }
-            }
-
-            );
-        $(".disclaimer .checkbox").click(function () {
-            if (!$(this).hasClass("checked")) {
-                $(this).addClass("checked").css("background-position", "0 0");
-            }
-
-            $("#roomLogin").attr("disabled", false);
-            app.showDisplayNameAsLoggedIn();
-            localStorage.acceptedLogin = "true";
-            app.acceptedLogin = true;
-            app.loadRooms();
-        });
+        $("#roomLogin").attr("disabled", true);
     };
 
     this.handleDroppedLinks = function (links) {
@@ -302,10 +274,10 @@ function App() {
                             }
                         }
                     });
-            } else {
-                links.splice(0, 10);
-                self.handleUserDroppingToManyObjects(links, max, "links");
-            }
+                } else {
+                    links.splice(0, 10);
+                    self.handleUserDroppingToManyObjects(links, max, "links");
+                }
                 self.currentRoom.updatePlaylist();
             });
         }
@@ -362,6 +334,7 @@ function App() {
                 } else {
                     $(div).html($("#roomTopListTemplate").tmpl(result));
                     $(div).append("<a>" + room + "</a>");
+                    console.log(room);
                     $("#enterRoomBanner").hide();
                 }
             }, error: function (r) {
@@ -409,94 +382,92 @@ function App() {
                     }
                 });
 
-$('.loadingIndicator').hide();
-});
+                $('.loadingIndicator').hide();
+            });
 
-self.loaded = true;
-}
-};
-
-this.fillRooms = function () {
-    $(".rooms li ").each(function () {
-        var room = this.innerText;
-        self.fillRoomToplist(room, this);
-        $(this).click(function () {
-            document.location = "spotify:app:wejay:room:" + room;
-        });
-    });
-};
-
-this.userLogoutShow = function () {
-    $("#joinRoom, #facebook").hide();
-    $("#leaveRoom").show();
-};
-
-this.userLogoutHide = function () {
-    $("#joinRoom").show();
-    $("#leaveRoom").hide();
-};
-
-this.checkIfUserAcceptedAgreement = function () {
-    var accepted = false;
-    if (self.acceptedLogin) {
-        accepted = true;
-        self.checkIfUserIsLoggedIn();
-    } else {
-        $(".disclaimer").show();
-    }
-    return accepted;
-};
-
-this.checkIfUserIsLoggedIn = function () {
-    if (!app.user.accessToken) {
-        app.user.authenticate();
-    }
-};
-
-this.playApp = function () {
-    app.isPlayingFromWejay = true;
-    $("#onair").show();
-    app.currentRoom.playSong(app.currentRoom.currentSong, true);
-};
-
-this.pauseApp = function () {
-    var player = sp.trackPlayer;
-    app.isPlayingFromWejay = false;
-    $("#onair").hide();
-    player.setIsPlaying(false);
-};
-
-m.player.observe(m.EVENT.CHANGE, function (event) {
-    var player = event.data;
-
-    if (app.isPlayingFromWejay === true) {
-        if (player.volume === false && player.shuffle === false && player.repeat === false) {
-            if (player.curtrack === false && player.playstate === false) {
-                self.pauseApp();
-            } else if (m.player.canPlayNext === true && m.player.canPlayNext === true) {
-                self.pauseApp();
-            }
-            $("#start").addClass("pause").addClass("onair");
+            self.loaded = true;
         }
-    } else if (app.isPlayingFromWejay === false) {
-        $("#start").removeClass("pause").removeClass("onair");
-    } else if (m.player.context !== null && m.player.canPlayNext === false && m.player.canPlayNext === false) {
-        if (player.volume === false && player.shuffle === false && player.repeat === false) {
-            if (player.curtrack === false && player.playstate === false && sp.trackPlayer.getIsPlaying() === false) {
-                if (window.location.hash !== "#chooseSection") {
-                    self.playApp();
+    };
+
+    this.fillRooms = function () {
+        $(".rooms li ").each(function () {
+            var room = this.innerText;
+            self.fillRoomToplist(room, this);
+            $(this).click(function () {
+                document.location = "spotify:app:wejay:room:" + room;
+            });
+        });
+    };
+
+    this.userLogoutShow = function () {
+        $("#joinRoom, #facebook").hide();
+        $("#leaveRoom").show();
+    };
+
+    this.userLogoutHide = function () {
+        $("#joinRoom").show();
+        $("#leaveRoom").hide();
+    };
+
+    this.checkIfUserAcceptedAgreement = function () {
+        var accepted = false;
+        if (self.acceptedLogin) {
+            accepted = true;
+            self.checkIfUserIsLoggedIn();
+        } else {
+            $(".disclaimer").show();
+        }
+        return accepted;
+    };
+
+    this.checkIfUserIsLoggedIn = function () {
+        if (!app.user.accessToken) {
+            app.user.authenticate();
+        }
+    };
+
+    this.playApp = function () {
+        app.isPlayingFromWejay = true;
+        $("#onair").show();
+        app.currentRoom.playSong(app.currentRoom.currentSong, true);
+    };
+
+    this.pauseApp = function () {
+        var player = sp.trackPlayer;
+        app.isPlayingFromWejay = false;
+        $("#onair").hide();
+        player.setIsPlaying(false);
+    };
+
+    m.player.observe(m.EVENT.CHANGE, function (event) {
+        var player = event.data;
+        if (app.isPlayingFromWejay === true) {
+            if (player.volume === false && player.shuffle === false && player.repeat === false) {
+                if (player.curtrack === false && player.playstate === false) {
+                    self.pauseApp();
+                } else if (m.player.canPlayNext === true && m.player.canPlayNext === true) {
+                    self.pauseApp();
+                }
+                $("#start").addClass("pause").addClass("onair");
+            }
+        } else if (app.isPlayingFromWejay === false) {
+            $("#start").removeClass("pause").removeClass("onair");
+        } else if (m.player.context !== null && m.player.canPlayNext === false && m.player.canPlayNext === false) {
+            if (player.volume === false && player.shuffle === false && player.repeat === false) {
+                if (player.curtrack === false && player.playstate === false && sp.trackPlayer.getIsPlaying() === false) {
+                    if (window.location.hash !== "#chooseSection") {
+                        self.playApp();
+                    }
                 }
             }
         }
-    }
+    });
 
-});
-
-/* INIT */
-this.init = function (version) {
-    var directives = sp.require("javascript/Directives");
-    directives.init(version);
-};
+    /* INIT */
+    this.init = function (version) {
+        var directives = sp.require("javascript/Directives");
+        directives.init(version);
+    };
 }
 
 String.prototype.format = function () {
