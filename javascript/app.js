@@ -2,9 +2,9 @@
 function App() {
 
     var self = this,
-    sp = getSpotifyApi(1),
+    sp = getSpotifyApi(),
     ui = sp.require("sp://import/scripts/dnd"),
-    m = sp.require("sp://import/scripts/api/models"),
+    m = sp.require('$api/models'),
     v = sp.require("sp://import/scripts/api/views"),
     r = sp.require("sp://import/scripts/react"),
     kbd = sp.require("sp://import/scripts/keyboard"),
@@ -439,9 +439,9 @@ function App() {
     this.pauseApp = function () {
         var player = sp.trackPlayer;
         app.isPlayingFromWejay = false;
-        $("#start").removeClass("pause").removeClass("onair");
         $("#onair").hide();
         player.setIsPlaying(false);
+        $("#start").removeClass("pause").removeClass("onair");
     };
 
     m.player.observe(m.EVENT.CHANGE, function (event) {

@@ -250,9 +250,11 @@ function RoomController(roomName, nodeUrl) {
                     $("#like").addClass("liked");
                     var name = (app.user.userName) ? app.user.userName : "Anonymous",
                         obj = { user: name, room: self.roomName, mbId: self.currentSong.SpotifyId, value: 5 };
+
+                    console.log('liked', obj);
                 },
                 error: function () {
-                    window.NOTIFIER.show("like failed");
+                    window.NOTIFIER.show("Could not like song");
                     $("#like").removeClass("liking")
                     $("#like").addClass("failed");
                     setTimeout(function () {
@@ -460,7 +462,8 @@ function RoomController(roomName, nodeUrl) {
             throw "You have not set room and user or facebook details yet";
         }
         var self = this,
-            userObject = { userName: app.user.userName, facebookId: app.user.facebookId, room: self.roomName };
+            userObject = { userName: app.user.facebookUser.name, facebookId: app.user.facebookId, room: self.roomName };
+
         $.ajax({
             url: "http://wejay.org/Room/checkin",
             data: userObject,
@@ -475,7 +478,7 @@ function RoomController(roomName, nodeUrl) {
                 }
                 app.userLogoutShow();
                 //self.hub.checkin({ user: app.user.userName, room: self.roomName });
-                console.log(app.user.userName + " logged in to wejay room ", self.roomName);
+                console.log(app.user.facebookUser.name + " logged in to wejay room ", self.roomName);
             }
         });
     }
