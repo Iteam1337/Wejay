@@ -430,17 +430,20 @@ function App() {
         app.isPlayingFromWejay = true;
         $("#onair").show();
         app.currentRoom.playSong(app.currentRoom.currentSong, true);
+        $("#start").addClass("pause").addClass("onair");
     };
 
     this.pauseApp = function () {
         var player = sp.trackPlayer;
         app.isPlayingFromWejay = false;
+        $("#start").removeClass("pause").removeClass("onair");
         $("#onair").hide();
         player.setIsPlaying(false);
     };
 
     m.player.observe(m.EVENT.CHANGE, function (event) {
         var player = event.data;
+
         if (app.isPlayingFromWejay === true) {
             if (player.volume === false && player.shuffle === false && player.repeat === false) {
                 if (player.curtrack === false && player.playstate === false) {
@@ -448,10 +451,7 @@ function App() {
                 } else if (m.player.canPlayNext === true && m.player.canPlayNext === true) {
                     self.pauseApp();
                 }
-                $("#start").addClass("pause").addClass("onair");
             }
-        } else if (app.isPlayingFromWejay === false) {
-            $("#start").removeClass("pause").removeClass("onair");
         } else if (m.player.context !== null && m.player.canPlayNext === false && m.player.canPlayNext === false) {
             if (player.volume === false && player.shuffle === false && player.repeat === false) {
                 if (player.curtrack === false && player.playstate === false && sp.trackPlayer.getIsPlaying() === false) {

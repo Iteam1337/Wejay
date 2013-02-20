@@ -103,9 +103,11 @@ function RoomController(roomName, nodeUrl) {
         $("#voteOverlay").removeClass("show");
         $("#currentHolder .hover").show();
         if (song.Played) {
+
             var played = eval(song.Played.replace(/\/Date\(([-\d]+)\)\//gi, "new Date( $1 )")),
-                diff = (new Date().getTime() - app.timeDiff) - played.getTime()
+                diff = (new Date().getTime() - app.timeDiff) - played.getTime();
             if (diff < 0) { diff = 0; }
+
             song.position = new Date(diff);
         } else {
             song.position = new Date().setTime(0); // start from 0 seconds if no position was set
