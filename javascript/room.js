@@ -480,47 +480,55 @@ function RoomController(roomName, nodeUrl) {
         });
     }
 
+    var updateTimeout = null;
     // Update playlist ul
     this.updatePlaylist = function () {
-        var url = "http://wejay.org/Room/Playlist?room=" + self.roomName;
-        $.ajax({
-            url: url,
-            type: "GET",
-            processData: false,
-            contentType: "application/json; charset=utf-8",
-            dataType: "text json",
-            error: function (e) {
-                window.NOTIFIER.show("error updating queue");
-                console.log("___ - Error updating queue", e);
-            },
-            success: function (r) {
-                var result = r ? r.Playlist.filter(function (song) { return song.SpotifyId; }) : [];
-                if (result.length > 0) {
-                    // slice the array to limit the playlist to 15 songs.
-                    $("#currentQueueNumber").text("Current queue (" + result.length + ")");
-                    //var newHtml = $("#queueTemplate").tmpl(result.slice(0, 15));
-                    var newHtml = $("#queueTemplate").tmpl(result);
-                    if ($("#queue").text() !== newHtml.text()) {
-                        var render = $("<ul/>", { id: "queue", html: newHtml });
-                        $("#queue").replaceWith(render);
-                        return false;
-                    } else {
-                        return false;
-                    }
-                } else {
-                    var newHtml = this.nothingPlayingCopy;
-                    $("#queue").html(newHtml);
-                    $("#currentQueueNumber").text("Current queue");
-                    if ($("#currentSong").html() === "") {
-                        $("#currentHolder .hover").hide();
-                        $("#currentSong").html("Drag tracks here to start the room");
-                    }
-                    return false;
-                }
-            }
-        });
+        
+        // prevent many simultaneous updates to flicker the playlist
+        clearTimeout(updateTimeout);
 
-        app.placeFooter();
+        updateTimeout = setTimeout(function(){
+            var url = "http://wejay.org/Room/Playlist?room=" + self.roomName;
+            $.ajax({
+                url: url,
+                type: "GET",
+                processData: false,
+                contentType: "application/json; charset=utf-8",
+                dataType: "text json",
+                error: function (e) {
+                    window.NOTIFIER.show("error updating queue");
+                    console.log("___ - Error updating queue", e);
+                },
+                success: function (r) {
+                    var result = r ? r.Playlist.filter(function (song) { return song.SpotifyId; }) : [];
+                    if (result.length > 0) {
+                        // slice the array to limit the playlist to 15 songs.
+                        $("#currentQueueNumber").text("Current queue (" + result.length + ")");
+                        //var newHtml = $("#queueTemplate").tmpl(result.slice(0, 15));
+                        var newHtml = $("#queueTemplate").tmpl(result);
+                        if ($("#queue").text() !== newHtml.text()) {
+                            var render = $("<ul/>", { id: "queue", html: newHtml });
+                            $("#queue").replaceWith(render);
+                            return false;
+                        } else {
+                            return false;
+                        }
+                    } else {
+                        var newHtml = this.nothingPlayingCopy;
+                        $("#queue").html(newHtml);
+                        $("#currentQueueNumber").text("Current queue");
+                        if ($("#currentSong").html() === "") {
+                            $("#currentHolder .hover").hide();
+                            $("#currentSong").html("Drag tracks here to start the room");
+                        }
+                        return false;
+                    }
+                }
+            });
+
+            app.placeFooter();
+        }, 500);
+
     }
 
     // Update users online list

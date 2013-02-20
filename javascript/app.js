@@ -278,7 +278,10 @@ function App() {
                     links.splice(0, 10);
                     self.handleUserDroppingToManyObjects(links, max, "links");
                 }
-                self.currentRoom.updatePlaylist();
+                // HACK: handle the async callbacks for each added track and run update after all items are added. Now we wait 1s instead..
+                setTimeout(function(){
+                    self.currentRoom.updatePlaylist();
+                }, 1000);
             });
         }
     };
