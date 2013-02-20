@@ -2134,6 +2134,7 @@ footer a
         -webkit-column-count: 0;
         -webkit-column-gap: 0;
     }
+
     #overlay #facebook {
         width: 300px;
         position: absolute;
@@ -2147,6 +2148,26 @@ footer a
         height: 470px;
     }
 }
+
+
+#aboutSection ul.right{
+  margin-left:0;
+}
+
+#aboutSection ul.left {
+  margin-right:0;
+}
+
+.left {
+  width: 45%;
+  float:left;
+}
+
+.right {
+  width: 45%;
+  float:right;
+}
+
 
 .clearfix:after {
   content: ".";
