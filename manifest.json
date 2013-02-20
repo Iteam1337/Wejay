@@ -3,14 +3,14 @@
   {
     "en": "WEJAY"
   },
-  "BundleVersion": "1.0.3",
+  "BundleVersion": "1.0.4",
   "Dependencies": {
     "api": "0.1.0",
     "resources": "0.1.0"
   },
   "AppDescription":
   {
-    "en": "We are the DJ. Listen to music together while you work"
+    "en": "Music For Teams. Listen to music together while you work"
   },
   "DefaultTabs":
   [
@@ -56,6 +56,7 @@
     "http://*.fbcdn.net",
     "http://ws.spotify.com",
     "http://*.facebook.com",
+    "https://www.facebook.com",
     "https://graph.facebook.com",
     "http://*.facebook.net",
     "http://81.201.221.135",
