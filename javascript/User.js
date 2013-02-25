@@ -1,12 +1,16 @@
 var auth = sp.require("sp://import/scripts/api/auth");
 // user class which handles all authentication with facebook and stores accesstokens, usernames, etc
 function User() {
-    // properties
-    this.facebookId = null;
-    this.facebookUser = null;
-    this.accessToken = null;
-
     var self = this;
+
+    self = {
+        facebookId: null,
+        facebookUser: null,
+        accessToken: null,
+        userName: null,
+        friends: null,
+        checkTokenNext: new Date(null)
+    }
 
     function _checkAccessToken(callback) {
         $.getJSON("https://graph.facebook.com/debug_token?input_token=INPUT_TOKEN&access_token=" + self.accessToken + "&callback=?", function (res) {
@@ -43,14 +47,20 @@ function User() {
                     console.log("logged in user: ", facebookUser);
                     $("#roomLogin").attr("disabled", true);
                     app.showDisplayNameAsLoggedIn(facebookUser);
-                    self.facebookUser = facebookUser;
-                    self.userName = unescape(facebookUser.name);
-                    self.facebookId = facebookUser.id;
-                    self.accessToken = accessToken;
+
+                    self = {
+                        userName: unescape(facebookUser.name),
+                        facebookId: facebookUser.id,
+                        facebookUser: facebookUser,
+                        checkTokenNext: moment(new Date()).add("hours", 3)._d,
+                        accessToken: accessToken,
+                    }
                     app.userLogoutShow();
                     app.loadRooms();
+
                     localStorage.setItem("facebookUser", JSON.stringify(facebookUser));
                     localStorage.setItem("accessToken", accessToken);
+
                     self.friends = localStorage.getItem("friends");
                     //
                     // facebookUser(this); // inherit all facebook properties to this user class
@@ -84,9 +94,14 @@ function User() {
         var logoutUrl = "https://www.facebook.com/logout.php?next=http://wejay.org/logout&access_token=" + this.accessToken;
         auth.showAuthenticationDialog(logoutUrl, "", {
             onSuccess: function (response) {
-                self.facebookId = null;
-                self.facebookUser = null;
-                self.accessToken = null;
+                self = {
+                    checkTokenNext: new Date(null),
+                    facebookUser: null,
+                    accessToken: null,
+                    facebookId: null,
+                    userName: null,
+                    friends: null
+                }
                 $("#rooms").html("");
                 app.clearLocalStorage();
                 app.loggedIntoRoom = null;

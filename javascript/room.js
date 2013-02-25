@@ -12,6 +12,12 @@ function RoomController(roomName, nodeUrl) {
         return;
     }
     var facebookId, self = this;
+    var updateTimeout = null;
+
+    function addLeadingZero(number) {
+        return ((parseInt(number) < 10) ? "0" : "") + parseInt(number);
+    }
+
     this.roomName = roomName.toLowerCase();
 
     console.log("New RoomController for room " + roomName);
@@ -84,10 +90,6 @@ function RoomController(roomName, nodeUrl) {
         } catch (err) {
             errorCallback(err);
         }
-    };
-
-    var addLeadingZero = function (number) {
-        return ((parseInt(number) < 10) ? "0" : "") + parseInt(number);
     };
 
     this.forceCheckCurrentSong = function () {
@@ -213,7 +215,7 @@ function RoomController(roomName, nodeUrl) {
             });
         };
 
-        if (!!app.user.accessToken) {
+        if (!!app.user.accessToken || new Date() < app.user.checkTokenNext) {
             voteFunction();
         } else {
             app.user.authenticate(function () {
@@ -267,7 +269,7 @@ function RoomController(roomName, nodeUrl) {
             });
         }
 
-        if (!!app.user.accessToken) {
+        if (!!app.user.accessToken || new Date() < app.user.checkTokenNext) {
             voteFunction();
         } else {
             app.user.authenticate(function () {
@@ -307,7 +309,7 @@ function RoomController(roomName, nodeUrl) {
             });
         };
 
-        if (!!app.user.accessToken) {
+        if (!!app.user.accessToken || new Date() < app.user.checkTokenNext) {
             voteFunction();
         } else {
             app.user.authenticate(function () {
@@ -349,7 +351,7 @@ function RoomController(roomName, nodeUrl) {
             });
         }
 
-        if (!!app.user.accessToken) {
+        if (!!app.user.accessToken || new Date() < app.user.checkTokenNext) {
             voteFunction();
         } else {
             app.user.authenticate(function () {
@@ -487,7 +489,6 @@ function RoomController(roomName, nodeUrl) {
         });
     }
 
-    var updateTimeout = null;
     // Update playlist ul
     this.updatePlaylist = function () {
 

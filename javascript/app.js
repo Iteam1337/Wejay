@@ -311,13 +311,6 @@ function App() {
         $("#overlayLimit").hide();
     };
 
-    // when links are dropped to the application we want to add those to the queue
-    m.application.observe(m.EVENT.LINKSCHANGED, function (e) {
-        var links = m.application.links;
-        console.log("dropped links", links);
-        self.handleDroppedLinks(links);
-    });
-
     // load images in the room banner
     this.fillRoomToplist = function (room, div) {
         $.ajax({
@@ -443,6 +436,19 @@ function App() {
         player.setIsPlaying(false);
         $("#start").removeClass("pause").removeClass("onair");
     };
+    
+    /* INIT */
+    this.init = function (version) {
+        var directives = sp.require("javascript/Directives");
+        directives.init(version);
+    };
+
+    // when links are dropped to the application we want to add those to the queue
+    m.application.observe(m.EVENT.LINKSCHANGED, function (e) {
+        var links = m.application.links;
+        console.log("dropped links", links);
+        self.handleDroppedLinks(links);
+    });
 
     m.player.observe(m.EVENT.CHANGE, function (event) {
         var player = event.data;
@@ -465,20 +471,4 @@ function App() {
             }
         }
     });
-
-    /* INIT */
-    this.init = function (version) {
-        var directives = sp.require("javascript/Directives");
-        directives.init(version);
-    };
 }
-
-String.prototype.format = function () {
-    var formatted = this, i = 0,
-    arg = arguments.length;
-    for (; i < arg; i++) {
-        var regexp = new RegExp("\\{' + i + '\\}', 'gi");
-        formatted = formatted.replace(regexp, arguments[i]);
-    }
-    return formatted;
-};
