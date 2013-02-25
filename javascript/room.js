@@ -245,6 +245,10 @@ function RoomController(roomName, nodeUrl) {
                 type: "POST",
                 traditional: true,
                 success: function (result) {
+                    self.hub.checkCurrentSong(app.currentRoom.roomName, function (error, song) {
+                        var currentVote = Math.round((song.Vote / 6) * 100);
+                        $('#likeAverage').html(currentVote + '%');
+                    });
                     $("#like").removeClass("liking")
                     $("#like").addClass("liked");
                     var name = (app.user.userName) ? app.user.userName : "Anonymous",
@@ -505,10 +509,7 @@ function RoomController(roomName, nodeUrl) {
                     var result = r ? r.Playlist.filter(function (song) { return song.SpotifyId; }) : [];
 
                     self.hub.checkCurrentSong(app.currentRoom.roomName, function (error, song) {
-                        console.log(song);
                         var currentVote = Math.round((song.Vote / 6) * 100);
-                        console.log(currentVote);
-
                         $('#likeAverage').html(currentVote + '%');
                     });
 

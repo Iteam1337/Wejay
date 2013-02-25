@@ -797,6 +797,21 @@ h3
     display:none;
     z-index: 1000;
 }
+#likeHover 
+{
+    width:200px;
+}
+#likeAverage {
+    font-size: 24px;
+    float: left;
+    margin-right: 10px;
+    position: relative;
+    top: 7px;
+}
+#likeHoverText {
+    float: left;
+    width: 70%;
+}
 #skipHover 
 {
     left:30px;
@@ -1243,14 +1258,6 @@ blockquote a
 #like:hover:after
 {
   background-position: -16px 0;
-}
-.liked 
-{
-    pointer-events:none;
-}
-#like.liked:after
-{
-  background-position: 0 0 !important;
 }
 .top .right #voteOverlay
 {
