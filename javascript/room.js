@@ -486,11 +486,11 @@ function RoomController(roomName, nodeUrl) {
     var updateTimeout = null;
     // Update playlist ul
     this.updatePlaylist = function () {
-        
+
         // prevent many simultaneous updates to flicker the playlist
         clearTimeout(updateTimeout);
 
-        updateTimeout = setTimeout(function(){
+        updateTimeout = setTimeout(function () {
             var url = "http://wejay.org/Room/Playlist?room=" + self.roomName;
             $.ajax({
                 url: url,
@@ -503,6 +503,15 @@ function RoomController(roomName, nodeUrl) {
                 },
                 success: function (r) {
                     var result = r ? r.Playlist.filter(function (song) { return song.SpotifyId; }) : [];
+
+                    self.hub.checkCurrentSong(app.currentRoom.roomName, function (error, song) {
+                        console.log(song);
+                        var currentVote = Math.round((song.Vote / 6) * 100);
+                        console.log(currentVote);
+
+                        $('#likeAverage').html(currentVote + '%');
+                    });
+
                     if (result.length > 0) {
                         // slice the array to limit the playlist to 15 songs.
                         $("#currentQueueNumber").text("Current queue (" + result.length + ")");
