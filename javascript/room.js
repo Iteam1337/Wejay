@@ -14,6 +14,8 @@ function RoomController(roomName, nodeUrl) {
     var facebookId, self = this;
     var updateTimeout = null;
 
+    this.skipping = false;
+
     function addLeadingZero(number) {
         return ((parseInt(number) < 10) ? "0" : "") + parseInt(number);
     }
@@ -101,7 +103,11 @@ function RoomController(roomName, nodeUrl) {
     };
 
     this.playSong = function (song, forcePlay) {
-        if (!song) return;
+        if (!song || !song.Length || !song.Length.TotalMinutes) return;
+        // if its longer than 6 minutes, let's just skip it
+        if (song.Length.TotalMinutes >= 6) {
+            return voteFunction(true,true);
+        }
         $("#voteOverlay").removeClass("show");
         $("#currentHolder .hover").show();
         if (song.Played) {
@@ -188,38 +194,45 @@ function RoomController(roomName, nodeUrl) {
         this.hub.checkout();
         this.hub = null;
     };
-    this.skip = function (noNotification) {
-        var thisSong = app.currentRoom.currentSong;
-        function voteFunction() {
-            if (!noNotification) {
-                $("#skip").html("Skipping...");
-            }
-            $.ajax({
-                url: "http://wejay.org/Room/next",
-                data: { room: self.roomName },
-                dataType: "json",
-                type: "POST",
-                traditional: true,
-                success: function (result) {
-                    $("#skip").html("Skip");
-                    self.hub.songSkipped(thisSong);
-                    $("#voteOverlay").removeClass("show");
-                },
-                error: function (res) {
-                    NOTIFIER.show("skip failed ",res);
-                    $("#skip").html("Skip Failed");
-                    setTimeout(function () {
-                        $("#skip").html("Skip");
-                    }, 1000);
-                }
-            });
-        };
 
+    function voteFunction(noNotification, player) {
+        if (player && self.skipping) {
+            return false;
+        }
+        self.skipping = true;
+        var thisSong = app.currentRoom.currentSong;
+        if (!noNotification) {
+            $("#skip").html("Skipping...");
+        }
+        $.ajax({
+            url: "http://wejay.org/Room/next",
+            data: { room: self.roomName },
+            dataType: "json",
+            type: "POST",
+            traditional: true,
+            success: function (result) {
+                $("#skip").html("Skip");
+                self.hub.songSkipped(thisSong);
+                $("#voteOverlay").removeClass("show");
+                self.skipping = false;
+            },
+            error: function (res) {
+                NOTIFIER.show("skip failed ", res);
+                $("#skip").html("Skip Failed");
+                setTimeout(function () {
+                    $("#skip").html("Skip");
+                    self.skipping = false;
+                }, 1000);
+            }
+        });
+    }
+
+    this.skip = function (noNotification) {
         if (!!app.user.accessToken || new Date() < app.user.checkTokenNext) {
-            voteFunction();
+            voteFunction(noNotification);
         } else {
             app.user.authenticate(function () {
-                voteFunction();
+                voteFunction(noNotification);
             });
         }
     };
