@@ -166,8 +166,8 @@ function User() {
 
     //  login to facebook with the current facebook user account
     this.authenticate = function (callback) {
-        console.log("starting authentication");
         function continueAuth() {
+            console.log("starting authentication");
             app.showDisplayNameAsLoggedIn(app.user.facebookUser);
             app.userLogoutShow();
             if (callback && app.currentRoom) {

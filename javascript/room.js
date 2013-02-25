@@ -54,14 +54,14 @@ function RoomController(roomName, nodeUrl) {
         song.room = self.roomName;
         var existsInQueue = $("#queue li a.track").filter(function (int, element) { return (element.href.split(":")[2] === song.spotifyId) }).length > 0;
 
-        if (!existsInQueue) {
-            self.hub.queueSong(song);
+        if (!!existsInQueue) {
+            // The song is in the playlist already
+            return NOTIFIER.show("\"" + song.artist + " - " + song.title + "\" is already in the playlist, let's skip this.");
+        } else if ((song.length / 60) >= 2) {
+            // The song is 6 minutes or longer
+            return NOTIFIER.show("\"" + song.artist + " - " + song.title + "\" exeeds the 6 minute limitation.");
         } else {
-            // TODO: felhantering.
-            // Här ska ett meddelande dyka upp till användaren om att låten
-            // redan existerar i listan.
-            var existingSong = "\"" + song.artist + " - " + song.title + "\" is already in the playlist, let's skip this.";
-            NOTIFIER.show(existingSong);
+            self.hub.queueSong(song);
         }
     };
 
