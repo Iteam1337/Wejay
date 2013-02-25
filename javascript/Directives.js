@@ -96,18 +96,17 @@ function Directives() {
         $("#onair").hide();
 
         $("#roomLogin").on("click", function () {
-            app.checkIfUserAcceptedAgreement(function (res) {
-                if (!!res) {
-                    app.user.authenticate(function (room) {
-                        app.loggedIntoRoom = room;
-                        $("#leaveRoom").show();
-                        app.loadRooms();
-                        app.userLogoutShow();
-                        $("#overlay").fadeOut();
-                        $("#fb-checkbox").removeClass("checked");
-                    });
-                }
-            });
+            if (app.loginAccepted()) {
+                app.user.authenticate(function (room) {
+                    console.log(room);
+                    app.loggedIntoRoom = room;
+                    $("#leaveRoom").show();
+                    app.loadRooms();
+                    app.userLogoutShow();
+                    $("#overlay").fadeOut();
+                    $("#fb-checkbox").removeClass("checked");
+                });
+            }
         });
 
         $("#closeNotifierHolder").on("click", function () {

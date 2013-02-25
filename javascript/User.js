@@ -3,14 +3,12 @@ var auth = sp.require("sp://import/scripts/api/auth");
 function User() {
     var self = this;
 
-    self = {
-        facebookId: null,
-        facebookUser: null,
-        accessToken: null,
-        userName: null,
-        friends: null,
-        checkTokenNext: new Date(null)
-    };
+    self.facebookId = null;
+    self.facebookUser = null;
+    self.accessToken = null;
+    self.userName = null;
+    self.friends = null;
+    self.checkTokenNext = new Date(null);
 
     function _checkAccessToken(callback) {
         return callback( new Date() > self.checkTokenNext );
@@ -52,13 +50,11 @@ function User() {
                     $("#roomLogin").attr("disabled", true);
                     app.showDisplayNameAsLoggedIn(facebookUser);
 
-                    self = {
-                        userName: unescape(facebookUser.name),
-                        facebookId: facebookUser.id,
-                        facebookUser: facebookUser,
-                        checkTokenNext: moment(new Date()).add("hours", 2)._d,
-                        accessToken: accessToken,
-                    }
+                    self.userName = unescape(facebookUser.name);
+                    self.facebookId = facebookUser.id;
+                    self.facebookUser = facebookUser;
+                    self.checkTokenNext = moment(new Date()).add("hours", 2)._d;
+                    self.accessToken = accessToken;
                     app.userLogoutShow();
                     app.loadRooms();
 
@@ -167,7 +163,7 @@ function User() {
         if (self.accessToken) {
             console.log("already authenticated");
             _checkAccessToken(function (res) {
-                if (res.error) {
+                if (res) {
                     console.log("Using a old accesstoken");
                     _authenticateWithFacebook(continueAuth);
                 } else {

@@ -483,15 +483,15 @@ function RoomController(roomName, nodeUrl) {
                 console.log(app.user.facebookUser.name + " logged in to wejay room ", self.roomName);
             }
         });
-    }
+    };
 
     // Update playlist ul
     this.updatePlaylist = function () {
-        
+
         // prevent many simultaneous updates to flicker the playlist
         clearTimeout(updateTimeout);
 
-        updateTimeout = setTimeout(function(){
+        updateTimeout = setTimeout(function () {
             var url = "http://wejay.org/Room/Playlist?room=" + self.roomName;
             $.ajax({
                 url: url,
@@ -532,7 +532,7 @@ function RoomController(roomName, nodeUrl) {
             app.placeFooter();
         }, 500);
 
-    }
+    };
 
     // Update users online list
     this.updateUsers = function () {
