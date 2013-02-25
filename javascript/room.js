@@ -188,7 +188,7 @@ function RoomController(roomName, nodeUrl) {
     };
     this.skip = function (noNotification) {
         var thisSong = app.currentRoom.currentSong;
-        var voteFunction = function () {
+        function voteFunction() {
             if (!noNotification) {
                 $("#skip").html("Skipping...");
             }
@@ -204,8 +204,7 @@ function RoomController(roomName, nodeUrl) {
                     $("#voteOverlay").removeClass("show");
                 },
                 error: function (res) {
-                    window.NOTIFIER.show("skip failed");
-                    console.log("skip failed", res);
+                    NOTIFIER.show("skip failed ",res);
                     $("#skip").html("Skip Failed");
                     setTimeout(function () {
                         $("#skip").html("Skip");
@@ -214,7 +213,7 @@ function RoomController(roomName, nodeUrl) {
             });
         };
 
-        if (app.user.accessToken) {
+        if (!!app.user.accessToken) {
             voteFunction();
         } else {
             app.user.authenticate(function () {
@@ -230,7 +229,7 @@ function RoomController(roomName, nodeUrl) {
         if (!self.currentSong) {
             throw "No current song";
         }
-        var voteFunction = function () {
+        function voteFunction() {
             if ($("#like").hasClass("liking")) {
                 return;
             }
@@ -254,7 +253,7 @@ function RoomController(roomName, nodeUrl) {
                     console.log('liked', obj);
                 },
                 error: function () {
-                    window.NOTIFIER.show("Could not like song");
+                    NOTIFIER.show("Could not like song");
                     $("#like").removeClass("liking")
                     $("#like").addClass("failed");
                     setTimeout(function () {
@@ -262,9 +261,9 @@ function RoomController(roomName, nodeUrl) {
                     }, 1000);
                 }
             });
-        };
+        }
 
-        if (app.user.accessToken) {
+        if (!!app.user.accessToken) {
             voteFunction();
         } else {
             app.user.authenticate(function () {
@@ -295,7 +294,7 @@ function RoomController(roomName, nodeUrl) {
                     console.log("Blocked successfully");
                 },
                 error: function () {
-                    window.NOTIFIER.show("block failed");
+                    NOTIFIER.show("block failed");
                     $("#block").html("Failed");
                     setTimeout(function () {
                         $("#block").html("Block");
@@ -304,7 +303,7 @@ function RoomController(roomName, nodeUrl) {
             });
         };
 
-        if (app.user.accessToken) {
+        if (!!app.user.accessToken) {
             voteFunction();
         } else {
             app.user.authenticate(function () {
@@ -326,7 +325,7 @@ function RoomController(roomName, nodeUrl) {
         } else {
             throw "This is not allowed";
         }
-        var voteFunction = function () {
+        function voteFunction() {
             $.ajax({
                 url: "http://wejay.org/Room/vote",
                 data: {
@@ -341,13 +340,12 @@ function RoomController(roomName, nodeUrl) {
                     element.removeClass("no" + number).addClass(newClass);
                 },
                 error: function (msg) {
-                    window.NOTIFIER.show("vote failed");
-                    console.log("vote failed", msg);
+                    NOTIFIER.show("vote failed ", msg);
                 }
             });
         }
 
-        if (app.user.accessToken) {
+        if (!!app.user.accessToken) {
             voteFunction();
         } else {
             app.user.authenticate(function () {
@@ -363,8 +361,8 @@ function RoomController(roomName, nodeUrl) {
             }
             console.log("init", roomName);
             if (!roomName) {
-                console.log("Room name must be specified")
-                throw "Room name must be specified"
+                NOTIFIER.show(msg);
+                throw msg;
             }
             this.roomName = roomName.toLowerCase();
             this.clearCurrentSong(true);
@@ -459,7 +457,9 @@ function RoomController(roomName, nodeUrl) {
     // checkin the current user to wejay
     this.checkin = function (force, callback) {
         if (!app.user.facebookId) {
-            throw "You have not set room and user or facebook details yet";
+            var msg = "You have not set room and user or facebook details yet";
+            NOTIFIER.show(msg);
+            throw msg;
         }
         var self = this,
             userObject = { userName: app.user.facebookUser.name, facebookId: app.user.facebookId, room: self.roomName };
@@ -499,8 +499,7 @@ function RoomController(roomName, nodeUrl) {
                 contentType: "application/json; charset=utf-8",
                 dataType: "text json",
                 error: function (e) {
-                    window.NOTIFIER.show("error updating queue");
-                    console.log("___ - Error updating queue", e);
+                    NOTIFIER.show("___ - Error updating queue", e);
                 },
                 success: function (r) {
                     var result = r ? r.Playlist.filter(function (song) { return song.SpotifyId; }) : [];

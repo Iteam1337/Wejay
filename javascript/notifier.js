@@ -39,7 +39,9 @@ NOTIFIER = {
         return created;
     },
     show: function (msg) {
-        msg = msg ? msg.toString().replace('"', '\"') : ' ';
+        var msg = Array.prototype.slice.call(arguments);
+        console.log("__NOTIFIER:", msg);
+        msg = msg ? msg.join(" ").replace('"', '\"') : ' ';
         var obj = this.create(msg);
         slidein(this, obj);
     },

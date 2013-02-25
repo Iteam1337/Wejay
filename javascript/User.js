@@ -8,80 +8,29 @@ function User() {
 
     var self = this;
 
-    // TODO:
-    this.logoutFromFacebook = function () {
-        var logoutUrl = "https://www.facebook.com/logout.php?next=http://wejay.org/logout&access_token=" + this.accessToken;
-        auth.showAuthenticationDialog(logoutUrl, "", {
-            onSuccess: function (response) {
-                self.facebookId = null;
-                self.facebookUser = null;
-                self.accessToken = null;
-                $("#rooms").html("");
-                app.clearLocalStorage();
-                app.loggedIntoRoom = null;
-                app.showLoginDisclaimer();
-            },
-            onFailure: function (error) {
-                console.log(error);
-            }
+    function _checkAccessToken(callback) {
+        $.getJSON("https://graph.facebook.com/debug_token?input_token=INPUT_TOKEN&access_token=" + self.accessToken + "&callback=?", function (res) {
+            callback(res);
         });
-    };
+    }
 
-    this.logout = function () {
-        $.ajax({
-            url: "http://wejay.org/Room/logout",
-            type: "POST",
-            traditional: true,
-            success: function (result) {
-                app.currentRoom.logoutUser();
-                app.currentRoom.updateUsers();
-                //app.loggedIntoRoom = null;
-            },
-            error: function (res) {
-                console.log("failed to logout");
-            }
-        });
-    };
-
-    this.loadFriends = function (callback) {
+    function _loadFriends(callback) {
         $.getJSON("https://graph.facebook.com/me/friends?access_token=" + self.accessToken + "&callback=?", function (friends) {
-            //console.log(friends);
-            var users = new Array();
+            var users = [];
             if (friends && friends.data) {
                 friends.data.forEach(function (friend) {
                     users.push(friend.id);
                 });
+                self.friends = users;
+                localStorage.setItem("friends", users);
             }
-            self.friends = users;
-            localStorage.setItem("friends", users);
             if (callback) {
                 callback(users);
             }
         });
     }
 
-    //  login to facebook with the current facebook user account
-    this.authenticate = function (callback) {
-        console.log("starting authentication");
-        //
-        // we are already authorized
-        if (self.accessToken) {
-            console.log("already authenticated");
-            app.showDisplayNameAsLoggedIn(app.user.facebookUser);
-            app.userLogoutShow();
-            if (callback && app.currentRoom) {
-                app.currentRoom.checkin(false, function (room) {
-                    if (callback) {
-                        callback(room);
-                    }
-                    app.currentRoom.updateUsers();
-                });
-                return;
-            } else {
-                return;
-            }
-        }
-
+    function _authenticateWithFacebook(callback) {
         var appID = "154112144637878",
             path = "https://www.facebook.com/dialog/oauth?",
             successUrl = "https://www.facebook.com/connect/login_success.html";
@@ -121,12 +70,93 @@ function User() {
             },
 
             onFailure: function (error) {
-                console.log("Authentication failed with error: " + error);
+                NOTIFIER.show("Authentication failed with error: " + error);
                 app.userLogoutHide();
             },
 
             onComplete: function () {
             }
         });
+    }
+
+    // TODO:
+    this.logoutFromFacebook = function () {
+        var logoutUrl = "https://www.facebook.com/logout.php?next=http://wejay.org/logout&access_token=" + this.accessToken;
+        auth.showAuthenticationDialog(logoutUrl, "", {
+            onSuccess: function (response) {
+                self.facebookId = null;
+                self.facebookUser = null;
+                self.accessToken = null;
+                $("#rooms").html("");
+                app.clearLocalStorage();
+                app.loggedIntoRoom = null;
+                app.showLoginDisclaimer();
+            },
+            onFailure: function (error) {
+                NOTIFIER.show(error);
+            }
+        });
+    };
+
+    this.logout = function () {
+        $.ajax({
+            url: "http://wejay.org/Room/logout",
+            type: "POST",
+            traditional: true,
+            success: function (result) {
+                app.currentRoom.logoutUser();
+                app.currentRoom.updateUsers();
+                //app.loggedIntoRoom = null;
+            },
+            error: function (res) {
+                NOTIFIER.show("failed to logout");
+            }
+        });
+    };
+
+    this.loadFriends = function (callback) {
+        if (self.accessToken) {
+            _checkAccessToken(function (res) {
+                if (res.error) {
+                    _authenticateWithFacebook(function () {
+                        _loadFriends(callback);
+                    });
+                } else {
+                    _loadFriends(callback);
+                }
+            });
+        } else {
+            _authenticateWithFacebook(function () {
+                _loadFriends(callback);
+            });
+        }
+    }
+
+    //  login to facebook with the current facebook user account
+    this.authenticate = function (callback) {
+        console.log("starting authentication");
+        function continueAuth() {
+            app.showDisplayNameAsLoggedIn(app.user.facebookUser);
+            app.userLogoutShow();
+            if (callback && app.currentRoom) {
+                app.currentRoom.checkin(false, function (room) {
+                    app.currentRoom.updateUsers();
+                    return callback(room);
+                });
+            }
+        }
+        if (self.accessToken) {
+            console.log("already authenticated");
+            _checkAccessToken(function (res) {
+                if (res.error) {
+                    console.log("Using a old accesstoken");
+                    _authenticateWithFacebook(continueAuth);
+                } else {
+                    continueAuth();
+                }
+            });
+        } else {
+            _authenticateWithFacebook(continueAuth);
+        }
     }
 }

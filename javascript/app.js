@@ -82,7 +82,7 @@ function App() {
             }
             if (test === false) {
                 delete localStorage[name];
-                console.log("deleted " + name + " from localStorage");
+                NOTIFIER.show("deleted " + name + " from localStorage");
             }
         }
 
@@ -234,7 +234,7 @@ function App() {
                         i = 0;
                         var type = m.Link.getType(link);
                         if (m.Link.TYPE.PROFILE === type || m.Link.TYPE.FACEBOOK_USER === type) {
-                            console.log("this is currently not available");
+                            NOTIFIER.show("this is currently not available");
                         } else {
                             if (m.Link.TYPE.TRACK === type) {
                                 //
