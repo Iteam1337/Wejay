@@ -13,6 +13,8 @@ function RoomController(roomName, nodeUrl) {
     }
     var facebookId, self = this;
     var updateTimeout = null;
+	
+	this.maxSongLength = 10;
 
     this.skipping = false;
 
@@ -59,9 +61,9 @@ function RoomController(roomName, nodeUrl) {
         if (!!existsInQueue) {
             // The song is in the playlist already
             return NOTIFIER.show("\"" + song.artist + " - " + song.title + "\" is already in the playlist, let's skip this.");
-        } else if ((song.length / 60) >= 6) {
-            // The song is 6 minutes or longer
-            return NOTIFIER.show("\"" + song.artist + " - " + song.title + "\" exeeds the 6 minute limitation.");
+        } else if ((song.length / 60) >= self.maxSongLength) {
+            // The song is 10 minutes or longer
+            return NOTIFIER.show("\"" + song.artist + " - " + song.title + "\" exeeds the " + self.maxSongLength + " minute limitation.");
         } else {
             self.hub.queueSong(song);
         }
@@ -104,8 +106,8 @@ function RoomController(roomName, nodeUrl) {
 
     this.playSong = function (song, forcePlay) {
         if (!song || !song.Length || !song.Length.TotalMinutes) return;
-        // if its longer than 6 minutes, let's just skip it
-        if (song.Length.TotalMinutes >= 6) {
+        // if its longer than 10 minutes, let's just skip it
+        if (song.Length.TotalMinutes >= self.maxSongLength) {
             return voteFunction(true,true);
         }
         $("#voteOverlay").removeClass("show");
