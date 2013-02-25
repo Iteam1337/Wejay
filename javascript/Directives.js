@@ -96,7 +96,7 @@ function Directives() {
         $("#onair").hide();
 
         $("#roomLogin").on("click", function () {
-            if (app.loginAccepted()) {
+            if (app.acceptedLogin) {
                 app.user.authenticate(function (room) {
                     console.log(room);
                     app.loggedIntoRoom = room;

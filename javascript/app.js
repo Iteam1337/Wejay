@@ -215,10 +215,6 @@ function App() {
         $("#roomLogin").attr("disabled", true);
     };
 
-    this.loginAccepted = function () {
-        return app.acceptedLogin;
-    }
-
     this.handleDroppedLinks = function (links) {
         function addSong(room) {
             if (app.loggedIntoRoom !== room) {

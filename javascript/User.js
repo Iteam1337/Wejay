@@ -10,6 +10,23 @@ function User() {
     self.friends = null;
     self.checkTokenNext = new Date(null);
 
+    function isValidDate(d) {
+        if (Object.prototype.toString.call(d) !== "[object Date]") {
+            return false;
+        } else {
+            return !isNaN(d.getTime());
+        }
+    }
+
+    if (localStorage.checkTokenNext) {
+        var checkDate = new Date(localStorage.checkTokenNext);
+        if (isValidDate(checkDate)) {
+            self.checkTokenNext = checkDate;
+        } else {
+            delete localStorage.checkTokenNext;
+        } 
+    }
+
     function _checkAccessToken(callback) {
         return callback( new Date() > self.checkTokenNext );
         /*
@@ -55,6 +72,7 @@ function User() {
                     self.facebookUser = facebookUser;
                     self.checkTokenNext = moment(new Date()).add("hours", 2)._d;
                     self.accessToken = accessToken;
+                    localStorage.checkTokenNext = self.checkTokenNext;
                     app.userLogoutShow();
                     app.loadRooms();
 
@@ -94,14 +112,13 @@ function User() {
         var logoutUrl = "https://www.facebook.com/logout.php?next=http://wejay.org/logout&access_token=" + this.accessToken;
         auth.showAuthenticationDialog(logoutUrl, "", {
             onSuccess: function (response) {
-                self = {
-                    checkTokenNext: new Date(null),
-                    facebookUser: null,
-                    accessToken: null,
-                    facebookId: null,
-                    userName: null,
-                    friends: null
-                }
+                self.checkTokenNext = new Date(null);
+                self.facebookUser = null;
+                self.accessToken = null;
+                self.facebookId = null;
+                self.userName = null;
+                self.friends = null;
+                delete localStorage.checkTokenNext;
                 $("#rooms").html("");
                 app.clearLocalStorage();
                 app.loggedIntoRoom = null;
