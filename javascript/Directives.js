@@ -96,16 +96,18 @@ function Directives() {
         $("#onair").hide();
 
         $("#roomLogin").on("click", function () {
-            if (app.checkIfUserAcceptedAgreement()) {
-                app.user.authenticate(function (room) {
-                    app.loggedIntoRoom = room;
-                    $("#leaveRoom").show();
-                    app.loadRooms();
-                    app.userLogoutShow();
-                    $("#overlay").fadeOut();
-                    $("#fb-checkbox").removeClass("checked");
-                });
-            }
+            app.checkIfUserAcceptedAgreement(function (res) {
+                if (!!res) {
+                    app.user.authenticate(function (room) {
+                        app.loggedIntoRoom = room;
+                        $("#leaveRoom").show();
+                        app.loadRooms();
+                        app.userLogoutShow();
+                        $("#overlay").fadeOut();
+                        $("#fb-checkbox").removeClass("checked");
+                    });
+                }
+            });
         });
 
         $("#closeNotifierHolder").on("click", function () {
@@ -141,8 +143,12 @@ function Directives() {
                     var inputString = m.Playlist.fromURI(id).data.name;
                     handleTheLastOutput(inputString);
                 }
-            } else if (app.checkIfUserAcceptedAgreement()) {
-                app.handleDroppedLinks([id]);
+            } else {
+                app.checkIfUserAcceptedAgreement(function (res) {
+                    if (!!res) {
+                        app.handleDroppedLinks([id]);
+                    }
+                });
             }
         });
 
@@ -174,9 +180,11 @@ function Directives() {
         // share popup
         $("#share").on("click", function (e) {
             e.preventDefault();
-            if (app.checkIfUserAcceptedAgreement()) {
-                $("#sharePopup").toggleClass("show");
-            }
+            app.checkIfUserAcceptedAgreement(function (res) {
+                if (!!res) {
+                    $("#sharePopup").toggleClass("show");
+                }
+            });
         });
 
         $("#closeShare").on("click", function () {
@@ -212,18 +220,22 @@ function Directives() {
 
         $(document).on("click", "#userToplist a.addSongToQueue", function (e) {
             e.preventDefault();
-            if (app.checkIfUserAcceptedAgreement()) {
-                var link = $(this).attr("href");
-                app.currentRoom.addTrackUri(link);
-            }
+            var link = $(this).attr("href");
+            app.checkIfUserAcceptedAgreement(function (res) {
+                if (!!res) {
+                    app.currentRoom.addTrackUri(link);
+                }
+            });
         });
 
         $(document).on("click", ".tracks a", function (e) {
             e.preventDefault();
             var link = $(this).attr("href");
-            if (app.checkIfUserAcceptedAgreement()) {
-                app.currentRoom.addTrackUri(link);
-            }
+            app.checkIfUserAcceptedAgreement(function (res) {
+                if (!!res) {
+                    app.currentRoom.addTrackUri(link);
+                }
+            });
             $(".auto-complete").removeClass("show");
         });
 
@@ -272,11 +284,13 @@ function Directives() {
             CurrentClassNumber = parseInt(CurrentClass[2]);
             CurrentClass = CurrentClass[0];
             SpotifyId = SpotifyId[length];
-            if (app.checkIfUserAcceptedAgreement()) {
-                if ((CurrentClassNumber === 3) || (CurrentClassNumber === 5)) {
-                    app.currentRoom.liveVote(SpotifyId, element, CurrentClassNumber);
+            app.checkIfUserAcceptedAgreement(function (res) {
+                if (!!res) {
+                    if ((CurrentClassNumber === 3) || (CurrentClassNumber === 5)) {
+                        app.currentRoom.liveVote(SpotifyId, element, CurrentClassNumber);
+                    }
                 }
-            }
+            });
         });
 
         //
@@ -343,22 +357,32 @@ function Directives() {
             }
         });
         $("#like").on("click", function () {
-            if (app.checkIfUserAcceptedAgreement()) {
-                if (!$(this).hasClass("liked")) {
-                    app.currentRoom.like();
+            app.checkIfUserAcceptedAgreement(function (res) {
+                if (!!res) {
+                    if (!$(this).hasClass("liked")) {
+                        app.currentRoom.like();
+                    }
                 }
-            }
+            });
         });
 
         $("#block").on("click", function () {
-            if (app.checkIfUserAcceptedAgreement()) {
-                app.currentRoom.block();
-            }
+            app.checkIfUserAcceptedAgreement(function (res) {
+                if (!!res) {
+                    if (!$(this).hasClass("liked")) {
+                        app.currentRoom.block();
+                    }
+                }
+            });
         });
         $("#skip").on("click", function () {
-            if (app.checkIfUserAcceptedAgreement()) {
-                app.currentRoom.skip();
-            }
+            app.checkIfUserAcceptedAgreement(function (res) {
+                if (!!res) {
+                    if (!$(this).hasClass("liked")) {
+                        app.currentRoom.skip();
+                    }
+                }
+            });
         });
         $("#voteButton").on({
             mouseenter: function () {
@@ -369,16 +393,23 @@ function Directives() {
             }
         });
         $("#voteButton").on("click", function () {
-            if (app.checkIfUserAcceptedAgreement()) {
-                $("#voteOverlay").toggleClass("show");
-            }
+
+            app.checkIfUserAcceptedAgreement(function (res) {
+                if (!!res) {
+                    if (!$(this).hasClass("liked")) {
+                        $("#voteOverlay").toggleClass("show");
+                    }
+                }
+            });
         });
 
         $("#voteOverlay").on("click", function (el) {
             if (el.target.id === "voteOverlay") {
-                if (app.checkIfUserAcceptedAgreement()) {
-                    $(this).toggleClass("show");
-                }
+                app.checkIfUserAcceptedAgreement(function (res) {
+                    if (!!res) {
+                        $(this).toggleClass("show");
+                    }
+                });
             }
         });
 

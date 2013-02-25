@@ -216,74 +216,80 @@ function App() {
     };
 
     this.handleDroppedLinks = function (links) {
-        console.log("dropped", links);
-        if (self.checkIfUserAcceptedAgreement()) {
-            app.user.authenticate(function (room) {
-                if (app.loggedIntoRoom !== room) {
-                    app.loggedIntoRoom = room;
-                    $("#leaveRoom").show();
-                    app.loadRooms();
-                    app.userLogoutShow();
-                }
-                var max = 10,
-                i = 0,
-                count = links.length;
-                if (count < max) {
-                    links.forEach(function (link) {
-                        max = 10;
-                        i = 0;
-                        var type = m.Link.getType(link);
-                        if (m.Link.TYPE.PROFILE === type || m.Link.TYPE.FACEBOOK_USER === type) {
-                            NOTIFIER.show("this is currently not available");
-                        } else {
-                            if (m.Link.TYPE.TRACK === type) {
-                                //
-                                // adding single track
-                                self.currentRoom.addTrackUri(link);
-                            } else if (m.Link.TYPE.PLAYLIST === type) {
-                                //
-                                // adding user generated playlist
-                                var playlist = m.Playlist.fromURI(link),
-                                tracks = playlist.data.all();
-                                count = tracks.length;
+        function addSong(room) {
+            if (app.loggedIntoRoom !== room) {
+                app.loggedIntoRoom = room;
+                $("#leaveRoom").show();
+                app.loadRooms();
+                app.userLogoutShow();
+            }
+            var max = 10,
+                    i = 0,
+                    count = links.length;
+            if (count < max) {
+                links.forEach(function (link) {
+                    max = 10;
+                    i = 0;
+                    var type = m.Link.getType(link);
+                    if (m.Link.TYPE.PROFILE === type || m.Link.TYPE.FACEBOOK_USER === type) {
+                        NOTIFIER.show("this is currently not available");
+                    } else {
+                        if (m.Link.TYPE.TRACK === type) {
+                            //
+                            // adding single track
+                            self.currentRoom.addTrackUri(link);
+                        } else if (m.Link.TYPE.PLAYLIST === type) {
+                            //
+                            // adding user generated playlist
+                            var playlist = m.Playlist.fromURI(link),
+                                    tracks = playlist.data.all();
+                            count = tracks.length;
+                            tracks = tracks.splice(0, 10);
+                            if (count < max) {
+                                tracks.splice(0, 10);
+                                tracks.forEach(function (uri) {
+                                    self.currentRoom.addTrackUri(uri);
+                                });
+                            } else {
+                                self.handleUserDroppingToManyObjects(tracks, max, "tracks");
+                            }
+                        } else if (m.Link.TYPE.ALBUM === type) {
+                            //
+                            // adding album
+                            m.Album.fromURI(link, function (album) {
+                                var albumLink = album.data.uri,
+                                        tracks = album.data.tracks,
+                                        count = tracks.length;
                                 tracks = tracks.splice(0, 10);
                                 if (count < max) {
-                                    tracks.splice(0, 10);
                                     tracks.forEach(function (uri) {
-                                        self.currentRoom.addTrackUri(uri);
+                                        self.currentRoom.addTrackUri(uri.uri);
                                     });
                                 } else {
                                     self.handleUserDroppingToManyObjects(tracks, max, "tracks");
                                 }
-                            } else if (m.Link.TYPE.ALBUM === type) {
-                                //
-                                // adding album
-                                m.Album.fromURI(link, function (album) {
-                                    var albumLink = album.data.uri,
-                                    tracks = album.data.tracks,
-                                    count = tracks.length;
-                                    tracks = tracks.splice(0, 10);
-                                    if (count < max) {
-                                        tracks.forEach(function (uri) {
-                                            self.currentRoom.addTrackUri(uri.uri);
-                                        });
-                                    } else {
-                                        self.handleUserDroppingToManyObjects(tracks, max, "tracks");
-                                    }
-                                });
-                            }
+                            });
                         }
-                    });
-                } else {
-                    links.splice(0, 10);
-                    self.handleUserDroppingToManyObjects(links, max, "links");
-                }
-                // HACK: handle the async callbacks for each added track and run update after all items are added. Now we wait 1s instead..
-                setTimeout(function(){
-                    self.currentRoom.updatePlaylist();
-                }, 1000);
-            });
+                    }
+                });
+            } else {
+                links.splice(0, 10);
+                self.handleUserDroppingToManyObjects(links, max, "links");
+            }
+            // HACK: handle the async callbacks for each added track and run update after all items are added. Now we wait 1s instead..
+            setTimeout(function () {
+                self.currentRoom.updatePlaylist();
+            }, 1000);
         }
+        self.checkIfUserAcceptedAgreement(function (response) {
+            if (!!response) {
+                addSong(app.currentRoom.roomName);
+            } else {
+                app.user.authenticate(function (room) {
+                    addSong(room);
+                });
+            }
+        });
     };
 
     this.handleUserDroppingToManyObjects = function (objects, max, isItTracks) {
@@ -405,22 +411,26 @@ function App() {
         $("#leaveRoom").hide();
     };
 
-    this.checkIfUserAcceptedAgreement = function () {
-        var accepted = false;
+    this.checkIfUserAcceptedAgreement = function (callback) {
         if (self.acceptedLogin) {
-            accepted = true;
-            self.checkIfUserIsLoggedIn();
+            checkIfUserIsLoggedIn(function () {
+                return callback(true);
+            });
         } else {
             $(".disclaimer").show();
+            return callback(false);
         }
-        return accepted;
     };
 
-    this.checkIfUserIsLoggedIn = function () {
-        if (!app.user.accessToken) {
-            app.user.authenticate();
+    function checkIfUserIsLoggedIn(callback) {
+        if (!!app.user.accessToken || new Date() < app.user.checkTokenNext) {
+            return callback(true);
+        } else {
+            app.user.authenticate(function () {
+                return callback(true);
+            });
         }
-    };
+    }
 
     this.playApp = function () {
         app.isPlayingFromWejay = true;

@@ -10,12 +10,16 @@ function User() {
         userName: null,
         friends: null,
         checkTokenNext: new Date(null)
-    }
+    };
 
     function _checkAccessToken(callback) {
-        $.getJSON("https://graph.facebook.com/debug_token?input_token=INPUT_TOKEN&access_token=" + self.accessToken + "&callback=?", function (res) {
+        return callback( new Date() > self.checkTokenNext );
+        /*
+        $.getJSON("https://graph.facebook.com/debug_token?access_token=" + self.accessToken + "&callback=?", function (res) {
+            console.log(res);
             callback(res);
         });
+        */
     }
 
     function _loadFriends(callback) {
@@ -52,7 +56,7 @@ function User() {
                         userName: unescape(facebookUser.name),
                         facebookId: facebookUser.id,
                         facebookUser: facebookUser,
-                        checkTokenNext: moment(new Date()).add("hours", 3)._d,
+                        checkTokenNext: moment(new Date()).add("hours", 2)._d,
                         accessToken: accessToken,
                     }
                     app.userLogoutShow();
