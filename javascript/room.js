@@ -57,7 +57,7 @@ function RoomController(roomName, nodeUrl) {
         if (!!existsInQueue) {
             // The song is in the playlist already
             return NOTIFIER.show("\"" + song.artist + " - " + song.title + "\" is already in the playlist, let's skip this.");
-        } else if ((song.length / 60) >= 2) {
+        } else if ((song.length / 60) >= 6) {
             // The song is 6 minutes or longer
             return NOTIFIER.show("\"" + song.artist + " - " + song.title + "\" exeeds the 6 minute limitation.");
         } else {
