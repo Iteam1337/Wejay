@@ -263,8 +263,8 @@ function RoomController(roomName, nodeUrl) {
                 traditional: true,
                 success: function (result) {
                     self.hub.checkCurrentSong(app.currentRoom.roomName, function (error, song) {
-                        var currentVote = Math.round((song.Vote / 6) * 100);
-                        $('#likeAverage').html(currentVote + '%');
+                        var currentVote = (Math.round((37 + song.Vote - 3) * 10) / 10).toFixed(1);
+                        $('#likeAverage').html(currentVote + '&deg;');
                     });
                     $("#like").removeClass("liking")
                     $("#like").addClass("liked");
@@ -523,8 +523,8 @@ function RoomController(roomName, nodeUrl) {
                 },
                 success: function (r) {
                     self.hub.checkCurrentSong(app.currentRoom.roomName, function (error, song) {
-                        var currentVote = Math.round((song.Vote / 6) * 100);
-                        $('#likeAverage').html(currentVote + '%');
+                        var currentVote = (Math.round((37 + song.Vote - 3) * 10) / 10).toFixed(1);
+                        $('#likeAverage').html(currentVote + '&deg;');
                     });
                     var result = r ? r.Playlist.filter(function (song) { return song.SpotifyId; }) : [];
                     if (result.length > 0) {
