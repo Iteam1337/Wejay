@@ -2175,6 +2175,10 @@ footer a
   float:right;
 }
 
+.clear{
+  clear:both;
+}
+
 
 .clearfix:after {
   content: ".";
