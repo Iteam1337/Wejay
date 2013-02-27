@@ -503,7 +503,7 @@ function RoomController(roomName, nodeUrl) {
                 
                 app.userLogoutShow();
                 //self.hub.checkin({ user: app.user.userName, room: self.roomName });
-                console.log(app.user.facebookUser.name, "logged in to wejay room", self.roomName);
+                //console.log(app.user.facebookUser.name, "logged in to wejay room", self.roomName);
                 if (callback) {
                     return callback(self.roomName);
                 }
