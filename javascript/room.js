@@ -394,7 +394,7 @@ function RoomController(roomName, nodeUrl) {
                 $("#sharePopup").removeClass("show");
                 $("#shareOnURL").text("Share URL");
                 $("#manualShare").addClass("hide");
-                var userString = (app.user.userName) ? "%0D%0A" + app.user.userName : "%0D%0A",
+                var userString = (app.user.facebookUser.name) ? "%0D%0A" + app.user.facebookUser.name : "%0D%0A",
                 mailString = "mailto:?subject=Join our WEJAY room&body=Hi, if you follow the link below you can add music to our WEJAY room \"" + local.roomName + "\" from Spotify.%0D%0A%0D%0A" + shareURL + userString + "%0D%0A%0D%0A%0D%0A%0D%0AWEJAY lets you and your coworkers add music to mixed democratic playlist which means you can all listen to your own favorite music while working. Recent research results shows that you work better when you get to listen to music.\%0D%0ARead more about WEJAY and the research on http://wejay.org";
                 $("#shareURL").val(shareURL);
                 $("#shareOnMail").attr("href", mailString);
@@ -402,12 +402,12 @@ function RoomController(roomName, nodeUrl) {
                 localStorage.setItem("room", local.roomName);
                 if (!anonymous && !app.user.accessToken) {
                     app.user.authenticate(function () {
-                        local.hub.checkin({ user: app.user.userName, room: local.roomName });
+                        local.hub.checkin({ user: app.user.facebookUser.name, room: local.roomName });
                         self.updateUsers();
                         self.updatePlaylist();
                     });
                 } else {
-                    var name = (app.user.userName) ? app.user.userName : "Anonymous";
+                    var name = (app.user.facebookUser.name) ? app.user.facebookUser.name : "Anonymous";
                     local.hub.checkin({ user: name, room: local.roomName });
                     self.updateUsers();
                     self.updatePlaylist();
@@ -494,12 +494,13 @@ function RoomController(roomName, nodeUrl) {
             success: function (result) {
                 self.lastCheckin = new Date();
                 //self.init(result.room); // save the last connected room for this user
-                if (callback) {
-                    callback(self.roomName);
-                }
+                
                 app.userLogoutShow();
                 //self.hub.checkin({ user: app.user.userName, room: self.roomName });
-                console.log(app.user.facebookUser.name + " logged in to wejay room ", self.roomName);
+                console.log(app.user.facebookUser.name, "logged in to wejay room", self.roomName);
+                if (callback) {
+                    return callback(self.roomName);
+                }
             }
         });
     };
