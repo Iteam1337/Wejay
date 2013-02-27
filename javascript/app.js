@@ -422,16 +422,19 @@ function App() {
         }
     };
 
+    function checkInToWejayAndSql(callback) {
+        app.currentRoom.checkin(false, function () {
+            app.currentRoom.updateUsers();
+            return callback(true);
+        });
+    }
+
     function checkIfUserIsLoggedIn(callback) {
         if (!!app.user.accessToken || new Date() < app.user.checkTokenNext) {
-            //var lastCheckin = (new Date().getTime() - new Date(app.currentRoom.lastCheckin).getTime());
-            //if (lastCheckin >= 360000) {
-            app.currentRoom.checkin();
-            //}
-            return callback(true);
+            checkInToWejayAndSql(callback);
         } else {
             app.user.authenticate(function () {
-                return callback(true);
+                checkInToWejayAndSql(callback);
             });
         }
     }
