@@ -10,6 +10,7 @@ function User() {
     self.friends = null;
     self.checkTokenNext = new Date(null);
 
+    // A function to check if a datestring is valid or not
     function isValidDate(d) {
         if (Object.prototype.toString.call(d) !== "[object Date]") {
             return false;
@@ -30,9 +31,10 @@ function User() {
     function _checkAccessToken(callback) {
         return callback( new Date() > self.checkTokenNext );
         /*
+        // TODO: Check if the accesstoken is expired or not.
         $.getJSON("https://graph.facebook.com/debug_token?access_token=" + self.accessToken + "&callback=?", function (res) {
-            console.log(res);
-            callback(res);
+        console.log(res);
+        callback(res);
         });
         */
     }
@@ -92,8 +94,6 @@ function User() {
                     localStorage.setItem("accessToken", accessToken);
 
                     self.friends = localStorage.getItem("friends");
-                    //
-                    // facebookUser(this); // inherit all facebook properties to this user class
                     if (!app.currentRoom) {
                         app.currentRoom = new RoomController();
                     }
@@ -111,7 +111,6 @@ function User() {
         });
     }
 
-    // TODO:
     this.logoutFromFacebook = function () {
         var logoutUrl = "https://www.facebook.com/logout.php?next=http://wejay.org/logout&access_token=" + this.accessToken;
         auth.showAuthenticationDialog(logoutUrl, "", {

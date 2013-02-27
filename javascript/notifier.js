@@ -24,7 +24,7 @@ function slideout(that, object) {
 
 NOTIFIER = {
     count: 0,
-    timeout: 5000,
+    timeout: 50000,
     height: 60,
     popups: [],
     holder: null,

@@ -364,7 +364,6 @@ function Directives() {
                 }
             });
         });
-
         $("#block").on("click", function () {
             app.checkIfUserAcceptedAgreement(function (res) {
                 if (!!res) {
@@ -392,7 +391,6 @@ function Directives() {
             }
         });
         $("#voteButton").on("click", function () {
-
             app.checkIfUserAcceptedAgreement(function (res) {
                 if (!!res) {
                     if (!$(this).hasClass("liked")) {
@@ -401,7 +399,6 @@ function Directives() {
                 }
             });
         });
-
         $("#voteOverlay").on("click", function (el) {
             if (el.target.id === "voteOverlay") {
                 app.checkIfUserAcceptedAgreement(function (res) {
@@ -411,7 +408,6 @@ function Directives() {
                 });
             }
         });
-
         $("#voteOverlay .close").on("click", function (el) {
             $("#voteOverlay").toggleClass("show");
         });

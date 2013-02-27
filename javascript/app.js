@@ -2,14 +2,14 @@
 function App() {
 
     var self = this,
-    sp = getSpotifyApi(),
-    ui = sp.require("sp://import/scripts/dnd"),
-    m = sp.require('$api/models'),
-    v = sp.require("sp://import/scripts/api/views"),
-    r = sp.require("sp://import/scripts/react"),
-    kbd = sp.require("sp://import/scripts/keyboard"),
-    accessToken,
-    facebookId;
+        sp = getSpotifyApi(),
+        ui = sp.require("sp://import/scripts/dnd"),
+        m = sp.require('$api/models'),
+        v = sp.require("sp://import/scripts/api/views"),
+        r = sp.require("sp://import/scripts/react"),
+        kbd = sp.require("sp://import/scripts/keyboard"),
+        accessToken,
+        facebookId;
 
     function handleError(showReconnect, message) {
         showReconnect ? $("#offline button").show() : $("#offline button").hide();
@@ -23,21 +23,26 @@ function App() {
         $("#offline").hide();
         $("#online").show();
         if (reset) {
-            //app.user.authenticate();
-            //app.currentRoom = new RoomController(unescape(localStorage.room || "example"), app.nodeUrl);
-            //app.currentRoom.playSong(app.currentRoom.currentSong, true);            
+            //TODO: Handle reset          
         }
     }
 
-    //
-    // Before anything begins loading - the application hinders users who are offline
-    m.session.observe(m.EVENT.STATECHANGED, function () {
-        if (m.session.state >= 2) {
-            return handleError(true);
+    function checkInToWejayAndSql(callback) {
+        app.currentRoom.checkin(false, function () {
+            app.currentRoom.updateUsers();
+            return callback(true);
+        });
+    }
+
+    function checkIfUserIsLoggedIn(callback) {
+        if (!!app.user.accessToken || new Date() < app.user.checkTokenNext) {
+            checkInToWejayAndSql(callback);
         } else {
-            return hideOfflineContent(true);
+            app.user.authenticate(function () {
+                checkInToWejayAndSql(callback);
+            });
         }
-    });
+    }
 
     if (m.session.state >= 2) {
         handleError();
@@ -48,12 +53,13 @@ function App() {
     //
     // This is used to check if the information
     // saved into localStorage is valid when loading the app.
-    var checkLocalStorage = [
-    { name: "facebookUser", type: "json" },
-    { name: "acceptedLogin", type: "boolean" },
-    { name: "friends", type: "commaNumber" },
-    { name: "room", type: "room" },
-    { name: "accessToken", type: "string" }
+    var checkLocalStorage =
+    [
+        { name: "facebookUser", type: "json" },
+        { name: "acceptedLogin", type: "boolean" },
+        { name: "friends", type: "commaNumber" },
+        { name: "room", type: "room" },
+        { name: "accessToken", type: "string" }
     ];
     for (var obj in checkLocalStorage) {
         var check = checkLocalStorage[obj],
@@ -90,8 +96,6 @@ function App() {
 
     //
     // Global connection to node server
-    var socket;
-
     this.nodeUrl = "http://81.201.221.135:5000";
 
     // public properties
@@ -104,6 +108,7 @@ function App() {
     this.bitlyKey = "R_147ec88bf32a7d569749440093523de6";
     this.timeDiff = null;
     this.checkIfFBUserExists = false;
+    this.loaded = false;
 
     // Event handlers
     if (!m.application) {
@@ -186,12 +191,6 @@ function App() {
 
         self.placeFooter();
     };
-    //
-    // tab switched in ui
-    m.application.observe(m.EVENT.ARGUMENTSCHANGED, function () {
-        var tab = m.application.arguments[0];
-        self.tabTo(tab);
-    });
 
     this.clearLocalStorage = function () {
         for (var obj in localStorage) {
@@ -345,9 +344,6 @@ function App() {
         });
     };
 
-    this.currentRoomList = [];
-    this.loaded = false;
-
     // Load all rooms to startpage
     this.loadRooms = function () {
         if (!app.user.facebookId) {
@@ -376,7 +372,6 @@ function App() {
                             $("#rooms").html("");
                             $("<p><strong>No rooms found</strong></p>").insertBefore("#createRoom");
                         } else {
-                            self.currentRoomList = r;
                             $("#enterRoomBanner").hide();
                             $(".wejayRoomsCopy").show();
                             $("#rooms").html($("#roomListTemplate").tmpl(r));
@@ -422,23 +417,6 @@ function App() {
         }
     };
 
-    function checkInToWejayAndSql(callback) {
-        app.currentRoom.checkin(false, function () {
-            app.currentRoom.updateUsers();
-            return callback(true);
-        });
-    }
-
-    function checkIfUserIsLoggedIn(callback) {
-        if (!!app.user.accessToken || new Date() < app.user.checkTokenNext) {
-            checkInToWejayAndSql(callback);
-        } else {
-            app.user.authenticate(function () {
-                checkInToWejayAndSql(callback);
-            });
-        }
-    }
-
     this.playApp = function () {
         app.isPlayingFromWejay = true;
         $("#onair").show();
@@ -459,6 +437,23 @@ function App() {
         var directives = sp.require("javascript/Directives");
         directives.init(version);
     };
+
+    //
+    // Before anything begins loading - the application hinders users who are offline
+    m.session.observe(m.EVENT.STATECHANGED, function () {
+        if (m.session.state >= 2) {
+            return handleError(true);
+        } else {
+            return hideOfflineContent(true);
+        }
+    });
+
+    //
+    // tab switched in ui
+    m.application.observe(m.EVENT.ARGUMENTSCHANGED, function () {
+        var tab = m.application.arguments[0];
+        self.tabTo(tab);
+    });
 
     // when links are dropped to the application we want to add those to the queue
     m.application.observe(m.EVENT.LINKSCHANGED, function (e) {

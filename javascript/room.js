@@ -11,9 +11,10 @@ function RoomController(roomName, nodeUrl) {
     if (!/^([a-z0-9\_\-\ ]){2,10}$/i.exec(roomName)) {
         return;
     }
-    var facebookId, self = this;
-    var updateTimeout = null;
 
+    var facebookId,
+        self = this,
+        updateTimeout = null;
 
     this.lastCheckin = new Date(null);
 	this.maxSongLength = 10;
@@ -499,11 +500,7 @@ function RoomController(roomName, nodeUrl) {
             traditional: true,
             success: function (result) {
                 self.lastCheckin = new Date();
-                //self.init(result.room); // save the last connected room for this user
-                
                 app.userLogoutShow();
-                //self.hub.checkin({ user: app.user.userName, room: self.roomName });
-                //console.log(app.user.facebookUser.name, "logged in to wejay room", self.roomName);
                 if (callback) {
                     return callback(self.roomName);
                 }
@@ -526,7 +523,7 @@ function RoomController(roomName, nodeUrl) {
                 contentType: "application/json; charset=utf-8",
                 dataType: "text json",
                 error: function (e) {
-                    NOTIFIER.show("___ - Error updating queue", e);
+                    NOTIFIER.show("Error updating queue:", e.statusText);
                 },
                 success: function (r) {
                     self.hub.checkCurrentSong(app.currentRoom.roomName, function (error, song) {
