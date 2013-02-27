@@ -170,13 +170,11 @@ function User() {
     //  login to facebook with the current facebook user account
     this.authenticate = function (callback) {
         function continueAuth() {
-            console.log("starting authentication");
             app.showDisplayNameAsLoggedIn(app.user.facebookUser);
             app.userLogoutShow();
             if (app.currentRoom) checkinToRoom(callback);
         }
         if (self.accessToken) {
-            console.log("already authenticated");
             _checkAccessToken(function (res) {
                 if (res) {
                     console.log("Using a old accesstoken");
