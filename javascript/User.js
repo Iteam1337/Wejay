@@ -37,6 +37,18 @@ function User() {
         */
     }
 
+    function checkinToRoom(callback) {
+        app.currentRoom.checkin(false, function (roomName) {
+            if (!app.currentRoom.roomName) {
+                app.currentRoom.init(unescape(roomName));
+            }
+            app.currentRoom.updateUsers();
+            if (callback) {
+                callback(unescape(roomName));
+            }
+        });
+    }
+
     function _loadFriends(callback) {
         $.getJSON("https://graph.facebook.com/me/friends?access_token=" + self.accessToken + "&callback=?", function (friends) {
             var users = [];
@@ -85,15 +97,7 @@ function User() {
                     if (!app.currentRoom) {
                         app.currentRoom = new RoomController();
                     }
-                    app.currentRoom.checkin(false, function (roomName) {
-                        if (!app.currentRoom.roomName) {
-                            app.currentRoom.init(unescape(roomName));
-                        }
-                        app.currentRoom.updateUsers();
-                        if (callback) {
-                            callback(unescape(roomName));
-                        }
-                    });
+                    return checkinToRoom(callback);
                 });
             },
 
@@ -170,12 +174,7 @@ function User() {
             console.log("starting authentication");
             app.showDisplayNameAsLoggedIn(app.user.facebookUser);
             app.userLogoutShow();
-            if (callback && app.currentRoom) {
-                app.currentRoom.checkin(false, function (room) {
-                    app.currentRoom.updateUsers();
-                    return callback(room);
-                });
-            }
+            if (app.currentRoom) checkinToRoom(callback);
         }
         if (self.accessToken) {
             console.log("already authenticated");

@@ -424,6 +424,10 @@ function App() {
 
     function checkIfUserIsLoggedIn(callback) {
         if (!!app.user.accessToken || new Date() < app.user.checkTokenNext) {
+            var lastCheckin = (new Date().getTime() - new Date(app.currentRoom.lastCheckin).getTime());
+            if (lastCheckin >= 360000) {
+                app.currentRoom.checkin();
+            }
             return callback(true);
         } else {
             app.user.authenticate(function () {

@@ -13,7 +13,9 @@ function RoomController(roomName, nodeUrl) {
     }
     var facebookId, self = this;
     var updateTimeout = null;
-	
+
+
+    this.lastCheckin = new Date(null);
 	this.maxSongLength = 10;
 
     this.skipping = false;
@@ -108,7 +110,7 @@ function RoomController(roomName, nodeUrl) {
         if (!song || !song.Length || !song.Length.TotalMinutes) return;
         // if its longer than 10 minutes, let's just skip it
         if (song.Length.TotalMinutes >= self.maxSongLength) {
-            return voteFunction(true,true);
+            return voteFunction(true, true);
         }
         $("#voteOverlay").removeClass("show");
         $("#currentHolder .hover").show();
@@ -129,7 +131,7 @@ function RoomController(roomName, nodeUrl) {
         self.currentSong = song;
         var trackUri = "spotify:track:" + song.SpotifyId;
         if (song.position && song.position.getMinutes) trackUri += "#" + addLeadingZero(song.position.getMinutes()) + ":" + addLeadingZero(song.position.getSeconds());
-        m.Track.fromURI(trackUri, function (track) {
+        return m.Track.fromURI(trackUri, function (track) {
             var tpl = new m.Playlist();
 
             // search through all songs in the existing playlist and see if the current track is already there
@@ -155,7 +157,6 @@ function RoomController(roomName, nodeUrl) {
                 sp.trackPlayer.setShuffle(false);
                 m.player.play(trackUri, tpl);
             }
-
             $("#currentArtist").html('<a href="' + track.data.artists[0].uri + '">' + track.data.artists[0].name + '</a>');
             $("#currentArtist").append(' - ');
             $("#currentTrack").html('<a href="' + track.data.uri + '">' + track.data.name + '</a>');
@@ -376,67 +377,72 @@ function RoomController(roomName, nodeUrl) {
     };
 
     this.init = function (roomName, anonymous) {
-        if (roomName !== "example") {
-            if (roomName === "null" || roomName === undefined) {
-                roomName = "null";
-            }
-            console.log("init", roomName);
-            if (!roomName) {
-                NOTIFIER.show(msg);
-                throw msg;
-            }
-            this.roomName = roomName.toLowerCase();
-            this.clearCurrentSong(true);
-            var local = this;
-
-            this.getBitlyKey(local.roomName, function (shareURL) {
-                local.shareURL = shareURL;
-                $("#sharePopup").removeClass("show");
-                $("#shareOnURL").text("Share URL");
-                $("#manualShare").addClass("hide");
-                var userString = (app.user.facebookUser.name) ? "%0D%0A" + app.user.facebookUser.name : "%0D%0A",
-                mailString = "mailto:?subject=Join our WEJAY room&body=Hi, if you follow the link below you can add music to our WEJAY room \"" + local.roomName + "\" from Spotify.%0D%0A%0D%0A" + shareURL + userString + "%0D%0A%0D%0A%0D%0A%0D%0AWEJAY lets you and your coworkers add music to mixed democratic playlist which means you can all listen to your own favorite music while working. Recent research results shows that you work better when you get to listen to music.\%0D%0ARead more about WEJAY and the research on http://wejay.org";
-                $("#shareURL").val(shareURL);
-                $("#shareOnMail").attr("href", mailString);
-                $("#shareOnFacebook").attr("href", "http://facebook.com/sharer.php?s=100&p[url]=" + shareURL + "&p[title]=" + escape("Play music with me on WEJAY") + "&p[images][0]=" + escape("http://wejay.org/Content/Images/Wejay256transparent.png") + "&p[summary]=" + escape("WEJAY is a Spotify app for playing music together at work. I've created the room " + local.roomName + ", join me there!"));
-                localStorage.setItem("room", local.roomName);
-                if (!anonymous && !app.user.accessToken) {
-                    app.user.authenticate(function () {
-                        local.hub.checkin({ user: app.user.facebookUser.name, room: local.roomName });
-                        self.updateUsers();
-                        self.updatePlaylist();
-                    });
-                } else {
-                    var name = (app.user.facebookUser.name) ? app.user.facebookUser.name : "Anonymous";
-                    local.hub.checkin({ user: name, room: local.roomName });
-                    self.updateUsers();
-                    self.updatePlaylist();
-                }
-                // fill the top tracks for this user
-                self.loadTopTracks(function (userTopTracks) {
-                    topTracks = userTopTracks;
-                });
-
-                //
-                // Update the userlist on interval
-                if (self.updateUsersInterval !== null) {
-                    clearInterval(self.updateUsersInterval);
-                }
-                self.updateUsersInterval = setInterval(function () {
-                    self.updateUsers();
-                }, ((60 * 1000) * 2));
-
-                //
-                // RoomUpdateInterval
-                if (self.roomUpdateInterval !== null) {
-                    clearInterval(self.roomUpdateInterval);
-                }
-                self.roomUpdateInterval = setInterval(function () {
-                    self.updatePlaylist();
-                    self.forceCheckCurrentSong();
-                }, ((60 * 1000) * 10));
-            });
+        if (roomName === "example") {
+            return;
         }
+        if (roomName === "null" || roomName === undefined) {
+            roomName = "null";
+        }
+        if (!roomName) {
+            NOTIFIER.show(msg);
+            throw msg;
+        }
+
+        this.roomName = roomName.toLowerCase();
+        this.clearCurrentSong(true);
+        var local = this;
+
+        this.getBitlyKey(local.roomName, function (shareURL) {
+            local.shareURL = shareURL;
+            $("#sharePopup").removeClass("show");
+            $("#shareOnURL").text("Share URL");
+            $("#manualShare").addClass("hide");
+            var userString = (app.user.facebookUser.name) ? "%0D%0A" + app.user.facebookUser.name : "%0D%0A",
+            mailString = "mailto:?subject=Join our WEJAY room&body=Hi, if you follow the link below you can add music to our WEJAY room \"" + local.roomName + "\" from Spotify.%0D%0A%0D%0A" + shareURL + userString + "%0D%0A%0D%0A%0D%0A%0D%0AWEJAY lets you and your coworkers add music to mixed democratic playlist which means you can all listen to your own favorite music while working. Recent research results shows that you work better when you get to listen to music.\%0D%0ARead more about WEJAY and the research on http://wejay.org";
+            $("#shareURL").val(shareURL);
+            $("#shareOnMail").attr("href", mailString);
+            $("#shareOnFacebook").attr("href", "http://facebook.com/sharer.php?s=100&p[url]=" + shareURL + "&p[title]=" + escape("Play music with me on WEJAY") + "&p[images][0]=" + escape("http://wejay.org/Content/Images/Wejay256transparent.png") + "&p[summary]=" + escape("WEJAY is a Spotify app for playing music together at work. I've created the room " + local.roomName + ", join me there!"));
+            localStorage.setItem("room", local.roomName);
+
+            if (!anonymous && !app.user.accessToken) {
+                app.user.authenticate(function () {
+                    local.hub.checkin({ user: app.user.facebookUser.name, room: local.roomName });
+                    self.updateUsers();
+                    self.updatePlaylist();
+                });
+            } else {
+                var name = (app.user.facebookUser.name) ? app.user.facebookUser.name : "Anonymous";
+                local.hub.checkin({ user: name, room: local.roomName });
+                self.updateUsers();
+                self.updatePlaylist();
+            }
+
+            app.user.authenticate();
+
+            // fill the top tracks for this user
+            self.loadTopTracks(function (userTopTracks) {
+                topTracks = userTopTracks;
+            });
+
+            //
+            // Update the userlist on interval
+            if (self.updateUsersInterval !== null) {
+                clearInterval(self.updateUsersInterval);
+            }
+            self.updateUsersInterval = setInterval(function () {
+                self.updateUsers();
+            }, ((60 * 1000) * 2));
+
+            //
+            // RoomUpdateInterval
+            if (self.roomUpdateInterval !== null) {
+                clearInterval(self.roomUpdateInterval);
+            }
+            self.roomUpdateInterval = setInterval(function () {
+                self.updatePlaylist();
+                self.forceCheckCurrentSong();
+            }, ((60 * 1000) * 10));
+        });
     };
 
     this.loadTopTracks = function (callback) {
@@ -524,7 +530,7 @@ function RoomController(roomName, nodeUrl) {
                 },
                 success: function (r) {
                     self.hub.checkCurrentSong(app.currentRoom.roomName, function (error, song) {
-                        var currentVote = (Math.round((37 + song.Vote - 3) * 10) / 10).toFixed(1);
+                        var currentVote = (Math.round((37 + (song?song.Vote:3) - 3) * 10) / 10).toFixed(1);
                         $('#likeAverage').html(currentVote + '&deg;');
                     });
                     var result = r ? r.Playlist.filter(function (song) { return song.SpotifyId; }) : [];
