@@ -336,6 +336,45 @@ function RoomController(roomName, nodeUrl) {
 
     };
 
+    this.silentBlock = function () {
+        if (!this.currentSong) {
+            throw "No current song";
+        }
+        var voteFunction = function () {
+            $("#silentBlock").html("Blocking...");
+            $.ajax({
+                url: "http://wejay.org/Room/vote",
+                data: {
+                    mbId: self.currentSong.SpotifyId,
+                    value: 1
+                },
+                dataType: "json",
+                type: "POST",
+                traditional: true,
+                success: function (result) {
+                    $("#silentBlock").html("Silent Block");
+                    console.log("Blocked successfully");
+                },
+                error: function () {
+                    NOTIFIER.show("block failed");
+                    $("#silentBlock").html("Failed");
+                    setTimeout(function () {
+                        $("#silentBlock").html("Silent Block");
+                    }, 1000);
+                }
+            });
+        };
+
+        if (!!app.user.accessToken || new Date() < app.user.checkTokenNext) {
+            voteFunction();
+        } else {
+            app.user.authenticate(function () {
+                voteFunction();
+            });
+        }
+
+    };
+
     this.liveVote = function (SpotifyId, element, number) {
         if (!SpotifyId || !element || !number) {
             throw "No song selected";

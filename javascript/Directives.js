@@ -373,6 +373,15 @@ function Directives() {
                 }
             });
         });
+        $("#silentBlock").on("click", function () {
+            app.checkIfUserAcceptedAgreement(function (res) {
+                if (!!res) {
+                    if (!$(this).hasClass("liked")) {
+                        app.currentRoom.silentBlock();
+                    }
+                }
+            });
+        });
         $("#skip").on("click", function () {
             app.checkIfUserAcceptedAgreement(function (res) {
                 if (!!res) {
