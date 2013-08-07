@@ -436,9 +436,14 @@ function Directives() {
         toplist.matchType = m.TOPLISTMATCHES.TRACKS;
         toplist.userName = m.TOPLISTUSER_CURRENT;
         toplist.observe(m.EVENT.CHANGE, function () {
-            var i = 0, max = 10;
+            var i = 0, max = 10, content;
             for (; i < max; i++) {
-                $("#userToplist").append($("#userToplistTemplate").tmpl(toplist.results[i]));
+                content = toplist.results[i];
+                content = (typeof content === "object") ? content : {};
+                content.album = (!!content.album) ? content.album : null;
+                content.uri = (!!content.uri) ? content.uri : null;
+                if (!content.album || !content.uri) return;
+                $("#userToplist").append($("#userToplistTemplate").tmpl(content));
             }
         });
         toplist.run();

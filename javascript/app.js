@@ -23,7 +23,7 @@ function App() {
         $("#offline").hide();
         $("#online").show();
         if (reset) {
-            //TODO: Handle reset          
+            //TODO: Handle reset
         }
     }
 
@@ -431,7 +431,7 @@ function App() {
         player.setIsPlaying(false);
         $("#start").removeClass("pause").removeClass("onair");
     };
-    
+
     /* INIT */
     this.init = function (version) {
         var directives = sp.require("javascript/Directives");
@@ -464,6 +464,8 @@ function App() {
 
     m.player.observe(m.EVENT.CHANGE, function (event) {
         var player = event.data;
+
+        console.log(player);
 
         if (app.isPlayingFromWejay === true) {
             if (player.volume === false && player.shuffle === false && player.repeat === false) {

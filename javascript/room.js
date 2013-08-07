@@ -17,7 +17,7 @@ function RoomController(roomName, nodeUrl) {
         updateTimeout = null;
 
     this.lastCheckin = new Date(null);
-	this.maxSongLength = 10;
+    this.maxSongLength = 10;
 
     this.skipping = false;
 
