@@ -1,10 +1,53 @@
-var sp = getSpotifyApi(1),
-    ui = sp.require("sp://import/scripts/dnd"),
-    m = sp.require("sp://import/scripts/api/models"),
-    v = sp.require("sp://import/scripts/api/views"),
-    accessToken;
+var sp, ui, m, v, accessToken;
+
+sp = getSpotifyApi(1);
+ui = sp.require("sp://import/scripts/dnd");
+m = sp.require("sp://import/scripts/api/models");
+v = sp.require("sp://import/scripts/api/views");
 
 function RoomController(roomName, nodeUrl) {
+    function addLeadingZero(number) {
+        return ((parseInt(number,10) < 10) ? "0" : "") + parseInt(number, 10);
+    }
+
+    function voteFunction(noNotification, player) {
+        var thisSong;
+        if (player && self.skipping) {
+            return false;
+        }
+        self.skipping = true;
+        thisSong = app.currentRoom.currentSong;
+        if (!noNotification) {
+            $("#skip").html("Skipping...");
+        }
+        $.ajax({
+            url: "http://wejay.org/Room/next",
+            data: { room: self.roomName },
+            dataType: "json",
+            type: "POST",
+            traditional: true,
+            success: function (result) {
+                $("#skip").html("Skip");
+                self.hub.songSkipped(thisSong);
+                $("#voteOverlay").removeClass("show");
+                self.skipping = false;
+            },
+            error: function (res) {
+                NOTIFIER.show("skip failed ", res);
+                $("#skip").html("Skip Failed");
+                setTimeout(function () {
+                    $("#skip").html("Skip");
+                    self.skipping = false;
+                }, 1000);
+            }
+        });
+    }
+
+    var facebookId, self, updateTimeout;
+
+    self = this;
+    updateTimeout = null;
+
     if (roomName === "null" || roomName === undefined) {
         roomName = "example";
     }
@@ -12,18 +55,10 @@ function RoomController(roomName, nodeUrl) {
         return;
     }
 
-    var facebookId,
-        self = this,
-        updateTimeout = null;
-
     this.lastCheckin = new Date(null);
     this.maxSongLength = 10;
 
     this.skipping = false;
-
-    function addLeadingZero(number) {
-        return ((parseInt(number) < 10) ? "0" : "") + parseInt(number);
-    }
 
     this.roomName = roomName.toLowerCase();
 
@@ -51,15 +86,16 @@ function RoomController(roomName, nodeUrl) {
     this.roomUpdateInterval = null;
 
     this.queueTrack = function (track) {
-        var song = {
+        var song, existsInQueue;
+        song = {
             artist: track.data.artists[0].name,
             mbid: "",
             title: track.data.name,
-            length: parseInt(track.data.duration / 1000),
+            length: parseInt(track.data.duration / 1000, 10),
             spotifyId: track.data.uri.replace("spotify:track:", "")
         };
         song.room = self.roomName;
-        var existsInQueue = $("#queue li a.track").filter(function (int, element) { return (element.href.split(":")[2] === song.spotifyId) }).length > 0;
+        existsInQueue = $("#queue li a.track").filter(function (int, element) { return (element.href.split(":")[2] === song.spotifyId); }).length > 0;
 
         if (!!existsInQueue) {
             // The song is in the playlist already
@@ -108,6 +144,7 @@ function RoomController(roomName, nodeUrl) {
     };
 
     this.playSong = function (song, forcePlay) {
+        var trackUri, played, diff;
         if (!song || !song.Length || !song.Length.TotalMinutes) return;
         // if its longer than 10 minutes, let's just skip it
         if (song.Length.TotalMinutes >= self.maxSongLength) {
@@ -115,12 +152,14 @@ function RoomController(roomName, nodeUrl) {
         }
         $("#voteOverlay").removeClass("show");
         $("#currentHolder .hover").show();
+
         if (song.Played) {
+            played = eval(song.Played.replace(/\/Date\(([-\d]+)\)\//gi, "new Date( $1 )"));
+            diff = (new Date().getTime() - app.timeDiff) - played.getTime();
 
-            var played = eval(song.Played.replace(/\/Date\(([-\d]+)\)\//gi, "new Date( $1 )")),
-                diff = (new Date().getTime() - app.timeDiff) - played.getTime();
-            if (diff < 0) { diff = 0; }
-
+            if (diff < 0) {
+                diff = 0;
+            }
             song.position = new Date(diff);
         } else {
             song.position = new Date().setTime(0); // start from 0 seconds if no position was set
@@ -130,10 +169,14 @@ function RoomController(roomName, nodeUrl) {
             return;
         }
         self.currentSong = song;
-        var trackUri = "spotify:track:" + song.SpotifyId;
-        if (song.position && song.position.getMinutes) trackUri += "#" + addLeadingZero(song.position.getMinutes()) + ":" + addLeadingZero(song.position.getSeconds());
+        trackUri = "spotify:track:" + song.SpotifyId;
+        if (song.position && song.position.getMinutes) {
+            trackUri += "#" + addLeadingZero(song.position.getMinutes()) + ":" + addLeadingZero(song.position.getSeconds());
+        }
+
         return m.Track.fromURI(trackUri, function (track) {
-            var tpl = new m.Playlist();
+            var tpl, player, currentTrack;
+            tpl = new m.Playlist();
 
             // search through all songs in the existing playlist and see if the current track is already there
             if (!tpl.data.all().some(function (t) {
@@ -142,8 +185,8 @@ function RoomController(roomName, nodeUrl) {
                 tpl.add(track);
             }
 
-            var player = sp.trackPlayer,
-                currentTrack = player.getNowPlayingTrack();
+            player = sp.trackPlayer;
+            currentTrack = player.getNowPlayingTrack();
 
             player.context = tpl;
 
@@ -176,6 +219,10 @@ function RoomController(roomName, nodeUrl) {
 
     this.nothingPlayingCopy = $("#nothingPlayingTemplate").tmpl();
 
+    this.clear = function() {
+        sp.trackPlayer.setIsPlaying(false);
+    };
+
     this.clearCurrentSong = function (force) {
         $("#roomTitle").html(this.roomName + " Wejay Room");
 
@@ -194,42 +241,11 @@ function RoomController(roomName, nodeUrl) {
             $("#queue").html(this.nothingPlayingCopy);
         }
     };
+
     this.dispose = function () {
         this.hub.checkout();
         this.hub = null;
     };
-
-    function voteFunction(noNotification, player) {
-        if (player && self.skipping) {
-            return false;
-        }
-        self.skipping = true;
-        var thisSong = app.currentRoom.currentSong;
-        if (!noNotification) {
-            $("#skip").html("Skipping...");
-        }
-        $.ajax({
-            url: "http://wejay.org/Room/next",
-            data: { room: self.roomName },
-            dataType: "json",
-            type: "POST",
-            traditional: true,
-            success: function (result) {
-                $("#skip").html("Skip");
-                self.hub.songSkipped(thisSong);
-                $("#voteOverlay").removeClass("show");
-                self.skipping = false;
-            },
-            error: function (res) {
-                NOTIFIER.show("skip failed ", res);
-                $("#skip").html("Skip Failed");
-                setTimeout(function () {
-                    $("#skip").html("Skip");
-                    self.skipping = false;
-                }, 1000);
-            }
-        });
-    }
 
     this.skip = function (noNotification) {
         if (!!app.user.accessToken || new Date() < app.user.checkTokenNext) {
@@ -264,20 +280,22 @@ function RoomController(roomName, nodeUrl) {
                 type: "POST",
                 traditional: true,
                 success: function (result) {
+                    var name, obj;
                     self.hub.checkCurrentSong(app.currentRoom.roomName, function (error, song) {
-                        var currentVote = (Math.round((37 + song.Vote - 3) * 10) / 10).toFixed(1);
+                        var currentVote;
+                        currentVote = (Math.round((37 + song.Vote - 3) * 10) / 10).toFixed(1);
                         $('#likeAverage').html(currentVote + '&deg;');
                     });
-                    $("#like").removeClass("liking")
+                    $("#like").removeClass("liking");
                     $("#like").addClass("liked");
-                    var name = (app.user.userName) ? app.user.userName : "Anonymous",
-                        obj = { user: name, room: self.roomName, mbId: self.currentSong.SpotifyId, value: 5 };
+                    name = (app.user.userName) ? app.user.userName : "Anonymous";
+                    obj = { user: name, room: self.roomName, mbId: self.currentSong.SpotifyId, value: 5 };
 
                     console.log('liked', obj);
                 },
                 error: function () {
                     NOTIFIER.show("Could not like song");
-                    $("#like").removeClass("liking")
+                    $("#like").removeClass("liking");
                     $("#like").addClass("failed");
                     setTimeout(function () {
                         $("#like").removeClass("failed");
@@ -296,10 +314,7 @@ function RoomController(roomName, nodeUrl) {
     };
 
     this.block = function () {
-        if (!this.currentSong) {
-            throw "No current song";
-        }
-        var voteFunction = function () {
+        function voteFunction () {
             $("#block").html("Blocking...");
             $.ajax({
                 url: "http://wejay.org/Room/vote",
@@ -324,7 +339,10 @@ function RoomController(roomName, nodeUrl) {
                     }, 1000);
                 }
             });
-        };
+        }
+        if (!this.currentSong) {
+            throw "No current song";
+        }
 
         if (!!app.user.accessToken || new Date() < app.user.checkTokenNext) {
             voteFunction();
@@ -337,10 +355,7 @@ function RoomController(roomName, nodeUrl) {
     };
 
     this.silentBlock = function () {
-        if (!this.currentSong) {
-            throw "No current song";
-        }
-        var voteFunction = function () {
+        function voteFunction () {
             $("#silentBlock").html("Blocking...");
             $.ajax({
                 url: "http://wejay.org/Room/vote",
@@ -363,7 +378,11 @@ function RoomController(roomName, nodeUrl) {
                     }, 1000);
                 }
             });
-        };
+        }
+
+        if (!this.currentSong) {
+            throw "No current song";
+        }
 
         if (!!app.user.accessToken || new Date() < app.user.checkTokenNext) {
             voteFunction();
@@ -376,10 +395,11 @@ function RoomController(roomName, nodeUrl) {
     };
 
     this.liveVote = function (SpotifyId, element, number) {
+        var vote;
         if (!SpotifyId || !element || !number) {
             throw "No song selected";
         }
-        var vote = null;
+        vote = null;
         if (number === 3) {
             vote = 5;
         } else if (number === 5) {
@@ -398,7 +418,9 @@ function RoomController(roomName, nodeUrl) {
                 type: "POST",
                 tradition: true,
                 success: function (result) {
-                    var newClass = (number === 5) ? "no3" : "no5";
+                    var newClass;
+
+                    newClass = (number === 5) ? "no3" : "no5";
                     element.removeClass("no" + number).addClass(newClass);
                 },
                 error: function (msg) {
@@ -417,6 +439,7 @@ function RoomController(roomName, nodeUrl) {
     };
 
     this.init = function (roomName, anonymous) {
+        var local;
         if (roomName === "example") {
             return;
         }
@@ -430,15 +453,16 @@ function RoomController(roomName, nodeUrl) {
 
         this.roomName = roomName.toLowerCase();
         this.clearCurrentSong(true);
-        var local = this;
+        local = this;
 
         this.getBitlyKey(local.roomName, function (shareURL) {
+            var userString, mailString;
             local.shareURL = shareURL;
             $("#sharePopup").removeClass("show");
             $("#shareOnURL").text("Share URL");
             $("#manualShare").addClass("hide");
-            var userString = (app.user.facebookUser.name) ? "%0D%0A" + app.user.facebookUser.name : "%0D%0A",
-            mailString = "mailto:?subject=Join our WEJAY room&body=Hi, if you follow the link below you can add music to our WEJAY room \"" + local.roomName + "\" from Spotify.%0D%0A%0D%0A" + shareURL + userString + "%0D%0A%0D%0A%0D%0A%0D%0AWEJAY lets you and your coworkers add music to mixed democratic playlist which means you can all listen to your own favorite music while working. Recent research results shows that you work better when you get to listen to music.\%0D%0ARead more about WEJAY and the research on http://wejay.org";
+            userString = (app.user.facebookUser.name) ? "%0D%0A" + app.user.facebookUser.name : "%0D%0A";
+            mailString = "mailto:?subject=Join our WEJAY room&body=Hi, if you follow the link below you can add music to our WEJAY room \"" + local.roomName + "\" from Spotify.%0D%0A%0D%0A" + shareURL + userString + "%0D%0A%0D%0A%0D%0A%0D%0AWEJAY lets you and your coworkers add music to mixed democratic playlist which means you can all listen to your own favorite music while working. Recent research results shows that you work better when you get to listen to music.%0D%0ARead more about WEJAY and the research on http://wejay.org";
             $("#shareURL").val(shareURL);
             $("#shareOnMail").attr("href", mailString);
             $("#shareOnFacebook").attr("href", "http://facebook.com/sharer.php?s=100&p[url]=" + shareURL + "&p[title]=" + escape("Play music with me on WEJAY") + "&p[images][0]=" + escape("http://wejay.org/Content/Images/Wejay256transparent.png") + "&p[summary]=" + escape("WEJAY is a Spotify app for playing music together at work. I've created the room " + local.roomName + ", join me there!"));
@@ -451,7 +475,8 @@ function RoomController(roomName, nodeUrl) {
                     self.updatePlaylist();
                 });
             } else {
-                var name = (app.user.facebookUser.name) ? app.user.facebookUser.name : "Anonymous";
+                var name;
+                name = (app.user.facebookUser.name) ? app.user.facebookUser.name : "Anonymous";
                 local.hub.checkin({ user: name, room: local.roomName });
                 self.updateUsers();
                 self.updatePlaylist();
@@ -486,10 +511,12 @@ function RoomController(roomName, nodeUrl) {
     };
 
     this.loadTopTracks = function (callback) {
-        var userName = null; // null means current user
+        var userName;
+        userName = null; // null means current user
         sp.social.getToplist("track", "user", userName, {
             onSuccess: function (r) {
-                var topTracks = r.tracks;
+                var topTracks;
+                topTracks = r.tracks;
                 if (callback) {
                     callback(topTracks);
                 }
@@ -502,7 +529,8 @@ function RoomController(roomName, nodeUrl) {
     };
 
     this.getBitlyKey = function (url, callback) {
-        var longurl = "http://open.spotify.com/app/wejay/room/" + url;
+        var longurl;
+        longurl = "http://open.spotify.com/app/wejay/room/" + url;
         $.getJSON(
           "http://api.bitly.com/v3/shorten?callback=?",
           {
@@ -523,13 +551,14 @@ function RoomController(roomName, nodeUrl) {
 
     // checkin the current user to wejay
     this.checkin = function (force, callback) {
+        var msg, self, userObject;
         if (!app.user.facebookId) {
-            var msg = "You have not set room and user or facebook details yet";
+            msg = "You have not set room and user or facebook details yet";
             NOTIFIER.show(msg);
             throw msg;
         }
-        var self = this,
-            userObject = { userName: app.user.facebookUser.name, facebookId: app.user.facebookId, room: self.roomName };
+        self = this;
+        userObject = { userName: app.user.facebookUser.name, facebookId: app.user.facebookId, room: self.roomName };
 
         $.ajax({
             url: "http://wejay.org/Room/checkin",
@@ -554,7 +583,8 @@ function RoomController(roomName, nodeUrl) {
         clearTimeout(updateTimeout);
 
         updateTimeout = setTimeout(function () {
-            var url = "http://wejay.org/Room/Playlist?room=" + self.roomName;
+            var url;
+            url = "http://wejay.org/Room/Playlist?room=" + self.roomName;
             $.ajax({
                 url: url,
                 type: "GET",
@@ -565,25 +595,27 @@ function RoomController(roomName, nodeUrl) {
                     NOTIFIER.show("Error updating queue:", e.statusText);
                 },
                 success: function (r) {
+                    var result, newHtml, render;
                     self.hub.checkCurrentSong(app.currentRoom.roomName, function (error, song) {
-                        var currentVote = (Math.round((37 + (song?song.Vote:3) - 3) * 10) / 10).toFixed(1);
+                        var currentVote;
+                        currentVote = (Math.round((37 + (song?song.Vote:3) - 3) * 10) / 10).toFixed(1);
                         $('#likeAverage').html(currentVote + '&deg;');
                     });
-                    var result = r ? r.Playlist.filter(function (song) { return song.SpotifyId; }) : [];
+                    result = r ? r.Playlist.filter(function (song) { return song.SpotifyId; }) : [];
                     if (result.length > 0) {
                         // slice the array to limit the playlist to 15 songs.
                         $("#currentQueueNumber").text("Current queue (" + result.length + ")");
                         //var newHtml = $("#queueTemplate").tmpl(result.slice(0, 15));
-                        var newHtml = $("#queueTemplate").tmpl(result);
+                        newHtml = $("#queueTemplate").tmpl(result);
                         if ($("#queue").text() !== newHtml.text()) {
-                            var render = $("<ul/>", { id: "queue", html: newHtml });
+                            render = $("<ul/>", { id: "queue", html: newHtml });
                             $("#queue").replaceWith(render);
                             return false;
                         } else {
                             return false;
                         }
                     } else {
-                        var newHtml = this.nothingPlayingCopy;
+                        newHtml = this.nothingPlayingCopy;
                         $("#queue").html(newHtml);
                         $("#currentQueueNumber").text("Current queue");
                         if ($("#currentSong").html() === "") {
@@ -609,21 +641,27 @@ function RoomController(roomName, nodeUrl) {
             contentType: "application/json",
             dataType: "text",
             success: function (r) {
-                var loggedIn = false,
-                    result = r ? JSON.parse(r).Data : [],
-                    loggedInUsersTitle = "NO LOGGED IN WEJAYS",
-                    loggedInUsersInnerText = $("#noOneIsLoggedInTemplate").tmpl()
+                var loggedIn, result, loggedInUsersTitle, loggedInUsersInnerText;
+
+                loggedIn = false;
+                result = r ? JSON.parse(r).Data : [];
+                loggedInUsersTitle = "NO LOGGED IN WEJAYS";
+                loggedInUsersInnerText = $("#noOneIsLoggedInTemplate").tmpl();
                 result = result.filter(function (user) { return user.FacebookId && user.FacebookId != "null" && user.Online; });
 
                 if (result.length > 0 && app.user.facebookUser) {
                     result = result.map(function (user) {
-                        var newDate = moment(user.CheckedIn).valueOf(),
-                            momentDiff = new Date(moment(newDate).add("hours", 1).diff(new Date())),
-                            hour = momentDiff.getHours(),
-                            timeleft = momentDiff.getMinutes(),
-                            newCheckedIn = (hour > 1 || timeleft > 55) ? "Just logged in" : (timeleft < 2 ? "Will logout any second now" : "Logged in for " + timeleft + " minutes");
-                        if (user.FacebookId === app.user.facebookUser.id) loggedIn = true;
-                        var returnTimeLeft = hour > 1 ? 100 : timeleft;
+                        var newDate, momentDiff, hour, timeleft, newCheckedIn;
+
+                        newDate = moment(user.CheckedIn).valueOf();
+                        momentDiff = new Date(moment(newDate).add("hours", 1).diff(new Date()));
+                        hour = momentDiff.getHours();
+                        timeleft = momentDiff.getMinutes();
+                        newCheckedIn = (hour > 1 || timeleft > 55) ? "Just logged in" : (timeleft < 2 ? "Will logout any second now" : "Logged in for " + timeleft + " minutes");
+                        if (user.FacebookId === app.user.facebookUser.id) {
+                            loggedIn = true;
+                        }
+                        returnTimeLeft = hour > 1 ? 100 : timeleft;
                         return { UserName: unescape(user.UserName), FacebookId: user.FacebookId, CheckedIn: newCheckedIn, timeleft: returnTimeLeft };
                     }).sort(function (a, b) {
                         return b.timeleft - a.timeleft;
