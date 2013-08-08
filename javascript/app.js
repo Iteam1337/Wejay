@@ -432,7 +432,6 @@ function App() {
     };
 
     this.playApp = function () {
-        console.log("play!");
         app.isPlayingFromWejay = true;
         $("#onair").show();
         app.currentRoom.playSong(app.currentRoom.currentSong, true);
@@ -505,7 +504,6 @@ function App() {
         }
         function canWePlayNextSong(playingFromWejay) {
             playingFromWejay = !playingFromWejay ? !sp.trackPlayer.getIsPlaying() : false;
-            console.log(playingFromWejay, player);
             if (window.location.hash === "#chooseSection") {
                 return;
             } else if (!playingFromWejay) {
@@ -523,6 +521,6 @@ function App() {
         }
 
         clearTimeout(newCheck);
-        newCheck = setTimeout(runAfterTimeout, 250);
+        newCheck = setTimeout(runAfterTimeout, 1000);
     });
 }
