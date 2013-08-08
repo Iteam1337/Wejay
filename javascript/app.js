@@ -432,6 +432,7 @@ function App() {
     };
 
     this.playApp = function () {
+        console.log("playApp");
         app.isPlayingFromWejay = true;
         $("#onair").show();
         app.currentRoom.playSong(app.currentRoom.currentSong, true);
@@ -507,8 +508,6 @@ function App() {
             if (window.location.hash === "#chooseSection") {
                 return;
             } else if (!playingFromWejay) {
-                self.playApp();
-            } else if (!player.curtrack && !player.playstate) {
                 self.playApp();
             }
         }
