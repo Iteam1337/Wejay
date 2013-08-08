@@ -88,7 +88,7 @@ function App() {
         checkLocalStorage = null;
     }
 
-    var self, sp, ui, m, v, r, kbd, accessToken, facebookId;
+    var self, sp, ui, m, v, r, kbd, accessToken, facebookId, newCheck;
 
     self = this;
     sp = getSpotifyApi();
@@ -97,6 +97,7 @@ function App() {
     v = sp.require("sp://import/scripts/api/views");
     r = sp.require("sp://import/scripts/react");
     kbd = sp.require("sp://import/scripts/keyboard");
+    newCheck = null;
 
     //
     // Global connection to node server
@@ -431,6 +432,7 @@ function App() {
     };
 
     this.playApp = function () {
+        console.log("play!");
         app.isPlayingFromWejay = true;
         $("#onair").show();
         app.currentRoom.playSong(app.currentRoom.currentSong, true);
@@ -488,13 +490,27 @@ function App() {
     });
 
     m.player.observe(m.EVENT.CHANGE, function (event) {
+        function runAfterTimeout() {
+            if (!!app.isPlayingFromWejay) {
+                if (!player.curtrack && !player.playstate) {
+                    self.pauseApp();
+                } else if (!!m.player.canPlayNext) {
+                    self.pauseApp();
+                } else if (!sp.trackPlayer.getIsPlaying()) {
+                    canWePlayNextSong(true);
+                }
+            } else if (m.player.context !== null && !m.player.canPlayNext) {
+                canWePlayNextSong();
+            }
+        }
         function canWePlayNextSong(playingFromWejay) {
-            playingFromWejay = !playingFromWejay ? sp.trackPlayer.getIsPlaying() === false : false;
+            playingFromWejay = !playingFromWejay ? !sp.trackPlayer.getIsPlaying() : false;
+            console.log(playingFromWejay, player);
             if (window.location.hash === "#chooseSection") {
                 return;
-            } else if (player.curtrack === false && player.playstate === false && !!playingFromWejay) {
+            } else if (!playingFromWejay) {
                 self.playApp();
-            } else if (player.contextclear === false) {
+            } else if (!player.curtrack && !player.playstate) {
                 self.playApp();
             }
         }
@@ -502,20 +518,11 @@ function App() {
 
         player = event.data;
 
-        if (player.volume === true || player.shuffle === true || player.repeat === true) {
+        if (!!player.volume || !!player.shuffle || !!player.repeat) {
             return;
         }
 
-        if (app.isPlayingFromWejay === true) {
-            if (player.curtrack === false && player.playstate === false) {
-                self.pauseApp();
-            } else if (m.player.canPlayNext === true) {
-                self.pauseApp();
-            } else if (player.contextclear === false && !!player.curtrack && !!player.playstate) {
-                canWePlayNextSong(true);
-            }
-        } else if (m.player.context !== null && m.player.canPlayNext === false) {
-            canWePlayNextSong();
-        }
+        clearTimeout(newCheck);
+        newCheck = setTimeout(runAfterTimeout, 250);
     });
 }

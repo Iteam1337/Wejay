@@ -220,7 +220,7 @@ function RoomController(roomName, nodeUrl) {
     this.nothingPlayingCopy = $("#nothingPlayingTemplate").tmpl();
 
     this.clear = function() {
-        sp.trackPlayer.setIsPlaying(false);
+        app.isPlayingFromWejay = false;
     };
 
     this.clearCurrentSong = function (force) {

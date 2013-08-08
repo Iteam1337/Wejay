@@ -64,7 +64,6 @@ function Hub(nodeUrl, currentRoom, facebookUserId) {
         if (!currentSong.SpotifyId) {
             console.log("No spotify Id, ignoring...");
         } else {
-            currentRoom.clear();
             currentRoom.playSong(currentSong);
             currentRoom.updatePlaylist();
         }
