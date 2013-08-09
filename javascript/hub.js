@@ -57,7 +57,6 @@ function Hub(nodeUrl, currentRoom, facebookUserId) {
     });
 
     socket.on("onSongStarted", function (currentSong) {
-        console.log("onSongStarted", currentSong);
         if (!currentSong) {
             return;
         }

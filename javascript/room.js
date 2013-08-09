@@ -67,6 +67,7 @@ function RoomController(roomName, nodeUrl) {
     this.currentTab = null;
 
     this.serverTime = null;
+    this.lastPlayed = null;
 
     this.stop = function () {
         var player = sp.trackPlayer;
@@ -144,7 +145,7 @@ function RoomController(roomName, nodeUrl) {
     };
 
     this.playSong = function (song, forcePlay) {
-        var trackUri, played, diff;
+        var trackUri, played, diff, songPlayed;
         if (!song || !song.Length || !song.Length.TotalMinutes) return;
         // if its longer than 10 minutes, let's just skip it
         if (song.Length.TotalMinutes >= self.maxSongLength) {
@@ -161,9 +162,11 @@ function RoomController(roomName, nodeUrl) {
                 diff = 0;
             }
             song.position = new Date(diff);
+            song.position = new Date(song.position.getTime() - (3*60*60*1000));
         } else {
             song.position = new Date().setTime(0); // start from 0 seconds if no position was set
         }
+
         if (!song.SpotifyId) {
             this.skip(true); // no point in waiting for a song at this point with no id
             return;
@@ -172,6 +175,15 @@ function RoomController(roomName, nodeUrl) {
         trackUri = "spotify:track:" + song.SpotifyId;
         if (song.position && song.position.getMinutes) {
             trackUri += "#" + addLeadingZero(song.position.getMinutes()) + ":" + addLeadingZero(song.position.getSeconds());
+        }
+
+        songPlayed = new Date(song.Length.TotalMilliseconds - (60*60*1000));
+
+        if (song.position > songPlayed) {
+            self.stop();
+            self.clearCurrentSong();
+            console.log("stopped", songPlayed, song.position);
+            return;
         }
 
         return m.Track.fromURI(trackUri, function (track) {
@@ -399,7 +411,6 @@ function RoomController(roomName, nodeUrl) {
         if (!SpotifyId || !element || !number) {
             throw "No song selected";
         }
-        vote = null;
         if (number === 3) {
             vote = 5;
         } else if (number === 5) {
@@ -451,12 +462,12 @@ function RoomController(roomName, nodeUrl) {
             throw msg;
         }
 
-        this.roomName = roomName.toLowerCase();
-        this.clearCurrentSong(true);
         local = this;
 
+        this.roomName = roomName.toLowerCase();
+        this.clearCurrentSong(true);
         this.getBitlyKey(local.roomName, function (shareURL) {
-            var userString, mailString;
+            var userString, mailString, name;
             local.shareURL = shareURL;
             $("#sharePopup").removeClass("show");
             $("#shareOnURL").text("Share URL");
@@ -478,7 +489,6 @@ function RoomController(roomName, nodeUrl) {
                     self.updatePlaylist();
                 });
             } else {
-                var name;
                 name = (app.user.facebookUser.name) ? app.user.facebookUser.name : "Anonymous";
                 local.hub.checkin({
                     user: name,
@@ -537,22 +547,18 @@ function RoomController(roomName, nodeUrl) {
     this.getBitlyKey = function (url, callback) {
         var longurl;
         longurl = "http://open.spotify.com/app/wejay/room/" + url;
-        $.getJSON(
-          "http://api.bitly.com/v3/shorten?callback=?",
-          {
-              "format": "json",
-              "apiKey": app.bitlyKey,
-              "login": app.bitlyName,
-              "longUrl": longurl
-          },
-          function (response) {
-              if (response.status_code === 200) {
-                  callback(response.data.url);
-              } else {
-                  callback(longurl);
-              }
-          }
-        );
+        $.getJSON("http://api.bitly.com/v3/shorten?callback=?", {
+            "format": "json",
+            "apiKey": app.bitlyKey,
+            "login": app.bitlyName,
+            "longUrl": longurl
+        }, function (response) {
+            if (response.status_code === 200) {
+                callback(response.data.url);
+            } else {
+                callback(longurl);
+            }
+        });
     };
 
     // checkin the current user to wejay
