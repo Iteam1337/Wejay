@@ -171,6 +171,7 @@ function RoomController(roomName, nodeUrl) {
             this.skip(true); // no point in waiting for a song at this point with no id
             return;
         }
+
         self.currentSong = song;
         trackUri = "spotify:track:" + song.SpotifyId;
         if (song.position && song.position.getMinutes) {
@@ -180,8 +181,6 @@ function RoomController(roomName, nodeUrl) {
         songPlayed = new Date(song.Length.TotalMilliseconds - (60*60*1000));
 
         if (song.position > songPlayed) {
-            self.stop();
-            self.clearCurrentSong();
             console.log("stopped", songPlayed, song.position);
             return;
         }
