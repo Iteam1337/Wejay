@@ -145,7 +145,7 @@ function RoomController(roomName, nodeUrl) {
     };
 
     this.playSong = function (song, forcePlay) {
-        var trackUri, played, diff, songPlayed;
+        var trackUri, played, diff, songPlayed, oneHour;
         if (!song || !song.Length || !song.Length.TotalMinutes) return;
         // if its longer than 10 minutes, let's just skip it
         if (song.Length.TotalMinutes >= self.maxSongLength) {
@@ -153,6 +153,8 @@ function RoomController(roomName, nodeUrl) {
         }
         $("#voteOverlay").removeClass("show");
         $("#currentHolder .hover").show();
+
+        oneHour = +(60*60*1000);
 
         if (song.Played) {
             played = eval(song.Played.replace(/\/Date\(([-\d]+)\)\//gi, "new Date( $1 )"));
@@ -162,9 +164,9 @@ function RoomController(roomName, nodeUrl) {
                 diff = 0;
             }
             song.position = new Date(diff);
-            song.position = new Date(song.position.getTime() - (3*60*60*1000));
+            song.position = new Date(song.position.getTime() - (3*oneHour));
         } else {
-            song.position = new Date().setTime(0); // start from 0 seconds if no position was set
+            song.position = new Date().setTime(0 - (oneHour)); // start from 0 seconds if no position was set
         }
 
         if (!song.SpotifyId) {
@@ -178,11 +180,13 @@ function RoomController(roomName, nodeUrl) {
             trackUri += "#" + addLeadingZero(song.position.getMinutes()) + ":" + addLeadingZero(song.position.getSeconds());
         }
 
-        songPlayed = new Date(song.Length.TotalMilliseconds - (60*60*1000));
+        songPlayed = new Date(song.Length.TotalMilliseconds - oneHour);
 
         if (song.position > songPlayed) {
             console.log("stopped", songPlayed, song.position);
-            return;
+            return; // the position is after the song has ended.
+        } else if (song.position < new Date(0 - (oneHour))) {
+            return; // the song has not even begun.
         }
 
         return m.Track.fromURI(trackUri, function (track) {
