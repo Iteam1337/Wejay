@@ -470,14 +470,20 @@ function RoomController(roomName, nodeUrl) {
 
             if (!anonymous && !app.user.accessToken) {
                 app.user.authenticate(function () {
-                    local.hub.checkin({ user: app.user.facebookUser.name, room: local.roomName });
+                    local.hub.checkin({
+                        user: app.user.facebookUser.name,
+                        room: local.roomName
+                    });
                     self.updateUsers();
                     self.updatePlaylist();
                 });
             } else {
                 var name;
                 name = (app.user.facebookUser.name) ? app.user.facebookUser.name : "Anonymous";
-                local.hub.checkin({ user: name, room: local.roomName });
+                local.hub.checkin({
+                    user: name,
+                    room: local.roomName
+                });
                 self.updateUsers();
                 self.updatePlaylist();
             }
@@ -558,7 +564,11 @@ function RoomController(roomName, nodeUrl) {
             throw msg;
         }
         self = this;
-        userObject = { userName: app.user.facebookUser.name, facebookId: app.user.facebookId, room: self.roomName };
+        userObject = {
+            userName: app.user.facebookUser.name,
+            facebookId: app.user.facebookId,
+            room: self.roomName
+        };
 
         $.ajax({
             url: "http://wejay.org/Room/checkin",
@@ -668,6 +678,8 @@ function RoomController(roomName, nodeUrl) {
                     });
                     loggedInUsersTitle = "LOGGED IN WEJAYS (" + result.length + ")";
                     loggedInUsersInnerText = $("#usersTemplate").tmpl(result.slice(0, 10));
+                } else {
+                    sp.trackPlayer.setIsPlaying(false);
                 }
                 if (!loggedIn && self.roomName === app.loggedIntoRoom) {
                     app.userLogoutHide();
