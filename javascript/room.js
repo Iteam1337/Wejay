@@ -145,7 +145,7 @@ function RoomController(roomName, nodeUrl) {
     };
 
     this.playSong = function (song, forcePlay) {
-        var trackUri, played, diff, songPlayed, oneHour;
+        var trackUri, played, diff, songPlayed, oneHour, zeroTime, timeout;
         if (!song || !song.Length || !song.Length.TotalMinutes) return;
         // if its longer than 10 minutes, let's just skip it
         if (song.Length.TotalMinutes >= self.maxSongLength) {
@@ -181,13 +181,21 @@ function RoomController(roomName, nodeUrl) {
         }
 
         songPlayed = new Date(song.Length.TotalMilliseconds - oneHour);
+        zeroTime = new Date(0 - (oneHour));
 
-        if (song.position > songPlayed) {
+        if (song.position > songPlayed) { // the position is after the song has ended.
             console.log("stopped", songPlayed, song.position);
-            return; // the position is after the song has ended.
-        } else if (song.position < new Date(0 - (oneHour))) {
-            return; // the song has not even begun.
+            return;
+        } else if (song.position < zeroTime) { // the song has not even begun.
+            timeout = new Date(Math.abs(zeroTime - song.position)).getTime();
+            setTimeout(function() {
+                self.playSong(song, forcePlay);
+            }, timeout);
+            return;
         }
+
+        console.log("this",song);
+
 
         return m.Track.fromURI(trackUri, function (track) {
             var tpl, player, currentTrack;
