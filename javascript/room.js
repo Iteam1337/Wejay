@@ -164,9 +164,9 @@ function RoomController(roomName, nodeUrl) {
                 diff = 0;
             }
             song.position = new Date(diff);
-            song.position = new Date(song.position.getTime() - (3*oneHour));
+            song.position = new Date(song.position.getTime() - (2*oneHour));
         } else {
-            song.position = new Date().setTime(0 - (oneHour)); // start from 0 seconds if no position was set
+            song.position = new Date().setTime(0); // start from 0 seconds if no position was set
         }
 
         if (!song.SpotifyId) {
@@ -180,8 +180,8 @@ function RoomController(roomName, nodeUrl) {
             trackUri += "#" + addLeadingZero(song.position.getMinutes()) + ":" + addLeadingZero(song.position.getSeconds());
         }
 
-        songPlayed = new Date(song.Length.TotalMilliseconds - oneHour);
-        zeroTime = new Date(0 - (oneHour));
+        songPlayed = new Date(song.Length.TotalMilliseconds);
+        zeroTime = new Date(0);
 
         if (song.position > songPlayed) { // the position is after the song has ended.
             console.log("stopped", songPlayed, song.position);
@@ -194,11 +194,8 @@ function RoomController(roomName, nodeUrl) {
             return;
         }
 
-        console.log("this",song);
-
-
         return m.Track.fromURI(trackUri, function (track) {
-            var tpl, player, currentTrack;
+            var tpl, player, currentTrack, position, currentTrackHasNotSameUriOrIsBeforeCurrentTime;
             tpl = new m.Playlist();
 
             // search through all songs in the existing playlist and see if the current track is already there
@@ -210,12 +207,18 @@ function RoomController(roomName, nodeUrl) {
 
             player = sp.trackPlayer;
             currentTrack = player.getNowPlayingTrack();
+            position = new Date(song.position).getTime();
+            currentTrackHasNotSameUriOrIsBeforeCurrentTime = true;
+
+            if (currentTrack.track.uri === track.uri) {
+                currentTrackHasNotSameUriOrIsBeforeCurrentTime = (position < currentTrack.position);
+            }
 
             player.context = tpl;
 
             //
             // the user controls if the player should force-play every song. This is by pressing the play-icon on the cover.
-            if (forcePlay || (currentTrack === null && app.isPlayingFromWejay) || (((currentTrack === null) || (currentTrack.track.uri != track.uri)) && app.isPlayingFromWejay)) {
+            if (forcePlay || (currentTrack === null && app.isPlayingFromWejay) || (((currentTrack === null) || !!currentTrackHasNotSameUriOrIsBeforeCurrentTime) && app.isPlayingFromWejay)) {
                 sp.trackPlayer.setContextCanSkipPrev(tpl.uri, false);
                 sp.trackPlayer.setContextCanSkipNext(tpl.uri, false);
                 sp.trackPlayer.setContextCanShuffle(tpl.uri, false);
