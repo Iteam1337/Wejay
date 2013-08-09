@@ -210,7 +210,7 @@ function RoomController(roomName, nodeUrl) {
             position = new Date(song.position).getTime();
             currentTrackHasNotSameUriOrIsBeforeCurrentTime = true;
 
-            if (currentTrack.track.uri === track.uri) {
+            if (!!currentTrack && !!currentTrack.hasOwnProperty("track") && currentTrack.track.uri === track.uri) {
                 currentTrackHasNotSameUriOrIsBeforeCurrentTime = (position < currentTrack.position);
             }
 
