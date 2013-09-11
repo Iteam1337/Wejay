@@ -164,7 +164,7 @@ function RoomController(roomName, nodeUrl) {
                 diff = 0;
             }
             song.position = new Date(diff);
-            song.position = new Date(song.position.getTime() - (2*oneHour));
+            song.position = new Date(song.position.getTime() - 2);
         } else {
             song.position = new Date().setTime(0); // start from 0 seconds if no position was set
         }
