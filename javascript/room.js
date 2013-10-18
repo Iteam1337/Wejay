@@ -156,7 +156,7 @@ function RoomController(roomName, nodeUrl) {
 
         oneHour = +(60*60*1000);
 
-        if (song.Played) {
+        if (!!song.Played) {
             played = eval(song.Played.replace(/\/Date\(([-\d]+)\)\//gi, "new Date( $1 )"));
             diff = (new Date().getTime() - app.timeDiff) - played.getTime();
 
@@ -184,7 +184,6 @@ function RoomController(roomName, nodeUrl) {
         zeroTime = new Date(0);
 
         if (song.position > songPlayed) { // the position is after the song has ended.
-            console.log("stopped", songPlayed, song.position);
             return;
         } else if (song.position < zeroTime) { // the song has not even begun.
             timeout = new Date(Math.abs(zeroTime - song.position)).getTime();
@@ -215,6 +214,12 @@ function RoomController(roomName, nodeUrl) {
             }
 
             player.context = tpl;
+            console.log('forcePlay || (currentTrack === null && app.isPlayingFromWejay) || (((currentTrack === null) || !!currentTrackHasNotSameUriOrIsBeforeCurrentTime) && app.isPlayingFromWejay)', forcePlay || (currentTrack === null && app.isPlayingFromWejay) || (((currentTrack === null) || !!currentTrackHasNotSameUriOrIsBeforeCurrentTime) && app.isPlayingFromWejay));
+
+            console.log('forcePlay',forcePlay);
+            console.log('currentTrack', currentTrack);
+            console.log('app.isPlayingFromWejay', app.isPlayingFromWejay);
+            console.log('currentTrackHasNotSameUriOrIsBeforeCurrentTime', currentTrackHasNotSameUriOrIsBeforeCurrentTime);
 
             //
             // the user controls if the player should force-play every song. This is by pressing the play-icon on the cover.

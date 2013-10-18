@@ -499,7 +499,7 @@ function App() {
                 } else if (!sp.trackPlayer.getIsPlaying()) {
                     canWePlayNextSong(true);
                 }
-            } else if (m.player.context !== null && !m.player.canPlayNext) {
+            } else if (event.data.context !== null && !m.player.canPlayNext) {
                 canWePlayNextSong();
             }
         }
@@ -519,7 +519,7 @@ function App() {
             return;
         }
 
-        clearTimeout(newCheck);
-        newCheck = setTimeout(runAfterTimeout, 1000);
+        window.clearTimeout(newCheck);
+        newCheck = window.setTimeout(runAfterTimeout, 10000);
     });
 }
