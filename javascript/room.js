@@ -214,13 +214,6 @@ function RoomController(roomName, nodeUrl) {
             }
 
             player.context = tpl;
-            console.log('forcePlay || (currentTrack === null && app.isPlayingFromWejay) || (((currentTrack === null) || !!currentTrackHasNotSameUriOrIsBeforeCurrentTime) && app.isPlayingFromWejay)', forcePlay || (currentTrack === null && app.isPlayingFromWejay) || (((currentTrack === null) || !!currentTrackHasNotSameUriOrIsBeforeCurrentTime) && app.isPlayingFromWejay));
-
-            console.log('forcePlay',forcePlay);
-            console.log('currentTrack', currentTrack);
-            console.log('app.isPlayingFromWejay', app.isPlayingFromWejay);
-            console.log('currentTrackHasNotSameUriOrIsBeforeCurrentTime', currentTrackHasNotSameUriOrIsBeforeCurrentTime);
-
             //
             // the user controls if the player should force-play every song. This is by pressing the play-icon on the cover.
             if (forcePlay || (currentTrack === null && app.isPlayingFromWejay) || (((currentTrack === null) || !!currentTrackHasNotSameUriOrIsBeforeCurrentTime) && app.isPlayingFromWejay)) {
