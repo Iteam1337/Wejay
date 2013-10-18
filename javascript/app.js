@@ -432,7 +432,6 @@ function App() {
     };
 
     this.playApp = function () {
-        console.log("playApp");
         app.isPlayingFromWejay = true;
         $("#onair").show();
         app.currentRoom.playSong(app.currentRoom.currentSong, true);
@@ -453,6 +452,9 @@ function App() {
         var directives;
         directives = sp.require("javascript/Directives");
         directives.init(version);
+        window.onerror = function (errorMsg, url, lineNumber) {
+            NOTIFIER.show(errorMsg + ' @' + url + ':' + lineNumber);
+        };
     };
 
     checkLocalVariables();
@@ -491,17 +493,19 @@ function App() {
 
     m.player.observe(m.EVENT.CHANGE, function (event) {
         function runAfterTimeout() {
-            if (!!app.isPlayingFromWejay) {
-                if (!player.curtrack && !player.playstate) {
-                    self.pauseApp();
-                } else if (!!m.player.canPlayNext) {
-                    self.pauseApp();
-                } else if (!sp.trackPlayer.getIsPlaying()) {
-                    canWePlayNextSong(true);
+            app.currentRoom.hub.checkCurrentSong(app.loggedIntoRoom, function (error, data) {
+                if (!!data && !!app.isPlayingFromWejay) {
+                    if (!player.curtrack && !player.playstate) {
+                        self.pauseApp();
+                    } else if (!!m.player.canPlayNext) {
+                        self.pauseApp();
+                    } else if (!sp.trackPlayer.getIsPlaying()) {
+                        canWePlayNextSong(true);
+                    }
+                } else if (event.data.context !== null && !m.player.canPlayNext) {
+                    canWePlayNextSong();
                 }
-            } else if (event.data.context !== null && !m.player.canPlayNext) {
-                canWePlayNextSong();
-            }
+            });
         }
         function canWePlayNextSong(playingFromWejay) {
             playingFromWejay = !playingFromWejay ? !sp.trackPlayer.getIsPlaying() : false;
@@ -520,6 +524,6 @@ function App() {
         }
 
         window.clearTimeout(newCheck);
-        newCheck = window.setTimeout(runAfterTimeout, 10000);
+        newCheck = window.setTimeout(runAfterTimeout, 5000);
     });
 }

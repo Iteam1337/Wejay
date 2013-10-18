@@ -22,41 +22,49 @@ function Hub(nodeUrl, currentRoom, facebookUserId) {
     socket = createConnection();
     facebookId = facebookUserId;
 
-    socket.on("error", function (data) {
+    socket.on("error", function () {
+        console.log("error", arguments);
         socket.disconnect();
         return handleError("Sorry, we lost your connection with our realtime service, try again soon");
     });
 
-    socket.on("userlogout", function (data) {
+    socket.on("userlogout", function () {
+        console.log("userlogout", arguments);
         currentRoom.updateUsers();
         currentRoom.updatePlaylist();
     });
 
-    socket.on("connect", function (data) {
+    socket.on("connect", function () {
+        console.log("connect", arguments);
         currentRoom.clearCurrentSong(true);
         currentRoom.updateUsers();
     });
 
     socket.on("onSongAdded", function (song) {
+        console.log("onSongAdded", arguments);
         if (song) {
             currentRoom.updatePlaylist();
         }
     });
 
     socket.on("onCheckin", function (data) {
+        console.log("onSongAdded", arguments);
         currentRoom.updateUsers();
         app.updateServerTime(data);
     });
 
-    socket.on("onCheckout", function (data) {
+    socket.on("onCheckout", function () {
+        console.log("onCheckout", arguments);
         currentRoom.updateUsers();
     });
 
-    socket.on("onSongEnded", function (lastSong) {
+    socket.on("onSongEnded", function () {
+        console.log("onSongEnded", arguments);
         currentRoom.clearCurrentSong();
     });
 
     socket.on("onSongStarted", function (currentSong) {
+        console.log("onSongEnded", arguments);
         if (!currentSong) {
             return;
         }

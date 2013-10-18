@@ -25,7 +25,7 @@ function User() {
             self.checkTokenNext = checkDate;
         } else {
             delete localStorage.checkTokenNext;
-        } 
+        }
     }
 
     function _checkAccessToken(callback) {
@@ -102,6 +102,9 @@ function User() {
             },
 
             onFailure: function (error) {
+                if (+error === 30) {
+                    return;
+                }
                 NOTIFIER.show("Authentication failed with error: " + error);
                 app.userLogoutHide();
             },
@@ -127,6 +130,7 @@ function User() {
                 app.loggedIntoRoom = null;
                 app.showLoginDisclaimer();
             },
+
             onFailure: function (error) {
                 NOTIFIER.show(error);
             }
@@ -165,14 +169,16 @@ function User() {
                 _loadFriends(callback);
             });
         }
-    }
+    };
 
     //  login to facebook with the current facebook user account
     this.authenticate = function (callback) {
         function continueAuth() {
             app.showDisplayNameAsLoggedIn(app.user.facebookUser);
             app.userLogoutShow();
-            if (app.currentRoom) checkinToRoom(callback);
+            if (app.currentRoom) {
+                checkinToRoom(callback);
+            }
         }
         if (self.accessToken) {
             _checkAccessToken(function (res) {
@@ -186,5 +192,5 @@ function User() {
         } else {
             _authenticateWithFacebook(continueAuth);
         }
-    }
+    };
 }
