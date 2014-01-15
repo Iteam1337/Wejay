@@ -1,12 +1,38 @@
 section[ng-controller="RoomCtrl"] {
-  .toplist {
-    li {
-      margin-bottom:5px;
+  .now-playing {
+    border-bottom:1px solid @track;
+    font-size:24px;
+    margin-bottom:40px;
+    padding-bottom:20px;
 
-      img {
-        height:32px;
-        margin-right:20px;
-      }
+    #now-playing-image {
+      display: inline-block;
+      margin-right:20px;
     }
-  } 
+
+    .info {
+      display:inline-block;
+      padding-top:20px;
+      vertical-align:top;
+      width:73%;
+
+      div {
+        display: block;
+
+        &.artist {
+          color:@artist;
+        }
+
+        &.track {
+          color:@track;
+        }
+      }
+
+    }
+  }
+  .playlist, .toplist {
+    display:inline-block;
+    vertical-align:top;
+    width:49%;
+  }
 }

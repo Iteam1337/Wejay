@@ -5,13 +5,13 @@
   <div ng-hide="authenticated"><button ng-click="login()">Login with Facebook</button></div>
 
   <div ng-show="authenticated">Inloggad som: {{ user.name }}</div>
-
-  <ul class="toplist">
-    <li ng-repeat="track in toplist">
-      <img ng-src="{{ track.image }}">
-      <a ng-href="{{ track.artists[0].uri }}">{{ track.artists[0].name }}</a> -
-      <a ng-href="{{ track.uri }}">{{ track.name }}</a>
-      <span>{{ track.starred }}</span>
-    </li>
-  </ul>
+  <div class="now-playing">
+    <div id="now-playing-image"></div>
+    <div class="info">
+      <div class="artist">{{ nowPlaying.artists[0].name }}</div>
+      <div class="track">{{ nowPlaying.name }}</div>
+    </div>
+  </div>
+  <playlist></playlist>
+  <toplist></toplist>
 </section>

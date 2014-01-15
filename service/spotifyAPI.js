@@ -40,14 +40,15 @@ angular.module('wejay').service('spotifyAPI',function($rootScope) {
     }
   };
 
-  require(['$api/auth#Auth', '$api/models','$api/toplists#Toplist'], function (Auth, models, toplist) {
+  require(['$api/auth#Auth', '$api/models','$api/toplists#Toplist', '$views/image#Image'], function (Auth, models, toplist, image) {
     models.application.addEventListener('dropped', function() {
       spotifyAPI.emit('dropped', models.application.dropped);
     });
 
-    spotifyAPI.auth = new Auth();
-    spotifyAPI.models = models;
+    spotifyAPI.auth    = new Auth();
+    spotifyAPI.models  = models;
     spotifyAPI.toplist = toplist;
+    spotifyAPI.image   = image;
 
     $rootScope.$broadcast('appReady');
   });

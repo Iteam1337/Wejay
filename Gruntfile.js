@@ -103,7 +103,7 @@ module.exports = function (grunt) {
       },       
       removecss: {
         options:{
-          remove:'link',
+          remove:'link[data-remove!="exclude"]',
           append:{selector:'head',html:'<link rel="stylesheet" href="css/app.full.min.css">'}
         },
         src:'dist/index.html'

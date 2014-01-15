@@ -1,0 +1,15 @@
+<div class="toplist">
+  <h3>Your top tracks</h3>
+  <ul>
+    <li ng-repeat="track in toplist">
+      <a ng-click="playTrack(track.uri)">
+        <img ng-src="{{ track.image }}">
+      </a>
+      <div class="info">
+        <a class="artist" ng-href="{{ track.artists[0].uri }}">{{ track.artists[0].name }}</a>
+        <a class="track" ng-click="playTrack(track.uri)">{{ track.name }}</a>
+        <span class="star">{{ track.starred }}</span>
+      </div>
+    </li>
+  </ul>
+</div>

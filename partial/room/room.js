@@ -11,6 +11,39 @@ angular.module('wejay').controller('RoomCtrl',function($rootScope, $scope, spoti
   $scope.user = null;
 
   $rootScope.$on('appReady', function () {
+
+    /**
+     * Now playing
+     * @param  {[type]} p [description]
+     * @return {[type]}   [description]
+     */
+    spotifyAPI.models.player.load('track').done(function (p) {
+      $scope.nowPlaying = p.track;
+    });
+
+    spotifyAPI.models.player.addEventListener('change', function (p) {
+      $scope.nowPlaying = p.data.track;
+
+      $scope.$apply();
+    });
+
+    $scope.$watch('nowPlaying', function (np) {
+      var track = spotifyAPI.models.Track.fromURI(np.uri);
+      var image = spotifyAPI.image.forTrack(track, {player: true});
+
+      var imageContainer = document.getElementById('now-playing-image');
+      
+      if (imageContainer.firstChild) {
+        imageContainer.removeChild(imageContainer.firstChild);
+      }
+      
+      imageContainer.appendChild(image.node);
+    });
+
+    /**
+     * Toplist
+     * @type {[type]}
+     */
     toplist = spotifyAPI.toplist.forCurrentUser();
 
     toplist.tracks.snapshot().done(function (tracks) {
@@ -22,6 +55,10 @@ angular.module('wejay').controller('RoomCtrl',function($rootScope, $scope, spoti
 
       $scope.$apply();
     });
+
+    $scope.playTrack = function (uri) {
+      spotifyAPI.models.player.playTrack(spotifyAPI.models.Track.fromURI(uri));
+    };
 
   });
 
