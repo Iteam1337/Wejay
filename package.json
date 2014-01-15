@@ -1,6 +1,9 @@
 {
   "name": "wejay",
   "version": "0.1.0",
+  "scripts": {
+    "postinstall": "node node_modules/bower/bin/bower install"
+  },
   "devDependencies": {
     "grunt": "~0.4.2",
     "grunt-contrib-livereload": "~0.1.2",
@@ -24,6 +27,7 @@
     "mocha": "~1.14.0",
     "chai": "~1.8.1",
     "sinon": "~1.7.3",
-    "sinon-chai": "~2.4.0"
+    "sinon-chai": "~2.4.0",
+    "bower": "~1.2.8"
   }
 }
