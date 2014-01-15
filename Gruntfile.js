@@ -201,6 +201,6 @@ module.exports = function (grunt) {
   grunt.registerTask('install', ['build', 'shell:install']);
   grunt.registerTask('server', ['jshint','connect', 'watch']);
   grunt.registerTask('test',['dom_munger:readscripts']);
-  grunt.registerTask('default',['less', 'watch']);
+  grunt.registerTask('default',['install', 'watch']);
 
 };
