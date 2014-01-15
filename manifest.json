@@ -1,0 +1,62 @@
+{
+  "AppName":
+    {
+      "en": "Wejay"
+    },
+  "BundleVersion": "2.0.1",
+  "Dependencies":
+    {
+      "api": "1.0.0",
+      "util": "0.1.0",
+      "resources": "0.2.2",
+      "views": "1.0.0"
+    },
+    "AppDescription":
+    {
+      "en": "Music For Teams. Listen to music together while you work"
+    },
+  "DefaultTabs":
+    [
+      {
+        "arguments": "wejay",
+        "title":
+          {
+            "en": "Wejay"
+          }
+      }
+    ],
+  "SupportedLanguages":
+    [
+      "en"
+    ],
+  "BundleIdentifier": "wejay2",
+  "AppIcon":
+    {
+      "36x18": "Images/icon.png",
+      "64x64": "Images/wejay64.png",
+      "128x128": "Images/wejay128.png"
+    },
+  "BundleType": "Application",
+  "RequiredInterface": 1,
+  "RequiredPermissions":
+    [
+      "http://wejay.org:81",
+      "http://*.wejay.org",
+      "http://*.fbcdn.net",
+      "http://ws.spotify.com",
+      "http://*.facebook.com",
+      "https://www.facebook.com",
+      "https://graph.facebook.com",
+      "http://*.facebook.net",
+      "http://81.201.221.135",
+      "http://api.bitly.com",
+      "http://localhost:5000"
+    ],
+  "VendorIdentifier": "se.iteam",
+  "AcceptedLinkTypes":
+    [
+      "album",
+      "playlist",
+      "track"
+    ]
+}
