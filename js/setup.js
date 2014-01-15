@@ -5,7 +5,8 @@ angular.module('wejay').config(function($stateProvider, $urlRouterProvider) {
   'use strict';
 
   $stateProvider.
-  /* Add New Routes Above */
+  when('/room/:id',{templateUrl: 'partial/room/room.html'}).
+	/* Add New Routes Above */
   
   // For any unmatched url, redirect to /
   $urlRouterProvider.otherwise("/");
