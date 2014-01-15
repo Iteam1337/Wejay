@@ -9,7 +9,7 @@ angular.module('wejay').service('User',function(spotifyAPI, $http) {
 
   }
 
-  User.prototype.loginToFacebook = function (success, failure) {
+  User.prototype.facebookLogin = function (success, failure) {
 		var user = new User();
 
 		var permissions = ['user_about_me'];
