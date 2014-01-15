@@ -32,9 +32,9 @@
   "BundleIdentifier": "wejay2",
   "AppIcon":
     {
-      "36x18": "Images/icon.png",
-      "64x64": "Images/wejay64.png",
-      "128x128": "Images/wejay128.png"
+      "36x18": "img/wejay-icon.png",
+      "64x64": "img/wejay-logo-64x64.png",
+      "128x128": "img/wejay-logo-128x128.png"
     },
   "BundleType": "Application",
   "RequiredInterface": 1,
