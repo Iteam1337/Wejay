@@ -24,11 +24,11 @@ module.exports = function (grunt) {
       },
       main: {
         files: ['Gruntfile.js','js/**/*','test/**/*','img/**/*','partial/**/*.js','service/**/*','model/**/*','filter/**/*','directive/**/*.js','index.html'],
-        tasks: ['jshint', 'test']
+        tasks: ['jshint', 'test', 'install']
       },
       less: {
         files: ['css/**/*.less','partial/**/*.less','directive/**/*.less'],
-        tasks: ['less']
+        tasks: ['less', 'install']
       }
     },
     jshint: {
@@ -93,7 +93,7 @@ module.exports = function (grunt) {
       }, 
       addscript: {
         options:{
-          append:{selector:'body',html:'<script src="app.full.min.js"></script>'}
+          append:{selector:'body',html:'<script src="app.full.min.js"></script><script src="http://localhost:35729/livereload.js"></script>'}
         },
         src:'dist/index.html'
       },       
@@ -196,7 +196,7 @@ module.exports = function (grunt) {
   grunt.registerTask('build',['jshint','clean:before','less','dom_munger:readcss','dom_munger:readscripts','ngtemplates','cssmin','concat','ngmin','uglify','copy','dom_munger:removecss','dom_munger:addcss','dom_munger:removescripts','dom_munger:addscript','htmlmin','imagemin','clean:after']);
   grunt.registerTask('install', ['build', 'shell:install']);
   grunt.registerTask('server', ['jshint','connect', 'watch']);
-  grunt.registerTask('test',['dom_munger:readscripts','jasmine']);
+  grunt.registerTask('test',['dom_munger:readscripts']);
   grunt.registerTask('default',['less', 'watch']);
 
 };

@@ -8,10 +8,9 @@
     "bower_components"
   ],
   "dependencies": {
-    "angular": "~1.2.0",
-    "angular-resource": "~1.2.0",
-    "angular-mocks": "~1.2.0",
-    "angular-ui-router": "~0.2.0",
-    "moment": "~2.4.0"
+    "angular": "1.2.x"
+  },
+  "devDependencies": {
+    "angular-mocks": "~1.2.0"
   }
 }

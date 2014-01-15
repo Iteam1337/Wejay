@@ -1,14 +1,8 @@
-angular.module('wejay', ['ui.router', 'ngResource']);
+angular.module('wejay', []);
 
-angular.module('wejay').config(function($stateProvider, $urlRouterProvider) {
+angular.module('wejay').config(function() {
 
   'use strict';
-
-  $stateProvider.
-  /* Add New Routes Above */
-  
-  // For any unmatched url, redirect to /
-  $urlRouterProvider.otherwise("/");
 
 });
 

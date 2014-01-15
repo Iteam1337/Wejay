@@ -50,7 +50,8 @@
       "http://*.facebook.net",
       "http://81.201.221.135",
       "http://api.bitly.com",
-      "http://localhost:5000"
+      "http://localhost:5000",
+      "http://localhost:35729"
     ],
   "VendorIdentifier": "se.iteam",
   "AcceptedLinkTypes":
