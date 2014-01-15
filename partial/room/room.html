@@ -1,3 +1,9 @@
-<div ng-controller="RoomCtrl">
-  Wejay
-</div>
+<section ng-controller="RoomCtrl">
+  <ul>
+    <li ng-repeat="track in toplist">
+      <span>{{ track.starred }}</span>
+      <a ng-href="{{ track.artists[0].uri }}">{{ track.artists[0].name }}</a> -
+      <a ng-href="{{ track.uri }}">{{ track.name }}</a>
+    </li>
+  </ul>
+</section>

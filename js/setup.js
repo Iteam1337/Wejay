@@ -1,8 +1,10 @@
 angular.module('wejay', []);
 
-angular.module('wejay').config(function() {
+angular.module('wejay').config(function ($compileProvider) {
 
   'use strict';
+
+  $compileProvider.aHrefSanitizationWhitelist(/^\s*(spotify):/);
 
 });
 
