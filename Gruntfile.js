@@ -23,8 +23,12 @@ module.exports = function (grunt) {
         livereload: true
       },
       main: {
-        files: ['Gruntfile.js','js/**/*','test/**/*','img/**/*','partial/**/*.js','service/**/*','model/**/*','filter/**/*','directive/**/*.js','index.html'],
+        files: ['Gruntfile.js','js/**/*','test/**/*','img/**/*','partial/**/*.js','service/**/*','model/**/*','filter/**/*','directive/**/*.js'],
         tasks: ['jshint', 'test', 'install']
+      },
+      html: {
+        files:['**/*.html'],
+        tasks: ['install']
       },
       less: {
         files: ['css/**/*.less','partial/**/*.less','directive/**/*.less'],
