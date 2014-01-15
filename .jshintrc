@@ -16,6 +16,7 @@
         "console": true,
         "$": true,
         "_": true,
-        "moment": true
+        "moment": true,
+        "require": true
     }
 }
