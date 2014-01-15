@@ -10,6 +10,8 @@ angular.module('wejay').service('playlist',function($rootScope, spotifyAPI) {
   spotifyAPI.on('dropped', function(track) {
     playlist.pending.push(track);
     console.log('dropped', track);
+
+    $rootScope.$broadcast('playlistUpdated');
   });
 
 	return playlist;

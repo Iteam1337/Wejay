@@ -1,0 +1,40 @@
+.toplist {
+  li {
+    border-bottom:1px solid @border;
+    margin-bottom:5px;
+    padding-bottom:5px;
+
+    img {
+      cursor:pointer;
+      height:32px;
+      margin-right:10px;
+    }
+    
+    .info {
+      display:inline-block;
+      position: relative;
+      width:87%;
+
+      .star {
+        position: absolute;
+        right:0;
+        top:5px;
+      }
+
+      a {
+        .text-overflow;
+
+        display: block;
+        width:90%;
+
+        &.artist { 
+          color:@artist;
+        }
+
+        &.track {
+          color:@track;
+        }
+      }
+    }
+  }
+} 

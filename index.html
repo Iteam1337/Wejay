@@ -6,12 +6,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta charset="utf-8">
 
-<!--   <link rel="stylesheet" href="$views/css/buttons.css">
-  <link rel="stylesheet" href="$views/css/image.css">
-  <link rel="stylesheet" href="$views/css/list.css">
-  <link rel="stylesheet" href="$views/css/popup.css">
-  <link rel="stylesheet" href="$views/css/tabbar.css">
-  <link rel="stylesheet" href="$views/css/throbber.css"> -->
+  <link rel="stylesheet" href="$views/css/buttons.css" data-remove="exclude">
+  <link rel="stylesheet" href="$views/css/image.css" data-remove="exclude">
+  <link rel="stylesheet" href="$views/css/list.css" data-remove="exclude">
+  <link rel="stylesheet" href="$views/css/popup.css" data-remove="exclude">
+  <link rel="stylesheet" href="$views/css/tabbar.css" data-remove="exclude">
+  <link rel="stylesheet" href="$views/css/throbber.css" data-remove="exclude">
 
   <!-- App LESS -->
   <link href="temp/app.css" type="text/css" rel="stylesheet">
@@ -38,6 +38,7 @@
 
   <!-- Directive JS -->
   <script src="directive/playlist/playlist.js"></script>
+  <script src="directive/toplist/toplist.js"></script>
   <!-- Add New Directive JS Above -->
 
   <!-- Filter JS -->
@@ -49,7 +50,6 @@
 
   <div>
     <div ng-include="'partial/room/room.html'"></div>
-    <playlist></playlist>
   </div>
   
 </body>
