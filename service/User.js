@@ -1,4 +1,4 @@
-angular.module('wejay').service('User',function(spotifyAPI, $http) {
+angular.module('wejay').service('User',function(spotifyAPI, $http, $window) {
 
   'use strict';
 
@@ -27,6 +27,9 @@ angular.module('wejay').service('User',function(spotifyAPI, $http) {
 									user.name = facebookUser.name;
 									user.facebookId = facebookUser.id;
 
+									$window.localStorage.setItem('facebookUser', facebookUser);
+									$window.localStorage.setItem('accessToken', params.accessToken);
+									
 									success(user);
 								});
 	          } else {

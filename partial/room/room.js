@@ -1,4 +1,4 @@
-angular.module('wejay').controller('RoomCtrl',function($rootScope, $scope, spotifyAPI, User){
+angular.module('wejay').controller('RoomCtrl',function($rootScope, $scope, spotifyAPI, User, $window){
 
   'use strict';
 
@@ -6,9 +6,9 @@ angular.module('wejay').controller('RoomCtrl',function($rootScope, $scope, spoti
 
   $scope.toplist = [];
 
-  $scope.loginStatus = 'Ej inloggad';
-
   $scope.name = "Iteam";
+  $scope.authenticated = false;
+  $scope.user = null;
 
   $rootScope.$on('appReady', function () {
     toplist = spotifyAPI.toplist.forCurrentUser();
@@ -26,18 +26,14 @@ angular.module('wejay').controller('RoomCtrl',function($rootScope, $scope, spoti
   });
 
   $scope.login = function() {
-		//login via facebook
-		//get facebook user
-		//use socket.join to login to current room ("Iteam")
-
 		var user = new User();
 
 		user.facebookLogin(function(user) {
-			$scope.loginStatus = 'Inloggad som ' + user.name + ', ' + user.facebookId;
-
-		}, function(error) {
-			$scope.loginStatus = error;
+			$scope.user = user;
+			$scope.authenticated = true;
 			$scope.safeApply();
+		}, function(error) {
+			$window.alert('Login failed ' + error);
 		});
 	};
 });

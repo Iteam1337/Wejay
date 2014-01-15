@@ -1,9 +1,11 @@
 
 <section ng-controller="RoomCtrl">
-  <div><button ng-click="login()">Login with Facebook</button></div>
+	<div>Welcome to {{ name }}</div>
 
-  <div>Loginstatus: {{ loginStatus }}</div>
-  
+  <div ng-hide="authenticated"><button ng-click="login()">Login with Facebook</button></div>
+
+  <div ng-show="authenticated">Inloggad som: {{ user.name }}</div>
+
   <ul class="toplist">
     <li ng-repeat="track in toplist">
       <img ng-src="{{ track.image }}">
