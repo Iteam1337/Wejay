@@ -1,7 +1,15 @@
-<div ng-controller="RoomCtrl">
-  Wejay2
 
+<section ng-controller="RoomCtrl">
   <div><button ng-click="login()">Login with Facebook</button></div>
 
   <div>Loginstatus: {{ loginStatus }}</div>
-</div>
+  
+  <ul class="toplist">
+    <li ng-repeat="track in toplist">
+      <img ng-src="{{ track.image }}">
+      <a ng-href="{{ track.artists[0].uri }}">{{ track.artists[0].name }}</a> -
+      <a ng-href="{{ track.uri }}">{{ track.name }}</a>
+      <span>{{ track.starred }}</span>
+    </li>
+  </ul>
+</section>

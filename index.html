@@ -31,12 +31,14 @@
   <!-- Service JS -->
   <script src="service/spotifyAPI.js"></script>
   <script src="service/User.js"></script>
+  <script src="service/playlist.js"></script>
   <!-- Add New Service JS Above --> 
 
   <!-- Model JS -->
   <!-- Add New Model JS Above --> 
 
   <!-- Directive JS -->
+  <script src="directive/playlist/playlist.js"></script>
   <!-- Add New Directive JS Above -->
 
   <!-- Filter JS -->
@@ -48,6 +50,7 @@
 
   <div>
     <div ng-include="'partial/room/room.html'"></div>
+    <playlist></playlist>
   </div>
   
 </body>

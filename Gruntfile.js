@@ -24,7 +24,7 @@ module.exports = function (grunt) {
       },
       main: {
         files: ['Gruntfile.js','js/**/*','test/**/*','img/**/*','partial/**/*.js','service/**/*','model/**/*','filter/**/*','directive/**/*.js'],
-        tasks: ['jshint', 'test', 'install']
+        tasks: ['install']
       },
       html: {
         files:['**/*.html'],
@@ -32,7 +32,7 @@ module.exports = function (grunt) {
       },
       less: {
         files: ['css/**/*.less','partial/**/*.less','directive/**/*.less'],
-        tasks: ['less', 'install']
+        tasks: ['install']
       }
     },
     jshint: {

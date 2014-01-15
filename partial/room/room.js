@@ -1,10 +1,29 @@
-angular.module('wejay').controller('RoomCtrl',function($scope, User, $window){
+angular.module('wejay').controller('RoomCtrl',function($rootScope, $scope, spotifyAPI, User){
 
   'use strict';
+
+  var toplist;
+
+  $scope.toplist = [];
 
   $scope.loginStatus = 'Ej inloggad';
 
   $scope.name = "Iteam";
+
+  $rootScope.$on('appReady', function () {
+    toplist = spotifyAPI.toplist.forCurrentUser();
+
+    toplist.tracks.snapshot().done(function (tracks) {
+      for (var i = 0; i < 10; i++) {
+        $scope.toplist.push(tracks.get(i));
+      }
+
+      console.log($scope.toplist);
+
+      $scope.$apply();
+    });
+
+  });
 
   $scope.login = function() {
 		//login via facebook
@@ -21,5 +40,4 @@ angular.module('wejay').controller('RoomCtrl',function($scope, User, $window){
 			$scope.safeApply();
 		});
 	};
-  
 });
