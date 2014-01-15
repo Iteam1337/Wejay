@@ -19,12 +19,16 @@ module.exports = function (grunt) {
       }
     },
     watch: {
+      options: {
+        livereload: true
+      },
       main: {
-        options: {
-            livereload: true
-        },
-        files: ['js/**/*','css/**/*','img/**/*','partial/**/*','service/**/*','filter/**/*','directive/**/*','index.html'],
-        tasks: ['jshint']
+        files: ['Gruntfile.js','js/**/*','test/**/*','img/**/*','partial/**/*.js','service/**/*','model/**/*','filter/**/*','directive/**/*.js','index.html'],
+        tasks: ['jshint', 'test']
+      },
+      less: {
+        files: ['css/**/*.less','partial/**/*.less','directive/**/*.less'],
+        tasks: ['less']
       }
     },
     jshint: {
