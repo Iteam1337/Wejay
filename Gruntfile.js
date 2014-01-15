@@ -67,11 +67,7 @@ module.exports = function (grunt) {
       main: {
         files: [
           {src: ['index.html'], dest: 'dist/'},
-          {src: ['img/**'], dest: 'dist/'},
-          {src: ['bower_components/angular-ui/build/angular-ui-ieshiv.js'], dest: 'dist/'},
-          {src: ['bower_components/font-awesome/build/assets/font-awesome/font/**'], dest: 'dist/',filter:'isFile',expand:true},
-          // {src: ['bower_components/select2/*.png','bower_components/select2/*.gif'], dest:'dist/css/',flatten:true,expand:true},
-          {src: ['bower_components/angular-mocks/angular-mocks.js'], dest: 'dist/'}
+          {src: ['img/**'], dest: 'dist/'}
         ]
       }
     },
@@ -166,6 +162,17 @@ module.exports = function (grunt) {
           specs: 'test/unit/**/*.js'
         }
       }
+    },
+
+    shell: {
+      install: {
+        command: [
+          'rm -rf ~/Spotify/wejay2',
+          'mkdir -p ~/Spotify/wejay2',
+          'cp -r dist/* ~/Spotify/wejay2',
+          'cp manifest.json ~/Spotify/wejay2'
+        ].join(' && ')
+      }
     }
   });
 
@@ -184,8 +191,10 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-contrib-jasmine');
   grunt.loadNpmTasks('grunt-ngmin');
   grunt.loadNpmTasks('grunt-contrib-watch');
+  grunt.loadNpmTasks('grunt-shell');
 
   grunt.registerTask('build',['jshint','clean:before','less','dom_munger:readcss','dom_munger:readscripts','ngtemplates','cssmin','concat','ngmin','uglify','copy','dom_munger:removecss','dom_munger:addcss','dom_munger:removescripts','dom_munger:addscript','htmlmin','imagemin','clean:after']);
+  grunt.registerTask('install', ['build', 'shell:install']);
   grunt.registerTask('server', ['jshint','connect', 'watch']);
   grunt.registerTask('test',['dom_munger:readscripts','jasmine']);
   grunt.registerTask('default',['less', 'watch']);
