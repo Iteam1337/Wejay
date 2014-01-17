@@ -1,4 +1,4 @@
-angular.module('wejay').service('playlist',function($rootScope, spotifyAPI) {
+angular.module('wejay').service('playlist',function($rootScope, spotifyAPI, socket) {
 
   'use strict';
 
@@ -11,7 +11,7 @@ angular.module('wejay').service('playlist',function($rootScope, spotifyAPI) {
     console.log('dropped', tracks);
 
     tracks.map(function (track) {
-      playlist.pending.push(track.uri);
+      socket.emit('addSong', {spotifyId: track.uri, user: {id: 767015528 }});
     });
 
     $rootScope.$broadcast('playlistUpdated');

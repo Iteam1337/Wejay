@@ -9,13 +9,26 @@
     <div class="info">
       <div class="artist">{{ nowPlaying.artists[0].name }}</div>
       <div class="track">{{ nowPlaying.name }}</div>
+      <div class="user">
+        <img ng-src="{{ nowPlaying.user.image }}">
+      </div>
     </div>
   </div>
   <div class="fb-login" ng-hide="authenticated">
     <button ng-click="login()">Login with Facebook</button>
   </div>
-
-  <div ng-show="authenticated">Inloggad som: {{ user.name }}</div>
   <playlist></playlist>
+  <div id="usersNmeta">
+    <div>
+      <h3>Logged in Wejays</h3>
+      <ul>
+        <li ng-repeat="user in users">{{ user.name }}</li>
+      </ul>
+    </div>
+    <div class="bio">
+      <h3>About {{ nowPlaying.artists[0].name }}</h3>
+      <div ng-bind-html="nowPlaying.meta.biography | limitTo:500"></div>
+    </div>
+  </div>
   <toplist></toplist>
 </section>

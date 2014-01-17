@@ -25,7 +25,7 @@ section[ng-controller="RoomCtrl"] {
     #now-playing-image {
       bottom:-20px;
       display: inline-block;
-      left:40px;
+      left:@standardMargin;
       margin-right:20px;
       position: absolute;
 
@@ -59,6 +59,10 @@ section[ng-controller="RoomCtrl"] {
         &.track {
           color:@track;
         }
+
+        &.user {
+          .position(top-right, 5px, 20px);
+        }
       }
 
     }
@@ -84,6 +88,17 @@ section[ng-controller="RoomCtrl"] {
       padding:10px 10px 5px;
 
       &:hover { background: @fbLight; }
+    }
+  }
+  
+  #usersNmeta {
+    background:lighten(@bg,5%);
+    padding:(@standardMargin / 2) @standardMargin @standardMargin;
+
+    > div {
+      display: inline-block;
+      vertical-align:top;
+      width:49%;
     }
   }
 }

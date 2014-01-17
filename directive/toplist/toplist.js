@@ -1,4 +1,4 @@
-angular.module('wejay').directive('toplist', function() {
+angular.module('wejay').directive('toplist', function(spotifyAPI, $rootScope) {
 
   'use strict';
 
@@ -7,7 +7,6 @@ angular.module('wejay').directive('toplist', function() {
 		replace: true,
 		templateUrl: 'directive/toplist/toplist.html',
 		link: function(scope, element, attrs, fn) {
-
 
 		}
 	};

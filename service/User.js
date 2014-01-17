@@ -27,7 +27,7 @@ angular.module('wejay').service('User',function(spotifyAPI, $http, $window) {
 									user.name = facebookUser.name;
 									user.facebookId = facebookUser.id;
 
-									$window.localStorage.setItem('facebookUser', facebookUser);
+									$window.localStorage.setItem('facebookUser', JSON.stringify(facebookUser));
 									$window.localStorage.setItem('accessToken', params.accessToken);
 									
 									success(user);
