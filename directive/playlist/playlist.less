@@ -1,0 +1,75 @@
+.playlist {
+  padding:20px 40px 40px;
+
+  > div {
+    line-height: 1.75;
+  }
+
+  li {
+    padding:5px 10px;
+    position: relative;
+
+    &:nth-child(odd) {
+      background:lighten(@bg,5%);
+    }
+
+    &.mySong {
+      background:@wejay;
+    }
+
+    .star {
+      display: inline-block;
+      color: @faded;
+      cursor:pointer;
+      font-size: 16px;
+      line-height: 1;
+      margin:10px 10px 0 0;
+      vertical-align: top;
+
+      &.starred, &:hover {
+        color:@wejay;
+      }
+    }
+
+    img {
+      cursor:pointer;
+      height:32px;
+      margin-right:10px;
+      vertical-align:top;
+    }
+    
+    .info {
+      .text-overflow;
+
+      display:inline-block;
+      width:82%;
+
+      .artist { 
+        color:@artist;
+        font-weight:bold;
+      }
+
+      .track {
+        color:@track;
+      }
+    }
+
+    .duration {
+      .position(top-right, 15px, 10px);
+    }
+  }
+
+  .totals {
+    color: @faded;
+    margin-top: 10px;
+
+    .songs {
+      float:left;
+      padding-left:10px;
+    }
+    .duration {
+      float:right;
+      padding-right: 10px;
+    }
+  }
+} 

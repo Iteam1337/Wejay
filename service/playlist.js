@@ -7,9 +7,12 @@ angular.module('wejay').service('playlist',function($rootScope, spotifyAPI) {
     played: []
   };
 
-  spotifyAPI.on('dropped', function(track) {
-    playlist.pending.push(track);
-    console.log('dropped', track);
+  spotifyAPI.on('dropped', function(tracks) {
+    console.log('dropped', tracks);
+
+    tracks.map(function (track) {
+      playlist.pending.push(track.uri);
+    });
 
     $rootScope.$broadcast('playlistUpdated');
   });

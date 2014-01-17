@@ -1,22 +1,55 @@
 section[ng-controller="RoomCtrl"] {
   .now-playing {
-    border-bottom:1px solid @track;
     font-size:24px;
-    margin-bottom:40px;
-    padding-bottom:20px;
+    height:250px;
+    position: relative;
+
+    .background-wrap {
+      height:100%;
+      overflow:hidden;
+      position: relative;
+
+      #background {
+        -webkit-filter: blur(20px);
+        -webkit-transform: scale(2);
+        -webkit-transform-origin: top left;
+        background-size:cover;
+        height: 100%;
+        left:-100px;
+        position: absolute;
+        top:-100px;
+        width: 100%;
+      }
+    }
 
     #now-playing-image {
+      bottom:-20px;
       display: inline-block;
+      left:40px;
       margin-right:20px;
+      position: absolute;
+
+      .sp-image-style-inset .sp-image-inset {
+        .box-shadow(none);
+      }
     }
 
     .info {
+      .box-sizing();
+      
+      background: rgba(33,33,33,0.5);
+      bottom:0;
       display:inline-block;
-      padding-top:20px;
+      left:0;
+      padding: 5px 20px 5px 260px;
+      position: absolute;
       vertical-align:top;
-      width:73%;
+      width:100%;
+      z-index:2;
 
       div {
+        .text-overflow();
+        
         display: block;
 
         &.artist {
@@ -30,9 +63,27 @@ section[ng-controller="RoomCtrl"] {
 
     }
   }
-  .playlist, .toplist {
-    display:inline-block;
-    vertical-align:top;
-    width:49%;
+
+  .fb-login {
+    position: absolute;
+    top: 0;
+    right: 20px;
+    z-index: 3;
+
+    button {
+      .appearance();
+      .box-shadow(0px 1px 3px rgba(33,33,33,0.4));
+      .border-radius(0 0 3px 3px);
+
+      background:@fb;
+      border: none;
+      color:#fff;
+      cursor:pointer;
+      font-weight:bold;
+      margin:0;
+      padding:10px 10px 5px;
+
+      &:hover { background: @fbLight; }
+    }
   }
 }

@@ -3,7 +3,6 @@ html, body {
   color:@track;
   height:100%;
   margin:0;
-  padding:40px;
 }
 
 a {
@@ -19,4 +18,19 @@ ul {
   list-style:none;
   margin:0;
   padding:0;
+}
+
+.empty-state {
+  border: 1px dashed @faded;
+  color: @faded;
+  font-size: 21px;
+  padding: 60px;
+  text-align: center;
+
+  > div {
+    border-bottom: 1px solid rgba(248, 159, 48, 0.6);
+    color:@wejay;
+    display: inline-block;
+    margin-right: 20px;
+  }
 }

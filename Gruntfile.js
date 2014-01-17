@@ -27,7 +27,7 @@ module.exports = function (grunt) {
         tasks: ['install']
       },
       html: {
-        files:['**/*.html'],
+        files:['partial/**/*.html','index.html','directive/**/*.html'],
         tasks: ['install']
       },
       less: {

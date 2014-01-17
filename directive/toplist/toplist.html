@@ -1,4 +1,8 @@
-<div class="toplist">
+<div id="toplist">
+  <div class="bio" ng-show="nowPlaying.meta.biography">
+    <h3>About {{ nowPlaying.artists[0].name }}</h3>
+    <div ng-bind-html="nowPlaying.meta.biography | limitTo:500"></div>
+  </div>
   <h3>Your top tracks</h3>
   <ul>
     <li ng-repeat="track in toplist">

@@ -1,11 +1,11 @@
-angular.module('wejay', []);
+angular.module('wejay', ['ngSanitize']);
 
 angular.module('wejay').config(function ($compileProvider) {
 
   'use strict';
 
-  $compileProvider.aHrefSanitizationWhitelist(/^\s*(spotify):/);
-  $compileProvider.imgSrcSanitizationWhitelist(/^\s*(spotify):/);
+  $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|file|spotify):/);
+  $compileProvider.imgSrcSanitizationWhitelist(/^\s*(https?|ftp|mailto|file|spotify):/);
 
 });
 

@@ -1,17 +1,21 @@
 
 <section ng-controller="RoomCtrl">
-	<div>Welcome to {{ name }}</div>
-
-  <div ng-hide="authenticated"><button ng-click="login()">Login with Facebook</button></div>
-
-  <div ng-show="authenticated">Inloggad som: {{ user.name }}</div>
   <div class="now-playing">
+    <div class="overlay"></div>
+    <div class="background-wrap">
+      <div id="background"></div>
+    </div>
     <div id="now-playing-image"></div>
     <div class="info">
       <div class="artist">{{ nowPlaying.artists[0].name }}</div>
       <div class="track">{{ nowPlaying.name }}</div>
     </div>
   </div>
+  <div class="fb-login" ng-hide="authenticated">
+    <button ng-click="login()">Login with Facebook</button>
+  </div>
+
+  <div ng-show="authenticated">Inloggad som: {{ user.name }}</div>
   <playlist></playlist>
   <toplist></toplist>
 </section>

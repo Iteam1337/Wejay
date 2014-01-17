@@ -16,6 +16,13 @@
 }
 
 /**
+ * 
+ */
+.box-shadow(@shadow) {
+  .prefix(box-shadow, @shadow);
+}
+
+/**
  * [type description]
  * @type {[type]}
  */
@@ -81,6 +88,12 @@
  */
 .prefix(@property, @value) {
   -:~";-webkit-@{property}: @{value}; -moz-@{property}: @{value}; -ms-@{property}: @{value}; -o-@{property}: @{value}; @{property}: @{value}";
+}
+
+.position(@position, @top, @right) when (@position = top-right) {
+  position: absolute;
+  right: @right;
+  top: @top;
 }
 
 /**

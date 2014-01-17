@@ -1,8 +1,23 @@
 <div class="playlist">
+  <h2>{{ name }} playlist</h2>
   <ul>
     <li ng-repeat="track in playlist">
-      <div class="">{{ track.artists[0].name }}</div>
-      <div class="">{{ track.name }}</div>
+      <div class="star" ng-class="{'starred':track.starred}" ng-click="star(track)">&#9733;</div>
+      <img ng-src="{{ track.image }}">
+      <img ng-src="{{ track.user.image }}">
+      <div class="info">
+        <div class="artist">{{ track.artists[0].name }}</div>
+        <div class="track">{{ track.name }}</div>
+      </div>
+      <div class="duration">{{ track.time }}</div>
     </li>
   </ul>
+  <div class="totals" ng-show="totalDuration">
+     <div class="songs">{{ playlist.length }} songs</div>
+     <div class="duration">{{ totalDuration }} min</div>
+  </div>
+  <div class="empty-state" ng-hide="playlist">
+    <div>No songs ;(</div>
+    Drop some here to start playing!
+  </div>
 </div>
