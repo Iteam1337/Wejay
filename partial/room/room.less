@@ -71,7 +71,7 @@ section[ng-controller="RoomCtrl"] {
   .fb-login {
     position: absolute;
     top: 0;
-    right: 20px;
+    right: @standardMargin;
     z-index: 3;
 
     button {
@@ -99,6 +99,10 @@ section[ng-controller="RoomCtrl"] {
       display: inline-block;
       vertical-align:top;
       width:49%;
+
+      &:first-child {
+        margin-right:1.5%;
+      }
     }
   }
 }

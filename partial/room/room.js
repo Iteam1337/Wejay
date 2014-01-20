@@ -56,7 +56,7 @@ angular.module('wejay').controller('RoomCtrl',function(socket, $rootScope, $scop
 
     analyzer.addEventListener('audio', function (evt) {
       player.load('position').done(function() {
-        if(player.position >= ($scope.nowPlaying.duration - 1000)) {
+        if(player.position >= ($scope.nowPlaying.duration - 1500)) {
           console.log('skip');
           socket.emit('skip', {spotifyId: $scope.nowPlaying.uri});
         }
@@ -64,33 +64,36 @@ angular.module('wejay').controller('RoomCtrl',function(socket, $rootScope, $scop
     });
 
     $scope.$watch('nowPlaying', function (np) {
-      if ($scope.playlist && $scope.nowPlaying && $scope.nowPlaying.uri === $scope.playlist[0].uri) {
-        $scope.playlist.splice(0,1);
+      if (np) {
+        console.log($scope.playlist);
+        if ($scope.playlist && np.uri === $scope.playlist[0].uri) {
+          $scope.playlist.splice(0,1);
+        }
+
+        Track
+          .fromURI(np.uri)
+          .load('name')
+          .done(function (track) {
+            var image = spotifyAPI.image.forTrack(track, {player: true});
+
+            spotifyAPI.models.Artist.fromURI(track.artists[0].uri)
+              .load(artist_metadata_properties)
+              .done(function (meta) {
+                $scope.nowPlaying.meta = meta;
+                $scope.safeApply();
+              });
+
+            document.getElementById('background').style.backgroundImage = 'url(' + track.image + ')';
+
+            var imageContainer = document.getElementById('now-playing-image');
+            
+            if (imageContainer.firstChild) {
+              imageContainer.removeChild(imageContainer.firstChild);
+            }
+            
+            imageContainer.appendChild(image.node);
+          });
       }
-
-      Track
-        .fromURI(np.uri)
-        .load('name')
-        .done(function (track) {
-          var image = spotifyAPI.image.forTrack(track, {player: true});
-
-          spotifyAPI.models.Artist.fromURI(track.artists[0].uri)
-            .load(artist_metadata_properties)
-            .done(function (meta) {
-              $scope.nowPlaying.meta = meta;
-              $scope.safeApply();
-            });
-
-          document.getElementById('background').style.backgroundImage = 'url(' + track.image + ')';
-
-          var imageContainer = document.getElementById('now-playing-image');
-          
-          if (imageContainer.firstChild) {
-            imageContainer.removeChild(imageContainer.firstChild);
-          }
-          
-          imageContainer.appendChild(image.node);
-        });
     });
 
     $scope.$watch('room.queue', function (list) {
@@ -131,11 +134,13 @@ angular.module('wejay').controller('RoomCtrl',function(socket, $rootScope, $scop
   socket.on('queue', function (queue) {
     console.log('queue', queue);
     $scope.room.queue = queue;
+    $scope.safeApply();
   });
 
   socket.on('userJoined', function (users) {
     console.log('userJoined', users);
     $scope.room.users = users;
+    $scope.safeApply();
   });
 
   socket.on('nextSong', function (song) {
