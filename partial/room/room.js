@@ -26,6 +26,16 @@ angular.module('wejay').controller('RoomCtrl',function(socket, $rootScope, $scop
     player = spotifyAPI.models.player;
     Track  = spotifyAPI.models.Track;
 
+
+
+    spotifyAPI.models.Playlist
+    .createTemporary('Wejay')
+    .done(function(playlist){
+      playlist.load('tracks').done(function(playlist){
+        $scope.history = playlist;
+      });
+    });
+
     /**
      * Toplist
      */
@@ -49,6 +59,10 @@ angular.module('wejay').controller('RoomCtrl',function(socket, $rootScope, $scop
       if (p.data.track && p.data.track.advertisement && $scope.nowPlaying){
         $scope.master = p.data.playing && $scope.nowPlaying.spotifyId === p.data.track.uri;
         $scope.safeApply();
+      } else {
+        if (!p.data.track) {
+          $scope.skip();
+        }
       }
     });
 
@@ -72,12 +86,21 @@ angular.module('wejay').controller('RoomCtrl',function(socket, $rootScope, $scop
           song.track = track;
           bind(song.track);
 
-          if (song.position > track.duration) {
-            socket.emit('skip', song);
-          } else {
-            if ($scope.master){
+          if ($scope.master){
+            // song.position = new Date() - song.started;
+            if (song.position > track.duration || !track.playable) {
+              socket.emit('skip', song);
+            } else {
+
+              $scope.history.tracks.clear();
+              $scope.history.tracks.add(track);
+              player.context = $scope.history;
+              player.repeat = false;
+              player.shuffle = false;
+
+              player.playContext($scope.history);
               player.playTrack(track, song.position);
-              song.started = new Date(); // local time
+              song.started = new Date() - song.position; // local time
             }
           }
 
@@ -165,7 +188,7 @@ angular.module('wejay').controller('RoomCtrl',function(socket, $rootScope, $scop
           console.log('duration', duration, $scope.totalDuration);
         }
 
-        $scope.nowPlaying = playlist[0];
+        // $scope.nowPlaying = playlist[0];
       }
     });
   });
