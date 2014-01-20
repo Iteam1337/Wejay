@@ -147,6 +147,8 @@ angular.module('wejay').controller('RoomCtrl',function(socket, $rootScope, $scop
           $scope.totalDuration = makeDuration(duration);
           console.log('duration', duration, $scope.totalDuration);
         }
+
+        $scope.nowPlaying = playlist[0];
       }
     });
   });
@@ -210,6 +212,14 @@ angular.module('wejay').controller('RoomCtrl',function(socket, $rootScope, $scop
             });          
         }
       });
+  };
+
+  $scope.skip = function(){
+    socket.emit('skip', $scope.nowPlaying, function(message){
+      if (/Error:/.test(message)) {
+        $window.alert(message);
+      } 
+    });
   };
 
   $scope.login = function () {

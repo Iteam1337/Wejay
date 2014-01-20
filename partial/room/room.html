@@ -6,9 +6,13 @@
       <div id="background"></div>
     </div>
     <div id="now-playing-image"></div>
-    <div class="info">
+    <div class="info" ng-show="nowPlaying">
       <div class="artist">{{ nowPlaying.track.artists[0].name }}</div>
-      <div class="track">{{ nowPlaying.track.name }}</div>
+      <div class="track">{{ nowPlaying.track.name }} 
+      </div>
+      <div class="tools">
+        <button ng-click="skip()">Skip</button> 
+      </div>  
       <div class="user">
         <img ng-src="{{ nowPlaying.user.image }}">
       </div>
@@ -29,7 +33,7 @@
     </div>
     <div class="bio">
       <h3>About {{ nowPlaying.track.artists[0].name }}</h3>
-      <div ng-bind-html="nowPlaying.track.meta.biography | limitTo:500"></div>
+      <div ng-bind-html="nowPlaying.meta.biography | limitTo:500"></div>
     </div>
   </div>
   <toplist></toplist>
