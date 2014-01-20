@@ -46,7 +46,7 @@ angular.module('wejay').controller('RoomCtrl',function(socket, $rootScope, $scop
     player.addEventListener('change', function (p) {
       console.log('change', p);
 
-      if (p.data.track && $scope.nowPlaying){
+      if (p.data.track && p.data.track.advertisement && $scope.nowPlaying){
         $scope.master = p.data.playing && $scope.nowPlaying.spotifyId === p.data.track.uri;
         $scope.safeApply();
       }
