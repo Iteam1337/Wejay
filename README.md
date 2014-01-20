@@ -9,9 +9,10 @@ Wejay is an app for Spotify developed by Iteam. By installing the app you and yo
 ### Mac
 1. Download the zip or clone the repo
 2. Put the files in some folder with easy access
-3. Run
-  npm install
-4. Run
-  grunt
+3. In folder
+  3. Run
+    npm install
+  4. Run
+    grunt
 5. Restart Spotify if open
 6. Start spotify:app:wejay2
