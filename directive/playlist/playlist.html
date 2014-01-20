@@ -1,17 +1,17 @@
 <div class="playlist">
-  <h2 ng-show="room.roomName">{{ room.roomName }} playlist</h2>
+  <h2 ng-show="room.roomName">{{ room.roomName }} Wejay Room</h2>
   <ul>
-    <li ng-repeat="track in playlist">
-      <div class="star" ng-class="{'starred':track.starred}" ng-click="star(track)">&#9733;</div>
-      <img ng-src="{{ track.image }}">
+    <li ng-repeat="song in playlist.slice(1)">
+      <div class="star" ng-class="{'starred':song.track.starred}" ng-click="star(song.track)">&#9733;</div>
+      <img ng-src="{{ song.track.image }}">
       <div class="info">
-        <a class="artist" ng-href="{{ track.artists[0].uri }}">{{ track.artists[0].name }}</a>
+        <a class="artist" ng-href="{{ song.track.artists[0].uri }}">{{ song.track.artists[0].name }}</a>
         <div class="track">
-          {{ track.name }}
+          {{ song.track.name }}
         </div>
       </div>
-      <img ng-src="{{ track.user.image }}">
-      <div class="duration">{{ track.time }}</div>
+      <img ng-src="{{ song.user.image }}">
+      <div class="duration">{{ song.time }}</div>
     </li>
   </ul>
   <div class="totals" ng-show="totalDuration">

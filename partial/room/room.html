@@ -7,8 +7,8 @@
     </div>
     <div id="now-playing-image"></div>
     <div class="info">
-      <div class="artist">{{ nowPlaying.artists[0].name }}</div>
-      <div class="track">{{ nowPlaying.name }}</div>
+      <div class="artist">{{ nowPlaying.track.artists[0].name }}</div>
+      <div class="track">{{ nowPlaying.track.name }}</div>
       <div class="user">
         <img ng-src="{{ nowPlaying.user.image }}">
       </div>
@@ -28,8 +28,8 @@
       </ul>
     </div>
     <div class="bio">
-      <h3>About {{ nowPlaying.artists[0].name }}</h3>
-      <div ng-bind-html="nowPlaying.meta.biography | limitTo:500"></div>
+      <h3>About {{ nowPlaying.track.artists[0].name }}</h3>
+      <div ng-bind-html="nowPlaying.track.meta.biography | limitTo:500"></div>
     </div>
   </div>
   <toplist></toplist>

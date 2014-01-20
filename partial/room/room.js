@@ -8,6 +8,7 @@ angular.module('wejay').controller('RoomCtrl',function(socket, $rootScope, $scop
   $scope.users         = [];
   $scope.authenticated = false;
   $scope.user          = null;
+  $scope.master        = true; // default to play the room directly (being master)
 
   var artist_metadata_properties = [
     'biography',
@@ -43,32 +44,31 @@ angular.module('wejay').controller('RoomCtrl',function(socket, $rootScope, $scop
      * @param  {[type]} p [description]
      * @return {[type]}   [description]
      */
-    player.load('track').done(function (p) {
-      $scope.nowPlaying = p.track;
-    });
+    // player.load('track').done(function (p) {
+    //   $scope.nowPlaying = p.track;
+    // });
 
     player.addEventListener('change', function (p) {
-      $scope.nowPlaying = p.data.track;
-      $scope.safeApply();
+      console.log('change', p);
+
+      if (p.data.track && $scope.nowPlaying){
+        $scope.master = p.data.playing && $scope.nowPlaying.spotifyId === p.data.track.uri;
+      }
     });
 
-    var analyzer = spotifyAPI.audio.RealtimeAnalyzer.forPlayer(player);
+    // var analyzer = spotifyAPI.audio.RealtimeAnalyzer.forPlayer(player);
 
-    analyzer.addEventListener('audio', function (evt) {
-      player.load('position').done(function() {
-        if(player.position >= ($scope.nowPlaying.duration - 1500)) {
-          console.log('skip');
-          socket.emit('skip', {spotifyId: $scope.nowPlaying.uri});
-        }
-      });
-    });
+    // analyzer.addEventListener('audio', function (evt) {
+    //   player.load('position').done(function() {
+    //     if(player.position >= ($scope.nowPlaying.duration - 1500)) {
+    //       console.log('skip');
+    //       socket.emit('skip', {spotifyId: $scope.nowPlaying.uri});
+    //     }
+    //   });
+    // });
 
     $scope.$watch('nowPlaying', function (np) {
       if (np) {
-        console.log($scope.playlist);
-        if ($scope.playlist && np.uri === $scope.playlist[0].uri) {
-          $scope.playlist.splice(0,1);
-        }
 
         Track
           .fromURI(np.uri)
@@ -83,7 +83,7 @@ angular.module('wejay').controller('RoomCtrl',function(socket, $rootScope, $scop
                 $scope.safeApply();
               });
 
-            document.getElementById('background').style.backgroundImage = 'url(' + track.image + ')';
+            document.getElementById('background').style.backgroundImage = 'url(' + np.track.image + ')';
 
             var imageContainer = document.getElementById('now-playing-image');
             
@@ -96,39 +96,39 @@ angular.module('wejay').controller('RoomCtrl',function(socket, $rootScope, $scop
       }
     });
 
-    $scope.$watch('room.queue', function (list) {
-      $scope.totalDuration = 0;
+    $scope.$watch('room.queue', function (queue) {
 
-      if (list) {
-        $scope.playlist = [];
 
-        list.map(function (track) {
-          Track.fromURI(track.spotifyId)
+      if (queue) {
+        $scope.playlist = queue.map(function (song) {
+          spotifyAPI.facebook.FacebookUser
+          .fromId(song.user.facebookId)
+          .load('name')
+          .done(function (user) {
+            song.user = user;
+            $scope.safeApply();
+          });
+
+          Track.fromURI(song.spotifyId)
             .load('name')
-            .done(function (spotifyTrack) {
-              if (!spotifyTrack.local) {
-                var duration = spotifyTrack.duration;
-
-                spotifyAPI.facebook.FacebookUser
-                  .fromId(track.user.facebookId)
-                  .load('name')
-                  .done(function (user) {
-                    spotifyTrack.user = user;
-                    console.log('user', user);
-
-                    $scope.safeApply();
-                  });
-
-                $scope.totalDuration = $scope.totalDuration + Math.round(duration/60000);
-
-                spotifyTrack.time = makeDuration(duration);
-                $scope.playlist.push(spotifyTrack);
-
-                $scope.safeApply();
+            .done(function (track) {
+              if (!track.local) {
+                song.length = track.duration;
+                song.time = makeDuration(track.duration);
+                song.track = track;
               }
             });
+          return song;
         });
+        $scope.safeApply();
       }
+    });
+
+    $scope.$watch('playlist', function(playlist){
+      $scope.totalDuration = playlist && playlist.reduce(function(a,b){
+        a = a + (b.length || b.track && b.track.duration) / 60000;
+        return a;
+      }, 0);
     });
   });
 
@@ -146,7 +146,12 @@ angular.module('wejay').controller('RoomCtrl',function(socket, $rootScope, $scop
 
   socket.on('nextSong', function (song) {
     console.log('nextSong', song);
-    player.playTrack(Track.fromURI(song.spotifyId));
+    $scope.nowPlaying = song;
+    $scope.safeApply();
+
+    if ($scope.master) {
+      player.playTrack(Track.fromURI(song.spotifyId));
+    }
   });
 
   /**
@@ -208,7 +213,9 @@ angular.module('wejay').controller('RoomCtrl',function(socket, $rootScope, $scop
               if (current.position > track.duration) {
                 socket.emit('skip', {spotifyId: current.spotifyId});
               } else {
-                player.playTrack(track, current.position);
+                if ($scope.master){
+                  player.playTrack(track, current.position);
+                }
               }
             });
         }
@@ -220,6 +227,7 @@ angular.module('wejay').controller('RoomCtrl',function(socket, $rootScope, $scop
 			$window.alert('Login failed ' + error);
 		});
 	};
+
 
   /**
    * Makes a more readable duration from ms to m:ss
