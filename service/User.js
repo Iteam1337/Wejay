@@ -4,41 +4,51 @@ angular.module('wejay').service('User',function(spotifyAPI, $http, $window) {
 
   function User(data) {
 
-    this.facebookId = "";
-    this.name = "";
+    this.name = data.name;
+    this.id = this.facebookId = data.id;
+
+    $window.localStorage.setItem('facebookUser', this);
+
   }
 
-  User.prototype.facebookLogin = function (success, failure) {
-		var user = new User();
+  User.facebookLogin = function(success, failure){
+    var token = $window.localStorage.getItem('accessToken');
+    if (token) {
+      return getDetails(token, success, failure);
+    } else {
+      return facebookAuthenticate(function(token){
+        $window.localStorage.setItem('accessToken', token);
+        return getDetails(token, success, failure);
+      });
+    }
+  };
+
+
+  var getDetails = function(accessToken, success){
+    //go get facebook user
+    return $http.get("https://graph.facebook.com/me?access_token=" + accessToken)
+    .success(function(data){
+      success(new User(data));
+    });
+  };
+
+  var facebookAuthenticate = function (success, failure) {
 
 		var permissions = ['user_about_me'];
 		var appId = '154112144637878';
 
-	    spotifyAPI.auth.authenticateWithFacebook(appId, permissions)
-	      .done(function(params) {
-	          if (params.accessToken) {
-
-							//go get facebook user
-							$http.get("https://graph.facebook.com/me?access_token=" + params.accessToken)
-								.success(function(facebookUser) {
-									var user = new User();
-
-									user.name = facebookUser.name;
-									user.id = user.facebookId = facebookUser.id;
-
-									$window.localStorage.setItem('facebookUser', JSON.stringify(facebookUser));
-									$window.localStorage.setItem('accessToken', params.accessToken);
-									success(user);
-								});
-	          } else {
-              failure('No access token returned');
-	          }
-	      }).fail(function(req, error) {
-						console.log('not logged in', error);
-	          failure('The Auth request ' + req + ' failed with error: ' + error);
-	      }).always(function() {});
+    spotifyAPI.auth.authenticateWithFacebook(appId, permissions)
+      .done(function(params) {
+          if (params.accessToken) {
+            success(params.accessToken);
+          } else {
+            failure('No access token returned');
+          }
+      }).fail(function(req, error) {
+					console.log('not logged in', error);
+          failure('The Auth request ' + req + ' failed with error: ' + error);
+      }).always(function() {});
 	  
-	  return user;
   };
 
 	return User;	

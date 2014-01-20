@@ -42,10 +42,7 @@ angular.module('wejay').controller('RoomCtrl',function(socket, $rootScope, $scop
     var toplist = spotifyAPI.toplist.forCurrentUser();
 
     toplist.tracks.snapshot().done(function (tracks) {
-      for (var i = 0; i < 5; i++) {
-        $scope.toplist.push(tracks.get(i));
-      }
-      
+      $scope.toplist = Array.prototype.slice.call(tracks, 0,5);
       $scope.safeApply();
     });
 
@@ -57,25 +54,18 @@ angular.module('wejay').controller('RoomCtrl',function(socket, $rootScope, $scop
       console.log('change', p);
 
       if (p.data.track && p.data.track.advertisement && $scope.nowPlaying){
+
+        // pause or another song is playing
         $scope.master = p.data.playing && $scope.nowPlaying.spotifyId === p.data.track.uri;
         $scope.safeApply();
       } else {
+
+        // next pressed
         if (!p.data.track) {
           $scope.skip();
         }
       }
     });
-
-    // var analyzer = spotifyAPI.audio.RealtimeAnalyzer.forPlayer(player);
-
-    // analyzer.addEventListener('audio', function (evt) {
-    //   player.load('position').done(function() {
-    //     if(player.position >= ($scope.nowPlaying.duration - 1500)) {
-    //       console.log('skip');
-    //       socket.emit('skip', {spotifyId: $scope.nowPlaying.uri});
-    //     }
-    //   });
-    // });
 
     $scope.$watch('nowPlaying', function (song) {
       if (song){
@@ -260,9 +250,8 @@ angular.module('wejay').controller('RoomCtrl',function(socket, $rootScope, $scop
   };
 
   $scope.login = function () {
-		var user = new User();
 
-		user.facebookLogin(function(user) {
+		User.facebookLogin(function(user) {
       $scope.users.push(user);
       $rootScope.me = user;
 
@@ -278,6 +267,7 @@ angular.module('wejay').controller('RoomCtrl',function(socket, $rootScope, $scop
 		});
 	};
 
+  $scope.login(); // autologin
 
   /**
    * Makes a more readable duration from ms to m:ss
