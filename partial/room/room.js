@@ -40,14 +40,9 @@ angular.module('wejay').controller('RoomCtrl',function(socket, $rootScope, $scop
     });
 
     /**
-     * Now playing
-     * @param  {[type]} p [description]
-     * @return {[type]}   [description]
+     * Listen for change events and see if the song is changed from the current playing song 
+     * which means we are pausing or playing something else
      */
-    // player.load('track').done(function (p) {
-    //   $scope.nowPlaying = p.track;
-    // });
-
     player.addEventListener('change', function (p) {
       console.log('change', p);
 
@@ -68,17 +63,27 @@ angular.module('wejay').controller('RoomCtrl',function(socket, $rootScope, $scop
     // });
 
     $scope.$watch('nowPlaying', function (song) {
-      if (!song.track) {
+      if (song){
+        if (!song.track) {
 
-        Track
-          .fromURI(song.spotifyId)
-          .load('name')
-          .done(function (track) {
-            song.track = track;
-            changeBackground(song.track);
-          });
-      } else {
-        changeBackground(song.track);
+          Track
+            .fromURI(song.spotifyId)
+            .load('name')
+            .done(function (track) {
+              song.track = track;
+              changeBackground(song.track);
+            });
+
+          spotifyAPI.facebook.FacebookUser
+            .fromId(song.user.facebookId)
+            .load('name')
+            .done(function (user) {
+              song.user = user;
+              $scope.safeApply();
+            });
+        } else {
+          changeBackground(song.track);
+        }
       }
     });
 
@@ -106,16 +111,16 @@ angular.module('wejay').controller('RoomCtrl',function(socket, $rootScope, $scop
 
     $scope.$watch('room.queue', function (queue) {
 
-
+      console.log('queue', queue);
       if (queue) {
         $scope.playlist = queue.map(function (song) {
           spotifyAPI.facebook.FacebookUser
-          .fromId(song.user.facebookId)
-          .load('name')
-          .done(function (user) {
-            song.user = user;
-            $scope.safeApply();
-          });
+            .fromId(song.user.facebookId)
+            .load('name')
+            .done(function (user) {
+              song.user = user;
+              $scope.safeApply();
+            });
 
           Track.fromURI(song.spotifyId)
             .load('name')
@@ -124,19 +129,25 @@ angular.module('wejay').controller('RoomCtrl',function(socket, $rootScope, $scop
                 song.length = track.duration;
                 song.time = makeDuration(track.duration);
                 song.track = track;
+                $scope.safeApply();
               }
             });
           return song;
         });
-        $scope.safeApply();
       }
     });
 
     $scope.$watch('playlist', function(playlist){
-      $scope.totalDuration = playlist && playlist.reduce(function(a,b){
-        a = a + (b.length || b.track && b.track.duration) / 60000;
-        return a;
-      }, 0);
+      if (playlist){
+        var duration = playlist.reduce(function(a,b){
+          return a + (b.length - (b.position || 0) );
+        }, 0);
+
+        if (duration) { 
+          $scope.totalDuration = makeDuration(duration);
+          console.log('duration', duration, $scope.totalDuration);
+        }
+      }
     });
   });
 
