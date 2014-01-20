@@ -13,3 +13,5 @@ Wejay is an app for Spotify developed by Iteam. By installing the app you and yo
   npm install
 4. Run
   grunt
+5. Restart Spotify if open
+6. Start spotify:app:wejay2
