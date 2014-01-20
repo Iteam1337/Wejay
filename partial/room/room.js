@@ -67,34 +67,42 @@ angular.module('wejay').controller('RoomCtrl',function(socket, $rootScope, $scop
     //   });
     // });
 
-    $scope.$watch('nowPlaying', function (np) {
-      if (np) {
+    $scope.$watch('nowPlaying', function (song) {
+      if (!song.track) {
 
         Track
-          .fromURI(np.uri)
+          .fromURI(song.spotifyId)
           .load('name')
           .done(function (track) {
-            var image = spotifyAPI.image.forTrack(track, {player: true});
-
-            spotifyAPI.models.Artist.fromURI(track.artists[0].uri)
-              .load(artist_metadata_properties)
-              .done(function (meta) {
-                $scope.nowPlaying.meta = meta;
-                $scope.safeApply();
-              });
-
-            document.getElementById('background').style.backgroundImage = 'url(' + np.track.image + ')';
-
-            var imageContainer = document.getElementById('now-playing-image');
-            
-            if (imageContainer.firstChild) {
-              imageContainer.removeChild(imageContainer.firstChild);
-            }
-            
-            imageContainer.appendChild(image.node);
+            song.track = track;
+            changeBackground(song.track);
           });
+      } else {
+        changeBackground(song.track);
       }
     });
+
+    // directive?
+    var changeBackground = function(track){
+
+
+      spotifyAPI.models.Artist.fromURI(track.artists[0].uri)
+        .load(artist_metadata_properties)
+        .done(function (meta) {
+          $scope.nowPlaying.meta = meta;
+          $scope.safeApply();
+        });
+
+
+      var image = spotifyAPI.image.forTrack(track, {player: true});
+      document.getElementById('background').style.backgroundImage = 'url(' + track.image + ')';
+      var imageContainer = document.getElementById('now-playing-image');
+      if (imageContainer.firstChild) {
+        imageContainer.removeChild(imageContainer.firstChild);
+      }
+      imageContainer.appendChild(image.node);
+    };
+
 
     $scope.$watch('room.queue', function (queue) {
 
