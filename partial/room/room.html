@@ -15,8 +15,9 @@
       </div>
     </div>
   </div>
-  <div class="fb-login" ng-hide="authenticated">
-    <button ng-click="login()">Login with Facebook</button>
+  <div class="fb-login">
+    <button ng-click="login()" ng-hide="me">Login with Facebook</button>
+    <button ng-click="logout()" ng-show="me">Logout</button>
   </div>
   <playlist></playlist>
   <div id="usersNmeta">
@@ -28,10 +29,16 @@
                {{ user.name }}</li>
       </ul>
     </div>
-    <div class="bio">
+    <div class="bio" ng-show="nowPlaying.meta.biography">
       <h3>About {{ nowPlaying.track.artists[0].name }}</h3>
       <div ng-bind-html="nowPlaying.meta.biography | limitTo:500"></div>
     </div>
   </div>
   <toplist></toplist>
+
+
 </section>
+<!-- TODO: make it perrrty -->
+<select ng-model="room.roomName">
+  <option ng-repeat="work in me.work">{{work.employer.name}}</option>
+</select>

@@ -6,8 +6,6 @@ angular.module('wejay').controller('RoomCtrl',function(socket, $rootScope, $scop
 
   $scope.toplist       = [];
   $scope.users         = [];
-  $scope.authenticated = false;
-  $scope.user          = null;
   $scope.master        = true; // default to play the room directly (being master)
 
   var artist_metadata_properties = [
@@ -42,7 +40,7 @@ angular.module('wejay').controller('RoomCtrl',function(socket, $rootScope, $scop
     var toplist = spotifyAPI.toplist.forCurrentUser();
 
     toplist.tracks.snapshot().done(function (tracks) {
-      $scope.toplist = Array.prototype.slice.call(tracks, 0,5);
+      $scope.toplist = Array.prototype.slice.call(tracks, 0, 5);
       $scope.safeApply();
     });
 
@@ -249,23 +247,32 @@ angular.module('wejay').controller('RoomCtrl',function(socket, $rootScope, $scop
     });
   };
 
+  $scope.logout = function () {
+    socket.emit('logout', {roomName: $scope.roomName, user: $scope.me}, function () {
+      $scope.roomName = null;
+    });
+
+  };
+
   $scope.login = function () {
 
 		User.facebookLogin(function(user) {
       $scope.users.push(user);
       $rootScope.me = user;
-
-      socket.emit('join', {roomName: 'Iteam', user: user}, function (room) {
-        $scope.room = room;
-        $scope.nowPlaying = room.currentSong;
-      });
-
-			$scope.authenticated = true;
-			$scope.safeApply();
+      $scope.roomName = user.work && user.work.length && user.work[0].employer.name || 'Iteam';
+      $scope.safeApply();
 		}, function(error) {
 			$window.alert('Login failed ' + error);
 		});
 	};
+
+  $scope.$watch('roomName', function(roomName){
+    socket.emit('join', {roomName: roomName, user: $scope.me}, function (room) {
+      $scope.room = room;
+      $scope.nowPlaying = room.currentSong;
+      $scope.safeApply();
+    });
+  });
 
   $scope.login(); // autologin
 

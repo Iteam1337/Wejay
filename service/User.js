@@ -6,6 +6,7 @@ angular.module('wejay').service('User',function(spotifyAPI, $http, $window) {
 
     this.name = data.name;
     this.id = this.facebookId = data.id;
+    this.work = data.work;
 
     $window.localStorage.setItem('facebookUser', this);
 
