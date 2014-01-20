@@ -48,6 +48,7 @@ angular.module('wejay').controller('RoomCtrl',function(socket, $rootScope, $scop
 
       if (p.data.track && $scope.nowPlaying){
         $scope.master = p.data.playing && $scope.nowPlaying.spotifyId === p.data.track.uri;
+        $scope.safeApply();
       }
     });
 
@@ -64,31 +65,47 @@ angular.module('wejay').controller('RoomCtrl',function(socket, $rootScope, $scop
 
     $scope.$watch('nowPlaying', function (song) {
       if (song){
-        if (!song.track) {
+        Track
+        .fromURI(song.spotifyId)
+        .load('name')
+        .done(function (track) {
+          song.track = track;
+          bind(song.track);
 
-          Track
-            .fromURI(song.spotifyId)
-            .load('name')
-            .done(function (track) {
-              song.track = track;
-              changeBackground(song.track);
-            });
+          if (song.position > track.duration) {
+            socket.emit('skip', song);
+          } else {
+            if ($scope.master){
+              player.playTrack(track, song.position);
+              song.started = new Date(); // local time
+            }
+          }
 
-          spotifyAPI.facebook.FacebookUser
-            .fromId(song.user.facebookId)
-            .load('name')
-            .done(function (user) {
-              song.user = user;
-              $scope.safeApply();
-            });
-        } else {
-          changeBackground(song.track);
-        }
+        });
+
+        spotifyAPI.facebook.FacebookUser
+        .fromId(song.user.facebookId)
+        .load('name')
+        .done(function (user) {
+          song.user = user;
+          $scope.safeApply();
+        });
       }
     });
 
+    $scope.$watch('master', function (master) {
+      if (master){
+        if ($scope.master) {
+          player.playTrack($scope.nowPlaying.track, new Date() - $scope.nowPlaying.started);
+        }
+      } else {
+        player.pause();
+      }
+    });
+
+
     // directive?
-    var changeBackground = function(track){
+    var bind = function(track){
 
 
       spotifyAPI.models.Artist.fromURI(track.artists[0].uri)
@@ -170,9 +187,6 @@ angular.module('wejay').controller('RoomCtrl',function(socket, $rootScope, $scop
     $scope.nowPlaying = song;
     $scope.safeApply();
 
-    if ($scope.master) {
-      player.playTrack(Track.fromURI(song.spotifyId));
-    }
   });
 
   /**
@@ -231,23 +245,7 @@ angular.module('wejay').controller('RoomCtrl',function(socket, $rootScope, $scop
 
       socket.emit('join', {roomName: 'Iteam', user: user}, function (room) {
         $scope.room = room;
-
-        var current = room.currentSong;
-
-        if (current) {
-          Track
-            .fromURI(current.spotifyId)
-            .load('name')
-            .done(function (track) {
-              if (current.position > track.duration) {
-                socket.emit('skip', {spotifyId: current.spotifyId});
-              } else {
-                if ($scope.master){
-                  player.playTrack(track, current.position);
-                }
-              }
-            });
-        }
+        $scope.nowPlaying = room.currentSong;
       });
 
 			$scope.authenticated = true;
