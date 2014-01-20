@@ -70,6 +70,7 @@ module.exports = function (grunt) {
     copy: {
       main: {
         files: [
+          {src: ['manifest.json'], dest: 'dist/'},
           {src: ['index.html'], dest: 'dist/'},
           {src: ['img/**'], dest: 'dist/'}
         ]
@@ -180,7 +181,6 @@ module.exports = function (grunt) {
           'rm -rf ~/Spotify/wejay2',
           'mkdir -p ~/Spotify/wejay2',
           'cp -r dist/* ~/Spotify/wejay2',
-          'cp manifest.json ~/Spotify/wejay2'
         ].join(' && ')
       }
     }
