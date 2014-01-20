@@ -22,7 +22,9 @@
     <div>
       <h3>Logged in Wejays</h3>
       <ul>
-        <li ng-repeat="user in users">{{ user.name }}</li>
+        <li ng-repeat="user in users">
+               <img ng-src="{{ user.image }}">
+               {{ user.name }}</li>
       </ul>
     </div>
     <div class="bio">

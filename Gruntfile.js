@@ -91,13 +91,19 @@ module.exports = function (grunt) {
       removescripts: {
         options:{
           remove:'script[data-remove!="exclude"]',
-          append:{selector:'head',html:'<script src="app.full.min.js"></script>'}
+          append:{selector:'head',html:'<script src="app.full.js"></script>'}
         },
         src:'dist/index.html'
       }, 
       addscript: {
+        /*production: {
+          options:{
+            append:{selector:'body',html:'<script src="app.full.min.js"></script>'}
+          },
+          src:'dist/index.html'
+        },*/
         options:{
-          append:{selector:'body',html:'<script src="app.full.min.js"></script><script src="http://localhost:35729/livereload.js"></script>'}
+          append:{selector:'body',html:'<script src="app.full.js"></script><script src="http://localhost:35729/livereload.js"></script>'}
         },
         src:'dist/index.html'
       },       
@@ -124,18 +130,18 @@ module.exports = function (grunt) {
     concat: {
       main: {
         src: ['<%= dom_munger.data.appjs %>','<%= ngtemplates.main.dest %>'],
-        dest: 'temp/app.full.js'
+        dest: 'dist/app.full.js'
       }
     },
     ngmin: {
       main: {
-        src:'temp/app.full.js',
+        src:'dist/app.full.js',
         dest: 'temp/app.full.js'
       }
     },
     uglify: {
       main: {
-        src: 'temp/app.full.js',
+        src: 'dist/app.full.js',
         dest:'dist/app.full.min.js'
       }
     },
@@ -197,7 +203,8 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-shell');
 
-  grunt.registerTask('build',['jshint','clean:before','less','dom_munger:readcss','dom_munger:readscripts','ngtemplates','cssmin','concat','ngmin','uglify','copy','dom_munger:removecss','dom_munger:addcss','dom_munger:removescripts','dom_munger:addscript','htmlmin','imagemin','clean:after']);
+  grunt.registerTask('build',['jshint','clean:before','less','dom_munger:readcss','dom_munger:readscripts','ngtemplates','cssmin','concat','copy','dom_munger:removecss','dom_munger:addcss','dom_munger:removescripts','dom_munger:addscript:development','htmlmin','imagemin','clean:after']);
+  grunt.registerTask('production',['jshint','clean:before','less','dom_munger:readcss','dom_munger:readscripts','ngtemplates','cssmin','concat','ngmin','uglify','copy','dom_munger:removecss','dom_munger:addcss','dom_munger:removescripts','dom_munger:addscript:development','htmlmin','imagemin','clean:after']);
   grunt.registerTask('install', ['build', 'shell:install']);
   grunt.registerTask('server', ['jshint','connect', 'watch']);
   grunt.registerTask('test',['dom_munger:readscripts']);

@@ -109,11 +109,12 @@ angular.module('wejay').controller('RoomCtrl',function(socket, $rootScope, $scop
               if (!spotifyTrack.local) {
                 var duration = spotifyTrack.duration;
 
-                spotifyAPI.models.User
-                  .fromUsername('believer')
+                spotifyAPI.facebook.FacebookUser
+                  .fromId(track.user.facebookId)
                   .load('name')
                   .done(function (user) {
                     spotifyTrack.user = user;
+                    console.log('user', user);
 
                     $scope.safeApply();
                   });
@@ -192,8 +193,9 @@ angular.module('wejay').controller('RoomCtrl',function(socket, $rootScope, $scop
 
 		user.facebookLogin(function(user) {
       $scope.users.push(user);
+      $rootScope.me = user;
 
-      socket.emit('join', {roomName: 'Iteam', user: {id: user.facebookId}}, function (room) {
+      socket.emit('join', {roomName: 'Iteam', user: user}, function (room) {
         $scope.room = room;
 
         var current = room.currentSong;

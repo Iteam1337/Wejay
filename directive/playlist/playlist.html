@@ -1,16 +1,16 @@
 <div class="playlist">
   <h2 ng-show="room.roomName">{{ room.roomName }} playlist</h2>
   <ul>
-    <li ng-repeat="track in playlist track by track.uri">
+    <li ng-repeat="track in playlist">
       <div class="star" ng-class="{'starred':track.starred}" ng-click="star(track)">&#9733;</div>
       <img ng-src="{{ track.image }}">
-      <img ng-src="{{ track.user.image }}">
       <div class="info">
         <a class="artist" ng-href="{{ track.artists[0].uri }}">{{ track.artists[0].name }}</a>
         <div class="track">
           {{ track.name }}
         </div>
       </div>
+      <img ng-src="{{ track.user.image }}">
       <div class="duration">{{ track.time }}</div>
     </li>
   </ul>

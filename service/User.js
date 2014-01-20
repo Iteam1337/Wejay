@@ -6,7 +6,6 @@ angular.module('wejay').service('User',function(spotifyAPI, $http, $window) {
 
     this.facebookId = "";
     this.name = "";
-
   }
 
   User.prototype.facebookLogin = function (success, failure) {
@@ -25,11 +24,10 @@ angular.module('wejay').service('User',function(spotifyAPI, $http, $window) {
 									var user = new User();
 
 									user.name = facebookUser.name;
-									user.facebookId = facebookUser.id;
+									user.id = user.facebookId = facebookUser.id;
 
 									$window.localStorage.setItem('facebookUser', JSON.stringify(facebookUser));
 									$window.localStorage.setItem('accessToken', params.accessToken);
-									
 									success(user);
 								});
 	          } else {
