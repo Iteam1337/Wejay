@@ -89,6 +89,9 @@ angular.module('wejay').controller('RoomCtrl',function(socket, $rootScope, $scop
     console.log('nextSong', song);
     $scope.nowPlaying = song;
     $scope.safeApply();
+    if (!song) {
+      player.pause();
+    }
 
   });
 

@@ -2,7 +2,13 @@ angular.module('wejay').service('socket', function(socketIo, $q, $rootScope) {
 
   'use strict';
 
-  var socket = socketIo.connect('http://node-wejay-415927084.eu-west-1.elb.amazonaws.com');
+  var socket = socketIo.connect('54.194.197.163');
+
+  console.log('connecting...');
+
+  socket.on('connect', function(){
+    console.log('connected!');
+  });
 
   return {
     on: function (eventName, callback) {
