@@ -210,7 +210,7 @@ angular.module('wejay').controller('RoomCtrl',function(socket, $rootScope, $scop
       bind(song.track);
 
       if ($scope.master){
-        // song.position = new Date() - song.started;
+        if (song.localStarted) { song.position = new Date() - song.localStarted; }
         if (song.position > track.duration || !track.playable) {
           socket.emit('skip', song);
         } else {
