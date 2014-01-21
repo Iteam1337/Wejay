@@ -11,9 +11,11 @@
       <div class="track">{{ nowPlaying.track.name }} 
       </div>
       <div class="tools">
-        <button ng-click="skip()">Skip</button>
         <input type="checkbox" ng-model="master"> <!-- peeerty pleeze -->
-      </div>  
+      </div>
+      <div class="action">
+        <button ng-click="skip()">Skip</button>
+      </div>
       <div class="user">
         <img ng-src="{{ nowPlaying.user.image }}">
       </div>

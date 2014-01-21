@@ -59,11 +59,15 @@ angular.module('wejay').controller('RoomCtrl',function(socket, $rootScope, $scop
       // next
       if (!p.data.playing)
       {
-        $scope.skip();
+        if($scope.master && !p.data.track){
+          socket.emit('skip', $scope.nowPlaying);
+        }
       } else{
-        if (p.data.track){
+        if (p.data.track && !p.data.track.adversiment){
           if (p.data.track.uri !== $scope.nowPlaying.spotifyId){
             $scope.master = false;
+          } else {
+            $scope.master = true;
           }
         }
       }
