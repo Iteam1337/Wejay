@@ -44,7 +44,8 @@ angular.module('wejay').controller('RoomCtrl',function(socket, $rootScope, $scop
     var toplist = spotifyAPI.toplist.forCurrentUser();
 
     toplist.tracks.snapshot().done(function (tracks) {
-      $scope.toplist = Array.prototype.slice.call(tracks, 0, 5);
+      console.log('tracks', tracks);
+      $scope.toplist = tracks._meta.slice(0, 5);
       $scope.safeApply();
     });
 
@@ -55,13 +56,7 @@ angular.module('wejay').controller('RoomCtrl',function(socket, $rootScope, $scop
     player.addEventListener('change', function (p) {
       console.log('change', p);
 
-      if (p.data.track && p.data.track.advertisement && $scope.nowPlaying){
-
-        // pause or another song is playing
-        $scope.master = p.data.playing && $scope.nowPlaying.spotifyId === p.data.track.uri;
-        $scope.safeApply();
-      } else {
-
+      if (p.data.track && $scope.nowPlaying){
         // next pressed
         if (!p.data.track) {
           $scope.skip();
@@ -124,26 +119,6 @@ angular.module('wejay').controller('RoomCtrl',function(socket, $rootScope, $scop
   });
 
 
-  // directive?
-  var bind = function(track){
-
-
-    spotifyAPI.models.Artist.fromURI(track.artists[0].uri)
-      .load(artist_metadata_properties)
-      .done(function (meta) {
-        $scope.nowPlaying.meta = meta;
-        $scope.safeApply();
-      });
-
-
-    var image = spotifyAPI.image.forTrack(track, {player: true});
-    document.getElementById('background').style.backgroundImage = 'url(' + track.image + ')';
-    var imageContainer = document.getElementById('now-playing-image');
-    if (imageContainer.firstChild) {
-      imageContainer.removeChild(imageContainer.firstChild);
-    }
-    imageContainer.appendChild(image.node);
-  };
 
 
   $scope.$watch('room.queue', function (queue) {
@@ -308,6 +283,25 @@ angular.module('wejay').controller('RoomCtrl',function(socket, $rootScope, $scop
    *  HELPERS
    */
 
+
+  // directive?
+  function bind(track){
+
+    spotifyAPI.models.Artist.fromURI(track.artists[0].uri)
+      .load(artist_metadata_properties)
+      .done(function (meta) {
+        $scope.nowPlaying.meta = meta;
+        $scope.safeApply();
+      });
+
+    var image = spotifyAPI.image.forTrack(track, {player: true});
+    document.getElementById('background').style.backgroundImage = 'url(' + track.image + ')';
+    var imageContainer = document.getElementById('now-playing-image');
+    if (imageContainer.firstChild) {
+      imageContainer.removeChild(imageContainer.firstChild);
+    }
+    imageContainer.appendChild(image.node);
+  }
 
   /**
    * Makes a more readable duration from ms to m:ss
