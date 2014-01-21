@@ -24,6 +24,7 @@ angular.module('wejay').controller('RoomCtrl',function(socket, $rootScope, $scop
     player = spotifyAPI.models.player;
     Track  = spotifyAPI.models.Track;
 
+    $scope.login(); // autologin
 
 
     spotifyAPI.models.Playlist
@@ -65,121 +66,12 @@ angular.module('wejay').controller('RoomCtrl',function(socket, $rootScope, $scop
       }
     });
 
-    $scope.$watch('nowPlaying', function (song) {
-      if (song){
-        Track
-        .fromURI(song.spotifyId)
-        .load('name')
-        .done(function (track) {
-          song.track = track;
-          bind(song.track);
-
-          if ($scope.master){
-            // song.position = new Date() - song.started;
-            if (song.position > track.duration || !track.playable) {
-              socket.emit('skip', song);
-            } else {
-
-              $scope.history.tracks.clear();
-              $scope.history.tracks.add(track);
-              player.context = $scope.history;
-              player.repeat = false;
-              player.shuffle = false;
-
-              player.playContext($scope.history);
-              player.playTrack(track, song.position);
-              song.started = new Date() - song.position; // local time
-            }
-          }
-
-        });
-
-        spotifyAPI.facebook.FacebookUser
-        .fromId(song.user.facebookId)
-        .load('name')
-        .done(function (user) {
-          song.user = user;
-          $scope.safeApply();
-        });
-      }
-    });
-
-    $scope.$watch('master', function (master) {
-      if (master){
-        if ($scope.master) {
-          player.playTrack($scope.nowPlaying.track, new Date() - $scope.nowPlaying.started);
-        }
-      } else {
-        player.pause();
-      }
-    });
-
-
-    // directive?
-    var bind = function(track){
-
-
-      spotifyAPI.models.Artist.fromURI(track.artists[0].uri)
-        .load(artist_metadata_properties)
-        .done(function (meta) {
-          $scope.nowPlaying.meta = meta;
-          $scope.safeApply();
-        });
-
-
-      var image = spotifyAPI.image.forTrack(track, {player: true});
-      document.getElementById('background').style.backgroundImage = 'url(' + track.image + ')';
-      var imageContainer = document.getElementById('now-playing-image');
-      if (imageContainer.firstChild) {
-        imageContainer.removeChild(imageContainer.firstChild);
-      }
-      imageContainer.appendChild(image.node);
-    };
-
-
-    $scope.$watch('room.queue', function (queue) {
-
-      console.log('queue', queue);
-      if (queue) {
-        $scope.playlist = queue.map(function (song) {
-          spotifyAPI.facebook.FacebookUser
-            .fromId(song.user.facebookId)
-            .load('name')
-            .done(function (user) {
-              song.user = user;
-              $scope.safeApply();
-            });
-
-          Track.fromURI(song.spotifyId)
-            .load('name')
-            .done(function (track) {
-              if (!track.local) {
-                song.length = track.duration;
-                song.time = makeDuration(track.duration);
-                song.track = track;
-                $scope.safeApply();
-              }
-            });
-          return song;
-        });
-      }
-    });
-
-    $scope.$watch('playlist', function(playlist){
-      if (playlist){
-        var duration = playlist.reduce(function(a,b){
-          return a + (b.length - (b.position || 0) );
-        }, 0);
-
-        if (duration) { 
-          $scope.totalDuration = makeDuration(duration);
-          console.log('duration', duration, $scope.totalDuration);
-        }
-
-        // $scope.nowPlaying = playlist[0];
-      }
-    });
   });
+
+
+  /**
+   * SOCKET
+   */
 
   socket.on('queue', function (queue) {
     console.log('queue', queue);
@@ -199,6 +91,133 @@ angular.module('wejay').controller('RoomCtrl',function(socket, $rootScope, $scop
     $scope.safeApply();
 
   });
+
+
+  /**
+   * WATCH
+   */
+
+
+
+  $scope.$watch('nowPlaying', function (song) {
+    if (song){
+      Track
+      .fromURI(song.spotifyId)
+      .load('name')
+      .done(function (track) {
+        song.track = track;
+        bind(song.track);
+
+        if ($scope.master){
+          // song.position = new Date() - song.started;
+          if (song.position > track.duration || !track.playable) {
+            socket.emit('skip', song);
+          } else {
+
+            $scope.history.tracks.clear();
+            $scope.history.tracks.add(track);
+            player.context = $scope.history;
+            player.repeat = false;
+            player.shuffle = false;
+
+            player.playContext($scope.history);
+            player.playTrack(track, song.position);
+            song.started = new Date() - song.position; // local time
+          }
+        }
+
+      });
+
+      spotifyAPI.facebook.FacebookUser
+      .fromId(song.user.facebookId)
+      .load('name')
+      .done(function (user) {
+        song.user = user;
+        $scope.safeApply();
+      });
+    }
+  });
+
+  $scope.$watch('master', function (master) {
+    if (master){
+      if ($scope.master) {
+        player.playTrack($scope.nowPlaying.track, new Date() - $scope.nowPlaying.started);
+      }
+    } else {
+      player.pause();
+    }
+  });
+
+
+  // directive?
+  var bind = function(track){
+
+
+    spotifyAPI.models.Artist.fromURI(track.artists[0].uri)
+      .load(artist_metadata_properties)
+      .done(function (meta) {
+        $scope.nowPlaying.meta = meta;
+        $scope.safeApply();
+      });
+
+
+    var image = spotifyAPI.image.forTrack(track, {player: true});
+    document.getElementById('background').style.backgroundImage = 'url(' + track.image + ')';
+    var imageContainer = document.getElementById('now-playing-image');
+    if (imageContainer.firstChild) {
+      imageContainer.removeChild(imageContainer.firstChild);
+    }
+    imageContainer.appendChild(image.node);
+  };
+
+
+  $scope.$watch('room.queue', function (queue) {
+
+    console.log('queue', queue);
+    if (queue) {
+      $scope.playlist = queue.map(function (song) {
+        spotifyAPI.facebook.FacebookUser
+          .fromId(song.user.facebookId)
+          .load('name')
+          .done(function (user) {
+            song.user = user;
+            $scope.safeApply();
+          });
+
+        Track.fromURI(song.spotifyId)
+          .load('name')
+          .done(function (track) {
+            if (!track.local) {
+              song.length = track.duration;
+              song.time = makeDuration(track.duration);
+              song.track = track;
+              $scope.safeApply();
+            }
+          });
+        return song;
+      });
+    }
+  });
+
+  $scope.$watch('playlist', function(playlist){
+    if (playlist){
+      var duration = playlist.reduce(function(a,b){
+        return a + (b.length - (b.position || 0) );
+      }, 0);
+
+      if (duration) { 
+        $scope.totalDuration = makeDuration(duration);
+        console.log('duration', duration, $scope.totalDuration);
+      }
+
+      // $scope.nowPlaying = playlist[0];
+    }
+  });
+
+
+  /**
+   *  METHODS
+   */
 
   /**
    * [playTrack description]
@@ -274,7 +293,11 @@ angular.module('wejay').controller('RoomCtrl',function(socket, $rootScope, $scop
     });
   });
 
-  $scope.login(); // autologin
+
+  /**
+   *  HELPERS
+   */
+
 
   /**
    * Makes a more readable duration from ms to m:ss

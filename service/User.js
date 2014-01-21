@@ -15,7 +15,10 @@ angular.module('wejay').service('User',function(spotifyAPI, $http, $window) {
   User.facebookLogin = function(success, failure){
     var token = $window.localStorage.getItem('accessToken');
     if (token) {
-      return getDetails(token, success, failure);
+      return getDetails(token, success, function(){
+        $window.localStorage.setItem('accessToken', '');
+        return User.facebookLogin(success, failure); // try again without saved token
+      });
     } else {
       return facebookAuthenticate(function(token){
         $window.localStorage.setItem('accessToken', token);
@@ -25,11 +28,14 @@ angular.module('wejay').service('User',function(spotifyAPI, $http, $window) {
   };
 
 
-  var getDetails = function(accessToken, success){
+  var getDetails = function(accessToken, success, failure){
     //go get facebook user
     return $http.get("https://graph.facebook.com/me?access_token=" + accessToken)
     .success(function(data){
       success(new User(data));
+    })
+    .error(function(data){
+      failure(data);
     });
   };
 
