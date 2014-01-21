@@ -56,10 +56,15 @@ angular.module('wejay').controller('RoomCtrl',function(socket, $rootScope, $scop
     player.addEventListener('change', function (p) {
       console.log('change', p);
 
-      if (p.data.track && $scope.nowPlaying){
-        // next pressed
-        if (!p.data.track) {
-          $scope.skip();
+      // next
+      if (!p.data.playing)
+      {
+        $scope.skip();
+      } else{
+        if (p.data.track){
+          if (p.data.track.uri !== $scope.nowPlaying.spotifyId){
+            $scope.master = false;
+          }
         }
       }
     });
