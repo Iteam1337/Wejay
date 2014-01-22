@@ -121,7 +121,7 @@ angular.module('wejay').controller('RoomCtrl',function(socket, $rootScope, $scop
     if (master){
       if ($scope.master) {
         var song = $scope.nowPlaying;
-        song.position = new Date() - song.localStartedf;
+        song.position = new Date() - song.localStarted;
         $scope.setCurrent(song);
       }
     } else {
@@ -186,7 +186,7 @@ angular.module('wejay').controller('RoomCtrl',function(socket, $rootScope, $scop
    * @return {[type]}     [description]
    */
   $scope.setCurrent = function (song) {
-    if ( !song ) { return; }
+    if ( !song || !song.spotifyId ) { return; }
 
     Track
     .fromURI(song.spotifyId)
@@ -217,13 +217,15 @@ angular.module('wejay').controller('RoomCtrl',function(socket, $rootScope, $scop
 
     });
 
-    spotifyAPI.facebook.FacebookUser
-    .fromId(song.user.facebookId)
-    .load('name')
-    .done(function (user) {
-      song.user = user;
-      $scope.safeApply();
-    });
+    if (song.user.facebookId){
+      spotifyAPI.facebook.FacebookUser
+      .fromId(song.user.facebookId)
+      .load('name')
+      .done(function (user) {
+        song.user = user;
+        $scope.safeApply();
+      });
+    }
 
   };
 
