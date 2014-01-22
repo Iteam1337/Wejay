@@ -180,7 +180,7 @@ module.exports = function (grunt) {
         command: [
           'rm -rf ~/Spotify/wejay2',
           'mkdir -p ~/Spotify/wejay2',
-          'cp -r dist/* ~/Spotify/wejay2',
+          'cp -r dist/* ~/Spotify/wejay2'
         ].join(' && ')
       }
     }

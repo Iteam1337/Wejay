@@ -61,7 +61,7 @@ angular.module('wejay').controller('RoomCtrl',function(socket, $rootScope, $scop
       {
         if($scope.master && !p.data.track){
           socket.emit('skip', $scope.nowPlaying);
-        }
+        } 
       } else{
         if (p.data.track && !p.data.track.adversiment){
           if (p.data.track.uri !== $scope.nowPlaying.spotifyId){
@@ -95,6 +95,8 @@ angular.module('wejay').controller('RoomCtrl',function(socket, $rootScope, $scop
   socket.on('nextSong', function (song) {
     console.log('nextSong', song);
     $scope.nowPlaying = song;
+    $scope.setCurrent(song); // hängslen
+
     $scope.safeApply();
     if (!song) {
       player.pause();
@@ -206,6 +208,7 @@ angular.module('wejay').controller('RoomCtrl',function(socket, $rootScope, $scop
             .add(track)
             .done(function(){
               player.playContext($scope.history, 0, song.position);
+              player.play();
             });
           });
         }
