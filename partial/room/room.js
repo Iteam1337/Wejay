@@ -121,7 +121,6 @@ angular.module('wejay').controller('RoomCtrl',function(socket, $rootScope, $scop
     if (master){
       if ($scope.master) {
         var song = $scope.nowPlaying;
-        song.position = new Date() - song.localStarted;
         $scope.setCurrent(song);
       }
     } else {
