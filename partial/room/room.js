@@ -86,22 +86,19 @@ angular.module('wejay').controller('RoomCtrl',function(socket, $rootScope, $scop
   socket.on('queue', function (queue) {
     console.log('queue', queue);
     $scope.room.queue = queue;
-    $scope.safeApply();
   });
 
   socket.on('userJoined', function (users) {
     console.log('userJoined', users);
     $scope.room.users = users;
-    $scope.safeApply();
   });
 
   socket.on('nextSong', function (song) {
     console.log('nextSong', song);
     $scope.nowPlaying = song;
-    $scope.setCurrent(song); // hängslen
 
-    $scope.safeApply();
     if (!song) {
+      $scope.history.tracks.clear();
       player.pause();
     }
 
@@ -138,16 +135,14 @@ angular.module('wejay').controller('RoomCtrl',function(socket, $rootScope, $scop
 
   $scope.$watch('room.queue', function (queue) {
 
-    console.log('queue', queue);
     if (queue) {
       $scope.playlist = queue.map(function (song) {
-        spotifyAPI.facebook.FacebookUser
-          .fromId(song.user.facebookId)
-          .load('name')
-          .done(function (user) {
-            song.user = user;
-            $scope.safeApply();
-          });
+    
+
+      // tmp
+      if (song.length) song = song[0];
+      
+      console.log('queue', song);
 
         Track.fromURI(song.spotifyId)
           .load('name')
@@ -159,6 +154,12 @@ angular.module('wejay').controller('RoomCtrl',function(socket, $rootScope, $scop
               $scope.safeApply();
             }
           });
+
+        if (song.user && song.user.facebookId){
+          var user = spotifyAPI.facebook.FacebookUser.fromId(song.user.facebookId);
+          if (user) song.user = user;
+          $scope.safeApply();
+        }
         return song;
       });
     }
@@ -234,6 +235,11 @@ angular.module('wejay').controller('RoomCtrl',function(socket, $rootScope, $scop
 
   };
 
+  $scope.queueTrack = function (track){
+    console.log('queueTrack', track);
+    socket.emit('addSong', {spotifyId: track.uri, length: track.duration, user: $rootScope.me});
+  };
+
   /**
    * [star description]
    * @param  {[type]} track [description]
@@ -293,7 +299,6 @@ angular.module('wejay').controller('RoomCtrl',function(socket, $rootScope, $scop
     socket.emit('join', {roomName: roomName, user: $scope.me}, function (room) {
       $scope.room = room;
       $scope.nowPlaying = room.currentSong;
-      $scope.safeApply();
     });
   });
 

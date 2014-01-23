@@ -2,7 +2,7 @@ angular.module('wejay').service('socket', function(socketIo, $q, $rootScope) {
 
   'use strict';
 
-  var socket = socketIo.connect('54.194.197.163');
+  var socket = socketIo.connect('node.wejay.org', {transports:['xhr-polling', 'jsonp-polling']});
 
   console.log('connecting...');
 
