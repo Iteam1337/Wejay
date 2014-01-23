@@ -54,25 +54,24 @@ angular.module('wejay').controller('RoomCtrl',function(socket, $rootScope, $scop
      * which means we are pausing or playing something else
      */
     player.addEventListener('change', function (p) {
-      console.log('change', p);
+      var song = $scope.nowPlaying;
+      if (!song) return;
+      
+      console.log('change', p, song);
 
-      // // next
-      // if (!p.data.playing)
-      // {
-      //   if($scope.master && p.data.track.uri === $scope.nowPlaying.spotifyId){
-      //     socket.emit('skip', $scope.nowPlaying);
-      //   } 
-      // } else {
-      //   // new song
-      //   if (p.data.track && !p.data.track.adversiment && $scope.nowPlaying){
-      //     if (p.data.track.uri !== $scope.nowPlaying.spotifyId){
-      //       $scope.master = false;
-      //     } else {
-      //       $scope.master = true;
-      //     }
-      //     $scope.safeApply();
-      //   }
-      // }
+      if (p.data.index === 1 && p.data.playing ){
+        socket.emit('skip', song);
+      } else {
+        // new song
+        if (p.data.track && !p.data.track.adversiment && song){
+          if (p.data.track.uri !== song.spotifyId){
+            $scope.master = false;
+          } else {
+            $scope.master = true;
+          }
+          $scope.safeApply();
+        }
+      }
 
     });
 
@@ -213,10 +212,11 @@ angular.module('wejay').controller('RoomCtrl',function(socket, $rootScope, $scop
             .done(function(){
               player.playContext($scope.history, 0, song.position);
               player.play();
+              $scope.history.tracks.add(track);
+              track.started = new Date() - song.position;
             });
           });
         }
-        song.localStarted = new Date() - song.position; // local time
       }
 
     });
