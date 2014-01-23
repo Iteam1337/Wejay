@@ -59,18 +59,21 @@ angular.module('wejay').controller('RoomCtrl',function(socket, $rootScope, $scop
       // next
       if (!p.data.playing)
       {
-        if($scope.master && !p.data.track){
+        if($scope.master && p.data.track.uri === $scope.nowPlaying.spotifyId){
           socket.emit('skip', $scope.nowPlaying);
         } 
-      } else{
-        if (p.data.track && !p.data.track.adversiment){
+      } else {
+        // new song
+        if (p.data.track && !p.data.track.adversiment && $scope.nowPlaying){
           if (p.data.track.uri !== $scope.nowPlaying.spotifyId){
             $scope.master = false;
           } else {
             $scope.master = true;
           }
+          $scope.safeApply();
         }
       }
+
     });
 
   });
@@ -124,7 +127,9 @@ angular.module('wejay').controller('RoomCtrl',function(socket, $rootScope, $scop
         $scope.setCurrent(song);
       }
     } else {
-      player.pause();
+      if (player.track.uri === $scope.nowPlaying.spotifyId){
+        player.pause();
+      }
     }
   });
 
