@@ -214,11 +214,11 @@ angular.module('wejay').controller('RoomCtrl',function(socket, $rootScope, $scop
               player.playContext($scope.history, 0, song.position);
               player.play();
               $scope.history.tracks.add(track);
-              track.started = new Date() - song.position;
             });
           });
         }
       }
+      song.localStarted = new Date() - song.position;
 
     });
 
