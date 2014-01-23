@@ -56,23 +56,23 @@ angular.module('wejay').controller('RoomCtrl',function(socket, $rootScope, $scop
     player.addEventListener('change', function (p) {
       console.log('change', p);
 
-      // next
-      if (!p.data.playing || p.data.position === 0)
-      {
-        if($scope.master && p.data.track.uri === $scope.nowPlaying.spotifyId){
-          socket.emit('skip', $scope.nowPlaying);
-        } 
-      } else {
-        // new song
-        if (p.data.track && !p.data.track.adversiment && $scope.nowPlaying){
-          if (p.data.track.uri !== $scope.nowPlaying.spotifyId){
-            $scope.master = false;
-          } else {
-            $scope.master = true;
-          }
-          $scope.safeApply();
-        }
-      }
+      // // next
+      // if (!p.data.playing)
+      // {
+      //   if($scope.master && p.data.track.uri === $scope.nowPlaying.spotifyId){
+      //     socket.emit('skip', $scope.nowPlaying);
+      //   } 
+      // } else {
+      //   // new song
+      //   if (p.data.track && !p.data.track.adversiment && $scope.nowPlaying){
+      //     if (p.data.track.uri !== $scope.nowPlaying.spotifyId){
+      //       $scope.master = false;
+      //     } else {
+      //       $scope.master = true;
+      //     }
+      //     $scope.safeApply();
+      //   }
+      // }
 
     });
 
