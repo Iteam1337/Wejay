@@ -57,7 +57,7 @@ angular.module('wejay').controller('RoomCtrl',function(socket, $rootScope, $scop
       console.log('change', p);
 
       // next
-      if (!p.data.playing)
+      if (!p.data.playing || p.data.position === 0)
       {
         if($scope.master && p.data.track.uri === $scope.nowPlaying.spotifyId){
           socket.emit('skip', $scope.nowPlaying);
