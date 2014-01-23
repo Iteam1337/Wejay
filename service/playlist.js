@@ -11,8 +11,10 @@ angular.module('wejay').service('playlist',function($rootScope, spotifyAPI, User
     console.log('dropped', tracks);
 
     var songs = tracks.map(function (track) {
-      return {spotifyId: track.uri, length: track.duration, user: $rootScope.me};
+      return {spotifyId: track.uri, user: $rootScope.me};
     });
+    console.log('addSong', songs);
+    
     
     socket.emit('addSong', songs);
 

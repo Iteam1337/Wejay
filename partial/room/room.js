@@ -45,7 +45,7 @@ angular.module('wejay').controller('RoomCtrl',function(socket, $rootScope, $scop
 
     toplist.tracks.snapshot().done(function (tracks) {
       console.log('tracks', tracks);
-      $scope.toplist = tracks._meta.slice(0, 5);
+      $scope.toplist = tracks.toArray().slice(0, 5);
       $scope.safeApply();
     });
 
@@ -69,9 +69,17 @@ angular.module('wejay').controller('RoomCtrl',function(socket, $rootScope, $scop
             $scope.master = false;
           } else {
             $scope.master = true;
+            console.log('resume', song);
           }
           $scope.safeApply();
         }
+      }
+      song.position = new Date().getTime() - (song.localStarted || new Date(song.started).getTime());
+      if (Math.floor(p.data.position / 30) !== Math.floor(song.position / 30) )
+      {
+        console.log('position', song.position, p.data.track.duration);
+        player.seek(song.position);
+        p.preventDefault();
       }
 
     });
@@ -96,6 +104,7 @@ angular.module('wejay').controller('RoomCtrl',function(socket, $rootScope, $scop
   socket.on('nextSong', function (song) {
     console.log('nextSong', song);
     $scope.nowPlaying = song;
+    $scope.setCurrent(song); // hängslen
 
     if (!song) {
       $scope.history.tracks.clear();
@@ -141,7 +150,7 @@ angular.module('wejay').controller('RoomCtrl',function(socket, $rootScope, $scop
 
       // tmp
       if (song.length) song = song[0];
-      
+
       console.log('queue', song);
 
         Track.fromURI(song.spotifyId)
@@ -201,7 +210,7 @@ angular.module('wejay').controller('RoomCtrl',function(socket, $rootScope, $scop
       bind(song.track);
 
       if ($scope.master){
-        if (song.localStarted) { song.position = new Date() - song.localStarted; }
+        song.position = new Date().getTime() - (song.localStarted || new Date(song.started).getTime());
         if (song.position > track.duration || !track.playable) {
           socket.emit('skip', song);
         } else {
@@ -219,7 +228,7 @@ angular.module('wejay').controller('RoomCtrl',function(socket, $rootScope, $scop
           });
         }
       }
-      song.localStarted = new Date() - song.position;
+      song.localStarted = new Date().getTime() - (song.position || 0);
 
     });
 
@@ -237,7 +246,9 @@ angular.module('wejay').controller('RoomCtrl',function(socket, $rootScope, $scop
 
   $scope.queueTrack = function (track){
     console.log('queueTrack', track);
-    socket.emit('addSong', {spotifyId: track.uri, length: track.duration, user: $rootScope.me});
+    socket.emit('addSong', {spotifyId: track.uri, length: track.duration, user: $rootScope.me}, function (queue) {
+       console.log('queue', queue); 
+    });
   };
 
   /**
