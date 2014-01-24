@@ -308,8 +308,11 @@ angular.module('wejay').controller('RoomCtrl',function(socket, $rootScope, $scop
 
   $scope.$watch('roomName', function(roomName){
     socket.emit('join', {roomName: roomName, user: $scope.me}, function (room) {
-      $scope.room = room;
-      $scope.nowPlaying = room.currentSong;
+      if (typeof(room) === "object"){
+        $scope.room = room;
+        $scope.users = room.users;
+        $scope.nowPlaying = room.currentSong;
+      }
     });
   });
 
