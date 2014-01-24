@@ -98,7 +98,7 @@ angular.module('wejay').controller('RoomCtrl',function(socket, $rootScope, $scop
 
   socket.on('userJoined', function (users) {
     console.log('userJoined', users);
-    $scope.room.users = users;
+    $scope.users = users;
   });
 
   socket.on('nextSong', function (song) {
