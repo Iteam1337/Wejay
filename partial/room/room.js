@@ -60,7 +60,7 @@ angular.module('wejay').controller('RoomCtrl',function(socket, $rootScope, $scop
       console.log('change', p, song);
 
       // next
-      if (p.data.index === 1 && p.data.playing ){
+      if (p.data.context.uri === $scope.history && p.data.index === 1 && p.data.playing ){
         socket.emit('skip', song);
       } else {
         // new song
