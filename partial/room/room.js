@@ -1,4 +1,4 @@
-angular.module('wejay').controller('RoomCtrl',function(socket, $rootScope, $scope, spotifyAPI, User, $window){
+angular.module('wejay').controller('RoomCtrl',function(socket, Room, $rootScope, $scope, spotifyAPI, User, $window){
 
   'use strict';
 
@@ -97,6 +97,14 @@ angular.module('wejay').controller('RoomCtrl',function(socket, $rootScope, $scop
     $scope.room.queue = queue;
   });
 
+
+  // reconnect
+  socket.on('connect', function () {
+    socket.emit('join', {roomName: $scope.roomName, user: $scope.me}, function (room) {
+      $scope.room = room;
+    });
+  });
+
   socket.on('userJoined', function (users) {
     console.log('userJoined', users);
     $scope.users = users;
@@ -119,8 +127,6 @@ angular.module('wejay').controller('RoomCtrl',function(socket, $rootScope, $scop
    * WATCH
    */
 
-
-
   $scope.$watch('nowPlaying', function (song) {
     if (song){
       $scope.setCurrent(song);
@@ -140,15 +146,11 @@ angular.module('wejay').controller('RoomCtrl',function(socket, $rootScope, $scop
     }
   });
 
-
-
-
   $scope.$watch('room.queue', function (queue) {
 
     if (queue) {
       $scope.playlist = queue.map(function (song) {
     
-
       // tmp
       if (song.length) song = song[0];
 
@@ -252,55 +254,12 @@ angular.module('wejay').controller('RoomCtrl',function(socket, $rootScope, $scop
     });
   };
 
-  /**
-   * [star description]
-   * @param  {[type]} track [description]
-   * @return {[type]}       [description]
-   */
-  $scope.star = function (track) {
-    spotifyAPI.models.Track
-      .fromURI(track.uri)
-      .load('starred')
-      .done(function (track) {
-        if (track.starred) {
-          spotifyAPI.library
-            .forCurrentUser()
-            .unstar(track)
-            .done(function() {
-              $scope.safeApply();
-            });
-        } else {
-          spotifyAPI.library
-            .forCurrentUser()
-            .star(track)
-            .done(function() {
-              $scope.safeApply();
-            });          
-        }
-      });
-  };
 
-  $scope.skip = function(){
-    socket.emit('skip', $scope.nowPlaying, function(message){
-      if (/Error:/.test(message)) {
-        $window.alert(message);
-      } 
-    });
-  };
-
-  $scope.logout = function () {
-    socket.emit('logout', {roomName: $scope.roomName, user: $scope.me}, function () {
-      $scope.roomName = null;
-    });
-
-  };
 
   $scope.login = function () {
 
 		User.facebookLogin(function(user) {
-      $scope.users.push(user);
-      $rootScope.me = user;
-      $scope.roomName = user.work && user.work.length && user.work[0].employer.name || 'Iteam';
+      $scope.room = new Room(user.work && user.work.length && user.work[0].employer.name || 'Iteam');
       $scope.safeApply();
 		}, function(error) {
 			$window.alert('Login failed ' + error);

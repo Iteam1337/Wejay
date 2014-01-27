@@ -8,8 +8,6 @@ angular.module('wejay').service('User',function(spotifyAPI, $http, $window) {
     this.id = this.facebookId = data.id;
     this.work = data.work;
 
-    $window.localStorage.setItem('facebookUser', this);
-
   }
 
   User.facebookLogin = function(success, failure){
@@ -32,7 +30,8 @@ angular.module('wejay').service('User',function(spotifyAPI, $http, $window) {
     //go get facebook user
     return $http.get("https://graph.facebook.com/me?access_token=" + accessToken)
     .success(function(data){
-      success(new User(data));
+      User.current = new User(data);
+      success(User.current);
     })
     .error(function(data){
       failure(data);
