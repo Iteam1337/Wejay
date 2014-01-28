@@ -1,11 +1,21 @@
 angular.module('wejay', ['ngSanitize']);
 
-angular.module('wejay').config(function ($compileProvider) {
+angular.module('wejay').config(function ($compileProvider, $provide) {
 
   'use strict';
 
   $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|file|spotify):/);
   $compileProvider.imgSrcSanitizationWhitelist(/^\s*(https?|ftp|mailto|file|spotify):/);
+
+  $provide.provider('models', function() {
+    var spotifyModels = {};
+    require(['$api/models'], function (models) {
+      spotifyModels  = models;
+    });
+    this.$get = function() {
+      return spotifyModels;
+    };
+  });
 
 });
 

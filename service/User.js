@@ -4,10 +4,16 @@ angular.module('wejay').service('User',function(spotifyAPI, $http, $window) {
 
   function User(data) {
 
+    var self = this;
     this.name = data.name;
     this.id = this.facebookId = data.id;
     this.work = data.work;
 
+    var toplist = spotifyAPI.toplist.forCurrentUser();
+
+    toplist.tracks.snapshot().done(function (tracks) {
+      self.toplist = tracks.toArray().slice(0, 5);
+    });
   }
 
   User.facebookLogin = function(success, failure){
