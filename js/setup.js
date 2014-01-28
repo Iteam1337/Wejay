@@ -7,16 +7,22 @@ angular.module('wejay').config(function ($compileProvider, $provide) {
   $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|file|spotify):/);
   $compileProvider.imgSrcSanitizationWhitelist(/^\s*(https?|ftp|mailto|file|spotify):/);
 
-  $provide.provider('models', function() {
-    var spotifyModels = {};
-    require(['$api/models'], function (models) {
-      spotifyModels  = models;
-    });
-    this.$get = function() {
-      return spotifyModels;
-    };
-  });
+});
 
+require(['$api/auth#Auth', '$api/audio', '$api/models','$api/toplists#Toplist', '$views/image#Image','$api/library#Library', '$api/facebook'], function (Auth, audio, models, toplist, image, library, facebook) {
+  var spotify = {};
+  spotify.auth    = new Auth();
+  spotify.audio   = audio;
+  spotify.models  = models;
+  spotify.toplist = toplist;
+  spotify.image   = image;
+  spotify.library = library;
+  spotify.facebook = facebook;
+  
+  $provide.provider('spotify', function() {
+    return spotify;
+  });
+  angular.bootstrap(document, ['wejay']); // start now
 });
 
 angular.module('wejay').run(function($rootScope) {

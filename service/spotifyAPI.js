@@ -40,21 +40,7 @@ angular.module('wejay').service('spotifyAPI',function($rootScope) {
     }
   };
 
-  require(['$api/auth#Auth', '$api/audio', '$api/models','$api/toplists#Toplist', '$views/image#Image','$api/library#Library', '$api/facebook'], function (Auth, audio, models, toplist, image, library, facebook) {
-    models.application.addEventListener('dropped', function() {
-      spotifyAPI.emit('dropped', models.application.dropped);
-    });
-
-    spotifyAPI.auth    = new Auth();
-    spotifyAPI.audio   = audio;
-    spotifyAPI.models  = models;
-    spotifyAPI.toplist = toplist;
-    spotifyAPI.image   = image;
-    spotifyAPI.library = library;
-    spotifyAPI.facebook = facebook;
-
-    $rootScope.$broadcast('appReady');
-  });
+  
 
   /*models.application.addEventListener('dropped', function() {
    var dropped = models.application.dropped; // it contains the dropped elements
