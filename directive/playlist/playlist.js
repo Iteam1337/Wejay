@@ -1,4 +1,4 @@
-angular.module('wejay').directive('playlist', function($rootScope, playlist, spotifyAPI) {
+angular.module('wejay').directive('playlist', function($rootScope, spotifyAPI) {
 
   'use strict';
 

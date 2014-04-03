@@ -1,4 +1,4 @@
-angular.module('wejay').service('playlist',function($rootScope, spotifyAPI, User, socket) {
+angular.module('wejay').service('playlist',function($rootScope, spotifyAPI, User, socket, models) {
 
   'use strict';
 
@@ -14,7 +14,6 @@ angular.module('wejay').service('playlist',function($rootScope, spotifyAPI, User
       return {spotifyId: track.uri, user: $rootScope.me};
     });
     console.log('addSong', songs);
-    
     
     socket.emit('addSong', songs);
 

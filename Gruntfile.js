@@ -174,7 +174,6 @@ module.exports = function (grunt) {
         }
       }
     },
-
     shell: {
       install: {
         command: [

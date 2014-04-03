@@ -114,40 +114,31 @@ angular.module('wejay').controller('RoomCtrl',function(socket, $rootScope, $scop
 
   });
 
-
   /**
    * WATCH
    */
 
-
-
   $scope.$watch('nowPlaying', function (song) {
-    if (song){
+    if (song) {
       $scope.setCurrent(song);
     }
   });
 
   $scope.$watch('master', function (master) {
-    if (master){
-      if ($scope.master) {
-        var song = $scope.nowPlaying;
-        $scope.setCurrent(song);
-      }
+    if (master) {
+      var song = $scope.nowPlaying;
+      $scope.setCurrent(song);
     } else {
-      if (player.track.uri === $scope.nowPlaying.spotifyId){
+      if (player.track.uri === $scope.nowPlaying.spotifyId) {
         player.pause();
       }
     }
   });
 
-
-
-
   $scope.$watch('room.queue', function (queue) {
 
     if (queue) {
       $scope.playlist = queue.map(function (song) {
-    
 
       // tmp
       if (song.length) song = song[0];
@@ -157,12 +148,12 @@ angular.module('wejay').controller('RoomCtrl',function(socket, $rootScope, $scop
         Track.fromURI(song.spotifyId)
           .load('name')
           .done(function (track) {
-            if (!track.local) {
-              song.length = track.duration;
-              song.time = makeDuration(track.duration);
-              song.track = track;
-              $scope.safeApply();
-            }
+            if (track.local) return;
+
+            song.length = track.duration;
+            song.time = makeDuration(track.duration);
+            song.track = track;
+            $scope.safeApply();
           });
 
         if (song.user && song.user.facebookId){
@@ -175,7 +166,7 @@ angular.module('wejay').controller('RoomCtrl',function(socket, $rootScope, $scop
     }
   });
 
-  $scope.$watch('playlist', function(playlist){
+  $scope.$watch('playlist', function (playlist) {
     if (playlist){
       var duration = playlist.reduce(function(a,b){
         return a + (b.length - (b.position || 0) );
@@ -247,31 +238,32 @@ angular.module('wejay').controller('RoomCtrl',function(socket, $rootScope, $scop
 
   $scope.queueTrack = function (track){
     console.log('queueTrack', track);
-    socket.emit('addSong', {spotifyId: track.uri, length: track.duration, user: $rootScope.me}, function (queue) {
+    socket.emit('addSong', {spotifyId: track.uri, length: track.duration, user: $scope.me}, function (queue) {
        console.log('queue', queue); 
     });
   };
 
   /**
-   * [star description]
-   * @param  {[type]} track [description]
-   * @return {[type]}       [description]
+   * Star or unstar a track
+   * @param  {Track} track Spotify Track
    */
   $scope.star = function (track) {
+    if (!track) return;
+
     spotifyAPI.models.Track
       .fromURI(track.uri)
       .load('starred')
       .done(function (track) {
+        var user = spotifyAPI.library.forCurrentUser();
+
         if (track.starred) {
-          spotifyAPI.library
-            .forCurrentUser()
+          user
             .unstar(track)
             .done(function() {
               $scope.safeApply();
             });
         } else {
-          spotifyAPI.library
-            .forCurrentUser()
+          user
             .star(track)
             .done(function() {
               $scope.safeApply();
@@ -343,15 +335,15 @@ angular.module('wejay').controller('RoomCtrl',function(socket, $rootScope, $scop
   }
 
   /**
-   * Makes a more readable duration from ms to m:ss
+   * Makes a more readable duration from ms to mm:ss
    * @param  {int} duration Duration in milliseconds
-   * @return {string} m:ss
+   * @return {string} mm:ss
    */
   function makeDuration (duration) {
     var minutes, seconds;
 
     duration = duration / 1000;
-    minutes  = duration/60;
+    minutes  = duration / 60;
     seconds  = Math.round((minutes % 1) * 60);
     minutes  = ~~minutes;
 
