@@ -3,7 +3,6 @@ Wejay
 
 Wejay is an app for Spotify developed by Iteam. By installing the app you and your colleagues can mix the music together. You need an spotify developer account to install it, we are beta testing right now and will send it to Spotify for approval within a few months.
 
-
 ## Install
 
 ### Mac

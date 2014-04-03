@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>eva2-angular - Mocha Tests</title>
+  <link rel="stylesheet" href="../../node_modules/mocha/mocha.css" />
+</head>
+<body>
+
+  <div id="mocha"></div>
+
+  <!-- Livereload script for development only (stripped during dist build) -->
+  <script src="http://localhost:35729/livereload.js"></script>
+
+  <!-- JS from Bower components -->
+  <script src="../../bower_components/angular/angular.js"></script>
+  <script src="../../bower_components/angular-sanitize/angular-sanitize.js"></script>
+
+  <!-- Test libraries -->
+  <script src="../../node_modules/mocha/mocha.js"></script>
+  <script>mocha.setup('bdd');</script>
+  <script src="../../node_modules/chai/chai.js"></script>
+  <script>var expect = chai.expect;</script>
+  <script src="../../node_modules/sinon-chai/lib/sinon-chai.js"></script>
+  <script src="../../node_modules/sinon/pkg/sinon.js"></script>
+  <script src="../../bower_components/angular-mocks/angular-mocks.js"></script>
+
+  <!-- Code files -->
+
+  <!-- Main App JS -->
+  <script src="../../js/setup.js"></script>
+
+  <!-- Service JS -->
+  <script src="../../service/Io.js"></script>
+  <script src="../../service/playlist.js"></script>
+  <script src="../../service/socket.js"></script>
+  <script src="../../service/socketio.js"></script>
+  <script src="../../service/spotifyAPI.js"></script>
+  <script src="../../service/User.js"></script>
+  <!-- Add New Service JS Above --> 
+
+  <!-- Model JS -->
+  <!-- Add New Model JS Above --> 
+
+  <!-- Directive JS -->
+  <script src="../../directive/playlist/playlist.js"></script>
+  <script src="../../directive/toplist/toplist.js"></script>
+  <!-- Add New Directive JS Above -->
+
+  <!-- Filter JS -->
+  <!-- Add New Filter JS Above -->
+
+  <!-- Partial JS -->
+  <script src="../../partial/room/room.js"></script>
+  <!-- Add New Partial JS Above -->
+
+  <!-- Test files -->
+
+  <!-- Service Test JS -->
+  <script src="service/Io.js"></script>
+  <script src="service/playlist.js"></script>
+  <script src="service/socket.js"></script>
+  <script src="service/socketio.js"></script>
+  <script src="service/spotifyAPI.js"></script>
+  <script src="service/User.js"></script>
+  <!-- Add New Service Test JS Above --> 
+
+  <!-- Model Test JS -->
+  <!-- Add New Model Test JS Above --> 
+
+  <!-- Directive Test JS -->
+  <script src="directive/playlist.js"></script>
+  <script src="directive/toplist.js"></script>
+  <!-- Add New Directive Test JS Above -->
+
+  <!-- Filter Test JS -->
+  <!-- Add New Filter Test JS Above -->
+
+  <!-- Partial Test JS -->
+  <script src="controller/room.js"></script>
+  <!-- Add New Partial Test JS Above -->
+
+  <!-- run mocha after all test are loaded -->
+  <script type="text/javascript" charset="utf-8">
+    // Only tests run in real browser, injected script run if options.run == true
+    if (navigator.userAgent.indexOf('PhantomJS') < 0) {
+      mocha.run();
+    }
+  </script>
+  
+</body>
+</html>
