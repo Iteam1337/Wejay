@@ -60,14 +60,13 @@ angular.module('wejay').controller('RoomCtrl',function(socket, $rootScope, $scop
       console.log('change', p, song);
 
       // next
-      if (p.data.context.uri === $scope.history.uri && p.data.index === 1 && p.data.playing ){
+      if ($scope.history && p.data.context.uri === $scope.history.uri && p.data.index === 1 && p.data.playing ){
         socket.emit('skip', song);
       } else {
         // new song
         if (p.data.track && !p.data.track.adversiment && song){
           if (p.data.track.uri !== song.spotifyId || !p.data.playing){
             $scope.master = false;
-            console.log('no longer master', p);
           } else {
             $scope.master = true;
             console.log('resume', song);
@@ -76,9 +75,8 @@ angular.module('wejay').controller('RoomCtrl',function(socket, $rootScope, $scop
         }
       }
       song.position = new Date().getTime() - (song.localStarted || new Date(song.started).getTime());
-      if (Math.floor(p.data.position / 30) !== Math.floor(song.position / 30) )
+      if (Math.abs(p.data.position - song.position) > 3000 && Math.abs(p.data.position - song.position) < p.data.duration)
       {
-        console.log('position', song.position, p.data.track.duration);
         player.seek(song.position);
         p.preventDefault();
       }
