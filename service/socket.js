@@ -2,7 +2,7 @@ angular.module('wejay').service('socket', function(socketIo, $q, $rootScope) {
 
   'use strict';
 
-  var socket = socketIo.connect('wejay.itea.md'); // 'node.wejay.org', {transports:['xhr-polling', 'jsonp-polling']});
+  var socket = socketIo.connect('localhost'); //wejay.itea.md', { transports: ['websocket'] }); // 'node.wejay.org', {transports:['xhr-polling', 'jsonp-polling']});
 
   return {
     on: function (eventName, callback) {
