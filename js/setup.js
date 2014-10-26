@@ -9,7 +9,7 @@ angular.module('wejay').config(function ($compileProvider) {
 
 });
 
-angular.module('wejay').run(function($rootScope) {
+angular.module('wejay').run(function($rootScope, spotifyAPI, socket) {
 
   'use strict';
 
@@ -23,5 +23,20 @@ angular.module('wejay').run(function($rootScope) {
 			this.$apply(fn);
 		}
 	};
+
+  spotifyAPI.on('dropped', function(tracks) {
+    console.log('dropped', tracks);
+
+    var songs = tracks.map(function (track) {
+      return {
+        spotifyId: track.uri,
+        user: $rootScope.me
+      };
+    });
+    console.log('addSong', songs);
+    
+    socket.emit('addSong', songs);
+
+  });
 
 });
