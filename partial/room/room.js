@@ -124,6 +124,8 @@ angular.module('wejay').controller('RoomCtrl',function(socket, $rootScope, $scop
 
   $scope.$watch('master', function (master) {
     if (master) {
+      if ($scope.room) join($scope.room.roomName);
+
       var song = $scope.nowPlaying;
       $scope.setCurrent(song);
     } else {
@@ -265,8 +267,8 @@ angular.module('wejay').controller('RoomCtrl',function(socket, $rootScope, $scop
       });
   };
 
-  $scope.skip = function(){
-    socket.emit('skip', $scope.nowPlaying, function(message){
+  $scope.skip = function(song){
+    socket.emit('skip', song || $scope.nowPlaying, function(message){
       if (/Error:/.test(message)) {
         $window.alert(message);
       } 
@@ -293,8 +295,17 @@ angular.module('wejay').controller('RoomCtrl',function(socket, $rootScope, $scop
 	};
 
   $scope.$watch('roomName', function(roomName){
+    join(roomName);
+  });
+
+
+  /**
+   *  HELPERS
+   */
+
+  function join(roomName){
     socket.emit('join', {roomName: roomName, user: $scope.me}, function (room) {
-      if (typeof(room) === "object"){
+      if (typeof(room) === 'object'){
         $scope.room = room;
         $scope.users = room.users;
         $scope.nowPlaying = room.currentSong;
@@ -304,13 +315,7 @@ angular.module('wejay').controller('RoomCtrl',function(socket, $rootScope, $scop
         }
       }
     });
-  });
-
-
-  /**
-   *  HELPERS
-   */
-
+  }
 
   // directive?
   function bind(track){

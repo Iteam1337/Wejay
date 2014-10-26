@@ -33,8 +33,6 @@ angular.module('wejay').run(function($rootScope, spotifyAPI, socket) {
         user: $rootScope.me
       };
     });
-    console.log('addSong', songs);
-    
     socket.emit('addSong', songs);
 
   });

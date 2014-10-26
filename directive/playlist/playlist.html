@@ -10,6 +10,7 @@
           {{ song.track.name }}
         </div>
       </div>
+      <button ng-click="skip(song)">x</button>
       <img ng-src="{{ song.user.image }}" class="user">
       <div class="duration">{{ song.time }}</div>
     </li>
@@ -19,8 +20,8 @@
      <div class="duration">{{ totalDuration }} min</div>
   </div>
   <div class="empty-state" ng-hide="playlist">
-    <div>No songs ;(</div>
-    Drop some to the app to start playing!
+    <div>Empty queue</div>
+    Drop some music here to start playing!
   </div>
 </div>
 

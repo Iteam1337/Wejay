@@ -1,13 +1,15 @@
-angular.module('wejay').directive('playlist', function($rootScope) {
+angular.module('wejay').directive('playlist', function() {
 
   'use strict';
 
   return {
     restrict: 'E',
     replace: true,
+    scope: {
+      skip: '&'
+    },
     templateUrl: 'directive/playlist/playlist.html',
-    link: function(scope, element, attrs, fn) {
-
+    link: function() {
 
       // var dropBoxDropEventListener = function (e) {
       //     if (e.preventDefault) {
