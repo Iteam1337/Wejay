@@ -143,18 +143,18 @@ angular.module('wejay').controller('RoomCtrl',function(socket, $rootScope, $scop
         // tmp
         if (song.length) song = song[0];
 
-        console.log('queue', song);
+        if (!song.track) {
+          Track.fromURI(song.spotifyId)
+            .load('name')
+            .done(function (track) {
+              if (track.local) return;
 
-        Track.fromURI(song.spotifyId)
-          .load('name')
-          .done(function (track) {
-            if (track.local) return;
-
-            song.length = track.duration;
-            song.time = makeDuration(track.duration);
-            song.track = track;
-            $scope.safeApply();
-          });
+              song.length = track.duration;
+              song.time = makeDuration(track.duration);
+              song.track = track;
+              $scope.safeApply();
+            });
+        }
 
         if (song.user && song.user.facebookId){
           var user = spotifyAPI.facebook.FacebookUser.fromId(song.user.facebookId);

@@ -5,9 +5,6 @@ angular.module('wejay').directive('playlist', function() {
   return {
     restrict: 'E',
     replace: true,
-    scope: {
-      skip: '&'
-    },
     templateUrl: 'directive/playlist/playlist.html',
     link: function() {
 
