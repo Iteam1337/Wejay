@@ -21592,10 +21592,7 @@ angular.module('wejay').controller('RoomCtrl',function(socket, $rootScope, $scop
 
     if (queue) {
       $scope.playlist = queue.map(function (song) {
-
-        // tmp
-        if (song.length) song = song[0];
-
+        
         if (!song.track) {
           Track.fromURI(song.spotifyId)
             .load('name')
