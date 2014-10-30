@@ -54,33 +54,41 @@ angular.module('wejay').controller('RoomCtrl',function(socket, $rootScope, $scop
      * which means we are pausing or playing something else
      */
     player.addEventListener('change', function (p) {
-      var song = $scope.nowPlaying;
-      if (!song) return;
-      
-      console.log('change', p, song);
+      console.log('change', p, p.data);
+      if (!$scope.nowPlaying) return;
+    
+      var command = null;
 
-      // next
-      if (p.data.context && p.data.context.uri === $scope.history.uri && p.data.index === 1 && p.data.playing ){
-        socket.emit('skip', song);
-      } else {
-        // new song
-        if (p.data.track && !p.data.track.adversiment && song){
-          if (p.data.track.uri !== song.spotifyId || !p.data.playing){
-            $scope.master = false;
-          } else {
-            $scope.master = true;
-            console.log('resume', song);
+      // we aren't getting the actual command, just data uri's so we need to figure out what's going on first...
+      if (!p.data.track) command = 'unknown';
+      else if (p.data.track.adversiment) command = 'advertisment';
+      //else if (p.data.track.uri === $scope.nowPlaying.spotifyId && !p.data.playing) command = 'skip';
+      else if (p.data.track.uri === $scope.nowPlaying.spotifyId && p.data.playing) command = 'master';
+      else command = 'slave';
+
+      console.log('command', command);
+
+      switch(command){
+        case 'skip':
+          $scope.skip($scope.nowPlaying);
+          break;
+        case 'master':
+          $scope.master = true;
+          $scope.nowPlaying.position = new Date().getTime() - ($scope.nowPlaying.localStarted || new Date($scope.nowPlaying.started).getTime());
+          if (Math.abs(p.data.position - $scope.nowPlaying.position) > 3000 && Math.abs(p.data.position - $scope.nowPlaying.position) < p.data.duration)
+          {
+            player.seek($scope.nowPlaying.position);
+            p.preventDefault();
           }
-          $scope.safeApply();
-        }
+          break;
+        case 'slave':
+          $scope.master = false;
+          break;
+        default:
+          console.log('unkown command', p.data);
+          break;
       }
-      song.position = new Date().getTime() - (song.localStarted || new Date(song.started).getTime());
-      if (Math.abs(p.data.position - song.position) > 3000 && Math.abs(p.data.position - song.position) < p.data.duration)
-      {
-        player.seek(song.position);
-        p.preventDefault();
-      }
-
+      $scope.safeApply();
     });
 
   });
@@ -129,7 +137,7 @@ angular.module('wejay').controller('RoomCtrl',function(socket, $rootScope, $scop
       var song = $scope.nowPlaying;
       $scope.setCurrent(song);
     } else {
-      if (player.track.uri === $scope.nowPlaying.spotifyId) {
+      if (player.track && player.track.uri === $scope.nowPlaying.spotifyId) {
         player.pause();
       }
     }
@@ -209,6 +217,8 @@ angular.module('wejay').controller('RoomCtrl',function(socket, $rootScope, $scop
         $scope.history.tracks
         .clear()
         .done(function(tracks){
+          console.log('play', tracks);
+          //$scope.next = tracks.length > 1 && track[1] || undefined;
           tracks.add([track,track]).done(function(){
             player.playContext($scope.history, 0, song.position);
             player.play();
