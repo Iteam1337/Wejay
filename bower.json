@@ -10,6 +10,7 @@
   "dependencies": {
     "angular": "1.2.*",
     "angular-sanitize": "*",
+    "moment": "*",
     "socket.io-client": "~0.9.16"
   },
   "devDependencies": {

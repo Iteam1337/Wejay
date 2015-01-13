@@ -1,4 +1,4 @@
-angular.module('wejay').controller('RoomCtrl',function(socket, $rootScope, $scope, spotifyAPI, User, $window){
+angular.module('wejay').controller('RoomCtrl',function(socket, $rootScope, $scope, spotifyAPI, User, moment, $window){
 
   'use strict';
 
@@ -184,6 +184,12 @@ angular.module('wejay').controller('RoomCtrl',function(socket, $rootScope, $scop
 
       // $scope.nowPlaying = playlist[0];
     }
+  });
+
+  $scope.$watch('users', function(users){
+    $scope.activeUsers = users.filter(function(user){
+      return moment(user.lastPlayDate) > moment().subtract(1, 'hour');
+    });
   });
 
 

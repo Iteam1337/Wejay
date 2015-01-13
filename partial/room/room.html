@@ -27,7 +27,7 @@
     <div>
       <h3>Logged in Wejays</h3>
       <ul>
-        <li ng-repeat="user in users | orderBy:lastPlayDate">
+        <li ng-repeat="user in activeUsers | orderBy:lastPlayDate">
                <img ng-src="{{ user.image }}">
                {{ user.name }}</li>
       </ul>
