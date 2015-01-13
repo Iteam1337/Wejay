@@ -14,7 +14,7 @@
         <input type="checkbox" ng-model="master"> <!-- peeerty pleeze -->
       </div>
       <div class="user">
-        <img ng-src="{{ nowPlaying.user.image }}" alt="Click to skip this song" ng-click="skip(nowPlaying)">
+        <a href="#" ng-click="skip(nowPlaying)" title="{{nowPlaying.user.name}} will be sad..">Skip</a>
       </div>
     </div>
   </div>

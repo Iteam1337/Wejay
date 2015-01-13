@@ -284,7 +284,7 @@ angular.module('wejay').controller('RoomCtrl',function(socket, $rootScope, $scop
     socket.emit('skip', song || $scope.nowPlaying, function(message){
       if (/Error:/.test(message)) {
         $window.alert(message);
-      } 
+      }
     });
   };
 

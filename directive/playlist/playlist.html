@@ -1,11 +1,11 @@
 <div class="playlist">
   <h2 ng-show="room.roomName">{{ room.roomName }} Wejay Room</h2>
   <ul>
-    <li ng-repeat="song in playlist.slice(1)">
+    <li ng-repeat="song in playlist | filter: notStarted ">
       <div class="star" ng-class="{'starred':song.track.starred}" ng-click="star(song.track)">&#9733;</div>
       <img ng-src="{{ song.track.image }}">
       <div class="info">
-        <a class="artist" ng-href="{{ song.track.artists[0].uri }}">{{ song.track.artists[0].name }}</a>
+        <a class="artist" ng-href="{{ song.track.artists[0].uri }}">{{ song.track.artists[0].name }}</a> {{song.position}}
         <div class="track">
           {{ song.track.name }}
         </div>
@@ -18,7 +18,7 @@
      <div class="songs">{{ playlist.length }} songs</div>
      <div class="duration">{{ totalDuration }} min</div>
   </div>
-  <div class="empty-state" ng-hide="!playlist">
+  <div class="empty-state" ng-show="playlist.length <= 1">
     <div>Empty queue</div>
     Drop some music here to start playing!
   </div>

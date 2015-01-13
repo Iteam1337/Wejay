@@ -4,6 +4,7 @@ section[ng-controller="RoomCtrl"] {
     height:250px;
     position: relative;
 
+
     .background-wrap {
       height:100%;
       overflow:hidden;
@@ -32,6 +33,11 @@ section[ng-controller="RoomCtrl"] {
       .sp-image-style-inset .sp-image-inset {
         .box-shadow(none);
       }
+
+      &.master{
+        border:2px solid white !important;
+      }
+
     }
 
     .info {

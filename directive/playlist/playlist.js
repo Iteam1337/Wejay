@@ -6,18 +6,20 @@ angular.module('wejay').directive('playlist', function() {
     restrict: 'E',
     replace: true,
     templateUrl: 'directive/playlist/playlist.html',
-    link: function() {
+    link: function($scope) {
 
-      // var dropBoxDropEventListener = function (e) {
-      //     if (e.preventDefault) {
-      //       e.preventDefault();
-      //     }
-      //     var droppedUri = e.dataTransfer.getData('text');
-      //     console.log('drop', arguments);
-      // };
+      $scope.notStarted = function(song) {
+        return !song.position;
+      };
+      /*
+      var dropBoxDropEventListener = function (e) {
+        e.preventDefault();
+        var droppedUri = e.dataTransfer.getData('text');
+        console.log('drop', arguments);
+      };
 
-      // $(element).addEventListener('drop', dropBoxDropEventListener, false);
-
+      document.addEventListener('drop', dropBoxDropEventListener, false);
+*/
 
     }
   };

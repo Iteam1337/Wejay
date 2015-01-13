@@ -24463,18 +24463,20 @@ angular.module('wejay').directive('playlist', function() {
     restrict: 'E',
     replace: true,
     templateUrl: 'directive/playlist/playlist.html',
-    link: function() {
+    link: function($scope) {
 
-      // var dropBoxDropEventListener = function (e) {
-      //     if (e.preventDefault) {
-      //       e.preventDefault();
-      //     }
-      //     var droppedUri = e.dataTransfer.getData('text');
-      //     console.log('drop', arguments);
-      // };
+      $scope.notStarted = function(song) {
+        return !song.position;
+      };
+      /*
+      var dropBoxDropEventListener = function (e) {
+        e.preventDefault();
+        var droppedUri = e.dataTransfer.getData('text');
+        console.log('drop', arguments);
+      };
 
-      // $(element).addEventListener('drop', dropBoxDropEventListener, false);
-
+      document.addEventListener('drop', dropBoxDropEventListener, false);
+*/
 
     }
   };
@@ -24780,7 +24782,7 @@ angular.module('wejay').controller('RoomCtrl',function(socket, $rootScope, $scop
     socket.emit('skip', song || $scope.nowPlaying, function(message){
       if (/Error:/.test(message)) {
         $window.alert(message);
-      } 
+      }
     });
   };
 
@@ -24885,7 +24887,7 @@ angular.module("wejay").run(["$templateCache", function($templateCache) {
     "        <input type=\"checkbox\" ng-model=\"master\"> <!-- peeerty pleeze -->\n" +
     "      </div>\n" +
     "      <div class=\"user\">\n" +
-    "        <img ng-src=\"{{ nowPlaying.user.image }}\" alt=\"Click to skip this song\" ng-click=\"skip(nowPlaying)\">\n" +
+    "        <a href=\"#\" ng-click=\"skip(nowPlaying)\" title=\"{{nowPlaying.user.name}} will be sad..\">Skip</a>\n" +
     "      </div>\n" +
     "    </div>\n" +
     "  </div>\n" +
@@ -24922,11 +24924,11 @@ angular.module("wejay").run(["$templateCache", function($templateCache) {
     "<div class=\"playlist\">\n" +
     "  <h2 ng-show=\"room.roomName\">{{ room.roomName }} Wejay Room</h2>\n" +
     "  <ul>\n" +
-    "    <li ng-repeat=\"song in playlist.slice(1)\">\n" +
+    "    <li ng-repeat=\"song in playlist | filter: notStarted \">\n" +
     "      <div class=\"star\" ng-class=\"{'starred':song.track.starred}\" ng-click=\"star(song.track)\">&#9733;</div>\n" +
     "      <img ng-src=\"{{ song.track.image }}\">\n" +
     "      <div class=\"info\">\n" +
-    "        <a class=\"artist\" ng-href=\"{{ song.track.artists[0].uri }}\">{{ song.track.artists[0].name }}</a>\n" +
+    "        <a class=\"artist\" ng-href=\"{{ song.track.artists[0].uri }}\">{{ song.track.artists[0].name }}</a> {{song.position}}\n" +
     "        <div class=\"track\">\n" +
     "          {{ song.track.name }}\n" +
     "        </div>\n" +
@@ -24939,7 +24941,7 @@ angular.module("wejay").run(["$templateCache", function($templateCache) {
     "     <div class=\"songs\">{{ playlist.length }} songs</div>\n" +
     "     <div class=\"duration\">{{ totalDuration }} min</div>\n" +
     "  </div>\n" +
-    "  <div class=\"empty-state\" ng-hide=\"!playlist\">\n" +
+    "  <div class=\"empty-state\" ng-show=\"playlist.length <= 1\">\n" +
     "    <div>Empty queue</div>\n" +
     "    Drop some music here to start playing!\n" +
     "  </div>\n" +
