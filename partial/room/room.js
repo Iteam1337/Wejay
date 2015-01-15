@@ -62,7 +62,7 @@ angular.module('wejay').controller('RoomCtrl',function(socket, $rootScope, $scop
       // we aren't getting the actual command, just data uri's so we need to figure out what's going on first...
       if (!p.data.track) command = 'unknown';
       else if (p.data.track.adversiment) command = 'advertisment';
-      else if ($scope.master && !p.position) command = 'skip';
+      else if ($scope.master && $scope.nowPlaying.started && !p.data.position) command = 'skip';
       else if (p.data.track.uri === $scope.nowPlaying.spotifyId && p.data.playing) command = 'master';
       else command = 'slave';
 
@@ -75,6 +75,7 @@ angular.module('wejay').controller('RoomCtrl',function(socket, $rootScope, $scop
         case 'master':
           $scope.master = true;
           $scope.nowPlaying.position = new Date().getTime() - ($scope.nowPlaying.localStarted || new Date($scope.nowPlaying.started).getTime());
+          $scope.nowPlaying.started = true;
           if (Math.abs(p.data.position - $scope.nowPlaying.position) > 3000 && Math.abs(p.data.position - $scope.nowPlaying.position) < p.data.duration)
           {
             player.seek($scope.nowPlaying.position);
@@ -224,6 +225,7 @@ angular.module('wejay').controller('RoomCtrl',function(socket, $rootScope, $scop
           //$scope.next = tracks.length > 1 && track[1] || undefined;
           tracks.add([track,track]).done(function(){
             player.playContext($scope.history, 0, song.position);
+            song.started = false;
             player.play();
           });
         });
