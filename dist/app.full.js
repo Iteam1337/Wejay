@@ -24560,7 +24560,7 @@ angular.module('wejay').controller('RoomCtrl',function(socket, $rootScope, $scop
       // we aren't getting the actual command, just data uri's so we need to figure out what's going on first...
       if (!p.data.track) command = 'unknown';
       else if (p.data.track.adversiment) command = 'advertisment';
-      //else if (p.data.track.uri === $scope.nowPlaying.spotifyId && !p.data.playing) command = 'skip';
+      else if (p.data.track.uri === $scope.nowPlaying.spotifyId && !p.position) command = 'skip';
       else if (p.data.track.uri === $scope.nowPlaying.spotifyId && p.data.playing) command = 'master';
       else command = 'slave';
 
@@ -24773,7 +24773,7 @@ angular.module('wejay').controller('RoomCtrl',function(socket, $rootScope, $scop
             .star(track)
             .done(function() {
               $scope.safeApply();
-            });          
+            });
         }
       });
   };
