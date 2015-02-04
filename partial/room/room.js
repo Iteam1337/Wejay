@@ -248,8 +248,10 @@ angular.module('wejay').controller('RoomCtrl',function(socket, $rootScope, $scop
 
   $scope.queueTrack = function (track){
     console.log('queueTrack', track);
-    socket.emit('addSong', {spotifyId: track.uri, length: track.duration, user: $scope.me}, function (queue) {
-      console.log('queue', queue); 
+    join($scope.room.roomName, function(){
+      socket.emit('addSong', {spotifyId: track.uri, length: track.duration, user: $scope.me}, function (queue) {
+        console.log('queue', queue); 
+      });
     });
   };
 
@@ -318,7 +320,7 @@ angular.module('wejay').controller('RoomCtrl',function(socket, $rootScope, $scop
    *  HELPERS
    */
 
-  function join(roomName){
+  function join(roomName, done){
     socket.emit('join', {roomName: roomName, user: $scope.me}, function (room) {
       if (typeof(room) === 'object'){
         $scope.room = room;
@@ -328,6 +330,8 @@ angular.module('wejay').controller('RoomCtrl',function(socket, $rootScope, $scop
           $scope.serverDiff = new Date(room.serverTime) - new Date();
           console.log('server diff', $scope.serverDiff);
         }
+
+        return done && done(null, room);
       }
     });
   }
